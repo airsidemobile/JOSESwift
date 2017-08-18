@@ -14,6 +14,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        testJWS()
+    }
+    
+    func testJWS() {
+        var jws = JWS(header: Header(["foo" : "bar"]), payload: Payload(["bing": "bong"]))
+        let signer =  Signer(algorithm: .rs512, key: "dummyPrivateKey")
+        
+        jws.sign(using: signer)
+        
+        print(jws.serialize())
     }
 
 }
