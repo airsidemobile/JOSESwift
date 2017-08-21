@@ -12,10 +12,14 @@ protocol Base64URLEncodable {
     func base64URLEncodedString() -> String
 }
 
-extension Base64URLEncodable where Self: CustomStringConvertible {
+extension Base64URLEncodable where Self: JSONEncodable {
     func base64URLEncodedString() -> String {
-        return "Base64URL(\(self.description))"
+        return "Base64URL(\(self.jsonEncodedString()))"
     }
 }
 
-extension String: Base64URLEncodable { }
+extension String: Base64URLEncodable {
+    func base64URLEncodedString() -> String {
+        return "Base64URL(\(self))"
+    }
+}
