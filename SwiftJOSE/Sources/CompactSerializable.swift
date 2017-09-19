@@ -9,5 +9,5 @@
 import Foundation
 
 protocol CompactSerializable {
-    var serialized: String { get }
+    func serialized() -> String
 }

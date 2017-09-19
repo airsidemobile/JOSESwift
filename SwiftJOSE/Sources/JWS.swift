@@ -25,7 +25,7 @@ public struct JWS {
 }
 
 extension JWS: CompactSerializable {
-    public var serialized: String {
+    public func serialized() -> String {
         let header = self.header.base64URLEncodedString()
         let payload = self.payload.base64URLEncodedString()
         let signature = String(data: self.signature, encoding: .utf8)!.base64URLEncodedString()
