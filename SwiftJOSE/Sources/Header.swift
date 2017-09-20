@@ -8,6 +8,20 @@
 
 import Foundation
 
-protocol Header {
+public struct Header {
+    public var parameters: [String: Any]
     
+    public init(_ parameters: [String: Any]) {
+        self.parameters = parameters
+    }
+    
+    public var jsonRepresentation: String {
+        return "JSON(\(parameters))"
+    }
+}
+
+extension Header: Base64URLEncodable {
+    public func base64URLEncoded() -> String {
+        return "Base64URL(\(jsonRepresentation))"
+    }
 }
