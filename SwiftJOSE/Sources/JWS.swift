@@ -17,8 +17,8 @@ public struct JWS {
         self.header = header
         self.payload = payload
         
-        let encodedHeader = self.header.jsonEncodedString().base64URLEncodedString()
-        let encodedPayload = self.payload.jsonEncodedString().base64URLEncodedString()
+        let encodedHeader = self.header.encoded()
+        let encodedPayload = self.payload.encoded()
         let signatureInput = "\(encodedHeader).\(encodedPayload)".data(using: .utf8)!
         self.signature = signer.sign(signatureInput)
     }
@@ -26,9 +26,9 @@ public struct JWS {
 
 extension JWS: CompactSerializable {
     public func serialized() -> String {
-        let header = self.header.base64URLEncodedString()
-        let payload = self.payload.base64URLEncodedString()
-        let signature = String(data: self.signature, encoding: .utf8)!.base64URLEncodedString()
+        let header = self.header.encoded()
+        let payload = self.payload.encoded()
+        let signature = String(data: self.signature, encoding: .utf8)!.encoded()
         
         return "\(header).\(payload).\(signature)"
     }
