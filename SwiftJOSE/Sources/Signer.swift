@@ -1,20 +1,20 @@
+////
+////  Signer.swift
+////  SwiftJOSE
+////
+////  Created by Daniel Egger on 18/08/2017.
+////  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
+////
 //
-//  Signer.swift
-//  SwiftJOSE
+//import Foundation
 //
-//  Created by Daniel Egger on 18/08/2017.
-//  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
+//public protocol Signer {
+//    init(algorithm: SigningAlgorithm, key: String)
+//    func sign(_ signatureInput: Data) -> Data
+//}
 //
-
-import Foundation
-
-public protocol Signer {
-    init(algorithm: SigningAlgorithm, key: String)
-    func sign(_ signatureInput: Data) -> Data
-}
-
-public struct SigningAlgorithm {
-    // Add supported signing Algorithms in the respective `Signer` implementation.
-    let secKeyAlgorithm: SecKeyAlgorithm
-    let identifier: String
-}
+//public struct SigningAlgorithm {
+//    // Add supported signing Algorithms in the respective `Signer` implementation.
+//    let secKeyAlgorithm: SecKeyAlgorithm
+//    let identifier: String
+//}

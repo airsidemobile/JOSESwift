@@ -1,13 +1,13 @@
+////
+////  CompactSerializable.swift
+////  SwiftJOSE
+////
+////  Created by Daniel on 21/08/2017.
+////  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
+////
 //
-//  CompactSerializable.swift
-//  SwiftJOSE
+//import Foundation
 //
-//  Created by Daniel on 21/08/2017.
-//  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
-//
-
-import Foundation
-
-protocol CompactSerializable {
-    func serialized() -> String
-}
+//protocol CompactSerializable {
+//    func serialized() -> String
+//}

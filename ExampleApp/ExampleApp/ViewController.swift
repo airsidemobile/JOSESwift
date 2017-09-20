@@ -18,11 +18,11 @@ class ViewController: UIViewController {
     }
     
     func testJWS() {
-        let signer = RSASigner(algorithm: .rs512, key: "signingKey")
-        let jws = JWS(header: Header(["pii": "locker"]), payload: Payload(["so": "cool"]), signer: signer)
-        let compactSerialization = jws.serialized()
-        
-        print(compactSerialization)
+//        let signer = RSASigner(algorithm: .rs512, key: "signingKey")
+//        let jws = JWS(header: Header(["pii": "locker"]), payload: Payload(["so": "cool"]), signer: signer)
+//        let compactSerialization = jws.serialized()
+//        
+//        print(compactSerialization)
     }
 
 }
