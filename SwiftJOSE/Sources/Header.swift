@@ -9,19 +9,16 @@
 import Foundation
 
 public struct Header {
-    public var parameters: [String: Any]
+    let parameters: [String: Any]
     
     public init(_ parameters: [String: Any]) {
         self.parameters = parameters
-    }
-    
-    public var jsonRepresentation: String {
-        return "JSON(\(parameters))"
     }
 }
 
 extension Header: Base64URLEncodable {
     public func base64URLEncoded() -> String {
-        return "Base64URL(\(jsonRepresentation))"
+        let data = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        return "Base64URL(\(String(data: data, encoding: .utf8)!)"
     }
 }

@@ -9,27 +9,27 @@
 import Foundation
 
 public struct Payload {
-    let payload: Any
+    let data: Data?
+    let dict: [String: Any]?
     
     public init(_ data: Data) {
-        self.payload = data
+        self.data = data
+        self.dict = nil
     }
     
     public init(_ dict: [String: Any]) {
-        self.payload = dict
-    }
-    
-    var jsonRepresentation: String? {
-        return "JSON?(\(payload))"
+        self.data = nil
+        self.dict = dict
     }
 }
 
 extension Payload: Base64URLEncodable {
     public func base64URLEncoded() -> String {
-        if let json = jsonRepresentation {
-            return "Base64URL(\(json))"
+        if dict != nil {
+            let data = try! JSONSerialization.data(withJSONObject: dict!, options: [])
+            return "Base64URL(\(String(data: data, encoding: .utf8)!)"
         }
         
-        return "Base64URL(\(payload))"
+        return "Base64URL(\(String(data: data!, encoding: .utf8)!))"
     }
 }
