@@ -16,9 +16,9 @@ public struct Header {
     }
 }
 
-extension Header: Base64URLEncodeable {
-    public func base64URLEncoded() -> String {
+extension Header: Base64URLEncodable {
+    func base64URLEncodedString() -> String {
         let data = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        return Base64URL.encode(data)
+        return data.base64URLEncodedString()
     }
 }

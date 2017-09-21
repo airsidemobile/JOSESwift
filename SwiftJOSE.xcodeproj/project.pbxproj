@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE61F73E61A0002DEE0 /* Base64.swift */; };
+		652F6DE71F73E61A0002DEE0 /* Base64URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE61F73E61A0002DEE0 /* Base64URL.swift */; };
 		652F6DE91F73E6780002DEE0 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE81F73E6780002DEE0 /* Serialization.swift */; };
-		652F6DEB1F73F7140002DEE0 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DEA1F73F7140002DEE0 /* Data.swift */; };
 		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
 		65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A9D3D91F45CDD7004E0B61 /* Tests.swift */; };
@@ -31,9 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		652F6DE61F73E61A0002DEE0 /* Base64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
+		652F6DE61F73E61A0002DEE0 /* Base64URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64URL.swift; sourceTree = "<group>"; };
 		652F6DE81F73E6780002DEE0 /* Serialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
-		652F6DEA1F73F7140002DEE0 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,8 +69,7 @@
 			children = (
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
-				652F6DEA1F73F7140002DEE0 /* Data.swift */,
-				652F6DE61F73E61A0002DEE0 /* Base64.swift */,
+				652F6DE61F73E61A0002DEE0 /* Base64URL.swift */,
 				652F6DE81F73E6780002DEE0 /* Serialization.swift */,
 			);
 			name = Commons;
@@ -277,8 +274,7 @@
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
 				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
-				652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */,
-				652F6DEB1F73F7140002DEE0 /* Data.swift in Sources */,
+				652F6DE71F73E61A0002DEE0 /* Base64URL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

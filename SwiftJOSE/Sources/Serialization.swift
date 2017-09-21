@@ -9,9 +9,9 @@
 import Foundation
 
 struct CompactSerializer {
-    static func serialize(_ parts: [Base64URLEncodeable]) -> String {
+    static func serialize(_ parts: [Base64URLEncodable]) -> String {
         let base64URLEncodings = parts.map() { part in
-            return part.base64URLEncoded()
+            return part.base64URLEncodedString()
         }
         return base64URLEncodings.joined(separator: ".")
     }
