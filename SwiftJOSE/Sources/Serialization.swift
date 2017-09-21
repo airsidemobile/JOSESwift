@@ -8,6 +8,10 @@
 
 import Foundation
 
+public protocol CompactSerializable {
+    func compactSerialization() -> String
+}
+
 struct CompactSerializer {
     static func serialize(_ parts: [Base64URLEncodable]) -> String {
         let base64URLEncodings = parts.map() { part in
@@ -15,8 +19,4 @@ struct CompactSerializer {
         }
         return base64URLEncodings.joined(separator: ".")
     }
-}
-
-public protocol CompactSerializable {
-    func compactSerialization() -> String
 }
