@@ -17,11 +17,15 @@ public struct JWS {
         self.header = header
         self.payload = payload
         
-        let signatureInput = "\(header.base64URLEncoded()).\(payload.base64URLEncoded())".data(using: .utf8)!
+        let serializer = CompactSerializer()
+        let signatureInput = serializer.serialize([header, payload]).data(using: .utf8)!
         self.signature = signer.sign(signatureInput)
     }
-    
-    public func serialized() -> String {
-        return CompactSerializer.serialize([header, payload, signature])
+}
+
+extension JWS: CompactSerializable {
+    public func compactSerialization() -> String {
+        let serializer = CompactSerializer()
+        return serializer.serialize([header, payload, signature])
     }
 }

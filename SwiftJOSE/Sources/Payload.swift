@@ -23,7 +23,7 @@ public struct Payload {
     }
 }
 
-extension Payload: Base64URLEncodable {
+extension Payload: Base64URLEncodeable {
     public func base64URLEncoded() -> String {
         if dict != nil {
             let data = try! JSONSerialization.data(withJSONObject: dict!, options: [])

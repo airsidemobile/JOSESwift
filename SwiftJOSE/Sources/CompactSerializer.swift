@@ -1,5 +1,5 @@
 //
-//  Serializer.swift
+//  CompactSerializer.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 20/09/2017.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct CompactSerializer {
-    public static func serialize(_ parts: [Base64URLEncodable]) -> String {
+struct CompactSerializer {
+    func serialize(_ parts: [Base64URLEncodeable]) -> String {
         let base64URLEncodings = parts.map() { part in
             return part.base64URLEncoded()
         }
