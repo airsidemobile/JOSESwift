@@ -22,3 +22,12 @@ extension Header: Base64URLEncodable {
         return data.base64URLEncodedString()
     }
 }
+
+extension Header: Base64URLDecodable {
+    init(base64URLEncoded: String) {
+        let data = Data(base64URLEncoded: base64URLEncoded)
+        let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        self.init(parameters)
+        
+    }
+}
