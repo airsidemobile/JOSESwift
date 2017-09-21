@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		652F6DE31F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE21F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift */; };
+		652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE61F73E61A0002DEE0 /* Base64.swift */; };
 		6582C0B91F4AE88000B153D5 /* CompactSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582C0B81F4AE88000B153D5 /* CompactSerializable.swift */; };
 		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		652F6DE21F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Base64URLEncodeable.swift"; sourceTree = "<group>"; };
+		652F6DE61F73E61A0002DEE0 /* Base64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
 		6582C0B81F4AE88000B153D5 /* CompactSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CompactSerializable.swift; path = SwiftJOSE/Sources/CompactSerializable.swift; sourceTree = SOURCE_ROOT; };
 		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			children = (
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
+				652F6DE61F73E61A0002DEE0 /* Base64.swift */,
 				652F6DE41F73B9270002DEE0 /* Base64 */,
 				652F6DE51F73B98C0002DEE0 /* Serialization */,
 			);
@@ -298,6 +301,7 @@
 				65C7D92F1F472F0D000CCDB2 /* Base64URLEncodeable.swift in Sources */,
 				652F6DE31F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
+				652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */,
 				65A7A19D1F72A65B009449E7 /* CompactSerializer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
