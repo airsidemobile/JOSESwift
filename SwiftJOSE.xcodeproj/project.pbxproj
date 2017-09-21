@@ -7,17 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		652F6DE31F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE21F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift */; };
 		652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE61F73E61A0002DEE0 /* Base64.swift */; };
-		6582C0B91F4AE88000B153D5 /* CompactSerializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582C0B81F4AE88000B153D5 /* CompactSerializable.swift */; };
+		652F6DE91F73E6780002DEE0 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE81F73E6780002DEE0 /* Serialization.swift */; };
 		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
-		65A7A19D1F72A65B009449E7 /* CompactSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A19C1F72A65B009449E7 /* CompactSerializer.swift */; };
 		65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A9D3D91F45CDD7004E0B61 /* Tests.swift */; };
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
 		65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92A1F472ACD000CCDB2 /* JWS.swift */; };
 		65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92C1F472B4D000CCDB2 /* Signer.swift */; };
-		65C7D92F1F472F0D000CCDB2 /* Base64URLEncodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92E1F472F0D000CCDB2 /* Base64URLEncodeable.swift */; };
 		65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FABAE91F4AC2D3006D7679 /* RSASigner.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -33,18 +30,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		652F6DE21F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Base64URLEncodeable.swift"; sourceTree = "<group>"; };
 		652F6DE61F73E61A0002DEE0 /* Base64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
-		6582C0B81F4AE88000B153D5 /* CompactSerializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CompactSerializable.swift; path = SwiftJOSE/Sources/CompactSerializable.swift; sourceTree = SOURCE_ROOT; };
+		652F6DE81F73E6780002DEE0 /* Serialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
-		65A7A19C1F72A65B009449E7 /* CompactSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactSerializer.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65A9D3D91F45CDD7004E0B61 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		65A9D3DB1F45CDD7004E0B61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C7D92A1F472ACD000CCDB2 /* JWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWS.swift; path = SwiftJOSE/Sources/JWS.swift; sourceTree = SOURCE_ROOT; };
 		65C7D92C1F472B4D000CCDB2 /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Signer.swift; path = SwiftJOSE/Sources/Signer.swift; sourceTree = SOURCE_ROOT; };
-		65C7D92E1F472F0D000CCDB2 /* Base64URLEncodeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Base64URLEncodeable.swift; path = SwiftJOSE/Sources/Base64URLEncodeable.swift; sourceTree = SOURCE_ROOT; };
 		65FABAE91F4AC2D3006D7679 /* RSASigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSASigner.swift; path = SwiftJOSE/Sources/RSASigner.swift; sourceTree = SOURCE_ROOT; };
 		65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftJOSE.h; sourceTree = "<group>"; };
@@ -70,32 +64,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		652F6DE41F73B9270002DEE0 /* Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				65C7D92E1F472F0D000CCDB2 /* Base64URLEncodeable.swift */,
-				652F6DE21F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift */,
-			);
-			name = Base64;
-			sourceTree = "<group>";
-		};
-		652F6DE51F73B98C0002DEE0 /* Serialization */ = {
-			isa = PBXGroup;
-			children = (
-				6582C0B81F4AE88000B153D5 /* CompactSerializable.swift */,
-				65A7A19C1F72A65B009449E7 /* CompactSerializer.swift */,
-			);
-			name = Serialization;
-			sourceTree = "<group>";
-		};
 		6582C0BB1F4B09DC00B153D5 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				652F6DE61F73E61A0002DEE0 /* Base64.swift */,
-				652F6DE41F73B9270002DEE0 /* Base64 */,
-				652F6DE51F73B98C0002DEE0 /* Serialization */,
+				652F6DE81F73E6780002DEE0 /* Serialization.swift */,
 			);
 			name = Commons;
 			sourceTree = "<group>";
@@ -294,15 +269,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */,
+				652F6DE91F73E6780002DEE0 /* Serialization.swift in Sources */,
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
-				6582C0B91F4AE88000B153D5 /* CompactSerializable.swift in Sources */,
 				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
-				65C7D92F1F472F0D000CCDB2 /* Base64URLEncodeable.swift in Sources */,
-				652F6DE31F73B8F20002DEE0 /* Data+Base64URLEncodeable.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
 				652F6DE71F73E61A0002DEE0 /* Base64.swift in Sources */,
-				65A7A19D1F72A65B009449E7 /* CompactSerializer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

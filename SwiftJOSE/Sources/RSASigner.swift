@@ -28,4 +28,3 @@ public struct RSASigner: Signer {
         return "Signature(\(string))".data(using: .utf8)!
     }
 }
-

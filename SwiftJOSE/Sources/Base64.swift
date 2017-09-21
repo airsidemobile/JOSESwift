@@ -1,5 +1,5 @@
 //
-//  Data+Base64URLEncodeable.swift
+//  Base64.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 21/09/2017.
@@ -7,6 +7,10 @@
 //
 
 import Foundation
+
+public protocol Base64URLEncodeable {
+    func base64URLEncoded() -> String
+}
 
 extension Data: Base64URLEncodeable {
     public func base64URLEncoded() -> String {

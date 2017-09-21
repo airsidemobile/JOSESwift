@@ -18,4 +18,3 @@ public struct SigningAlgorithm {
     let secKeyAlgorithm: SecKeyAlgorithm
     let identifier: String
 }
-
