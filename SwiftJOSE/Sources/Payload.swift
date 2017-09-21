@@ -27,9 +27,9 @@ extension Payload: Base64URLEncodeable {
     public func base64URLEncoded() -> String {
         if dict != nil {
             let data = try! JSONSerialization.data(withJSONObject: dict!, options: [])
-            return "Base64URL(\(String(data: data, encoding: .utf8)!)"
+            return Base64URL.encode(data)
         }
         
-        return "Base64URL(\(String(data: data!, encoding: .utf8)!))"
+        return Base64URL.encode(data!)
     }
 }

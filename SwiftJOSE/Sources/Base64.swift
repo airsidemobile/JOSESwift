@@ -8,12 +8,12 @@
 
 import Foundation
 
-public protocol Base64URLEncodeable {
-    func base64URLEncoded() -> String
+struct Base64URL {
+    static func encode(_ data: Data) -> String {
+        return "Base64URL(\(String.init(data: data, encoding: .utf8)!))"
+    }
 }
 
-extension Data: Base64URLEncodeable {
-    public func base64URLEncoded() -> String {
-        return "Base64URL(\(String.init(data: self, encoding: .utf8)!))"
-    }
+public protocol Base64URLEncodeable {
+    func base64URLEncoded() -> String
 }
