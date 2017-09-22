@@ -15,16 +15,5 @@ protocol Base64URLDecodable {
 }
 
 protocol Base64URLEncodable {
-    func base64URLEncodedString() -> String
-}
-
-extension Data: Base64URLCodable {
-    init(base64URLEncoded: String) {
-        // Do transfromation from Base64URL to Base64 here
-        self.init(base64Encoded: base64URLEncoded)!
-    }
-    
-    func base64URLEncodedString() -> String {
-        return "Base64URL(\(String(data: self, encoding: .utf8)!))"
-    }
+    func base64URLEncoded() -> String
 }

@@ -15,7 +15,7 @@ public protocol CompactSerializable {
 struct CompactSerializer {
     static func serialize(_ parts: [Base64URLEncodable]) -> String {
         let base64URLEncodings = parts.map() { part in
-            return part.base64URLEncodedString()
+            return part.base64URLEncoded()
         }
         return base64URLEncodings.joined(separator: ".")
     }

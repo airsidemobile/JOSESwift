@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		652F6DE71F73E61A0002DEE0 /* Base64URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE61F73E61A0002DEE0 /* Base64URL.swift */; };
 		652F6DE91F73E6780002DEE0 /* Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE81F73E6780002DEE0 /* Serialization.swift */; };
+		65353F5D1F750A6A003E099B /* Data+Base64URLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65353F5C1F750A6A003E099B /* Data+Base64URLCodable.swift */; };
 		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
 		65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A9D3D91F45CDD7004E0B61 /* Tests.swift */; };
@@ -32,6 +33,7 @@
 /* Begin PBXFileReference section */
 		652F6DE61F73E61A0002DEE0 /* Base64URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64URL.swift; sourceTree = "<group>"; };
 		652F6DE81F73E6780002DEE0 /* Serialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serialization.swift; sourceTree = "<group>"; };
+		65353F5C1F750A6A003E099B /* Data+Base64URLCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Base64URLCodable.swift"; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +72,7 @@
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				652F6DE61F73E61A0002DEE0 /* Base64URL.swift */,
+				65353F5C1F750A6A003E099B /* Data+Base64URLCodable.swift */,
 				652F6DE81F73E6780002DEE0 /* Serialization.swift */,
 			);
 			name = Commons;
@@ -273,6 +276,7 @@
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
 				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
+				65353F5D1F750A6A003E099B /* Data+Base64URLCodable.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
 				652F6DE71F73E61A0002DEE0 /* Base64URL.swift in Sources */,
 			);

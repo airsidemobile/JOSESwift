@@ -23,12 +23,22 @@ public struct Payload {
     }
 }
 
-extension Payload: Base64URLEncodable {
-    func base64URLEncodedString() -> String {
+extension Payload: Base64URLCodable {
+    func base64URLEncoded() -> String {
         if data == nil, let dict = dict {
-            return try! JSONSerialization.data(withJSONObject: dict, options: []).base64URLEncodedString()
+            return try! JSONSerialization.data(withJSONObject: dict, options: []).base64URLEncoded()
         }
-        
-        return data!.base64URLEncodedString()
+        return data!.base64URLEncoded()
+    }
+    
+    init(base64URLEncoded: String) {
+        let data = Data(base64URLEncoded: base64URLEncoded)
+        do {
+            self.dict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            self.data = nil
+        } catch {
+            self.data = data
+            self.dict = nil
+        }
     }
 }
