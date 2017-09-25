@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.version           = "1.0.0"
   s.license           = "Proprietary"
   s.summary           = "JOSE framework for Swift"
-  s.authors           = { "Christoph Gigi Fuchs" => "christoph@mohemian.com" }
+  s.authors           = { "Daniel Egger" => "daniel.egger@mohemian.com", "Christoph Gigi Fuchs" => "christoph@mohemian.com" }
   s.homepage          = "https://mohemian.com"
   s.social_media_url  = "https://twitter.com/mohemian_mobile"
 

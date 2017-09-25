@@ -14,6 +14,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        testJWS()
+    }
+    
+    func testJWS() {
+        let header = Header(["gnu": "linux"])
+        let payload = Payload("so cool".data(using: .utf8)!)
+        let signer = RSASigner(algorithm: .rs512, key: "signingKey")
+        let jws = JWS(header: header, payload: payload, signer: signer)
+        
+        print(jws.compactSerialization())
     }
 
 }
