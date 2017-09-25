@@ -16,15 +16,19 @@ public struct Header {
     }
 }
 
-extension Header: Base64URLCodable {
-    func base64URLEncoded() -> String {
-        let data = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        return data.base64URLEncoded()
-    }
-
-    init(base64URLEncoded: String) {
-        let data = Data(base64URLEncoded: base64URLEncoded)
+extension Header: ExpressibleByData {
+    init(_ data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters)
+    }
+    
+    func data() -> Data {
+        return try! JSONSerialization.data(withJSONObject: parameters, options: [])
+    }
+}
+
+extension Header: CompactDeserializable {
+    init(from deserializer: CompactDeserializerProtocol) {
+        self = deserializer.deserialize(Header.self, at: 0)
     }
 }

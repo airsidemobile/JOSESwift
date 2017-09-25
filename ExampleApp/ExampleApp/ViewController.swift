@@ -7,23 +7,31 @@
 //
 
 import UIKit
-import SwiftJOSE
+@testable import SwiftJOSE
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testJWS()
+        testJWSEncoding()
+        testJWSDecoding()
     }
     
-    func testJWS() {
+    func testJWSEncoding() {
         let header = Header(["gnu": "linux"])
         let payload = Payload("so cool".data(using: .utf8)!)
         let signer = RSASigner(algorithm: .rs512, key: "signingKey")
         let jws = JWS(header: header, payload: payload, signer: signer)
         
         print(jws.compactSerialization())
+    }
+    
+    func testJWSDecoding() {
+        let compactSerialization = "eyJkdW1teSI6ICJoZWFkZXIifQ==.eyJkdW1teSI6InBheWxvYWQifQ==.ZHVtbXlzaWduYXR1cmU="
+        let jws = CompactDeserializer().deserialize(JWS.self, from: compactSerialization)
+        
+        print(jws)
     }
 
 }
