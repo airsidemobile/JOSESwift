@@ -8,13 +8,6 @@
 
 import Foundation
 
-// Data
-
-protocol ExpressibleByData {
-    init(_ data: Data)
-    func data() -> Data
-}
-
 // Serialization
 
 protocol CompactSerializable {

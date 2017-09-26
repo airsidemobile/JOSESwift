@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         
         let compactSerialization = CompactSerializer().serialize(jws)
         
-        print("=== COMAPCT SERIALIZED ===")
+        print("=== COMPACT SERIALIZED ===")
         print(compactSerialization)
     }
     

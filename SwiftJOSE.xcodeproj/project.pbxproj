@@ -15,6 +15,7 @@
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
 		65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92A1F472ACD000CCDB2 /* JWS.swift */; };
 		65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92C1F472B4D000CCDB2 /* Signer.swift */; };
+		65D1D0651F7A4DB3006377CD /* ExpressibleByData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D1D0641F7A4DB3006377CD /* ExpressibleByData.swift */; };
 		65E810621F79489900C7E2A9 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E810611F79489900C7E2A9 /* Signature.swift */; };
 		65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FABAE91F4AC2D3006D7679 /* RSASigner.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +41,7 @@
 		65A9D3DB1F45CDD7004E0B61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C7D92A1F472ACD000CCDB2 /* JWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWS.swift; path = SwiftJOSE/Sources/JWS.swift; sourceTree = SOURCE_ROOT; };
 		65C7D92C1F472B4D000CCDB2 /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Signer.swift; path = SwiftJOSE/Sources/Signer.swift; sourceTree = SOURCE_ROOT; };
+		65D1D0641F7A4DB3006377CD /* ExpressibleByData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressibleByData.swift; sourceTree = "<group>"; };
 		65E810611F79489900C7E2A9 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		65FABAE91F4AC2D3006D7679 /* RSASigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSASigner.swift; path = SwiftJOSE/Sources/RSASigner.swift; sourceTree = SOURCE_ROOT; };
 		65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +74,7 @@
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				65353F5C1F750A6A003E099B /* Data+Extensions.swift */,
+				65D1D0641F7A4DB3006377CD /* ExpressibleByData.swift */,
 				652F6DE81F73E6780002DEE0 /* CompactSerializer.swift */,
 			);
 			name = Commons;
@@ -276,6 +279,7 @@
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
 				65E810621F79489900C7E2A9 /* Signature.swift in Sources */,
+				65D1D0651F7A4DB3006377CD /* ExpressibleByData.swift in Sources */,
 				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
 				65353F5D1F750A6A003E099B /* Data+Extensions.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
