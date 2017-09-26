@@ -9,7 +9,7 @@
 import Foundation
 
 public struct Header {
-    let parameters: [String: Any]
+    fileprivate let parameters: [String: Any]
     
     public init(_ parameters: [String: Any]) {
         self.parameters = parameters

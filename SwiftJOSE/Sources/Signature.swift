@@ -8,13 +8,15 @@
 
 import Foundation
 
-public struct Signature: ExpressibleByData {
-    let signature: Data
+public struct Signature {
+    fileprivate let signature: Data
     
     public init(_ signature: Data) {
         self.signature = signature
     }
-    
+}
+
+extension Signature: ExpressibleByData {
     func data() -> Data {
         return signature
     }

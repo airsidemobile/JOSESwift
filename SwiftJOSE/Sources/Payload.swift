@@ -8,13 +8,15 @@
 
 import Foundation
 
-public struct Payload: ExpressibleByData {
-    let payload: Data
+public struct Payload {
+    fileprivate let payload: Data
 
     public init(_ payload: Data) {
         self.payload = payload
     }
-    
+}
+
+extension Payload: ExpressibleByData {
     func data() -> Data {
         return payload
     }
