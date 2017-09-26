@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         testJWSEncoding()
+        print()
         testJWSDecoding()
     }
     
@@ -24,14 +25,18 @@ class ViewController: UIViewController {
         let signer = RSASigner(algorithm: .rs512, key: "signingKey")
         let jws = JWS(header: header, payload: payload, signer: signer)
         
-        print(jws.compactSerialization())
+        let compactSerialization = CompactSerializer().serialize(jws)
+        
+        print("=== COMAPCT SERIALIZED ===")
+        print(compactSerialization)
     }
     
     func testJWSDecoding() {
         let compactSerialization = "eyJkdW1teSI6ICJoZWFkZXIifQ==.eyJkdW1teSI6InBheWxvYWQifQ==.ZHVtbXlzaWduYXR1cmU="
         let jws = CompactDeserializer().deserialize(JWS.self, from: compactSerialization)
         
-        print(jws)
+        print("=== COMPACT DESERIALIZED ===")
+        print("\(jws.header) \(String(data: jws.payload.data(), encoding: .utf8)!) \(String(data: jws.signature.data(), encoding: .utf8)!)")
     }
 
 }

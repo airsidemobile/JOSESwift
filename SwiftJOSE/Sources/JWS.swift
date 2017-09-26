@@ -17,8 +17,8 @@ public struct JWS {
         self.header = header
         self.payload = payload
 
-        let signatureInput = CompactSerializer().serialize([header, payload]).data(using: .utf8)!
-        self.signature = Signature(signer.sign(signatureInput))
+        let signatureInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())"
+        self.signature = Signature(signer.sign(signatureInput.data(using: .utf8)!))
     }
     
     fileprivate init(header: Header, payload: Payload, signature: Signature) {
@@ -29,8 +29,10 @@ public struct JWS {
 }
 
 extension JWS: CompactSerializable {
-    public func compactSerialization() -> String {
-        return CompactSerializer().serialize([header, payload, signature])
+    func serialize(to serializer: inout CompactSerializerProtocol) {
+        serializer.serialize(header)
+        serializer.serialize(payload)
+        serializer.serialize(signature)
     }
 }
 

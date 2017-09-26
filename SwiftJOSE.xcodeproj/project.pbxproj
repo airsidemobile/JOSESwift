@@ -71,7 +71,6 @@
 			children = (
 				65A77E931F7285A900A66DDE /* Header.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
-				65E810611F79489900C7E2A9 /* Signature.swift */,
 				65353F5C1F750A6A003E099B /* Data+Extensions.swift */,
 				652F6DE81F73E6780002DEE0 /* CompactSerializer.swift */,
 			);
@@ -118,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				65C7D92A1F472ACD000CCDB2 /* JWS.swift */,
+				65E810611F79489900C7E2A9 /* Signature.swift */,
 				65C7D92C1F472B4D000CCDB2 /* Signer.swift */,
 			);
 			name = JWS;
