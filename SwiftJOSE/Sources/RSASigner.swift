@@ -28,3 +28,17 @@ public struct RSASigner: Signer {
         return "Signature(\(string))".data(using: .utf8)!
     }
 }
+
+public struct RSAVerifier: Verifier {
+    let algorithm: SigningAlgorithm
+    let key: String
+    
+    public init(algorithm: SigningAlgorithm, key: String) {
+        self.algorithm = algorithm
+        self.key = key
+    }
+    
+    public func verify(_ signature: Data, against signatureInput: Data) -> Bool {
+        return true
+    }
+}

@@ -26,6 +26,11 @@ public struct JWS {
         self.payload = payload
         self.signature = signature
     }
+    
+    public func validates(against verifier: Verifier) -> Bool {
+        let signatureInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .utf8)!
+        return verifier.verify(signature.data(), against: signatureInput)
+    }
 }
 
 extension JWS: CompactSerializable {

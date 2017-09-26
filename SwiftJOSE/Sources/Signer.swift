@@ -13,6 +13,11 @@ public protocol Signer {
     func sign(_ signatureInput: Data) -> Data
 }
 
+public protocol Verifier {
+    init(algorithm: SigningAlgorithm, key: String)
+    func verify(_ signature: Data, against signatureInput: Data) -> Bool
+}
+
 public struct SigningAlgorithm {
     // Add supported signing Algorithms in the respective `Signer` implementation.
     let secKeyAlgorithm: SecKeyAlgorithm

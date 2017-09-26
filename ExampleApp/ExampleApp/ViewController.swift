@@ -20,11 +20,10 @@ class ViewController: UIViewController {
     }
     
     func testJWSEncoding() {
-        let header = Header(["gnu": "linux"])
-        let payload = Payload("so cool".data(using: .utf8)!)
-        let signer = RSASigner(algorithm: .rs512, key: "signingKey")
+        let header = Header(["dummy": "header"])
+        let payload = Payload("dummy payload".data(using: .utf8)!)
+        let signer = RSASigner(algorithm: .rs512, key: "privateKey")
         let jws = JWS(header: header, payload: payload, signer: signer)
-        
         let compactSerialization = CompactSerializer().serialize(jws)
         
         print("=== COMPACT SERIALIZED ===")
@@ -32,11 +31,16 @@ class ViewController: UIViewController {
     }
     
     func testJWSDecoding() {
-        let compactSerialization = "eyJkdW1teSI6ICJoZWFkZXIifQ==.eyJkdW1teSI6InBheWxvYWQifQ==.ZHVtbXlzaWduYXR1cmU="
+        let compactSerialization = "eyJkdW1teSI6ImhlYWRlciJ9.ZHVtbXkgcGF5bG9hZA==.ZHVtbXkgc2lnbmF0dXJl"
         let jws = CompactDeserializer().deserialize(JWS.self, from: compactSerialization)
+        let verifier = RSAVerifier(algorithm: .rs512, key: "publicKey")
+        
+        guard jws.validates(against: verifier) else {
+            return
+        }
         
         print("=== COMPACT DESERIALIZED ===")
-        print("\(jws.header) \(String(data: jws.payload.data(), encoding: .utf8)!) \(String(data: jws.signature.data(), encoding: .utf8)!)")
+        print("\(jws.header)\n\(String(data: jws.payload.data(), encoding: .utf8)!)\n\(String(data: jws.signature.data(), encoding: .utf8)!)")
     }
 
 }
