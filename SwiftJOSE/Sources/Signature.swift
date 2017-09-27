@@ -16,14 +16,18 @@ public struct Signature {
     }
 }
 
-extension Signature: ExpressibleByData {
+extension Signature: JOSEObjectComponent {
+    init(from data: Data) {
+        self.signature = data
+    }
+    
     func data() -> Data {
         return signature
     }
 }
 
 extension Signature: CompactDeserializable {
-    init(from deserializer: CompactDeserializerProtocol) {
+    init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(Signature.self, at: 2)
     }
 }

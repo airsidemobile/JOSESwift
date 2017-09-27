@@ -16,14 +16,18 @@ public struct Payload {
     }
 }
 
-extension Payload: ExpressibleByData {
+extension Payload: JOSEObjectComponent {
+    init(from data: Data) {
+        self.payload = data
+    }
+    
     func data() -> Data {
         return payload
     }
 }
 
 extension Payload: CompactDeserializable {
-    init(from deserializer: CompactDeserializerProtocol) {
+    init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(Payload.self, at: 1)
     }
 }

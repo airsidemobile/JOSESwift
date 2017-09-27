@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ExpressibleByData {
-    init(_ data: Data)
+protocol JOSEObjectComponent {
+    init(from data: Data)
     func data() -> Data
 }

@@ -10,18 +10,20 @@ import Foundation
 
 extension Data {
     init(base64URLEncoded: String) {
-        self = Data.init(base64Encoded: base64URLEncoded)! // Attention: base64 != base64URL
+        // Convert to base64 with the restrictions defined in RFC-7515
+        self = Data(base64Encoded: base64URLEncoded)!
     }
     
     init(base64URLEncoded: Data) {
-        self = Data.init(base64Encoded: base64URLEncoded)! // Attention: base64 != base64URL
+        // Convert to base64 with the restrictions defined in RFC-7515
+        self = Data(base64Encoded: base64URLEncoded)!
     }
     
     func base64URLEncodedString() -> String {
-        return "Base64URL(\(String(data: self, encoding: .utf8)!))"
+        return self.base64EncodedString() // NOTE: base64 != base64URL
     }
     
     func base64URLEncodedData() -> Data {
-        return base64EncodedString().data(using: .utf8)!
+        return base64EncodedData() // NOTE: base64 != base64URL
     }
 }

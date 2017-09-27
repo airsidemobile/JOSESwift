@@ -16,8 +16,8 @@ public struct Header {
     }
 }
 
-extension Header: ExpressibleByData {
-    init(_ data: Data) {
+extension Header: JOSEObjectComponent {
+    init(from data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters)
     }
@@ -28,7 +28,7 @@ extension Header: ExpressibleByData {
 }
 
 extension Header: CompactDeserializable {
-    init(from deserializer: CompactDeserializerProtocol) {
+    init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(Header.self, at: 0)
     }
 }

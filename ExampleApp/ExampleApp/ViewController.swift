@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         let payload = Payload("dummy payload".data(using: .utf8)!)
         let signer = RSASigner(algorithm: .rs512, key: "privateKey")
         let jws = JWS(header: header, payload: payload, signer: signer)
-        let compactSerialization = CompactSerializer().serialize(jws)
+        let compactSerialization = Serializer().compact(jws)
         
         print("=== COMPACT SERIALIZED ===")
         print(compactSerialization)
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     
     func testJWSDecoding() {
         let compactSerialization = "eyJkdW1teSI6ImhlYWRlciJ9.ZHVtbXkgcGF5bG9hZA==.ZHVtbXkgc2lnbmF0dXJl"
-        let jws = CompactDeserializer().deserialize(JWS.self, from: compactSerialization)
+        let jws = Deserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
         let verifier = RSAVerifier(algorithm: .rs512, key: "publicKey")
         
         guard jws.validates(against: verifier) else {
