@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     func testJWSEncoding() {
         let header = Header(["dummy": "header"])
         let payload = Payload("dummy payload".data(using: .utf8)!)
-        let signer = RSASigner(algorithm: .rs512, key: "privateKey")
+        let signer = RSASigner(publicKey: "theKey")
         let jws = JWS(header: header, payload: payload, signer: signer)
         let compactSerialization = Serializer().compact(jws)
         

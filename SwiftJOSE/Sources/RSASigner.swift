@@ -8,19 +8,13 @@
 
 import Foundation
 
-extension SigningAlgorithm {
-    public static var rs512: SigningAlgorithm {
-        return SigningAlgorithm(secKeyAlgorithm: .rsaSignatureMessagePKCS1v15SHA512, identifier: "RS512")
-    }
-}
-
 public struct RSASigner: Signer {
     let algorithm: SigningAlgorithm
     let key: String
     
-    public init(algorithm: SigningAlgorithm, key: String) {
-        self.algorithm = algorithm
-        self.key = key
+    public init(publicKey: String) {
+        self.algorithm = .rs512
+        self.key = publicKey
     }
     
     public func sign(_ signatureInput: Data) -> Data {
