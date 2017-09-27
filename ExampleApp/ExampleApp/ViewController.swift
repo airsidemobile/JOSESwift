@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     }
     
     func testJWSEncoding() {
-        let header = Header(["dummy": "header"])
+        let header = JWSHeader(algorithm: .rs512)
         let payload = Payload("dummy payload".data(using: .utf8)!)
         let signer = RSASigner(publicKey: "theKey")
         let jws = JWS(header: header, payload: payload, signer: signer)

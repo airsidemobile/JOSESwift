@@ -8,27 +8,19 @@
 
 import Foundation
 
-public struct Header {
-    fileprivate let parameters: [String: Any]
-    
-    public init(_ parameters: [String: Any]) {
-        self.parameters = parameters
-    }
+internal protocol Header: JOSEObjectComponent {
+    var parameters: [String: Any] { get }
+    init(parameters: [String: Any])
+    init(algorithm: SigningAlgorithm)
 }
-
-extension Header: JOSEObjectComponent {
+    
+internal extension Header {
     init(from data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-        self.init(parameters)
+        self.init(parameters: parameters)
     }
     
     func data() -> Data {
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
-    }
-}
-
-extension Header: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(Header.self, at: 0)
     }
 }

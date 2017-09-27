@@ -9,11 +9,11 @@
 import Foundation
 
 public struct JWS {
-    let header: Header
+    let header: JWSHeader
     let payload: Payload
     let signature: Signature
     
-    public init(header: Header, payload: Payload, signer: Signer) {
+    public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
 
@@ -21,7 +21,7 @@ public struct JWS {
         self.signature = Signature(signer.sign(signatureInput.data(using: .utf8)!))
     }
     
-    fileprivate init(header: Header, payload: Payload, signature: Signature) {
+    fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
         self.header = header
         self.payload = payload
         self.signature = signature
@@ -43,7 +43,7 @@ extension JWS: CompactSerializable {
 
 extension JWS: CompactDeserializable {
     init(from deserializer: CompactDeserializer) {
-        let header = Header(from: deserializer)
+        let header = JWSHeader(from: deserializer)
         let payload = Payload(from: deserializer)
         let signature = Signature(from: deserializer)
         self.init(header: header, payload: payload, signature: signature)
