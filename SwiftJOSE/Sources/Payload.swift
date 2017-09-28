@@ -14,6 +14,10 @@ public struct Payload {
     public init(_ payload: Data) {
         self.payload = payload
     }
+    
+    public init(_ message: String) {
+        self.payload = message.data(using: .utf8)!
+    }
 }
 
 extension Payload: JOSEObjectComponent {

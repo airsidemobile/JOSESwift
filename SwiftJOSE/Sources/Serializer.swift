@@ -8,16 +8,16 @@
 
 import Foundation
 
-protocol CompactSerializable {
+internal protocol CompactSerializable {
     func serialize(to serializer: inout CompactSerializer)
 }
 
-protocol CompactSerializer {
+internal protocol CompactSerializer {
     var components: [JOSEObjectComponent] { get }
     mutating func serialize<T: JOSEObjectComponent>(_ object: T)
 }
 
-public struct Serializer {
+internal struct Serializer {
     func compact<T: CompactSerializable>(_ object: T) -> String {
         var serializer: CompactSerializer = _CompactSerializer()
         object.serialize(to: &serializer)

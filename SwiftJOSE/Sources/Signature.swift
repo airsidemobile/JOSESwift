@@ -14,6 +14,22 @@ public struct Signature {
     public init(_ signature: Data) {
         self.signature = signature
     }
+    
+    internal init?(from signer: Signer, using header: JWSHeader, and payload: Payload) {
+        if let signature = signer.sign(Signature.signingInput(from: header, and: payload), using: header.algorithm) {
+            self.init(signature)
+            return
+        }
+        return nil
+    }
+    
+    internal func validate(with verifier: Verifier, against header: JWSHeader, and payload: Payload) -> Bool {
+        return verifier.verify(signature, against: Signature.signingInput(from: header, and: payload), using: header.algorithm)
+    }
+    
+    static func signingInput(from header: JWSHeader, and payload: Payload) -> Data {
+        return "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
+    }
 }
 
 extension Signature: JOSEObjectComponent {

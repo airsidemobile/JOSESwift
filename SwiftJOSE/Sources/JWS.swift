@@ -13,11 +13,18 @@ public struct JWS {
     let payload: Payload
     let signature: Signature
     
+    public var compactSerialized: String {
+        return Serializer().compact(self)
+    }
+    
     public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
-        let signingInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
-        self.signature = Signature(signer.sign(signingInput, using: header.algorithm)!)
+        self.signature = Signature(from: signer, using: header, and: payload)!
+    }
+    
+    public init(compactSerialization: String) {
+        self = Deserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
     fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
@@ -27,8 +34,7 @@ public struct JWS {
     }
     
     public func validates(with verifier: Verifier) -> Bool {
-        let signingInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
-        return verifier.verify(signature, against: signingInput, using: header.algorithm)
+        return signature.validate(with: verifier, against: header, and: payload)
     }
 }
 
@@ -46,5 +52,14 @@ extension JWS: CompactDeserializable {
         let payload = Payload(from: deserializer)
         let signature = Signature(from: deserializer)
         self.init(header: header, payload: payload, signature: signature)
+    }
+}
+
+extension JWS: CustomStringConvertible {
+    public var description: String {
+        let header = self.header.parameters.description
+        let payload = String(data: self.payload.data(), encoding: .utf8)!
+        let signature = String(data: self.signature.data(), encoding: .utf8)!
+        return "\(header) . \(payload) . \(signature)"
     }
 }

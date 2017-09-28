@@ -19,7 +19,7 @@ public struct RSAVerifier: Verifier {
         self.key = key
     }
     
-    public func verify(_ signature: Signature, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
+    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
         guard supportedAlgorithms.contains(algorithm) else {
             return false
         }
