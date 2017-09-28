@@ -32,11 +32,11 @@ class ViewController: UIViewController {
     }
     
     func testJWSDecoding() {
-        let compactSerialization = "eyJkdW1teSI6ImhlYWRlciJ9.ZHVtbXkgcGF5bG9hZA==.ZHVtbXkgc2lnbmF0dXJl"
+        let compactSerialization = "eyJhbGciOiJSUzUxMiJ9.ZHVtbXkgcGF5bG9hZA==.ZHVtbXkgc2lnbmF0dXJl"
         let jws = Deserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
-        let verifier = RSAVerifier(algorithm: .rs512, key: "publicKey")
+        let verifier = RSAVerifier(key: "theKey")
         
-        guard jws.validates(against: verifier) else {
+        guard jws.validates(with: verifier) else {
             return
         }
         

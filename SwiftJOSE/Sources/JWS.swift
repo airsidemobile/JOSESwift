@@ -16,10 +16,8 @@ public struct JWS {
     public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
-        
-        let signingAlgorithm = header.algorithm
-        let signignInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
-        self.signature = Signature(signer.sign(signignInput, using: signingAlgorithm)!)
+        let signingInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
+        self.signature = Signature(signer.sign(signingInput, using: header.algorithm)!)
     }
     
     fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
@@ -28,9 +26,9 @@ public struct JWS {
         self.signature = signature
     }
     
-    public func validates(against verifier: Verifier) -> Bool {
-        let signatureInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .utf8)!
-        return verifier.verify(signature.data(), against: signatureInput)
+    public func validates(with verifier: Verifier) -> Bool {
+        let signingInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
+        return verifier.verify(signature, against: signingInput, using: header.algorithm)
     }
 }
 
