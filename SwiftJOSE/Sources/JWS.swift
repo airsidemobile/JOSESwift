@@ -16,9 +16,10 @@ public struct JWS {
     public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
-
-        let signatureInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())"
-        self.signature = Signature(signer.sign(signatureInput.data(using: .utf8)!))
+        
+        let signingAlgorithm = header.algorithm
+        let signignInput = "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
+        self.signature = Signature(signer.sign(signignInput, using: signingAlgorithm)!)
     }
     
     fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {

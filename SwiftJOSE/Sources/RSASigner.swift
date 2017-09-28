@@ -9,30 +9,22 @@
 import Foundation
 
 public struct RSASigner: Signer {
-    let algorithm: SigningAlgorithm
     let key: String
     
-    public init(publicKey: String) {
-        self.algorithm = .rs512
-        self.key = publicKey
+    var supportedAlgorithms: [SigningAlgorithm] {
+        return [ .rs512 ]
     }
     
-    public func sign(_ signatureInput: Data) -> Data {
-        let string = String.init(data: signatureInput, encoding: .utf8)!
-        return "Signature(\(string))".data(using: .utf8)!
-    }
-}
-
-public struct RSAVerifier: Verifier {
-    let algorithm: SigningAlgorithm
-    let key: String
-    
-    public init(algorithm: SigningAlgorithm, key: String) {
-        self.algorithm = algorithm
+    public init(key: String) {
         self.key = key
     }
     
-    public func verify(_ signature: Data, against signatureInput: Data) -> Bool {
-        return true
+    public func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data? {
+        guard supportedAlgorithms.contains(algorithm) else {
+            return nil
+        }
+        
+        let input = String(data: signingInput, encoding: .utf8)!
+        return "\(algorithm.rawValue)(\(input))".data(using: .utf8)
     }
 }

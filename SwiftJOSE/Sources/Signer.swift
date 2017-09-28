@@ -13,11 +13,6 @@ public enum SigningAlgorithm: String {
 }
 
 public protocol Signer {
-    init(publicKey: String)
-    func sign(_ signatureInput: Data) -> Data
-}
-
-public protocol Verifier {
-    init(algorithm: SigningAlgorithm, key: String)
-    func verify(_ signature: Data, against signatureInput: Data) -> Bool
+    init(key: String)
+    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data?
 }

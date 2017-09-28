@@ -12,7 +12,8 @@ public struct JWSHeader: Header, CompactDeserializable {
     let parameters: [String : Any]
     
     public var algorithm: SigningAlgorithm {
-        return parameters["alg"] as! SigningAlgorithm
+        let rawValue = parameters["alg"] as! String
+        return SigningAlgorithm(rawValue: rawValue)!
     }
     
     public init(algorithm: SigningAlgorithm) {
