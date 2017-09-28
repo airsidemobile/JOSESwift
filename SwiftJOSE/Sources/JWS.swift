@@ -33,7 +33,7 @@ public struct JWS {
         self.signature = signature
     }
     
-    public func validates(with verifier: Verifier) -> Bool {
+    public func validates(against verifier: Verifier) -> Bool {
         return signature.validate(with: verifier, against: header, and: payload)
     }
 }

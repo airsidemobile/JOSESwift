@@ -31,7 +31,10 @@ class ViewController: UIViewController {
         print("SERIALIZED:\t\t\(compactSerialization)")
         
         let secondJWS = JWS(compactSerialization: compactSerialization)
-        print("DESERIALIZED:\t\t\(secondJWS)")
+        let verifier =  RSAVerifier(key: publicKey)
+        if secondJWS.validates(against: verifier) {
+            print("DESERIALIZED:\t\t\(secondJWS)")
+        }
     }
 
 }
