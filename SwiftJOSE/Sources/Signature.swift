@@ -27,7 +27,7 @@ public struct Signature {
         return verifier.verify(signature, against: Signature.signingInput(from: header, and: payload), using: header.algorithm)
     }
     
-    static func signingInput(from header: JWSHeader, and payload: Payload) -> Data {
+    private static func signingInput(from header: JWSHeader, and payload: Payload) -> Data {
         return "\(header.data().base64URLEncodedString()).\(payload.data().base64URLEncodedString())".data(using: .ascii)!
     }
 }
