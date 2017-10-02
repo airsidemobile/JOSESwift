@@ -8,25 +8,20 @@
 
 import Foundation
 
-public struct JWSHeader: Header, CompactDeserializable {
+public struct JWSHeader: Header {
     let parameters: [String : Any]
     
-    public var algorithm: SigningAlgorithm {
-        let rawValue = parameters["alg"] as! String
-        return SigningAlgorithm(rawValue: rawValue)!
+    init(parameters: [String : Any]) {
+        // assert required parameters for JWS
+        self.parameters = parameters
     }
     
     public init(algorithm: SigningAlgorithm) {
         self.init(parameters: ["alg": algorithm.rawValue])
     }
     
-    internal init(parameters: [String : Any]) {
-        // assert parameters["alg"]
-        self.parameters = parameters
-    }
-    
-    internal init(from deserializer: CompactDeserializer) {
-        // assert parameters["alg"]
-        self = deserializer.deserialize(JWSHeader.self, at: 0)
+    public var algorithm: SigningAlgorithm {
+        let rawValue = parameters["alg"] as! String
+        return SigningAlgorithm(rawValue: rawValue)!
     }
 }

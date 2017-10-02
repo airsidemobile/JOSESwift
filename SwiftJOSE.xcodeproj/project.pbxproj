@@ -76,7 +76,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6582C0BB1F4B09DC00B153D5 /* Commons */ = {
+		6582C0BB1F4B09DC00B153D5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				65A77E931F7285A900A66DDE /* Header.swift */,
@@ -86,7 +86,7 @@
 				652F6DE81F73E6780002DEE0 /* Serializer.swift */,
 				65D1D0661F7A878D006377CD /* Deserializer.swift */,
 			);
-			name = Commons;
+			name = Common;
 			sourceTree = "<group>";
 		};
 		65A9D3D81F45CDD7004E0B61 /* Tests */ = {
@@ -101,7 +101,7 @@
 		65A9D3E21F45CDF1004E0B61 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				6582C0BB1F4B09DC00B153D5 /* Commons */,
+				6582C0BB1F4B09DC00B153D5 /* Common */,
 				65FABAEB1F4AD8FA006D7679 /* JWS */,
 				65FABAE81F4ABF61006D7679 /* Crypto */,
 			);

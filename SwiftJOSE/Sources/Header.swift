@@ -8,13 +8,12 @@
 
 import Foundation
 
-internal protocol Header: JOSEObjectComponent {
+protocol Header: JOSEObjectComponent, CompactDeserializable {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any])
-    init(algorithm: SigningAlgorithm)
 }
     
-internal extension Header {
+extension Header {
     init(from data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters: parameters)
@@ -22,5 +21,11 @@ internal extension Header {
     
     func data() -> Data {
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
+    }
+}
+
+extension Header where Self == JWSHeader {
+    init(from deserializer: CompactDeserializer) {
+        self = deserializer.deserialize(JWSHeader.self, at: 0)
     }
 }

@@ -22,18 +22,20 @@ class ViewController: UIViewController {
     }
     
     func testJWS() {
+        print("Message:\n\(message)\n")
+        
         let header = JWSHeader(algorithm: .rs512)
         let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey)
         let firstJWS = JWS(header: header, payload: payload, signer: signer)
         let compactSerialization = firstJWS.compactSerialized
         
-        print("SERIALIZED:\t\t\(compactSerialization)")
+        print("Serialized:\n\(compactSerialization)\n")
         
         let secondJWS = JWS(compactSerialization: compactSerialization)
         let verifier =  RSAVerifier(key: publicKey)
         if secondJWS.validates(against: verifier) {
-            print("DESERIALIZED:\t\t\(secondJWS)")
+            print("Deserialized:\n\(secondJWS)")
         }
     }
 
