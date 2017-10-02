@@ -27,7 +27,7 @@ public struct JWSHeader: Header {
 }
 
 extension JWSHeader: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
+    public init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(JWSHeader.self, at: 0)
     }
 }

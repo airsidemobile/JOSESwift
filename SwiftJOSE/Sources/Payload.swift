@@ -14,11 +14,11 @@ protocol Payload: JOSEObjectComponent {
 }
 
 extension Payload {
-    init(from data: Data) {
+    public init(from data: Data) {
         self.init(data)
     }
     
-    func data() -> Data {
+    public func data() -> Data {
         return data
     }
 }

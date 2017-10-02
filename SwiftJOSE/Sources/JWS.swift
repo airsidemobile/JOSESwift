@@ -39,7 +39,7 @@ public struct JWS {
 }
 
 extension JWS: CompactSerializable {
-    func serialize(to serializer: inout CompactSerializer) {
+    public func serialize(to serializer: inout CompactSerializer) {
         serializer.serialize(header)
         serializer.serialize(payload)
         serializer.serialize(signature)
@@ -47,7 +47,7 @@ extension JWS: CompactSerializable {
 }
 
 extension JWS: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
+    public init(from deserializer: CompactDeserializer) {
         let header = JWSHeader(from: deserializer)
         let payload = JWSPayload(from: deserializer)
         let signature = Signature(from: deserializer)

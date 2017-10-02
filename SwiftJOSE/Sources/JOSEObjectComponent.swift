@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal protocol JOSEObjectComponent {
+public protocol JOSEObjectComponent {
     init(from data: Data)
     func data() -> Data
 }

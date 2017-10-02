@@ -35,8 +35,13 @@ class ViewController: UIViewController {
         let secondJWS = JWS(compactSerialization: compactSerialization)
         let verifier =  RSAVerifier(key: publicKey)
         if secondJWS.validates(against: verifier) {
-            print("Deserialized:\n\(secondJWS)")
+            print("Deserialized:\n\(secondJWS)\n")
         }
+        
+        let justTheHeader = Deserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerialization)
+        print("Just The Header:\n\(justTheHeader)\n")
+        let justThePayload = Deserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerialization)
+        print("Just The Payload:\n\(justThePayload)")
     }
 
 }

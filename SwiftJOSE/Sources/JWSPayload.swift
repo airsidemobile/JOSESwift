@@ -17,7 +17,7 @@ public struct JWSPayload: Payload {
 }
 
 extension JWSPayload: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
+    public init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(JWSPayload.self, at: 1)
     }
 }

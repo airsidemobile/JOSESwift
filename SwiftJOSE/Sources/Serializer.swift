@@ -8,17 +8,17 @@
 
 import Foundation
 
-internal protocol CompactSerializable {
+public protocol CompactSerializable {
     func serialize(to serializer: inout CompactSerializer)
 }
 
-internal protocol CompactSerializer {
+public protocol CompactSerializer {
     var components: [JOSEObjectComponent] { get }
     mutating func serialize<T: JOSEObjectComponent>(_ object: T)
 }
 
-internal struct Serializer {
-    func compact<T: CompactSerializable>(_ object: T) -> String {
+public struct Serializer {
+    public func compact<T: CompactSerializable>(_ object: T) -> String {
         var serializer: CompactSerializer = _CompactSerializer()
         object.serialize(to: &serializer)
         let base64URLEncodings = serializer.components.map { $0.data().base64URLEncodedString() }

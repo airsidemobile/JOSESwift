@@ -33,17 +33,17 @@ public struct Signature {
 }
 
 extension Signature: JOSEObjectComponent {
-    init(from data: Data) {
+    public init(from data: Data) {
         self.signature = data
     }
     
-    func data() -> Data {
+    public func data() -> Data {
         return signature
     }
 }
 
 extension Signature: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
+    public init(from deserializer: CompactDeserializer) {
         self = deserializer.deserialize(Signature.self, at: 2)
     }
 }

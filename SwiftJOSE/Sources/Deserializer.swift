@@ -8,16 +8,17 @@
 
 import Foundation
 
-internal protocol CompactDeserializable {
+public protocol CompactDeserializable {
     init(from deserializer: CompactDeserializer)
 }
 
-internal protocol CompactDeserializer {
+public protocol CompactDeserializer {
     func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T
 }
 
-internal struct Deserializer {
-    func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
+public struct Deserializer {
+    public init() { }
+    public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
         let components = compactSerialization.components(separatedBy: ".").map { Data(base64URLEncoded: $0) }
         let deserializer = _CompactDeserializer(components: components)
         return T(from: deserializer)

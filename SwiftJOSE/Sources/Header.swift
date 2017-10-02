@@ -14,12 +14,12 @@ protocol Header: JOSEObjectComponent {
 }
     
 extension Header {
-    init(from data: Data) {
+    public init(from data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters: parameters)
     }
     
-    func data() -> Data {
+    public func data() -> Data {
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
     }
 }
