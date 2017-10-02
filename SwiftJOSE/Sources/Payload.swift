@@ -8,27 +8,17 @@
 
 import Foundation
 
-public struct Payload {
-    fileprivate let payload: Data
-
-    public init(_ payload: Data) {
-        self.payload = payload
-    }
+protocol Payload: JOSEObjectComponent {
+    var data: Data { get }
+    init(_ data: Data)
 }
 
-extension Payload: JOSEObjectComponent {
+extension Payload {
     init(from data: Data) {
-        self.payload = data
+        self.init(data)
     }
     
     func data() -> Data {
-        return payload
+        return data
     }
 }
-
-extension Payload: CompactDeserializable {
-    init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(Payload.self, at: 1)
-    }
-}
-

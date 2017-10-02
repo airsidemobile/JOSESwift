@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		652F6DE91F73E6780002DEE0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE81F73E6780002DEE0 /* Serializer.swift */; };
 		65353F5D1F750A6A003E099B /* Data+Base64URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65353F5C1F750A6A003E099B /* Data+Base64URL.swift */; };
+		65616A471F827EF900FA685D /* JWSPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65616A461F827EF900FA685D /* JWSPayload.swift */; };
 		6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6571F6221F7BF786004D53C5 /* JWSHeader.swift */; };
 		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		652F6DE81F73E6780002DEE0 /* Serializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
 		65353F5C1F750A6A003E099B /* Data+Base64URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Base64URL.swift"; sourceTree = "<group>"; };
+		65616A461F827EF900FA685D /* JWSPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSPayload.swift; sourceTree = "<group>"; };
 		6571F6221F7BF786004D53C5 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				65C7D92A1F472ACD000CCDB2 /* JWS.swift */,
 				6571F6221F7BF786004D53C5 /* JWSHeader.swift */,
+				65616A461F827EF900FA685D /* JWSPayload.swift */,
 				65E810611F79489900C7E2A9 /* Signature.swift */,
 				65C7D92C1F472B4D000CCDB2 /* Signer.swift */,
 				65D868101F7CEBA200769BBF /* Verifier.swift */,
@@ -295,6 +298,7 @@
 				65D8680F1F7CE35000769BBF /* RSAVerifier.swift in Sources */,
 				65E810621F79489900C7E2A9 /* Signature.swift in Sources */,
 				65D1D0651F7A4DB3006377CD /* JOSEObjectComponent.swift in Sources */,
+				65616A471F827EF900FA685D /* JWSPayload.swift in Sources */,
 				65D868111F7CEBA200769BBF /* Verifier.swift in Sources */,
 				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
 				65353F5D1F750A6A003E099B /* Data+Base64URL.swift in Sources */,

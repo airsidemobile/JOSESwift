@@ -25,3 +25,9 @@ public struct JWSHeader: Header {
         return SigningAlgorithm(rawValue: rawValue)!
     }
 }
+
+extension JWSHeader: CompactDeserializable {
+    init(from deserializer: CompactDeserializer) {
+        self = deserializer.deserialize(JWSHeader.self, at: 0)
+    }
+}

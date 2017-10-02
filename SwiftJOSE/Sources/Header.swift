@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Header: JOSEObjectComponent, CompactDeserializable {
+protocol Header: JOSEObjectComponent {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any])
 }
@@ -21,11 +21,5 @@ extension Header {
     
     func data() -> Data {
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
-    }
-}
-
-extension Header where Self == JWSHeader {
-    init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSHeader.self, at: 0)
     }
 }

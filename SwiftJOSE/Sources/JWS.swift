@@ -10,14 +10,14 @@ import Foundation
 
 public struct JWS {
     let header: JWSHeader
-    let payload: Payload
+    let payload: JWSPayload
     let signature: Signature
     
     public var compactSerialized: String {
         return Serializer().compact(self)
     }
     
-    public init(header: JWSHeader, payload: Payload, signer: Signer) {
+    public init(header: JWSHeader, payload: JWSPayload, signer: Signer) {
         self.header = header
         self.payload = payload
         self.signature = Signature(from: signer, using: header, and: payload)!
@@ -27,7 +27,7 @@ public struct JWS {
         self = Deserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
-    fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
+    fileprivate init(header: JWSHeader, payload: JWSPayload, signature: Signature) {
         self.header = header
         self.payload = payload
         self.signature = signature
@@ -49,7 +49,7 @@ extension JWS: CompactSerializable {
 extension JWS: CompactDeserializable {
     init(from deserializer: CompactDeserializer) {
         let header = JWSHeader(from: deserializer)
-        let payload = Payload(from: deserializer)
+        let payload = JWSPayload(from: deserializer)
         let signature = Signature(from: deserializer)
         self.init(header: header, payload: payload, signature: signature)
     }
