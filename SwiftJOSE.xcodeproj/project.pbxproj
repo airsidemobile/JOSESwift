@@ -11,7 +11,7 @@
 		65353F5D1F750A6A003E099B /* Data+Base64URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65353F5C1F750A6A003E099B /* Data+Base64URL.swift */; };
 		65616A471F827EF900FA685D /* JWSPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65616A461F827EF900FA685D /* JWSPayload.swift */; };
 		6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6571F6221F7BF786004D53C5 /* JWSHeader.swift */; };
-		65A77E941F7285A900A66DDE /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* Header.swift */; };
+		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
 		65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A9D3D91F45CDD7004E0B61 /* Tests.swift */; };
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
@@ -41,7 +41,7 @@
 		65353F5C1F750A6A003E099B /* Data+Base64URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Base64URL.swift"; sourceTree = "<group>"; };
 		65616A461F827EF900FA685D /* JWSPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSPayload.swift; sourceTree = "<group>"; };
 		6571F6221F7BF786004D53C5 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
-		65A77E931F7285A900A66DDE /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65A9D3D91F45CDD7004E0B61 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 		6582C0BB1F4B09DC00B153D5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				65A77E931F7285A900A66DDE /* Header.swift */,
+				65A77E931F7285A900A66DDE /* JOSEHeader.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				65353F5C1F750A6A003E099B /* Data+Base64URL.swift */,
 				65D1D0641F7A4DB3006377CD /* JOSEObjectComponent.swift */,
@@ -300,7 +300,7 @@
 				65D1D0651F7A4DB3006377CD /* JOSEObjectComponent.swift in Sources */,
 				65616A471F827EF900FA685D /* JWSPayload.swift in Sources */,
 				65D868111F7CEBA200769BBF /* Verifier.swift in Sources */,
-				65A77E941F7285A900A66DDE /* Header.swift in Sources */,
+				65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */,
 				65353F5D1F750A6A003E099B /* Data+Base64URL.swift in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
 			);

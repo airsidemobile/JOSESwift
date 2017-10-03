@@ -1,5 +1,5 @@
 //
-//  Header.swift
+//  JOSEHeader.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 20/09/2017.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol Header: JOSEObjectComponent {
+protocol JOSEHeader: JOSEObjectComponent {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any])
 }
     
-extension Header {
+extension JOSEHeader {
     public init(from data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters: parameters)

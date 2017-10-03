@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct JWSHeader: Header {
+public struct JWSHeader: JOSEHeader {
     let parameters: [String : Any]
     
     init(parameters: [String : Any]) {
