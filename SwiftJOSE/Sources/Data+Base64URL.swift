@@ -1,5 +1,5 @@
 //
-//  Data+Base64URLCodable.swift
+//  Data+Base64URL.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 22/09/2017.

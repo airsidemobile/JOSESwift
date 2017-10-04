@@ -1,5 +1,5 @@
 //
-//  ExpressibleByData.swift
+//  JOSEObjectComponent.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 26/09/2017.

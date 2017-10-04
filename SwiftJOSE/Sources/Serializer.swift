@@ -1,5 +1,5 @@
 //
-//  Serialization.swift
+//  Serializer.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 21/09/2017.
