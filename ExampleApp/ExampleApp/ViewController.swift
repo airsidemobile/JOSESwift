@@ -18,10 +18,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testJWS()
+        demoJWS()
     }
     
-    func testJWS() {
+    func demoJWS() {
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .rs512)
