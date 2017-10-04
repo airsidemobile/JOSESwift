@@ -28,19 +28,19 @@ class ViewController: UIViewController {
         let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey)
         let firstJWS = JWS(header: header, payload: payload, signer: signer)
-        let compactSerialization = firstJWS.compactSerialized
+        let compactSerializationFirstJWS = firstJWS.compactSerialized
         
-        print("Serialized:\n\(compactSerialization)\n")
+        print("Serialized:\n\(compactSerializationFirstJWS)\n")
         
-        let secondJWS = JWS(compactSerialization: compactSerialization)
+        let secondJWS = JWS(compactSerialization: compactSerializationFirstJWS)
         let verifier =  RSAVerifier(key: publicKey)
         if secondJWS.validates(against: verifier) {
             print("Deserialized:\n\(secondJWS)\n")
         }
         
-        let justTheHeader = Deserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerialization)
+        let justTheHeader = Deserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Header:\n\(justTheHeader)\n")
-        let justThePayload = Deserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerialization)
+        let justThePayload = Deserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Payload:\n\(justThePayload)")
     }
 
