@@ -23,10 +23,10 @@ public struct JWS {
     }
     
     /**
-     Constructs a JWS object from a given header, payload, and signer
-     - parameters:
-         - header: A fully initialized `JWSHeader`
-         - payload: A fully initialized `JWSPayload`
+     Constructs a JWS object from a given header, payload, and signer.
+     - Parameters:
+         - header: A fully initialized `JWSHeader`.
+         - payload: A fully initialized `JWSPayload`.
          - signer: The `Signer` used to compute the JWS signature from the header and payload.
     */
     public init(header: JWSHeader, payload: JWSPayload, signer: Signer) {
