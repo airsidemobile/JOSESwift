@@ -1,5 +1,5 @@
 //
-//  Serializer.swift
+//  JOSESerializer.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 21/09/2017.
@@ -17,7 +17,7 @@ public protocol CompactSerializer {
     mutating func serialize<T: JOSEObjectComponent>(_ object: T)
 }
 
-public struct Serializer {
+public struct JOSESerializer {
     public func compact<T: CompactSerializable>(_ object: T) -> String {
         var serializer: CompactSerializer = _CompactSerializer()
         object.serialize(to: &serializer)

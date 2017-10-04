@@ -19,7 +19,7 @@ public struct JWS {
     
     /// The compact serialization of this JWS object.
     public var compactSerialized: String {
-        return Serializer().compact(self)
+        return JOSESerializer().compact(self)
     }
     
     /**
@@ -41,7 +41,7 @@ public struct JWS {
          - compactSerialization: A compact serialized JWS object as received e.g. from the server.
     */
     public init(compactSerialization: String) {
-        self = Deserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
+        self = JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
     fileprivate init(header: JWSHeader, payload: JWSPayload, signature: Signature) {

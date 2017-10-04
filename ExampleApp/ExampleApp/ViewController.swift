@@ -38,9 +38,9 @@ class ViewController: UIViewController {
             print("Deserialized:\n\(secondJWS)\n")
         }
         
-        let justTheHeader = Deserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
+        let justTheHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Header:\n\(justTheHeader)\n")
-        let justThePayload = Deserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
+        let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Payload:\n\(justThePayload)")
     }
 

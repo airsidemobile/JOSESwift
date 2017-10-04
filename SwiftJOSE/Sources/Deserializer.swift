@@ -1,5 +1,5 @@
 //
-//  Deserializer.swift
+//  JOSEDeserializer.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 26/09/2017.
@@ -16,7 +16,7 @@ public protocol CompactDeserializer {
     func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T
 }
 
-public struct Deserializer {
+public struct JOSEDeserializer {
     public init() { }
     public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
         let components = compactSerialization.components(separatedBy: ".").map { Data(base64URLEncoded: $0) }
