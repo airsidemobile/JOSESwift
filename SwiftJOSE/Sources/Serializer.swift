@@ -21,7 +21,7 @@ public struct JOSESerializer {
     public func compact<T: CompactSerializable>(_ object: T) -> String {
         var serializer: CompactSerializer = _CompactSerializer()
         object.serialize(to: &serializer)
-        let base64URLEncodings = serializer.components.map { $0.data().base64URLEncodedString() }
+        let base64URLEncodings = serializer.components.map { component in component.data().base64URLEncodedString() }
         return base64URLEncodings.joined(separator: ".")
     }
 }
