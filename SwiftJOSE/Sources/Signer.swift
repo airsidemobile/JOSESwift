@@ -8,13 +8,11 @@
 
 import Foundation
 
-public protocol Signer {
-    init(algorithm: SigningAlgorithm, key: String)
-    func sign(_ signatureInput: Data) -> Data
+public enum SigningAlgorithm: String {
+    case rs512 = "RS512"
 }
 
-public struct SigningAlgorithm {
-    // Add supported signing Algorithms in the respective `Signer` implementation.
-    let secKeyAlgorithm: SecKeyAlgorithm
-    let identifier: String
+public protocol Signer {
+    init(key: String)
+    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data?
 }

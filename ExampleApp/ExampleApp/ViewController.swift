@@ -11,19 +11,37 @@ import SwiftJOSE
 
 class ViewController: UIViewController {
 
+    let message = "so cool"
+    let privateKey = "thePrivateKey"
+    let publicKey = "thePublicKey"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        testJWS()
+        demoJWS()
     }
     
-    func testJWS() {
-        let header = Header(["gnu": "linux"])
-        let payload = Payload("so cool".data(using: .utf8)!)
-        let signer = RSASigner(algorithm: .rs512, key: "signingKey")
-        let jws = JWS(header: header, payload: payload, signer: signer)
+    func demoJWS() {
+        print("Message:\n\(message)\n")
         
-        print(jws.compactSerialization())
+        let header = JWSHeader(algorithm: .rs512)
+        let payload = JWSPayload(message.data(using: .utf8)!)
+        let signer = RSASigner(key: privateKey)
+        let firstJWS = JWS(header: header, payload: payload, signer: signer)
+        let compactSerializationFirstJWS = firstJWS.compactSerialized
+        
+        print("Serialized:\n\(compactSerializationFirstJWS)\n")
+        
+        let secondJWS = JWS(compactSerialization: compactSerializationFirstJWS)
+        let verifier =  RSAVerifier(key: publicKey)
+        if secondJWS.validates(against: verifier) {
+            print("Deserialized:\n\(secondJWS)\n")
+        }
+        
+        let justTheHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
+        print("Just The Header:\n\(justTheHeader)\n")
+        let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
+        print("Just The Payload:\n\(justThePayload)")
     }
 
 }
