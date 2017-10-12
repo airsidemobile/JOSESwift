@@ -28,7 +28,7 @@ extension JOSEHeader {
     }
 }
 
-// Common header parameters that both JWS and JWE headers must support.
+/// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
 public protocol CommonHeaderParameterSpace {
     var algorithm: Algorithm { get }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// The header of a `JWE` object.
 public struct JWEHeader: JOSEHeader {
     let parameters: [String: Any]
     
