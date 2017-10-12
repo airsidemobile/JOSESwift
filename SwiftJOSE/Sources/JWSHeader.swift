@@ -15,15 +15,6 @@ public struct JWSHeader: JOSEHeader {
         // assert required parameters for JWS
         self.parameters = parameters
     }
-    
-    public init(algorithm: SigningAlgorithm) {
-        self.init(parameters: ["alg": algorithm.rawValue])
-    }
-    
-    public var algorithm: SigningAlgorithm {
-        let rawValue = parameters["alg"] as! String
-        return SigningAlgorithm(rawValue: rawValue)!
-    }
 }
 
 extension JWSHeader: CompactDeserializable {
