@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         demoJWS()
+        demoJWE()
     }
     
     func demoJWS() {
@@ -42,6 +43,10 @@ class ViewController: UIViewController {
         print("Just The Header:\n\(justTheHeader)\n")
         let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Payload:\n\(justThePayload)")
+    }
+    
+    func demoJWE() {
+        let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
     }
 
 }

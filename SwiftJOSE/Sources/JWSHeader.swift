@@ -9,11 +9,16 @@
 import Foundation
 
 public struct JWSHeader: JOSEHeader {
-    let parameters: [String : Any]
+    public let parameters: [String: Any]
     
-    init(parameters: [String : Any]) {
-        // assert required parameters for JWS
+    public init(parameters: [String: Any]) {
+        // TODO: Assert that required JWS parameters are present.
         self.parameters = parameters
+    }
+    
+    /// Initializes a `JWSHeader` with the specified algorithm.
+    public init(algorithm: SigningAlgorithm) {
+        self.init(parameters: ["alg": algorithm.rawValue])
     }
 }
 
