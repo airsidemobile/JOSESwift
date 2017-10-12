@@ -15,7 +15,7 @@ protocol JOSEHeader: JOSEObjectComponent {
     init(parameters: [String: Any])
     
     init(from data: Data)
-    func data()
+    func data() -> Data
 }
 
 // `JOSEObjectComponent` implementation.
