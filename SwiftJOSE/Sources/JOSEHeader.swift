@@ -30,8 +30,8 @@ public extension JOSEHeader {
 
 // Common header parameters that both JWS and JWE headers must support.
 public extension JOSEHeader {
-    var algorithm: SigningAlgorithm {
-        return SigningAlgorithm(rawValue: parameters["alg"] as! String)!
+    var algorithm: Algorithm {
+        return Algorithm(rawValue: parameters["alg"] as! String)!
     }
 }
 

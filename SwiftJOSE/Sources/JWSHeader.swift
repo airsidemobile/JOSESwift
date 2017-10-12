@@ -17,7 +17,7 @@ public struct JWSHeader: JOSEHeader {
     }
     
     /// Initializes a `JWSHeader` with the specified algorithm.
-    public init(algorithm: SigningAlgorithm) {
+    public init(algorithm: Algorithm) {
         self.init(parameters: ["alg": algorithm.rawValue])
     }
 }

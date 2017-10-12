@@ -17,7 +17,7 @@ public struct JWEHeader: JOSEHeader {
     }
     
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: SigningAlgorithm, encryptionAlgorithm: SigningAlgorithm) {
+    public init(algorithm: Algorithm, encryptionAlgorithm: Algorithm) {
         self.init(parameters: [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
@@ -28,8 +28,8 @@ public struct JWEHeader: JOSEHeader {
 // JWE specific header parameters.
 public extension JWEHeader {
     /// The algorithm used to encrypt the Content Encryption Key.
-    public var encryptionAlgorithm: SigningAlgorithm {
-        return SigningAlgorithm(rawValue: parameters["enc"] as! String)!
+    public var encryptionAlgorithm: Algorithm {
+        return Algorithm(rawValue: parameters["enc"] as! String)!
     }
 }
 

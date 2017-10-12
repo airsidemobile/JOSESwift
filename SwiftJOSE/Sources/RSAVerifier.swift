@@ -11,7 +11,7 @@ import Foundation
 public struct RSAVerifier: Verifier {
     let key: String
     
-    var supportedAlgorithms: [SigningAlgorithm] {
+    var supportedAlgorithms: [Algorithm] {
         return [ .rs512 ]
     }
     
@@ -19,7 +19,7 @@ public struct RSAVerifier: Verifier {
         self.key = key
     }
     
-    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
+    public func verify(_ signature: Data, against signingInput: Data, using algorithm: Algorithm) -> Bool {
         guard supportedAlgorithms.contains(algorithm) else {
             return false
         }
