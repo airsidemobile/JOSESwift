@@ -9,9 +9,9 @@
 import Foundation
 
 public struct JWEHeader: JOSEHeader {
-    public let parameters: [String: Any]
+    let parameters: [String: Any]
     
-    public init(parameters: [String: Any]) {
+    init(parameters: [String: Any]) {
         // TODO: Assert that required JWE parameters are present.
         self.parameters = parameters
     }
@@ -25,9 +25,18 @@ public struct JWEHeader: JOSEHeader {
     }
 }
 
+// Header parameters that both a `JWSHeader` and a `JWEHeader` must support.
+extension JWEHeader: CommonHeaderParameterSpace {
+    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
+    public var algorithm: Algorithm {
+        return Algorithm(rawValue: parameters["alg"] as! String)!
+    }
+}
+
 // JWE specific header parameters.
 public extension JWEHeader {
-    /// The algorithm used to encrypt the Content Encryption Key.
+    /// The encryption algorithm used to perform authenicated encryption of the plaintext
+    /// to produce the ciphertext and the Authentication Tag.
     public var encryptionAlgorithm: Algorithm {
         return Algorithm(rawValue: parameters["enc"] as! String)!
     }

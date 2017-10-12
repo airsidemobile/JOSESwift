@@ -9,9 +9,9 @@
 import Foundation
 
 public struct JWSHeader: JOSEHeader {
-    public let parameters: [String: Any]
+    let parameters: [String: Any]
     
-    public init(parameters: [String: Any]) {
+    init(parameters: [String: Any]) {
         // TODO: Assert that required JWS parameters are present.
         self.parameters = parameters
     }
@@ -19,6 +19,14 @@ public struct JWSHeader: JOSEHeader {
     /// Initializes a `JWSHeader` with the specified algorithm.
     public init(algorithm: Algorithm) {
         self.init(parameters: ["alg": algorithm.rawValue])
+    }
+}
+
+// Header parameters that both a `JWSHeader` and a `JWEHeader` must support.
+extension JWSHeader: CommonHeaderParameterSpace {
+    /// The algorithm used to sign the payload.
+    public var algorithm: Algorithm {
+        return Algorithm(rawValue: parameters["alg"] as! String)!
     }
 }
 
