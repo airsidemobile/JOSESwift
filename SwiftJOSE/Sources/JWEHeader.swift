@@ -26,7 +26,7 @@ public struct JWEHeader: JOSEHeader {
     }
 }
 
-// Header parameters that both a `JWSHeader` and a `JWEHeader` must support.
+// Header parameters that both a JWS Header and a JWE Header must support.
 extension JWEHeader: CommonHeaderParameterSpace {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
     public var algorithm: Algorithm {
@@ -34,7 +34,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
     }
 }
 
-// JWE specific header parameters.
+// Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The encryption algorithm used to perform authenicated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.

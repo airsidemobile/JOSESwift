@@ -23,7 +23,7 @@ public struct JWSHeader: JOSEHeader {
     }
 }
 
-// Header parameters that both a `JWSHeader` and a `JWEHeader` must support.
+// Header parameters that both a JWS Header and a JWE Header must support.
 extension JWSHeader: CommonHeaderParameterSpace {
     /// The algorithm used to sign the payload.
     public var algorithm: Algorithm {
