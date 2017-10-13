@@ -11,10 +11,10 @@ import Foundation
 public struct JWE {
     let header: JWEHeader
     let payload: Payload
-    let encryptedKey: String
-    let initializationVector: String
-    let ciphertext: String
-    let authenticationTag: String
+    let encryptedKey: Data
+    let initializationVector: Data
+    let ciphertext: Data
+    let authenticationTag: Data
     
     init(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
         self.header = header

@@ -16,6 +16,11 @@ public struct AESEncrypter: Encrypter {
     }
     
     func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts {
-        return JWECryptoParts(encryptedKey: "encryptedkey", initializationVector: "iv", ciphertext: "ciphertext", authenticationTag: "authtag")
+        return JWECryptoParts(
+            encryptedKey: "encryptedkey".data(using: .utf8)!,
+            initializationVector: "iv".data(using: .utf8)!,
+            ciphertext: "ciphertext".data(using: .utf8)!,
+            authenticationTag: "authtag".data(using: .utf8)!
+        )
     }
 }

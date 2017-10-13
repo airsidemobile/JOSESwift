@@ -9,10 +9,10 @@
 import Foundation
 
 struct JWECryptoParts {
-    let encryptedKey: String
-    let initializationVector: String
-    let ciphertext: String
-    let authenticationTag: String
+    let encryptedKey: Data
+    let initializationVector: Data
+    let ciphertext: Data
+    let authenticationTag: Data
 }
 
 protocol Encrypter {
