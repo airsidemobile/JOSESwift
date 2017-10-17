@@ -51,6 +51,9 @@ class ViewController: UIViewController {
         let encrypter = AESEncrypter(publicKey: "key")
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
         print(jwe.compactSerialized)
+        
+        let secondJWE = JWE(compactSerialization: jwe.compactSerialized)
+        print(secondJWE)
     }
 
 }

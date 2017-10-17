@@ -30,6 +30,19 @@ public struct JWE {
         self.ciphertext = cryptoParts.ciphertext
         self.authenticationTag = cryptoParts.authenticationTag
     }
+    
+    public init(compactSerialization: String) {
+        self = JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
+    }
+    
+    private init(header: JWEHeader, payload: JWEPayload, encryptedKey: Data, initializationVector: Data, authenticationTag: Data, ciphertext: Data) {
+        self.header = header
+        self.payload = payload
+        self.encryptedKey = encryptedKey
+        self.initializationVector = initializationVector
+        self.authenticationTag = authenticationTag
+        self.ciphertext = ciphertext
+    }
 }
 
 extension JWE: CompactSerializable {
@@ -39,5 +52,19 @@ extension JWE: CompactSerializable {
         serializer.serialize(initializationVector)
         serializer.serialize(ciphertext)
         serializer.serialize(authenticationTag)
+    }
+}
+
+extension JWE: CompactDeserializable {
+    public init (from deserializer: CompactDeserializer) {
+        let header = JWEHeader(from: deserializer)
+        let encryptedKey = deserializer.deserialize(Data.self, at: 1)
+        let initializationVector = deserializer.deserialize(Data.self, at: 2)
+        let ciphertext = deserializer.deserialize(Data.self, at: 3)
+        let authenticationTag = deserializer.deserialize(Data.self, at: 4)
+        
+        // TODO: Decrypt
+        let payload = JWEPayload("deserialized payload".data(using: .utf8)!)
+        self.init(header: header, payload: payload, encryptedKey: encryptedKey, initializationVector: initializationVector, authenticationTag: authenticationTag, ciphertext: ciphertext)
     }
 }
