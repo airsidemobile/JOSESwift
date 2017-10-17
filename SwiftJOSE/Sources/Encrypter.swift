@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Dummy container to simulate cryptographic values that are related to
+// and/or computed in the encryption process and not part of the skeleton.
 public struct JWECryptoParts {
     let encryptedKey: Data
     let initializationVector: Data
