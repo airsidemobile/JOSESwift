@@ -11,11 +11,11 @@ import Foundation
 public struct AESEncrypter: Encrypter {
     let kek: String
     
-    init(publicKey kek: String) {
+    public init(publicKey kek: String) {
         self.kek = kek
     }
     
-    func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts {
+    public func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts {
         return JWECryptoParts(
             encryptedKey: "encryptedkey".data(using: .utf8)!,
             initializationVector: "iv".data(using: .utf8)!,

@@ -10,13 +10,17 @@ import Foundation
 
 public struct JWE {
     let header: JWEHeader
-    let payload: Payload
+    let payload: JWEPayload
     let encryptedKey: Data
     let initializationVector: Data
     let ciphertext: Data
     let authenticationTag: Data
+     
+    public var compactSerialized: String {
+        return JOSESerializer().compact(self)
+    }
     
-    init(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
+    public init(header: JWEHeader, payload: JWEPayload, encrypter: Encrypter) {
         self.header = header
         self.payload = payload
         
@@ -25,5 +29,15 @@ public struct JWE {
         self.initializationVector = cryptoParts.initializationVector
         self.ciphertext = cryptoParts.ciphertext
         self.authenticationTag = cryptoParts.authenticationTag
+    }
+}
+
+extension JWE: CompactSerializable {
+    public func serialize(to serializer: inout CompactSerializer) {
+        serializer.serialize(header)
+        serializer.serialize(encryptedKey)
+        serializer.serialize(initializationVector)
+        serializer.serialize(ciphertext)
+        serializer.serialize(authenticationTag)
     }
 }

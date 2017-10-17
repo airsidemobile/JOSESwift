@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct JWECryptoParts {
+public struct JWECryptoParts {
     let encryptedKey: Data
     let initializationVector: Data
     let ciphertext: Data
     let authenticationTag: Data
 }
 
-protocol Encrypter {
+public protocol Encrypter {
     init(publicKey kek: String)
     func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts
 }

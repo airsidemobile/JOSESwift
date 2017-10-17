@@ -47,6 +47,10 @@ class ViewController: UIViewController {
     
     func demoJWE() {
         let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
+        let payload = JWEPayload(message.data(using: .utf8)!)
+        let encrypter = AESEncrypter(publicKey: "key")
+        let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
+        print(jwe.compactSerialized)
     }
 
 }
