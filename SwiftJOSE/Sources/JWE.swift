@@ -10,7 +10,6 @@ import Foundation
 
 public struct JWE {
     let header: JWEHeader
-    let payload: JWEPayload
     let encryptedKey: Data
     let initializationVector: Data
     let ciphertext: Data
@@ -22,7 +21,6 @@ public struct JWE {
     
     public init(header: JWEHeader, payload: JWEPayload, encrypter: Encrypter) {
         self.header = header
-        self.payload = payload
         
         let cryptoParts = encrypter.encrypt(plaintext: payload.data(), withHeader: header)
         self.encryptedKey = cryptoParts.encryptedKey
@@ -35,13 +33,17 @@ public struct JWE {
         self = JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
     
-    private init(header: JWEHeader, payload: JWEPayload, encryptedKey: Data, initializationVector: Data, authenticationTag: Data, ciphertext: Data) {
+    private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header
-        self.payload = payload
         self.encryptedKey = encryptedKey
         self.initializationVector = initializationVector
-        self.authenticationTag = authenticationTag
         self.ciphertext = ciphertext
+        self.authenticationTag = authenticationTag
+    }
+    
+    public func decrypt(with decrypter: Decrypter) -> JWEPayload? {
+        let plaintext = decrypter.decrypt(ciphertext: ciphertext, withHeader: header, encryptedKey: encryptedKey, initializationVector: initializationVector, authenticationTag: authenticationTag)!
+        return JWEPayload(plaintext)
     }
 }
 
@@ -62,9 +64,18 @@ extension JWE: CompactDeserializable {
         let initializationVector = deserializer.deserialize(Data.self, at: 2)
         let ciphertext = deserializer.deserialize(Data.self, at: 3)
         let authenticationTag = deserializer.deserialize(Data.self, at: 4)
-        
-        // TODO: Decrypt
-        let payload = JWEPayload("deserialized payload".data(using: .utf8)!)
-        self.init(header: header, payload: payload, encryptedKey: encryptedKey, initializationVector: initializationVector, authenticationTag: authenticationTag, ciphertext: ciphertext)
+        self.init(header: header, encryptedKey: encryptedKey, initializationVector: initializationVector, ciphertext: ciphertext, authenticationTag: authenticationTag)
+    }
+}
+
+// For testing only
+extension JWE: CustomStringConvertible {
+    public var description: String {
+        let header = self.header.parameters.description
+        let encryptedKey = String(data: self.encryptedKey, encoding: .utf8)!
+        let initializationVector = String(data: self.initializationVector, encoding: .utf8)!
+        let ciphertext = String(data: self.ciphertext, encoding: .utf8)!
+        let authenticationTag = String(data: self.authenticationTag, encoding: .utf8)!
+        return "\(header) . \(encryptedKey) . \(initializationVector) . \(ciphertext) . \(authenticationTag)"
     }
 }

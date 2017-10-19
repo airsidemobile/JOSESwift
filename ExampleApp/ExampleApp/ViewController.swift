@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     }
     
     func demoJWS() {
+        print("\n========== JWS ==========\n")
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .rs512)
@@ -46,14 +47,27 @@ class ViewController: UIViewController {
     }
     
     func demoJWE() {
+        print("\n========== JWE ==========\n")
+        print("Message:\n\(message)\n")
+        
         let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = AESEncrypter(publicKey: "key")
-        let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
-        print(jwe.compactSerialized)
+        let encrypter = AESEncrypter(publicKey: "publicKey")
+        let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
+        let compactSerializationFirstJWE = firstJwe.compactSerialized
         
-        let secondJWE = JWE(compactSerialization: jwe.compactSerialized)
-        print(secondJWE)
+        print("Serialized:\n\(compactSerializationFirstJWE)\n")
+        
+        let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
+        print("Deserialized:\n\(secondJWE)\n")
+        
+        let decrypter = AESDecrypter(privateKey: "privateKey")
+        if let payload = secondJWE.decrypt(with: decrypter) {
+            print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
+        }
+        
+        let justTheHeader = JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
+        print("Just The Header:\n\(justTheHeader)\n")
     }
 
 }

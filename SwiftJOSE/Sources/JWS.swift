@@ -77,6 +77,7 @@ extension JWS: CompactDeserializable {
     }
 }
 
+// For testing only
 extension JWS: CustomStringConvertible {
     public var description: String {
         let header = self.header.parameters.description
