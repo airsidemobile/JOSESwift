@@ -16,6 +16,6 @@ public struct AESDecrypter: Decrypter {
     }
     
     public func decrypt(ciphertext: Data, withHeader: JWEHeader, encryptedKey: Data, initializationVector: Data, authenticationTag: Data) -> Data? {
-        return "plaintext".data(using: .utf8)!
+        return "so cool".data(using: .utf8)!
     }
 }
