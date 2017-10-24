@@ -164,8 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				65C7D92A1F472ACD000CCDB2 /* JWS.swift */,
-				65616A461F827EF900FA685D /* JWSPayload.swift */,
 				6571F6221F7BF786004D53C5 /* JWSHeader.swift */,
+				65616A461F827EF900FA685D /* JWSPayload.swift */,
 				65E810611F79489900C7E2A9 /* Signature.swift */,
 				65C7D92C1F472B4D000CCDB2 /* Signer.swift */,
 				65D868101F7CEBA200769BBF /* Verifier.swift */,
