@@ -15,7 +15,7 @@ public struct AESDecrypter: Decrypter {
         self.kdk = kdk
     }
     
-    public func decrypt(ciphertext: Data, withHeader: JWEHeader, encryptedKey: Data, initializationVector: Data, authenticationTag: Data) -> Data? {
+    public func decrypt(ciphertext: Data, with header: JWEHeader, and additionalInformation: JWEAdditionalCryptoInformation) -> Data? {
         return "so cool".data(using: .utf8)!
     }
 }

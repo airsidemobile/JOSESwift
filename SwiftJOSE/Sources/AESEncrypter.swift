@@ -15,12 +15,12 @@ public struct AESEncrypter: Encrypter {
         self.kek = kek
     }
     
-    public func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts {
-        return JWECryptoParts(
+    public func encrypt(plaintext: Data, withHeader header: JWEHeader) -> (ciphertext: Data, additionalInformation: JWEAdditionalCryptoInformation) {
+        let additionalInfoarmation = JWEAdditionalCryptoInformation(
             encryptedKey: "encryptedkey".data(using: .utf8)!,
             initializationVector: "iv".data(using: .utf8)!,
-            ciphertext: "ciphertext".data(using: .utf8)!,
             authenticationTag: "authtag".data(using: .utf8)!
         )
+        return ("ciphertext".data(using: .utf8)!, additionalInfoarmation)
     }
 }

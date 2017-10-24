@@ -10,14 +10,13 @@ import Foundation
 
 // Dummy container to store cryptographic values that are related to
 // and/or computed in the encryption process and not part of the skeleton.
-public struct JWECryptoParts {
+public struct JWEAdditionalCryptoInformation {
     let encryptedKey: Data
     let initializationVector: Data
-    let ciphertext: Data
     let authenticationTag: Data
 }
 
 public protocol Encrypter {
     init(publicKey kek: String)
-    func encrypt(plaintext: Data, withHeader header: JWEHeader) -> JWECryptoParts
+    func encrypt(plaintext: Data, withHeader header: JWEHeader) -> (ciphertext: Data, additionalInformation: JWEAdditionalCryptoInformation)
 }

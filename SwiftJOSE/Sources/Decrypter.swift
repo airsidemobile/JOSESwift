@@ -10,5 +10,5 @@ import Foundation
 
 public protocol Decrypter {
     init(privateKey kdk: String)
-    func decrypt(ciphertext: Data, withHeader: JWEHeader, encryptedKey: Data, initializationVector: Data, authenticationTag: Data) -> Data?
+    func decrypt(ciphertext: Data, with header: JWEHeader, and additionalInformation: JWEAdditionalCryptoInformation) -> Data?
 }
