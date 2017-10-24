@@ -36,11 +36,7 @@ public struct Signature {
     }
 }
 
-extension Signature: JOSEObjectComponent {
-    public init(from data: Data) {
-        self.signature = data
-    }
-    
+extension Signature: JOSEObjectComponent {    
     public func data() -> Data {
         return signature
     }

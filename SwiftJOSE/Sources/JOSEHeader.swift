@@ -17,7 +17,7 @@ protocol JOSEHeader: JOSEObjectComponent {
 
 // `JOSEObjectComponent` implementation.
 extension JOSEHeader {
-    public init(from data: Data) {
+    public init(_ data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         self.init(parameters: parameters)
     }

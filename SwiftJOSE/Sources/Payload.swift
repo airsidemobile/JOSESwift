@@ -14,10 +14,6 @@ protocol Payload: JOSEObjectComponent {
 }
 
 extension Payload {
-    public init(from data: Data) {
-        self.init(data)
-    }
-    
     public func data() -> Data {
         return data
     }

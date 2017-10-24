@@ -29,7 +29,7 @@ extension Data {
 }
 
 extension Data: JOSEObjectComponent {
-    public init(from data: Data) {
+    public init(_ data: Data) {
         self = data
     }
     
