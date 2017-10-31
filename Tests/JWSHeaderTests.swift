@@ -35,6 +35,11 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), data)
     }
     
+    func testDeserializeFromCompactSerialization() {
+        let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
+        
+        let jwsHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializedJWS)
+        XCTAssertEqual(jwsHeader.parameters["alg"] as? String, "RS512")
     }
     
 }
