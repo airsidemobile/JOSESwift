@@ -17,9 +17,9 @@ extension Data {
         let mod = s.count % 4
         switch mod {
         case 0: break
-        case 1: return nil
         case 2: s.append("==")
         case 3: s.append("=")
+        default: return nil
         }
         
         self.init(base64Encoded: s)
