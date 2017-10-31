@@ -11,7 +11,7 @@ import XCTest
 
 class JWETests: XCTestCase {
     
-    let message = "so cool"
+    let message = "Hello world!"
     let symKey = "symmetricKey"
     
     override func setUp() {
@@ -36,8 +36,7 @@ class JWETests: XCTestCase {
         let decrypter = AESDecrypter(privateKey: symKey)
         let payloadString = String(data: (secondJWE.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
         
-        XCTAssertEqual(payloadString, "so cool")
-        
+        XCTAssertEqual(payloadString, "Hello world!")
     }
     
 }
