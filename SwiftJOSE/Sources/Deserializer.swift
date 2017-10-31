@@ -20,7 +20,7 @@ public struct JOSEDeserializer {
     public init() { }
     public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
-        let decodedComponents = encodedComponents.map { component in Data(base64URLEncoded: component) }
+        let decodedComponents = encodedComponents.map { component in Data(base64URLEncoded: component)! }
         let deserializer = _CompactDeserializer(components: decodedComponents)
         return T(from: deserializer)
     }
