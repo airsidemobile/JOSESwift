@@ -39,7 +39,7 @@ extension Data {
     }
     
     func base64URLEncodedData() -> Data {
-        return base64EncodedData() // NOTE: base64 != base64URL
+        return self.base64URLEncodedString().data(using: .utf8)!
     }
 }
 
