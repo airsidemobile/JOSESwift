@@ -31,10 +31,14 @@ class JWETests: XCTestCase {
         let compactSerializedJWE = jwe.compactSerialized
         
         XCTAssertEqual(compactSerializedJWE, "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw")
+    }
+    
+    func testDecrypt() {
+        let compactSerializedJWE = "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw"
         
-        let secondJWE = JWE(compactSerialization: compactSerializedJWE)
+        let jwe = JWE(compactSerialization: compactSerializedJWE)
         let decrypter = AESDecrypter(privateKey: symKey)
-        let payloadString = String(data: (secondJWE.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
+        let payloadString = String(data: (jwe.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
         
         XCTAssertEqual(payloadString, "Hello world!")
     }
