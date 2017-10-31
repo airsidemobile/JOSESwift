@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = AESEncrypter(publicKey: "publicKey")
+        let encrypter = RSAEncrypter(publicKey: "publicKey")
         let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializationFirstJWE = firstJwe.compactSerialized
         
@@ -61,7 +61,7 @@ class ViewController: UIViewController {
         let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
         print("Deserialized:\n\(secondJWE)\n")
         
-        let decrypter = AESDecrypter(privateKey: "privateKey")
+        let decrypter = RSADecrypter(privateKey: "privateKey")
         if let payload = secondJWE.decrypt(with: decrypter) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }

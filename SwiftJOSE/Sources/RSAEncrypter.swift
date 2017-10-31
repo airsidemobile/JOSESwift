@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AESEncrypter: Encrypter {
+public struct RSAEncrypter: Encrypter {
     let kek: String
     
     public init(publicKey kek: String) {
