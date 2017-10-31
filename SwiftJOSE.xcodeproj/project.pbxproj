@@ -32,6 +32,8 @@
 		65E810621F79489900C7E2A9 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E810611F79489900C7E2A9 /* Signature.swift */; };
 		65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FABAE91F4AC2D3006D7679 /* RSASigner.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSTests.swift */; };
+		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftJOSE.h; sourceTree = "<group>"; };
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C803EFE41FA77E3000B71335 /* JWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSTests.swift; sourceTree = "<group>"; };
+		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				65A9D3D91F45CDD7004E0B61 /* Tests.swift */,
+				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
+				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);
 			path = Tests;
@@ -313,6 +319,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
+				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
 				65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
