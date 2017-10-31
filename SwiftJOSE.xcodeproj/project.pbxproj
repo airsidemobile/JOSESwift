@@ -34,6 +34,7 @@
 		C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSTests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 		C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */; };
+		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		C803EFE41FA77E3000B71335 /* JWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSTests.swift; sourceTree = "<group>"; };
 		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSPayloadTests.swift; sourceTree = "<group>"; };
+		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
 				C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */,
+				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);
 			path = Tests;
@@ -321,6 +324,7 @@
 			files = (
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
 				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
+				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
 				C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
