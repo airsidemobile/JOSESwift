@@ -7,29 +7,22 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
 class JWSPayloadTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testDeserializationFromCompactSerialization() {
+        let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
+        
+        let jwsPayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializedJWS)
+        XCTAssertEqual(String(data: jwsPayload.data(), encoding: .utf8), "Hello world!")
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }
