@@ -9,9 +9,20 @@
 import Foundation
 
 extension Data {
-    init(base64URLEncoded: String) {
-        // Convert to base64 with the restrictions defined in RFC-7515
-        self = Data(base64Encoded: base64URLEncoded)!
+    init?(base64URLEncoded: String) {
+        var s = base64URLEncoded
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+        
+        let mod = s.count % 4
+        switch mod {
+        case 0: break
+        case 1: return nil
+        case 2: s.append("==")
+        case 3: s.append("=")
+        }
+        
+        self.init(base64Encoded: s)
     }
     
     init(base64URLEncoded: Data) {
