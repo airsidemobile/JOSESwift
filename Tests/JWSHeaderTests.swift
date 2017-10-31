@@ -7,29 +7,34 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
 class JWSHeaderTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testInitFromParameters() {
+        let parameters = ["alg": "RS512"]
+        let header = JWSHeader(parameters: parameters)
+
+        XCTAssertEqual(header.parameters["alg"] as? String, parameters["alg"])
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameters, options: []))
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testInitFromData() {
+        let data = try! JSONSerialization.data(withJSONObject: ["alg": "RS512"], options: [])
+        let header = JWSHeader(data)
+        
+        XCTAssertEqual(header.parameters["alg"] as! String, "RS512")
+        XCTAssertEqual(header.data(), data)
+    }
+    
     }
     
 }
