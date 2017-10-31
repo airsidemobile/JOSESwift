@@ -38,11 +38,10 @@ class JWSTests: XCTestCase {
         XCTAssertTrue(secondJWS.validates(against: verifier))
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testDeserializeFromCompactSerialization() {
+        let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
+        
+        let jws = JWS(compactSerialization: compactSerializedJWS)
+        XCTAssertEqual(jws.description, "[\"alg\": RS512] . Hello world! . RS512(eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh)")
     }
-    
 }
