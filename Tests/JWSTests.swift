@@ -7,22 +7,35 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
 class JWSTests: XCTestCase {
     
+    let message = "Hello world!"
+    let privateKey = "privateKey"
+    let publicKey = "publicKey"
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testSignAndSerialize() {
+        let header = JWSHeader(algorithm: .rs512)
+        let payload = JWSPayload(message.data(using: .utf8)!)
+        let signer = RSASigner(key: privateKey)
+        let jws = JWS(header: header, payload: payload, signer: signer)
+        let compactSerializedJWS = jws.compactSerialized
+        
+        XCTAssertEqual(compactSerializedJWS, "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk")
+        
+        let secondJWS = JWS(compactSerialization: compactSerializedJWS)
+        let verifier = RSAVerifier(key: publicKey)
+        
+        XCTAssertTrue(secondJWS.validates(against: verifier))
     }
     
     func testPerformanceExample() {
