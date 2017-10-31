@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         print("\n========== JWS ==========\n")
         print("Message:\n\(message)\n")
         
-        let header = JWSHeader(algorithm: .rs512)
+        let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey)
         let firstJWS = JWS(header: header, payload: payload, signer: signer)
@@ -50,7 +50,7 @@ class ViewController: UIViewController {
         print("\n========== JWE ==========\n")
         print("Message:\n\(message)\n")
         
-        let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
+        let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = JWEPayload(message.data(using: .utf8)!)
         let encrypter = AESEncrypter(publicKey: "publicKey")
         let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)

@@ -12,7 +12,7 @@ public struct RSAVerifier: Verifier {
     let key: String
     
     var supportedAlgorithms: [Algorithm] {
-        return [ .rs512 ]
+        return [ .RS512 ]
     }
     
     public init(key: String) {
