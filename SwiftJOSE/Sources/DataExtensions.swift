@@ -31,7 +31,11 @@ extension Data {
     }
     
     func base64URLEncodedString() -> String {
-        return self.base64EncodedString() // NOTE: base64 != base64URL
+        let s = self.base64EncodedString()
+        return s
+            .replacingOccurrences(of: "=", with: "")
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
     }
     
     func base64URLEncodedData() -> Data {
