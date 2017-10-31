@@ -88,10 +88,10 @@ extension JWE: CompactSerializable {
 extension JWE: CompactDeserializable {
     public init (from deserializer: CompactDeserializer) {
         let header = JWEHeader(from: deserializer)
-        let encryptedKey = deserializer.deserialize(Data.self, at: 1)
-        let initializationVector = deserializer.deserialize(Data.self, at: 2)
-        let ciphertext = deserializer.deserialize(Data.self, at: 3)
-        let authenticationTag = deserializer.deserialize(Data.self, at: 4)
+        let encryptedKey = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweEncryptedKeyIndex)
+        let initializationVector = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweInitializationVectorIndex)
+        let ciphertext = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweCiphertextIndex)
+        let authenticationTag = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweAuthenticationTagIndex)
         self.init(header: header, encryptedKey: encryptedKey, initializationVector: initializationVector, ciphertext: ciphertext, authenticationTag: authenticationTag)
     }
 }
