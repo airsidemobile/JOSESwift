@@ -25,9 +25,12 @@ extension Data {
         self.init(base64Encoded: s)
     }
     
-    init(base64URLEncoded: Data) {
-        // Convert to base64 with the restrictions defined in RFC-7515
-        self = Data(base64Encoded: base64URLEncoded)!
+    init?(base64URLEncoded: Data) {
+        if let s = String(data: base64URLEncoded, encoding: .utf8) {
+            self.init(base64URLEncoded: s)
+        }
+        
+        return nil
     }
     
     func base64URLEncodedString() -> String {
