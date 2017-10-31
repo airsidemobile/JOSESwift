@@ -7,29 +7,37 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
 class JWETests: XCTestCase {
     
+    let message = "so cool"
+    let symKey = "symmetricKey"
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+
+    //TODO: Adapt tests as soon as JWE skeletton is finished and merged
+    func testEncryptAndSerialize() {
+        let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
+        let payload = JWEPayload(message.data(using: .utf8)!)
+        let encrypter = AESEncrypter(publicKey: symKey)
+        let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
+        let compactSerializedJWE = jwe.compactSerialized
+        
+        XCTAssertEqual(compactSerializedJWE, "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw")
+        
+        let secondJWE = JWE(compactSerialization: compactSerializedJWE)
+        let decrypter = AESDecrypter(privateKey: symKey)
+        let payloadString = String(data: (secondJWE.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
+        
+        XCTAssertEqual(payloadString, "so cool")
+        
     }
     
 }
