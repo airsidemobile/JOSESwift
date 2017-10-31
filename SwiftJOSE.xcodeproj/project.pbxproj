@@ -21,7 +21,6 @@
 		6574227E1F91570A00F3A982 /* JWEPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6574227D1F91570A00F3A982 /* JWEPayload.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
-		65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A9D3D91F45CDD7004E0B61 /* Tests.swift */; };
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
 		65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92A1F472ACD000CCDB2 /* JWS.swift */; };
 		65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92C1F472B4D000CCDB2 /* Signer.swift */; };
@@ -62,7 +61,6 @@
 		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		65A9D3D91F45CDD7004E0B61 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		65A9D3DB1F45CDD7004E0B61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C7D92A1F472ACD000CCDB2 /* JWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWS.swift; path = SwiftJOSE/Sources/JWS.swift; sourceTree = SOURCE_ROOT; };
 		65C7D92C1F472B4D000CCDB2 /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Signer.swift; path = SwiftJOSE/Sources/Signer.swift; sourceTree = SOURCE_ROOT; };
@@ -127,7 +125,6 @@
 		65A9D3D81F45CDD7004E0B61 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				65A9D3D91F45CDD7004E0B61 /* Tests.swift */,
 				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
@@ -321,7 +318,6 @@
 			files = (
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
 				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
-				65A9D3DA1F45CDD7004E0B61 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
