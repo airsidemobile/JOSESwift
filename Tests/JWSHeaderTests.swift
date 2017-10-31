@@ -19,7 +19,7 @@ class JWSHeaderTests: XCTestCase {
         super.tearDown()
     }
     
-    func testInitFromParameters() {
+    func testInitWithParameters() {
         let parameters = ["alg": "RS512"]
         let header = JWSHeader(parameters: parameters)
 
@@ -27,11 +27,11 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameters, options: []))
     }
     
-    func testInitFromData() {
+    func testInitWithData() {
         let data = try! JSONSerialization.data(withJSONObject: ["alg": "RS512"], options: [])
         let header = JWSHeader(data)
         
-        XCTAssertEqual(header.parameters["alg"] as! String, "RS512")
+        XCTAssertEqual(header.parameters["alg"] as? String, "RS512")
         XCTAssertEqual(header.data(), data)
     }
     
