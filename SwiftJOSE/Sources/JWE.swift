@@ -73,7 +73,7 @@ public struct JWE {
     }
 }
 
-/// Serialize teh JWE to a given compact serializer.
+/// Serialize the JWE to a given compact serializer.
 extension JWE: CompactSerializable {
     public func serialize(to serializer: inout CompactSerializer) {
         serializer.serialize(header)
