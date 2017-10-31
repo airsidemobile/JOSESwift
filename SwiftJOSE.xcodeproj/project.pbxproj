@@ -36,7 +36,6 @@
 		C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 		C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */; };
-		C803EFF11FA884EA00B71335 /* JWEPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFF01FA884EA00B71335 /* JWEPayloadTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,7 +81,6 @@
 		C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSPayloadTests.swift; sourceTree = "<group>"; };
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
-		C803EFF01FA884EA00B71335 /* JWEPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEPayloadTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +136,6 @@
 				C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */,
 				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
-				C803EFF01FA884EA00B71335 /* JWEPayloadTests.swift */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);
 			path = Tests;
@@ -329,7 +326,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
-				C803EFF11FA884EA00B71335 /* JWEPayloadTests.swift in Sources */,
 				C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */,
 				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
 				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
