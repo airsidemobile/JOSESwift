@@ -7,8 +7,9 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
-class RSASignerTests: XCTestCase {
+class RSASignerTests: CryptoTestCase {
     
     override func setUp() {
         super.setUp()
@@ -16,6 +17,12 @@ class RSASignerTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
+    }
+    
+    func testSigning() {
+        print(publicKey)
+        print(privateKey)
+        let signer = RSASigner(key: "str")
     }
     
 }
