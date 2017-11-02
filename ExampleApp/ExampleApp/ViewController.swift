@@ -11,7 +11,7 @@ import SwiftJOSE
 
 class ViewController: UIViewController {
 
-    let message = "so cool"
+    let message = "The true sign of intelligence is not knowledge but imagination."
     let privateKey = "thePrivateKey"
     let publicKey = "thePublicKey"
     

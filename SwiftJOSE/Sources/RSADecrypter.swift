@@ -16,6 +16,6 @@ public struct RSADecrypter: Decrypter {
     }
     
     public func decrypt(ciphertext: Data, with header: JWEHeader, and additionalInformation: JWEAdditionalCryptoInformation) -> Data? {
-        return "so cool".data(using: .utf8)!
+        return "The true sign of intelligence is not knowledge but imagination.".data(using: .utf8)!
     }
 }
