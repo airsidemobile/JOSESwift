@@ -12,7 +12,8 @@ import XCTest
 class JWETests: XCTestCase {
     
     let message = "Hello world!"
-    let symKey = "symmetricKey"
+    let privateKey = "privateKey"
+    let publicKey = "publicKey"
     
     override func setUp() {
         super.setUp()
@@ -24,9 +25,9 @@ class JWETests: XCTestCase {
 
     //TODO: Adapt tests as soon as JWE skeletton is finished and merged
     func testEncryptAndSerialize() {
-        let header = JWEHeader(algorithm: .rs512, encryptionAlgorithm: .rs512)
+        let header = JWEHeader(algorithm: .RS512, encryptionAlgorithm: .RS512)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = AESEncrypter(publicKey: symKey)
+        let encrypter = RSAEncrypter(publicKey: publicKey)
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializedJWE = jwe.compactSerialized
         
@@ -37,7 +38,7 @@ class JWETests: XCTestCase {
         let compactSerializedJWE = "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw"
         
         let jwe = JWE(compactSerialization: compactSerializedJWE)
-        let decrypter = AESDecrypter(privateKey: symKey)
+        let decrypter = RSADecrypter(privateKey: privateKey)
         let payloadString = String(data: (jwe.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
         
         XCTAssertEqual(payloadString, "Hello world!")

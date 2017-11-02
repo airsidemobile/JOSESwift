@@ -10,6 +10,8 @@ import XCTest
 @testable import SwiftJOSE
 
 class JWSHeaderTests: XCTestCase {
+    let parameterDict = ["alg": "\(Algorithm.RS512.rawValue)"]
+    
     
     override func setUp() {
         super.setUp()
@@ -20,18 +22,17 @@ class JWSHeaderTests: XCTestCase {
     }
     
     func testInitWithParameters() {
-        let parameters = ["alg": "RS512"]
-        let header = JWSHeader(parameters: parameters)
+        let header = JWSHeader(parameters: parameterDict)
 
-        XCTAssertEqual(header.parameters["alg"] as? String, parameters["alg"])
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameters, options: []))
+        XCTAssertEqual(header.parameters["alg"] as? String, parameterDict["alg"])
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
     }
     
     func testInitWithData() {
-        let data = try! JSONSerialization.data(withJSONObject: ["alg": "RS512"], options: [])
+        let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
         let header = JWSHeader(data)
         
-        XCTAssertEqual(header.parameters["alg"] as? String, "RS512")
+        XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RS512.rawValue)
         XCTAssertEqual(header.data(), data)
     }
     
@@ -39,7 +40,7 @@ class JWSHeaderTests: XCTestCase {
         let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
         
         let jwsHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializedJWS)
-        XCTAssertEqual(jwsHeader.parameters["alg"] as? String, "RS512")
+        XCTAssertEqual(jwsHeader.parameters["alg"] as? String, Algorithm.RS512.rawValue)
     }
     
 }
