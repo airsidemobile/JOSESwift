@@ -37,6 +37,7 @@
 		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 		C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */; };
 		C803EFF31FA8A98F00B71335 /* DataExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */; };
+		C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
+		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
 				C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */,
+				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);
 			path = Tests;
@@ -334,6 +337,7 @@
 				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
 				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
 				C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */,
+				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
