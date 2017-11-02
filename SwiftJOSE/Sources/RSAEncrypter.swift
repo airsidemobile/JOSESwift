@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AESEncrypter: Encrypter {
+public struct RSAEncrypter: Encrypter {
     let kek: String
     
     public init(publicKey kek: String) {
@@ -16,11 +16,11 @@ public struct AESEncrypter: Encrypter {
     }
     
     public func encrypt(plaintext: Data, withHeader header: JWEHeader) -> (ciphertext: Data, additionalInformation: JWEAdditionalCryptoInformation) {
-        let additionalInfoarmation = JWEAdditionalCryptoInformation(
+        let additionalInformation = JWEAdditionalCryptoInformation(
             encryptedKey: "encryptedkey".data(using: .utf8)!,
             initializationVector: "iv".data(using: .utf8)!,
             authenticationTag: "authtag".data(using: .utf8)!
         )
-        return ("ciphertext".data(using: .utf8)!, additionalInfoarmation)
+        return ("ciphertext".data(using: .utf8)!, additionalInformation)
     }
 }

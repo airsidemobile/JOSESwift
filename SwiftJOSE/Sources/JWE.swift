@@ -63,17 +63,17 @@ public struct JWE {
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     public func decrypt(with decrypter: Decrypter) -> JWEPayload? {
-        let additionalInfoarmation = JWEAdditionalCryptoInformation(
+        let additionalInformation = JWEAdditionalCryptoInformation(
             encryptedKey: encryptedKey,
             initializationVector: initializationVector,
             authenticationTag: authenticationTag
         )
-        let plaintext = decrypter.decrypt(ciphertext: ciphertext, with: header, and: additionalInfoarmation)!
+        let plaintext = decrypter.decrypt(ciphertext: ciphertext, with: header, and: additionalInformation)!
         return JWEPayload(plaintext)
     }
 }
 
-/// Serialize teh JWE to a given compact serializer.
+/// Serialize the JWE to a given compact serializer.
 extension JWE: CompactSerializable {
     public func serialize(to serializer: inout CompactSerializer) {
         serializer.serialize(header)

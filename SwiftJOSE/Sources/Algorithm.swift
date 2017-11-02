@@ -9,5 +9,7 @@
 import Foundation
 
 public enum Algorithm: String {
-    case rs512 = "RS512"
+    case RS512 = "RS512"
+    case RSAOAEP = "RSA-OAEP"
+    case AESGCM256 = "A256GCM"
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AESDecrypter: Decrypter {
+public struct RSADecrypter: Decrypter {
     let kdk: String
     
     public init(privateKey kdk: String) {
