@@ -24,7 +24,7 @@ class JWSTests: XCTestCase {
     }
     
     func testSignAndSerialize() {
-        let header = JWSHeader(algorithm: .rs512)
+        let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey)
         let jws = JWS(header: header, payload: payload, signer: signer)
