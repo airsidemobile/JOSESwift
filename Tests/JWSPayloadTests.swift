@@ -19,7 +19,7 @@ class JWSPayloadTests: XCTestCase {
         super.tearDown()
     }
     
-    func testDeserializationFromCompactSerialization() {
+    func testDeserializeFromCompactSerialization() {
         let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
         
         let jwsPayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializedJWS)
