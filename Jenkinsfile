@@ -126,7 +126,7 @@ node(slave) {
 }
 
 def publishTestReport(title='Test Report') {
-  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'fastlane/test_output/', reportFiles: 'report.html', reportName: title, reportTitles: title])
+  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'test_output/', reportFiles: 'report.html', reportName: title, reportTitles: title])
 }
 
 static def executeCommand(command, commandFinally, githubStatusJose, context) {
