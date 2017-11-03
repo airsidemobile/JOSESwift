@@ -129,10 +129,6 @@ def publishTestReport(title='Test Report') {
   publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'fastlane/test_output/', reportFiles: 'report.html', reportName: title, reportTitles: title])
 }
 
-def publishScreenshots(title='UI Test Screenshots') {
-  publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: false, reportDir: 'screenshots/', reportFiles: '*', reportName: title, reportTitles: title])
-}
-
 static def executeCommand(command, commandFinally, githubStatusMPC, context) {
   githubStatusMPC(context, 'pending')
   try {
