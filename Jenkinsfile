@@ -90,7 +90,7 @@ node(slave) {
   withCredentials([[$class: 'StringBinding', credentialsId: '8c157f6e-431b-40dc-969d-edb840552bd5', variable: 'GITHUB_API_TOKEN']]) {
 
     def scmVars = checkout scm
-    def githubStatusMPC = { context, status -> githubStatus(GITHUB_API_TOKEN, "mpc-ios", scmVars.GIT_COMMIT, context, status) }
+    def githubStatusJose = { context, status -> githubStatus(GITHUB_API_TOKEN, "jose-ios", scmVars.GIT_COMMIT, context, status) }
 
     stage('Job Status') {
       log("Job is running on ${slave}")
@@ -109,7 +109,7 @@ node(slave) {
         shRVM "bundle exec pod repo update"
       }
       def cmdFinally = {}
-      executeCommand(cmd, cmdFinally, githubStatusMPC, context)
+      executeCommand(cmd, cmdFinally, githubStatusJose, context)
     }
 
     stage('Tests') {
@@ -120,7 +120,7 @@ node(slave) {
       def cmdFinally = {
         publishTestReport()
       }
-      executeCommand(cmd, cmdFinally, githubStatusMPC, context)
+      executeCommand(cmd, cmdFinally, githubStatusJose, context)
     }
   } // credentials
 }
@@ -129,17 +129,17 @@ def publishTestReport(title='Test Report') {
   publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'fastlane/test_output/', reportFiles: 'report.html', reportName: title, reportTitles: title])
 }
 
-static def executeCommand(command, commandFinally, githubStatusMPC, context) {
-  githubStatusMPC(context, 'pending')
+static def executeCommand(command, commandFinally, githubStatusJose, context) {
+  githubStatusJose(context, 'pending')
   try {
     command()
   } catch (exc) {
-    githubStatusMPC(context, 'failure')
+    githubStatusJose(context, 'failure')
     throw exc
   } finally {
     commandFinally()
   }
-  githubStatusMPC(context, 'success')
+  githubStatusJose(context, 'success')
 }
 
 /**
