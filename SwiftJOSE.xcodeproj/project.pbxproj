@@ -40,7 +40,6 @@
 		C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */; };
 		C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */; };
 		C84BDE1B1FAB461B0002B5D0 /* TestKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */; };
-		C8EE14521FAC747700A616E4 /* SignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE14511FAC747700A616E4 /* SignatureTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +89,6 @@
 		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 		C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTestCase.swift; sourceTree = "<group>"; };
 		C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestKey.plist; sourceTree = "<group>"; };
-		C8EE14511FAC747700A616E4 /* SignatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +142,6 @@
 				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
 				C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */,
-				C8EE14511FAC747700A616E4 /* SignatureTests.swift */,
 				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
 				C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */,
@@ -348,7 +345,6 @@
 				C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */,
 				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
 				C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */,
-				C8EE14521FAC747700A616E4 /* SignatureTests.swift in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
