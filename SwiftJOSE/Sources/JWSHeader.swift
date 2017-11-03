@@ -33,6 +33,6 @@ extension JWSHeader: CommonHeaderParameterSpace {
 
 extension JWSHeader: CompactDeserializable {
     public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSHeader.self, at: 0)
+        self = deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
     }
 }

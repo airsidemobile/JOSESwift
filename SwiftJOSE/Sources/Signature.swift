@@ -44,6 +44,6 @@ extension Signature: JOSEObjectComponent {
 
 extension Signature: CompactDeserializable {
     public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(Signature.self, at: 2)
+        self = deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
     }
 }
