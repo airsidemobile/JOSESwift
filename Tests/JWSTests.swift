@@ -19,22 +19,30 @@ class JWSTests: CryptoTestCase {
     }
     
     func testSignAndSerialize() {
+        guard publicKey != nil, privateKey != nil else {
+            XCTFail()
+            return
+        }
+        
         let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
-        let signer = RSASigner(key: privateKey)
+        let signer = RSASigner(key: privateKey!)
         let jws = JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerialized
-        
-        XCTAssertEqual(compactSerializedJWS, "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk")
+
+        XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
         
         let secondJWS = JWS(compactSerialization: compactSerializedJWS)
-        let verifier = RSAVerifier(key: publicKey)
+        let verifier = RSAVerifier(key: publicKey!)
         
         XCTAssertTrue(secondJWS.validates(against: verifier))
     }
     
     func testDeserializeFromCompactSerialization() {
-        let compactSerializedJWS = "eyJhbGciOiJSUzUxMiJ9.SGVsbG8gd29ybGQh.UlM1MTIoZXlKaGJHY2lPaUpTVXpVeE1pSjkuU0dWc2JHOGdkMjl5YkdRaCk"
+        guard privateKey != nil else {
+            XCTFail()
+            return
+        }
         
         let jws = JWS(compactSerialization: compactSerializedJWSConst)
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"RS512\"}")
