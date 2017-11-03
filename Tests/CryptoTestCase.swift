@@ -24,10 +24,7 @@ class CryptoTestCase: XCTestCase {
     }
 
     private func setupKeyPair() {
-        if let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"), let keyDict = NSDictionary(contentsOfFile: path) {
-            
-            let keyData = Data(base64Encoded: keyDict["privateKeyBase64String"] as! String)!
-            
+        if let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"), let keyDict = NSDictionary(contentsOfFile: path), let keyData = Data(base64Encoded: keyDict[privateKeyTag] as! String) {
             let attributes: [String: Any] = [
                 kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
                 kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
