@@ -9,12 +9,7 @@
 import XCTest
 @testable import SwiftJOSE
 
-class JWSTests: XCTestCase {
-    
-    let message = "Hello world!"
-    let privateKey = "privateKey"
-    let publicKey = "publicKey"
-    
+class JWSTests: CryptoTestCase {
     override func setUp() {
         super.setUp()
     }
