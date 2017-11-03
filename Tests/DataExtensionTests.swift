@@ -22,7 +22,6 @@ class DataExtensionTests: XCTestCase {
         super.tearDown()
     }
     
-    //TODO: Naming???
     func testBase64URLStringInit() {
         let data = Data(base64URLEncoded: base64URLTestString)
         
