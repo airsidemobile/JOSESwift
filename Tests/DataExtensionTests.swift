@@ -10,7 +10,6 @@ import XCTest
 @testable import SwiftJOSE
 
 class DataExtensionTests: XCTestCase {
-    
     let base64URLTestString = "VGhpcyBpcyBhIHRlc3Qgc3RyaW5nIHdoZXJlIHRoZSBiYXNlNjQgcmVwcmVzZW50YXRpb24gY29udGFpbnMgYSA9IGFzIHBhZGRpbmc"
     let testString = "This is a test string where the base64 representation contains a = as padding"
     

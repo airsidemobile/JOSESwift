@@ -12,7 +12,6 @@ import XCTest
 class JWSHeaderTests: XCTestCase {
     let parameterDict = ["alg": "\(Algorithm.RS512.rawValue)"]
     
-    
     override func setUp() {
         super.setUp()
     }
