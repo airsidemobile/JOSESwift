@@ -9,13 +9,13 @@
 import Foundation
 
 public struct RSASigner: Signer {
-    let key: String
+    let key: SecKey
     
     var supportedAlgorithms: [Algorithm] {
         return [ .RS512 ]
     }
     
-    public init(key: String) {
+    public init(key: SecKey) {
         self.key = key
     }
     
