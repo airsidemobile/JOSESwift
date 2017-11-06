@@ -33,7 +33,7 @@ extension JWSHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to sign the JWS.
     public var jku: URL {
-        return URL(string: "google.com")!
+        return parameters["jku"] as! URL
     }
     
     /// The JSON Web key corresponding to the key used to digitally sign the JWS.
@@ -49,7 +49,7 @@ extension JWSHeader: CommonHeaderParameterSpace {
     /// The X.509 URL that referes to a resource for the X.509 public key certificate
     /// or certificate chain corresponding to the key used to sign the JWS.
     public var x5u: URL {
-        return URL(string: "google.com")!
+        return parameters["x5u"] as! URL
     }
     
     /// The X.509 certificate chain contains the X.509 public key certificate or
