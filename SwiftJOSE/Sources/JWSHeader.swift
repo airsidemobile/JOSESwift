@@ -29,6 +29,61 @@ extension JWSHeader: CommonHeaderParameterSpace {
     public var algorithm: Algorithm {
         return Algorithm(rawValue: parameters["alg"] as! String)!
     }
+    
+    /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
+    /// one of which corresponds to the key used to sign the JWS.
+    public var jku: URL {
+        return URL(string: "google.com")!
+    }
+    
+    /// The JSON Web key corresponding to the key used to digitally sign the JWS.
+    public var jwk: String {
+        return ""
+    }
+    
+    /// The Key ID indicates the key which was used to secure the JWS.
+    public var kid: String {
+        return ""
+    }
+    
+    /// The X.509 URL that referes to a resource for the X.509 public key certificate
+    /// or certificate chain corresponding to the key used to sign the JWS.
+    public var x5u: URL {
+        return URL(string: "google.com")!
+    }
+    
+    /// The X.509 certificate chain contains the X.509 public key certificate or
+    /// certificate chain corresponding to the key used to sign the JWS.
+    public var x5c: [String : Any] {
+        return ["": ""]
+    }
+    
+    /// The X.509 certificate SHA-1 thumbprint of the DER encoding of the X.509 certificate
+    /// corresponding to the key used to sign the JWS.
+    public var x5t: String {
+        return ""
+    }
+    
+    /// The X.509 certificate SHA-256 thumbprint of the DER encoding of the X.509 certificate
+    /// corresponding to the key used to sign the JWS.
+    public var x5tS256: String {
+        return ""
+    }
+    
+    /// The type to declare the media type of the JWS object.
+    public var typ: JOSEObjectComponent.Type {
+        return JWSHeader.self
+    }
+    
+    /// The content type to declare the media type of the secured content (payload).
+    public var cty: String {
+        return ""
+    }
+    
+    /// The critical header parameter indicates the header parameter extensions.
+    public var crit: [String] {
+        return [""]
+    }
 }
 
 extension JWSHeader: CompactDeserializable {
