@@ -27,3 +27,13 @@ extension Data {
         return base64EncodedData() // NOTE: base64 != base64URL
     }
 }
+
+extension Data: JOSEObjectComponent {
+    public init(_ data: Data) {
+        self = data
+    }
+    
+    public func data() -> Data {
+        return self
+    }
+}

@@ -36,11 +36,7 @@ public struct Signature {
     }
 }
 
-extension Signature: JOSEObjectComponent {
-    public init(from data: Data) {
-        self.signature = data
-    }
-    
+extension Signature: JOSEObjectComponent {    
     public func data() -> Data {
         return signature
     }
@@ -48,6 +44,6 @@ extension Signature: JOSEObjectComponent {
 
 extension Signature: CompactDeserializable {
     public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(Signature.self, at: 2)
+        self = deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
     }
 }

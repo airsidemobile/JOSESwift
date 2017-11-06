@@ -11,7 +11,7 @@ import SwiftJOSE
 
 class ViewController: UIViewController {
 
-    let message = "so cool"
+    let message = "The true sign of intelligence is not knowledge but imagination."
     let privateKey = "thePrivateKey"
     let publicKey = "thePublicKey"
     
@@ -19,12 +19,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         demoJWS()
+        demoJWE()
     }
     
     func demoJWS() {
+        print("\n========== JWS ==========\n")
         print("Message:\n\(message)\n")
         
-        let header = JWSHeader(algorithm: .rs512)
+        let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey)
         let firstJWS = JWS(header: header, payload: payload, signer: signer)
@@ -42,6 +44,30 @@ class ViewController: UIViewController {
         print("Just The Header:\n\(justTheHeader)\n")
         let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
         print("Just The Payload:\n\(justThePayload)")
+    }
+    
+    func demoJWE() {
+        print("\n========== JWE ==========\n")
+        print("Message:\n\(message)\n")
+        
+        let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
+        let payload = JWEPayload(message.data(using: .utf8)!)
+        let encrypter = RSAEncrypter(publicKey: "publicKey")
+        let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
+        let compactSerializationFirstJWE = firstJwe.compactSerialized
+        
+        print("Serialized:\n\(compactSerializationFirstJWE)\n")
+        
+        let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
+        print("Deserialized:\n\(secondJWE)\n")
+        
+        let decrypter = RSADecrypter(privateKey: "privateKey")
+        if let payload = secondJWE.decrypt(with: decrypter) {
+            print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
+        }
+        
+        let justTheHeader = JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
+        print("Just The Header:\n\(justTheHeader)\n")
     }
 
 }

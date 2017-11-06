@@ -8,11 +8,7 @@
 
 import Foundation
 
-public enum SigningAlgorithm: String {
-    case rs512 = "RS512"
-}
-
 public protocol Signer {
     init(key: String)
-    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data?
+    func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data?
 }

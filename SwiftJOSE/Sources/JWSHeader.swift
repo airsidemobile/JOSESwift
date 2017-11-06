@@ -8,26 +8,31 @@
 
 import Foundation
 
+/// The header of a `JWS` object.
 public struct JWSHeader: JOSEHeader {
-    let parameters: [String : Any]
+    let parameters: [String: Any]
     
-    init(parameters: [String : Any]) {
-        // assert required parameters for JWS
+    init(parameters: [String: Any]) {
+        // TODO: Assert that required JWS parameters are present.
         self.parameters = parameters
     }
     
-    public init(algorithm: SigningAlgorithm) {
+    /// Initializes a `JWSHeader` with the specified algorithm.
+    public init(algorithm: Algorithm) {
         self.init(parameters: ["alg": algorithm.rawValue])
     }
-    
-    public var algorithm: SigningAlgorithm {
-        let rawValue = parameters["alg"] as! String
-        return SigningAlgorithm(rawValue: rawValue)!
+}
+
+// Header parameters that both a JWS Header and a JWE Header must support.
+extension JWSHeader: CommonHeaderParameterSpace {
+    /// The algorithm used to sign the payload.
+    public var algorithm: Algorithm {
+        return Algorithm(rawValue: parameters["alg"] as! String)!
     }
 }
 
 extension JWSHeader: CompactDeserializable {
     public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSHeader.self, at: 0)
+        self = deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
     }
 }

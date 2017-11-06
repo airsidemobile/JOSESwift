@@ -9,6 +9,17 @@
 import Foundation
 
 public protocol JOSEObjectComponent {
-    init(from data: Data)
+    init(_ data: Data)
     func data() -> Data
+}
+
+public enum ComponentCompactSerializedIndex {
+    static let jwsHeaderIndex = 0
+    static let jwsPayloadIndex = 1
+    static let jwsSignatureIndex = 2
+    static let jweHeaderIndex = 0
+    static let jweEncryptedKeyIndex = 1
+    static let jweInitializationVectorIndex = 2
+    static let jweCiphertextIndex = 3
+    static let jweAuthenticationTagIndex = 4
 }

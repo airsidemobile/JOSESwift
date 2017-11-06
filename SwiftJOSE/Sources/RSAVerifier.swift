@@ -11,15 +11,15 @@ import Foundation
 public struct RSAVerifier: Verifier {
     let key: String
     
-    var supportedAlgorithms: [SigningAlgorithm] {
-        return [ .rs512 ]
+    var supportedAlgorithms: [Algorithm] {
+        return [ .RS512 ]
     }
     
     public init(key: String) {
         self.key = key
     }
     
-    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
+    public func verify(_ signature: Data, against signingInput: Data, using algorithm: Algorithm) -> Bool {
         guard supportedAlgorithms.contains(algorithm) else {
             return false
         }

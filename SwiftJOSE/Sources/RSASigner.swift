@@ -11,15 +11,15 @@ import Foundation
 public struct RSASigner: Signer {
     let key: String
     
-    var supportedAlgorithms: [SigningAlgorithm] {
-        return [ .rs512 ]
+    var supportedAlgorithms: [Algorithm] {
+        return [ .RS512 ]
     }
     
     public init(key: String) {
         self.key = key
     }
     
-    public func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data? {
+    public func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data? {
         guard supportedAlgorithms.contains(algorithm) else {
             return nil
         }

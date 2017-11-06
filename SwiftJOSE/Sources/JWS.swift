@@ -8,10 +8,9 @@
 
 import Foundation
 
-/**
- A JWS object consisting of a header, payload and signature. The three components of a JWS object
- cannot be changed once the object is initialized.
-*/
+
+/// A JWS object consisting of a header, payload and signature. The three components of a JWS object
+/// cannot be changed once the object is initialized.
 public struct JWS {
     let header: JWSHeader
     let payload: JWSPayload
@@ -78,6 +77,7 @@ extension JWS: CompactDeserializable {
     }
 }
 
+// For testing only
 extension JWS: CustomStringConvertible {
     public var description: String {
         let header = self.header.parameters.description

@@ -30,6 +30,6 @@ fileprivate struct _CompactDeserializer: CompactDeserializer {
     let components: [Data]
     
     func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T {
-        return T(from: components[index])
+        return T(components[index])
     }
 }

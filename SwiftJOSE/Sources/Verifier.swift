@@ -10,5 +10,5 @@ import Foundation
 
 public protocol Verifier {
     init(key: String)
-    func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool
+    func verify(_ signature: Data, against signingInput: Data, using algorithm: Algorithm) -> Bool
 }
