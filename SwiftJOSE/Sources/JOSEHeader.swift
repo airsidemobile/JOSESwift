@@ -12,14 +12,14 @@ import Foundation
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
 protocol JOSEHeader: JOSEObjectComponent {
     var parameters: [String: Any] { get }
-    init(parameters: [String: Any])
+    init(parameters: [String: Any]) throws
 }
 
 // `JOSEObjectComponent` implementation.
 extension JOSEHeader {
     public init(_ data: Data) {
         let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-        self.init(parameters: parameters)
+        try! self.init(parameters: parameters) //TODO: Refactor force try as soon as error handling gets implemented
     }
     
     public func data() -> Data {
