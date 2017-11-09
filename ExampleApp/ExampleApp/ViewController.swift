@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     let message = "The true sign of intelligence is not knowledge but imagination."
     let privateKey = "thePrivateKey"
     let publicKey = "thePublicKey"
+    let sharedKey = "sharedKey"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,7 @@ class ViewController: UIViewController {
         
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey.data(using: .utf8)!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: "sharedKey".data(using: .utf8)!)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey.data(using: .utf8)!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: sharedKey.data(using: .utf8)!)
         let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializationFirstJWE = firstJwe.compactSerialized
         

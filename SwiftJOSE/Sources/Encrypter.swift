@@ -29,7 +29,7 @@ public struct Encrypter {
     let encryptedKey: Data
     
     public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: Data, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: Data) {
-        // Todo: Find out which encrypter supports which algorithm. See [JOSE-51](https://mohemian.atlassian.net/browse/JOSE-51)
+        // Todo: Find out which available encrypters support the specified algorithms. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.symmetricEncrypter = AESEncrypter(sharedKey: cek)
         self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(cek)
     }
