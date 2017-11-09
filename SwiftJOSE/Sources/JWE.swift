@@ -39,11 +39,11 @@ public struct JWE {
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public init(header: JWEHeader, payload: JWEPayload, encrypter: Encrypter) {
         self.header = header
-        let cryptoOutput = encrypter.encrypt(plaintext: payload.data(), withHeader: header)
-        self.ciphertext = cryptoOutput.ciphertext
-        self.encryptedKey = cryptoOutput.additionalInformation.encryptedKey
-        self.initializationVector = cryptoOutput.additionalInformation.initializationVector
-        self.authenticationTag = cryptoOutput.additionalInformation.authenticationTag
+        let encryption = encrypter.encrypt(header: header, payload: payload)
+        self.encryptedKey = encrypter.encryptedKey
+        self.ciphertext = encryption.ciphertext
+        self.initializationVector = encryption.initializationVector
+        self.authenticationTag = encryption.authenticationTag
     }
     
     /// Initializes a JWE from a given compact serialization.
@@ -63,13 +63,16 @@ public struct JWE {
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     public func decrypt(with decrypter: Decrypter) -> JWEPayload? {
-        let additionalInformation = JWEAdditionalCryptoInformation(
-            encryptedKey: encryptedKey,
-            initializationVector: initializationVector,
-            authenticationTag: authenticationTag
+        let plaintext = decrypter.decrypt(
+            DecryptionInput(
+                header: header,
+                encryptedKey: encryptedKey,
+                initializationVector: initializationVector,
+                ciphertext: ciphertext,
+                authenticationTag: authenticationTag
+            )
         )
-        let plaintext = decrypter.decrypt(ciphertext: ciphertext, with: header, and: additionalInformation)!
-        return JWEPayload(plaintext)
+        return JWEPayload(plaintext!)
     }
 }
 

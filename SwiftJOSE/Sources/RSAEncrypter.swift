@@ -8,19 +8,10 @@
 
 import Foundation
 
-public struct RSAEncrypter: Encrypter {
-    let kek: String
+public struct RSAEncrypter: AsymmetricEncrypter {
+    let publicKey: Data
     
-    public init(publicKey kek: String) {
-        self.kek = kek
-    }
-    
-    public func encrypt(plaintext: Data, withHeader header: JWEHeader) -> (ciphertext: Data, additionalInformation: JWEAdditionalCryptoInformation) {
-        let additionalInformation = JWEAdditionalCryptoInformation(
-            encryptedKey: "encryptedkey".data(using: .utf8)!,
-            initializationVector: "iv".data(using: .utf8)!,
-            authenticationTag: "authtag".data(using: .utf8)!
-        )
-        return ("ciphertext".data(using: .utf8)!, additionalInformation)
+    func encrypt(_ plaintext: Data) -> Data {
+        return "encryptedKey".data(using: .utf8)!
     }
 }

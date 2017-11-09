@@ -8,15 +8,33 @@
 
 import Foundation
 
-// Dummy container to store cryptographic values that are related to
-// and/or computed in the encryption process and not part of the skeleton.
-public struct JWEAdditionalCryptoInformation {
-    let encryptedKey: Data
-    let initializationVector: Data
-    let authenticationTag: Data
+internal protocol AsymmetricEncrypter {
+    init(publicKey: Data)
+    func encrypt(_ plaintext: Data) -> Data
 }
 
-public protocol Encrypter {
-    init(publicKey kek: String)
-    func encrypt(plaintext: Data, withHeader header: JWEHeader) -> (ciphertext: Data, additionalInformation: JWEAdditionalCryptoInformation)
+internal protocol SymmetricEncrypter {
+    init(sharedKey: Data)
+    func encrypt(_ plaintext: Data, withAdditionalAuthenticatedData aad: Data) -> EncryptionResult
+}
+
+public struct EncryptionResult {
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
+}
+
+public struct Encrypter {
+    let symmetricEncrypter: SymmetricEncrypter
+    let encryptedKey: Data
+    
+    public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: Data, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: Data) {
+        // Todo: Find out which encrypter supports which algorithm. See [JOSE-51](https://mohemian.atlassian.net/browse/JOSE-51)
+        self.symmetricEncrypter = AESEncrypter(sharedKey: cek)
+        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(cek)
+    }
+    
+    func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionResult {
+        return symmetricEncrypter.encrypt(payload.data(), withAdditionalAuthenticatedData: header.data().base64URLEncodedData())
+    }
 }

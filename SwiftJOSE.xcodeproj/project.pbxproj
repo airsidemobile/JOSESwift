@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6505236E1FB4940100E0B1B1 /* AESEncrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */; };
+		650523701FB494BE00E0B1B1 /* AESDecrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */; };
 		652F6DE91F73E6780002DEE0 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652F6DE81F73E6780002DEE0 /* Serializer.swift */; };
 		6533552A1F8F6B6800A660C6 /* JWEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653355291F8F6B6800A660C6 /* JWEHeader.swift */; };
 		6533552C1F8FAF1B00A660C6 /* Algorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6533552B1F8FAF1B00A660C6 /* Algorithm.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESEncrypter.swift; sourceTree = "<group>"; };
+		6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypter.swift; sourceTree = "<group>"; };
 		652F6DE81F73E6780002DEE0 /* Serializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
 		653355291F8F6B6800A660C6 /* JWEHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeader.swift; sourceTree = "<group>"; };
 		6533552B1F8FAF1B00A660C6 /* Algorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algorithm.swift; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
 				65617FCC1F90FB7600D8C743 /* RSAEncrypter.swift */,
 				6567F4DD1F98C8B50037ECB3 /* RSADecrypter.swift */,
+				6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */,
+				6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */,
 			);
 			name = Crypto;
 			sourceTree = "<group>";
@@ -329,11 +335,13 @@
 				6533552C1F8FAF1B00A660C6 /* Algorithm.swift in Sources */,
 				6567F4DE1F98C8B50037ECB3 /* RSADecrypter.swift in Sources */,
 				65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */,
+				650523701FB494BE00E0B1B1 /* AESDecrypter.swift in Sources */,
 				652F6DE91F73E6780002DEE0 /* Serializer.swift in Sources */,
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
 				6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */,
 				65D8680F1F7CE35000769BBF /* RSAVerifier.swift in Sources */,
+				6505236E1FB4940100E0B1B1 /* AESEncrypter.swift in Sources */,
 				65E810621F79489900C7E2A9 /* Signature.swift in Sources */,
 				65D1D0651F7A4DB3006377CD /* JOSEObjectComponent.swift in Sources */,
 				6533552E1F8FB61000A660C6 /* JWE.swift in Sources */,
