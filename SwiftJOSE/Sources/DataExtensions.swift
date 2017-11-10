@@ -26,11 +26,11 @@ extension Data {
     }
     
     init?(base64URLEncoded: Data) {
-        if let s = String(data: base64URLEncoded, encoding: .utf8) {
-            self.init(base64URLEncoded: s)
+        guard let s = String(data: base64URLEncoded, encoding: .utf8) else {
+            return nil
         }
         
-        return nil
+        self.init(base64URLEncoded: s)
     }
     
     func base64URLEncodedString() -> String {
