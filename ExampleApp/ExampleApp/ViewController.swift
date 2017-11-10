@@ -70,4 +70,24 @@ class ViewController: UIViewController {
         print("Just The Header:\n\(justTheHeader)\n")
     }
 
+    private func setupKeyPair() {
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false,
+                kSecAttrApplicationTag as String: privateKeyTag
+            ]
+        ]
+            
+        var error: Unmanaged<CFError>?
+        guard let secKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print("\(error!)")
+            return
+        }
+            
+        privateKey = secKey
+        publicKey = SecKeyCopyPublicKey(secKey)
+    }
 }
