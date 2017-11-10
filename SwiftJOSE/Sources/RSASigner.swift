@@ -29,9 +29,9 @@ fileprivate extension Algorithm {
 }
 
 public struct RSASigner: Signer {
-    let key: String
+    let key: SecKey
     
-    public init(key: String) {
+    public init(key: SecKey) {
         self.key = key
     }
     
