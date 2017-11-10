@@ -36,7 +36,7 @@ public struct RSASigner: Signer {
     }
     
     public func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data? {
-        guard supportedAlgorithms.contains(algorithm) else {
+        guard algorithm.isSupported else {
             return nil
         }
         
