@@ -12,7 +12,7 @@ extension Algorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RS512:
-            return SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA512
+            return .rsaSignatureDigestPKCS1v15SHA512
         default:
             return nil
         }
