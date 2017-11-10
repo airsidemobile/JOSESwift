@@ -8,12 +8,28 @@
 
 import Foundation
 
+extension Algorithm {
+    var secKeyAlgorithm: SecKeyAlgorithm? {
+        switch self {
+        case .RS512:
+            return SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA512
+        default:
+            return nil
+        }
+    }
+    
+    var isSupported: Bool {
+        switch self {
+        case .RS512:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public struct RSASigner: Signer {
     let key: String
-    
-    var supportedAlgorithms: [Algorithm] {
-        return [ .RS512 ]
-    }
     
     public init(key: String) {
         self.key = key
