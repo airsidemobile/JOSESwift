@@ -12,30 +12,37 @@ import SwiftJOSE
 class ViewController: UIViewController {
 
     let message = "The true sign of intelligence is not knowledge but imagination."
-    let privateKey = "thePrivateKey"
-    let publicKey = "thePublicKey"
+    let privateKeyTag = "com.airsidemobile.SwiftJOSE.testPrivateKey"
+    var privateKey: SecKey?
+    var publicKey: SecKey?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupKeyPair()
         
         demoJWS()
         demoJWE()
     }
     
     func demoJWS() {
+        guard publicKey != nil, privateKey != nil else {
+            return
+        }
+        
         print("\n========== JWS ==========\n")
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
-        let signer = RSASigner(key: privateKey)
+        let signer = RSASigner(key: privateKey!)
         let firstJWS = JWS(header: header, payload: payload, signer: signer)
         let compactSerializationFirstJWS = firstJWS.compactSerialized
         
         print("Serialized:\n\(compactSerializationFirstJWS)\n")
         
         let secondJWS = JWS(compactSerialization: compactSerializationFirstJWS)
-        let verifier =  RSAVerifier(key: publicKey)
+        let verifier =  RSAVerifier(key: publicKey!)
         if secondJWS.validates(against: verifier) {
             print("Deserialized:\n\(secondJWS)\n")
         }
