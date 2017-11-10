@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Algorithm {
+fileprivate extension Algorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RS512:
