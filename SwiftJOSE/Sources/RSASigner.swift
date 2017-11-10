@@ -41,7 +41,13 @@ public struct RSASigner: Signer {
             return nil
         }
         
-        let input = String(data: signingInput, encoding: .utf8)!
-        return "\(algorithm.rawValue)(\(input))".data(using: .utf8)
+        var signingError: Unmanaged<CFError>?
+        guard let signature = SecKeyCreateSignature(key, algorithm.secKeyAlgorithm!, signingInput as CFData, &signingError) else {
+            //TODO: throw signing error
+            print("\(signingError!)")
+            return nil
+        }
+        
+        return signature as Data
     }
 }
