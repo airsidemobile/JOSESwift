@@ -12,4 +12,13 @@ public enum Algorithm: String {
     case RS512 = "RS512"
     case RSAOAEP = "RSA-OAEP"
     case AESGCM256 = "A256GCM"
+    
+    var secKeyAlgorithm: SecKeyAlgorithm? {
+        switch self {
+        case .RS512:
+            return .rsaSignatureMessagePKCS1v15SHA512
+        default:
+            return nil
+        }
+    }
 }
