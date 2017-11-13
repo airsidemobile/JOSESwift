@@ -51,6 +51,15 @@
                <Test
                   Identifier = "JWSHeaderTests">
                </Test>
+               <Test
+                  Identifier = "JWSPayloadTests">
+               </Test>
+               <Test
+                  Identifier = "JWSTests">
+               </Test>
+               <Test
+                  Identifier = "RSAVerifierTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
