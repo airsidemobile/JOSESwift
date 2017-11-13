@@ -20,6 +20,10 @@ public struct RSAVerifier: Verifier {
             return false
         }
         
+        var verifyError: Unmanaged<CFError>?
+        guard SecKeyVerifySignature(key, algorithm, signingInput as CFData, signature as CFData, &verifyError) else {
+            //TODO: throw verify error
+            print("\(verifyError!)")
             return false
         }
         
