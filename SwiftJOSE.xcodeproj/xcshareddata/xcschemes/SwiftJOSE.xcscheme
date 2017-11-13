@@ -58,9 +58,6 @@
                   Identifier = "JWSTests">
                </Test>
                <Test
-                  Identifier = "RSASignerTests">
-               </Test>
-               <Test
                   Identifier = "RSAVerifierTests">
                </Test>
             </SkippedTests>
