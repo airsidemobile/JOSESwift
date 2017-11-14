@@ -8,14 +8,10 @@
 
 import Foundation
 
-public struct RSADecrypter: Decrypter {
-    let kdk: String
+public struct RSADecrypter: AsymmetricDecrypter {
+    let privateKey: SecKey
     
-    public init(privateKey kdk: String) {
-        self.kdk = kdk
-    }
-    
-    public func decrypt(ciphertext: Data, with header: JWEHeader, and additionalInformation: JWEAdditionalCryptoInformation) -> Data? {
-        return "The true sign of intelligence is not knowledge but imagination.".data(using: .utf8)!
+    func decrypt(_ ciphertext: Data) -> Data? {
+        return "decryptedKey".data(using: .utf8)
     }
 }

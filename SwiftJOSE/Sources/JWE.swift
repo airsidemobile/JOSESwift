@@ -36,14 +36,15 @@ public struct JWE {
     
     /// Initializes a JWE with a given header, payload and encrypter.
     /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
+    /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public init(header: JWEHeader, payload: JWEPayload, encrypter: Encrypter) {
         self.header = header
-        let cryptoOutput = encrypter.encrypt(plaintext: payload.data(), withHeader: header)
-        self.ciphertext = cryptoOutput.ciphertext
-        self.encryptedKey = cryptoOutput.additionalInformation.encryptedKey
-        self.initializationVector = cryptoOutput.additionalInformation.initializationVector
-        self.authenticationTag = cryptoOutput.additionalInformation.authenticationTag
+        let encryptionContext = encrypter.encrypt(header: header, payload: payload)
+        self.encryptedKey = encrypter.encryptedKey
+        self.ciphertext = encryptionContext.ciphertext
+        self.initializationVector = encryptionContext.initializationVector
+        self.authenticationTag = encryptionContext.authenticationTag
     }
     
     /// Initializes a JWE from a given compact serialization.
@@ -62,14 +63,19 @@ public struct JWE {
     
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
     /// As mentioned it is the responsibility of the user to chache this plaintext.
+    /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
+    /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public func decrypt(with decrypter: Decrypter) -> JWEPayload? {
-        let additionalInformation = JWEAdditionalCryptoInformation(
-            encryptedKey: encryptedKey,
-            initializationVector: initializationVector,
-            authenticationTag: authenticationTag
+        let plaintext = decrypter.decrypt(
+            DecryptionContext(
+                header: header,
+                encryptedKey: encryptedKey,
+                initializationVector: initializationVector,
+                ciphertext: ciphertext,
+                authenticationTag: authenticationTag
+            )
         )
-        let plaintext = decrypter.decrypt(ciphertext: ciphertext, with: header, and: additionalInformation)!
-        return JWEPayload(plaintext)
+        return JWEPayload(plaintext!)
     }
 }
 

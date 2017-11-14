@@ -15,11 +15,12 @@ class ViewController: UIViewController {
     let privateKeyTag = "com.airsidemobile.SwiftJOSE.testPrivateKey"
     var privateKey: SecKey?
     var publicKey: SecKey?
+    var symmetricKey: SecKey?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupKeyPair()
+        setupKeys()
         
         demoJWS()
         demoJWE()
@@ -36,30 +37,33 @@ class ViewController: UIViewController {
         let header = JWSHeader(algorithm: .RS512)
         let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
-        let firstJWS = JWS(header: header, payload: payload, signer: signer)
-        let compactSerializationFirstJWS = firstJWS.compactSerialized
+     
+        var jws = JWS(header: header, payload: payload, signer: signer)
+        let serialized = jws.compactSerialized
         
-        print("Serialized:\n\(compactSerializationFirstJWS)\n")
+        print("JWS:\n\(serialized)\n")
         
-        let secondJWS = JWS(compactSerialization: compactSerializationFirstJWS)
-        let verifier =  RSAVerifier(key: publicKey!)
-        if secondJWS.validates(against: verifier) {
-            print("Deserialized:\n\(secondJWS)\n")
+        jws = JWS(compactSerialization: serialized)
+        
+        let verifier = RSAVerifier(key: publicKey!)
+        if jws.validates(against: verifier) {
+            print("Signature correct.")
+        } else {
+            print("Signature wrong")
         }
-        
-        let justTheHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
-        print("Just The Header:\n\(justTheHeader)\n")
-        let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
-        print("Just The Payload:\n\(justThePayload)")
     }
     
     func demoJWE() {
+        guard publicKey != nil, privateKey != nil else {
+            return
+        }
+        
         print("\n========== JWE ==========\n")
         print("Message:\n\(message)\n")
         
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = RSAEncrypter(publicKey: "publicKey")
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!)
         let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializationFirstJWE = firstJwe.compactSerialized
         
@@ -68,7 +72,7 @@ class ViewController: UIViewController {
         let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
         print("Deserialized:\n\(secondJWE)\n")
         
-        let decrypter = RSADecrypter(privateKey: "privateKey")
+        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!)
         if let payload = secondJWE.decrypt(with: decrypter) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }
@@ -77,7 +81,7 @@ class ViewController: UIViewController {
         print("Just The Header:\n\(justTheHeader)\n")
     }
 
-    private func setupKeyPair() {
+    private func setupKeys() {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
@@ -93,8 +97,9 @@ class ViewController: UIViewController {
             print("\(error!)")
             return
         }
-            
+        
         privateKey = secKey
         publicKey = SecKeyCopyPublicKey(secKey)
+        symmetricKey = secKey
     }
 }

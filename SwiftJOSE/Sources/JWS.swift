@@ -80,9 +80,6 @@ extension JWS: CompactDeserializable {
 // For testing only
 extension JWS: CustomStringConvertible {
     public var description: String {
-        let header = self.header.parameters.description
-        let payload = String(data: self.payload.data(), encoding: .utf8)!
-        let signature = String(data: self.signature.data(), encoding: .utf8)!
-        return "\(header) . \(payload) . \(signature)"
+        return self.compactSerialized
     }
 }
