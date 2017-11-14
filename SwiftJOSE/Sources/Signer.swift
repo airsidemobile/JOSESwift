@@ -9,6 +9,6 @@
 import Foundation
 
 public protocol Signer {
-    init(key: String)
+    init(key: SecKey)
     func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data?
 }

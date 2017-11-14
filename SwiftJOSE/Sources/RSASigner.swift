@@ -9,22 +9,25 @@
 import Foundation
 
 public struct RSASigner: Signer {
-    let key: String
+    let key: SecKey
     
-    var supportedAlgorithms: [Algorithm] {
-        return [ .RS512 ]
-    }
-    
-    public init(key: String) {
+    public init(key: SecKey) {
         self.key = key
     }
     
     public func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data? {
-        guard supportedAlgorithms.contains(algorithm) else {
+        //TODO: Add error handling for signing error
+        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(key, .sign, algorithm) else {
             return nil
         }
         
-        let input = String(data: signingInput, encoding: .utf8)!
-        return "\(algorithm.rawValue)(\(input))".data(using: .utf8)
+        var signingError: Unmanaged<CFError>?
+        guard let signature = SecKeyCreateSignature(key, algorithm, signingInput as CFData, &signingError) else {
+            //TODO: throw signing error
+            print("\(signingError!)")
+            return nil
+        }
+        
+        return signature as Data
     }
 }
