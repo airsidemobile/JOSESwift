@@ -9,12 +9,12 @@
 import Foundation
 
 internal protocol AsymmetricEncrypter {
-    init(publicKey: Data)
+    init(publicKey: SecKey)
     func encrypt(_ plaintext: Data) -> Data
 }
 
 internal protocol SymmetricEncrypter {
-    init(symmetricKey: Data)
+    init(symmetricKey: SecKey)
     func encrypt(_ plaintext: Data, with aad: Data) -> EncryptionContext
 }
 
@@ -28,10 +28,14 @@ public struct Encrypter {
     let symmetricEncrypter: SymmetricEncrypter
     let encryptedKey: Data
     
-    public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: Data, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: Data) {
+    public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: SecKey) {
         // Todo: Find out which available encrypters support the specified algorithms. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
-        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(cek)
+        
+        // Todo: Convert key to correct representation (check RFC).
+        var error: Unmanaged<CFError>?
+        let keyData = SecKeyCopyExternalRepresentation(cek, &error)! as Data;
+        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData)
     }
     
     func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionContext {

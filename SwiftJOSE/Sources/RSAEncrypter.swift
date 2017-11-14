@@ -9,7 +9,7 @@
 import Foundation
 
 public struct RSAEncrypter: AsymmetricEncrypter {
-    let publicKey: Data
+    let publicKey: SecKey
     
     func encrypt(_ plaintext: Data) -> Data {
         return "encryptedKey".data(using: .utf8)!
