@@ -35,7 +35,7 @@ class ViewController: UIViewController {
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .RS512)
-        let payload = JWSPayload(message.data(using: .utf8)!);
+        let payload = JWSPayload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
      
         var jws = JWS(header: header, payload: payload, signer: signer)
