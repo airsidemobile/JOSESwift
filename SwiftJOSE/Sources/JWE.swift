@@ -40,11 +40,11 @@ public struct JWE {
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public init(header: JWEHeader, payload: JWEPayload, encrypter: Encrypter) {
         self.header = header
-        let encryption = encrypter.encrypt(header: header, payload: payload)
+        let encryptionContext = encrypter.encrypt(header: header, payload: payload)
         self.encryptedKey = encrypter.encryptedKey
-        self.ciphertext = encryption.ciphertext
-        self.initializationVector = encryption.initializationVector
-        self.authenticationTag = encryption.authenticationTag
+        self.ciphertext = encryptionContext.ciphertext
+        self.initializationVector = encryptionContext.initializationVector
+        self.authenticationTag = encryptionContext.authenticationTag
     }
     
     /// Initializes a JWE from a given compact serialization.
@@ -67,7 +67,7 @@ public struct JWE {
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public func decrypt(with decrypter: Decrypter) -> JWEPayload? {
         let plaintext = decrypter.decrypt(
-            DecryptionInput(
+            DecryptionContext(
                 header: header,
                 encryptedKey: encryptedKey,
                 initializationVector: initializationVector,

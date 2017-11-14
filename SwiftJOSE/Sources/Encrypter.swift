@@ -15,10 +15,10 @@ internal protocol AsymmetricEncrypter {
 
 internal protocol SymmetricEncrypter {
     init(symmetricKey: Data)
-    func encrypt(_ plaintext: Data, with aad: Data) -> EncryptionResult
+    func encrypt(_ plaintext: Data, with aad: Data) -> EncryptionContext
 }
 
-public struct EncryptionResult {
+public struct EncryptionContext {
     let ciphertext: Data
     let authenticationTag: Data
     let initializationVector: Data
@@ -34,7 +34,7 @@ public struct Encrypter {
         self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(cek)
     }
     
-    func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionResult {
+    func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionContext {
         return symmetricEncrypter.encrypt(payload.data(), with: header.data().base64URLEncodedData())
     }
 }

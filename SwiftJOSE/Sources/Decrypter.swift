@@ -18,7 +18,7 @@ internal protocol SymmetricDecrypter {
     func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) -> Data?
 }
 
-public struct DecryptionInput {
+public struct DecryptionContext {
     let header: JWEHeader
     let encryptedKey: Data
     let initializationVector: Data
@@ -34,9 +34,14 @@ public struct Decrypter {
         self.asymmetricDecrypter = RSADecrypter(privateKey: kdk)
     }
     
-    func decrypt(_ input: DecryptionInput) -> Data? {
-        let cdk = asymmetricDecrypter.decrypt(input.encryptedKey)!
+    func decrypt(_ context: DecryptionContext) -> Data? {
+        let cdk = asymmetricDecrypter.decrypt(context.encryptedKey)!
         // Todo: Find out which available encrypter supports the specified algorithm. See https://mohemian.atlassian.net/browse/JOSE-58.
-        return AESDecrypter(symmetricKey: cdk).decrypt(input.ciphertext, initializationVector: input.initializationVector, additionalAuthenticatedData: input.header.data().base64URLEncodedData(), authenticationTag: input.authenticationTag)
+        return AESDecrypter(symmetricKey: cdk).decrypt(
+            context.ciphertext,
+            initializationVector: context.initializationVector,
+            additionalAuthenticatedData: context.header.data().base64URLEncodedData(),
+            authenticationTag: context.authenticationTag
+        )
     }
 }
