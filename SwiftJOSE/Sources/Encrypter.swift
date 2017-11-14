@@ -14,7 +14,7 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    init(sharedKey: Data)
+    init(symmetricKey: Data)
     func encrypt(_ plaintext: Data, withAdditionalAuthenticatedData aad: Data) -> EncryptionResult
 }
 
@@ -30,7 +30,7 @@ public struct Encrypter {
     
     public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: Data, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: Data) {
         // Todo: Find out which available encrypters support the specified algorithms. See https://mohemian.atlassian.net/browse/JOSE-58.
-        self.symmetricEncrypter = AESEncrypter(sharedKey: cek)
+        self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
         self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(cek)
     }
     

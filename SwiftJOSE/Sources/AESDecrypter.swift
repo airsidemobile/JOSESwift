@@ -9,7 +9,7 @@
 import Foundation
 
 public struct AESDecrypter: SymmetricDecrypter {
-    let sharedKey: Data
+    let symmetricKey: Data
     
     func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) -> Data? {
         return "The true sign of intelligence is not knowledge but imagination.".data(using: .utf8)

@@ -9,7 +9,7 @@
 import Foundation
 
 public struct AESEncrypter: SymmetricEncrypter {
-    let sharedKey: Data
+    let symmetricKey: Data
     
     func encrypt(_ plaintext: Data, withAdditionalAuthenticatedData aad: Data) -> EncryptionResult {
         return EncryptionResult(
