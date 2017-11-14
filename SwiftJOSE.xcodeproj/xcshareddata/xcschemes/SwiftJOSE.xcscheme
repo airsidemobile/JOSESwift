@@ -42,12 +42,6 @@
                <Test
                   Identifier = "CryptoTestCase">
                </Test>
-               <Test
-                  Identifier = "JWEHeaderTests">
-               </Test>
-               <Test
-                  Identifier = "JWETests">
-               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

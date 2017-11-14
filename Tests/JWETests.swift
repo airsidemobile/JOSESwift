@@ -9,11 +9,7 @@
 import XCTest
 @testable import SwiftJOSE
 
-class JWETests: XCTestCase {
-    
-    let message = "Hello world!"
-    let privateKey = "privateKey"
-    let publicKey = "publicKey"
+class JWETests: CryptoTestCase {
     
     override func setUp() {
         super.setUp()
@@ -23,25 +19,25 @@ class JWETests: XCTestCase {
         super.tearDown()
     }
 
-    //TODO: Adapt tests as soon as JWE skeletton is finished and merged
+    //TODO: Adapt tests as soon as JWE skeleton is finished and merged
     func testEncryptAndSerialize() {
-        let header = JWEHeader(algorithm: .RS512, encryptionAlgorithm: .RS512)
+        let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = JWEPayload(message.data(using: .utf8)!)
-        let encrypter = RSAEncrypter(publicKey: publicKey)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: privateKey!)
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializedJWE = jwe.compactSerialized
         
-        XCTAssertEqual(compactSerializedJWE, "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw")
+        XCTAssertEqual(compactSerializedJWE, "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.ZW5jcnlwdGVkS2V5.aXY.Y2lwaGVydGV4dA.YXV0aFRhZw")
     }
     
     func testDecrypt() {
-        let compactSerializedJWE = "eyJhbGciOiJSUzUxMiIsImVuYyI6IlJTNTEyIn0.ZW5jcnlwdGVka2V5.aXY.Y2lwaGVydGV4dA.YXV0aHRhZw"
+        let compactSerializedJWE = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.ZW5jcnlwdGVkS2V5.aXY.Y2lwaGVydGV4dA.YXV0aFRhZw"
         
         let jwe = JWE(compactSerialization: compactSerializedJWE)
-        let decrypter = RSADecrypter(privateKey: privateKey)
+        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!)
         let payloadString = String(data: (jwe.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
         
-        XCTAssertEqual(payloadString, "Hello world!")
+        XCTAssertEqual(payloadString, "The true sign of intelligence is not knowledge but imagination.")
     }
     
 }
