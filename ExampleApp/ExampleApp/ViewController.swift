@@ -35,23 +35,22 @@ class ViewController: UIViewController {
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .RS512)
-        let payload = JWSPayload(message.data(using: .utf8)!)
+        let payload = JWSPayload(message.data(using: .utf8)!);
         let signer = RSASigner(key: privateKey!)
-        let firstJWS = JWS(header: header, payload: payload, signer: signer)
-        let compactSerializationFirstJWS = firstJWS.compactSerialized
+     
+        var jws = JWS(header: header, payload: payload, signer: signer)
+        let serialized = jws.compactSerialized
         
-        print("Serialized:\n\(compactSerializationFirstJWS)\n")
+        print("JWS:\n\(serialized)\n")
         
-        let secondJWS = JWS(compactSerialization: compactSerializationFirstJWS)
-        let verifier =  RSAVerifier(key: publicKey!)
-        if secondJWS.validates(against: verifier) {
-            print("Deserialized:\n\(secondJWS)\n")
+        jws = JWS(compactSerialization: serialized)
+        
+        let verifier = RSAVerifier(key: publicKey!)
+        if jws.validates(against: verifier) {
+            print("Signature correct.")
+        } else {
+            print("Signature wrong")
         }
-        
-        let justTheHeader = JOSEDeserializer().deserialize(JWSHeader.self, fromCompactSerialization: compactSerializationFirstJWS)
-        print("Just The Header:\n\(justTheHeader)\n")
-        let justThePayload = JOSEDeserializer().deserialize(JWSPayload.self, fromCompactSerialization: compactSerializationFirstJWS)
-        print("Just The Payload:\n\(justThePayload)")
     }
     
     func demoJWE() {
