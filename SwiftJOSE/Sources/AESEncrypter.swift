@@ -11,7 +11,7 @@ import Foundation
 public struct AESEncrypter: SymmetricEncrypter {
     let symmetricKey: Data
     
-    func encrypt(_ plaintext: Data, withAdditionalAuthenticatedData aad: Data) -> EncryptionResult {
+    func encrypt(_ plaintext: Data, with aad: Data) -> EncryptionResult {
         return EncryptionResult(
             ciphertext: "ciphertext".data(using: .utf8)!,
             authenticationTag: "authTag".data(using: .utf8)!,
