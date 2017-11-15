@@ -12,17 +12,25 @@ import Foundation
 public struct JWEHeader: JOSEHeader {
     let parameters: [String: Any]
     
-    init(parameters: [String: Any]) {
-        // TODO: Assert that required JWE parameters are present.
+    init(parameters: [String: Any]) throws {
+        guard
+            let algorithm = parameters["alg"] as? String,
+            Algorithm(rawValue: algorithm) != nil,
+            let encryptionAlgorithm = parameters["enc"] as? String,
+            Algorithm(rawValue: encryptionAlgorithm) != nil
+        else {
+            throw NSError(domain: "com.airsidemobile.SwiftJOSE.error", code: 666, userInfo: nil) //TODO: Implement error class as soon as the error handling stands
+        }
+        
         self.parameters = parameters
     }
     
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
     public init(algorithm: Algorithm, encryptionAlgorithm: Algorithm) {
-        self.init(parameters: [
+        try! self.init(parameters: [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
-        ])
+            ])
     }
 }
 

@@ -21,7 +21,7 @@ class JWEHeaderTests: XCTestCase {
     }
     
     func testInitWithParameters() {
-        let header = JWEHeader(parameters: parameterDict)
+        let header = try! JWEHeader(parameters: parameterDict)
         
         XCTAssertEqual(header.parameters["enc"] as? String, Algorithm.AESGCM256.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RSAOAEP.rawValue)

@@ -13,7 +13,6 @@ public struct JWSHeader: JOSEHeader {
     let parameters: [String: Any]
     
     init(parameters: [String: Any]) throws {
-        // TODO: Assert that required JWS parameters are present.
         guard let algorithm = parameters["alg"] as? String, Algorithm(rawValue: algorithm) != nil else {
             throw NSError(domain: "com.airsidemobile.SwiftJOSE.error", code: 666, userInfo: nil) //TODO: Implement error class as soon as the error handling stands
         }
