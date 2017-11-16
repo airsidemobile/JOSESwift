@@ -8,7 +8,13 @@
 
 import Foundation
 
+enum DeserializationError: Error {
+    case invalidCompactSerializationLength
+    case componentNotValidBase64URL(component: String)
+}
+
 public protocol CompactDeserializable {
+    static var count: Int { get }
     init(from deserializer: CompactDeserializer)
 }
 
@@ -18,10 +24,23 @@ public protocol CompactDeserializer {
 
 public struct JOSEDeserializer {
     public init() { }
-    public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
+    
+    public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) throws -> T {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
-        let decodedComponents = encodedComponents.map { component in Data(base64URLEncoded: component)! }
+        
+        guard encodedComponents.count == type.count else {
+            throw DeserializationError.invalidCompactSerializationLength
+        }
+        
+        let decodedComponents = try encodedComponents.map { (component: String) throws -> Data in
+            guard let data = Data(base64URLEncoded: component) else {
+                throw DeserializationError.componentNotValidBase64URL(component: component)
+            }
+            return data
+        }
+        
         let deserializer = _CompactDeserializer(components: decodedComponents)
+        
         return T(from: deserializer)
     }
 }

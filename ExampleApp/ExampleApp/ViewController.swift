@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         
         print("JWS:\n\(serialized)\n")
         
-        jws = JWS(compactSerialization: serialized)
+        jws = try! JWS(compactSerialization: serialized)
         
         let verifier = RSAVerifier(key: publicKey!)
         if jws.validates(against: verifier) {
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         
         print("Serialized:\n\(compactSerializationFirstJWE)\n")
         
-        let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
+        let secondJWE = try! JWE(compactSerialization: compactSerializationFirstJWE)
         print("Deserialized:\n\(secondJWE)\n")
         
         let decrypter = Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!)
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }
         
-        let justTheHeader = JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
+        let justTheHeader = try! JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
         print("Just The Header:\n\(justTheHeader)\n")
     }
 

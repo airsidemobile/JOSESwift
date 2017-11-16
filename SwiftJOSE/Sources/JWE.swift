@@ -48,8 +48,8 @@ public struct JWE {
     }
     
     /// Initializes a JWE from a given compact serialization.
-    public init(compactSerialization: String) {
-        self = JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
+    public init(compactSerialization: String) throws {
+        self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
     
     /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
@@ -92,6 +92,10 @@ extension JWE: CompactSerializable {
 
 /// Deserialize the JWE from a given compact deserializer.
 extension JWE: CompactDeserializable {
+    public static var count: Int {
+        return 5
+    }
+    
     public init (from deserializer: CompactDeserializer) {
         let header = JWEHeader(from: deserializer)
         let encryptedKey = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweEncryptedKeyIndex)

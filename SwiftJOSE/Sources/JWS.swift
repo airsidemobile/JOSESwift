@@ -39,8 +39,8 @@ public struct JWS {
      - parameters:
          - compactSerialization: A compact serialized JWS object as received e.g. from the server.
     */
-    public init(compactSerialization: String) {
-        self = JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
+    public init(compactSerialization: String) throws {
+        self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
     fileprivate init(header: JWSHeader, payload: JWSPayload, signature: Signature) {
@@ -69,6 +69,10 @@ extension JWS: CompactSerializable {
 }
 
 extension JWS: CompactDeserializable {
+    public static var count: Int {
+        return 3
+    }
+    
     public init(from deserializer: CompactDeserializer) {
         let header = JWSHeader(from: deserializer)
         let payload = JWSPayload(from: deserializer)
