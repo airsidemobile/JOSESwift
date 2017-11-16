@@ -41,13 +41,3 @@ extension Signature: JOSEObjectComponent {
         return signature
     }
 }
-
-extension Signature: CompactDeserializable {
-    public static var count: Int {
-        return 3
-    }
-    
-    public init(from deserializer: CompactDeserializer) throws {
-        self = try deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
-    }
-}

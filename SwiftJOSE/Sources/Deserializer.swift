@@ -18,7 +18,7 @@ enum DeserializationError: Error {
 }
 
 public protocol CompactDeserializable {
-    static var count: Int { get }
+    static var componentCount: Int { get }
     init(from deserializer: CompactDeserializer) throws
 }
 
@@ -32,7 +32,7 @@ public struct JOSEDeserializer {
     public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) throws -> T {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
         
-        guard encodedComponents.count == type.count else {
+        guard encodedComponents.count == type.componentCount else {
             throw DeserializationError.invalidCompactSerializationLength
         }
         

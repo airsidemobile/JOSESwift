@@ -76,9 +76,6 @@ class ViewController: UIViewController {
         if let payload = secondJWE.decrypt(with: decrypter) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }
-        
-        let justTheHeader = try! JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
-        print("Just The Header:\n\(justTheHeader)\n")
     }
 
     private func setupKeys() {

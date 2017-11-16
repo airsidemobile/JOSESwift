@@ -69,14 +69,14 @@ extension JWS: CompactSerializable {
 }
 
 extension JWS: CompactDeserializable {
-    public static var count: Int {
+    public static var componentCount: Int {
         return 3
     }
     
     public init(from deserializer: CompactDeserializer) throws {
-        let header = try JWSHeader(from: deserializer)
-        let payload = try JWSPayload(from: deserializer)
-        let signature = try Signature(from: deserializer)
+        let header = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
+        let payload = try deserializer.deserialize(JWSPayload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
+        let signature = try deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
         self.init(header: header, payload: payload, signature: signature)
     }
 }

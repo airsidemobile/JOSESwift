@@ -98,13 +98,3 @@ extension JWSHeader: CommonHeaderParameterSpace {
         return parameters["crit"] as? [String]
     }
 }
-
-extension JWSHeader: CompactDeserializable {
-    public static var count: Int {
-        return 3
-    }
-    
-    public init(from deserializer: CompactDeserializer) throws {
-        self = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
-    }
-}

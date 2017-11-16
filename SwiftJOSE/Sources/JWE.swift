@@ -92,12 +92,12 @@ extension JWE: CompactSerializable {
 
 /// Deserialize the JWE from a given compact deserializer.
 extension JWE: CompactDeserializable {
-    public static var count: Int {
+    public static var componentCount: Int {
         return 5
     }
     
     public init (from deserializer: CompactDeserializer) throws {
-        let header = try JWEHeader(from: deserializer)
+        let header = try deserializer.deserialize(JWEHeader.self, at: ComponentCompactSerializedIndex.jweHeaderIndex)
         let encryptedKey = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweEncryptedKeyIndex)
         let initializationVector = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweInitializationVectorIndex)
         let ciphertext = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweCiphertextIndex)

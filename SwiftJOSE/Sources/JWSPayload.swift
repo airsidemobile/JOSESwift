@@ -15,13 +15,3 @@ public struct JWSPayload: Payload {
         self.data = data
     }
 }
-
-extension JWSPayload: CompactDeserializable {
-    public static var count: Int {
-        return 3
-    }
-    
-    public init(from deserializer: CompactDeserializer) throws {
-        self = try deserializer.deserialize(JWSPayload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
-    }
-}

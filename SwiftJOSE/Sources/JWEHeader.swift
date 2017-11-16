@@ -119,13 +119,3 @@ public extension JWEHeader {
         return Algorithm(rawValue: parameters["enc"] as! String)!
     }
 }
-
-extension JWEHeader: CompactDeserializable {
-    public static var count: Int {
-        return 5
-    }
-    
-    public init(from deserializer: CompactDeserializer) throws {
-        self = try deserializer.deserialize(JWEHeader.self, at: 0)
-    }
-}
