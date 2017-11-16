@@ -68,6 +68,8 @@ extension Data {
      - Returns: The base64url encoded data.
      */
     func base64URLEncodedData() -> Data {
+        // UTF-8 can represent [all Unicode characters](https://en.wikipedia.org/wiki/UTF-8), so this 
+        // forced unwrap is safe. See also [this](https://stackoverflow.com/a/46152738/5233456) SO answer.
         return self.base64URLEncodedString().data(using: .utf8)!
     }
 }
