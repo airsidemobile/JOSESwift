@@ -9,8 +9,16 @@
 import Foundation
 
 extension Data {
-    init?(base64URLEncoded: String) {
-        var s = base64URLEncoded
+    /**
+     Creates a new data buffer from a base64url encoded string.
+     
+     - Parameters:
+         - base64URLString: The base64url encoded string to parse.
+     
+     - Returns: `nil` if the input is not recognized as valid base64url.
+     */
+    init?(base64URLEncoded base64URLString: String) {
+        var s = base64URLString
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
         
@@ -25,14 +33,27 @@ extension Data {
         self.init(base64Encoded: s)
     }
     
-    init?(base64URLEncoded: Data) {
-        guard let s = String(data: base64URLEncoded, encoding: .utf8) else {
+    /**
+     Creates a new data buffer from base64url, UTF-8 encoded data.
+     
+     - Parameters:
+     - base64URLData: The base64url, UTF-8 encoded data.
+     
+     - Returns: `nil` if the input is not recognized as valid base64url.
+     */
+    init?(base64URLEncoded base64URLData: Data) {
+        guard let s = String(data: base64URLData, encoding: .utf8) else {
             return nil
         }
         
         self.init(base64URLEncoded: s)
     }
     
+    /**
+     Returns a base64url encoded string.
+     
+     - Returns: The base64url encoded string.
+     */
     func base64URLEncodedString() -> String {
         let s = self.base64EncodedString()
         return s
@@ -41,6 +62,11 @@ extension Data {
             .replacingOccurrences(of: "/", with: "_")
     }
     
+    /**
+     Returns base64url encoded data.
+     
+     - Returns: The base64url encoded data.
+     */
     func base64URLEncodedData() -> Data {
         return self.base64URLEncodedString().data(using: .utf8)!
     }
