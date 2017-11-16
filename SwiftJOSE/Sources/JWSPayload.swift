@@ -18,10 +18,10 @@ public struct JWSPayload: Payload {
 
 extension JWSPayload: CompactDeserializable {
     public static var count: Int {
-        return 1
+        return 3
     }
     
-    public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSPayload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
+    public init(from deserializer: CompactDeserializer) throws {
+        self = try deserializer.deserialize(JWSPayload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
     }
 }

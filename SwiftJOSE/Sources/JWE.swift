@@ -96,12 +96,12 @@ extension JWE: CompactDeserializable {
         return 5
     }
     
-    public init (from deserializer: CompactDeserializer) {
-        let header = JWEHeader(from: deserializer)
-        let encryptedKey = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweEncryptedKeyIndex)
-        let initializationVector = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweInitializationVectorIndex)
-        let ciphertext = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweCiphertextIndex)
-        let authenticationTag = deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweAuthenticationTagIndex)
+    public init (from deserializer: CompactDeserializer) throws {
+        let header = try JWEHeader(from: deserializer)
+        let encryptedKey = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweEncryptedKeyIndex)
+        let initializationVector = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweInitializationVectorIndex)
+        let ciphertext = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweCiphertextIndex)
+        let authenticationTag = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweAuthenticationTagIndex)
         self.init(header: header, encryptedKey: encryptedKey, initializationVector: initializationVector, ciphertext: ciphertext, authenticationTag: authenticationTag)
     }
 }

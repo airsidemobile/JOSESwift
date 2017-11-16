@@ -91,9 +91,10 @@ extension JWSHeader: CommonHeaderParameterSpace {
 
 extension JWSHeader: CompactDeserializable {
     public static var count: Int {
-        return 1
+        return 3
     }
-    public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
+    
+    public init(from deserializer: CompactDeserializer) throws {
+        self = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
     }
 }

@@ -108,10 +108,10 @@ public extension JWEHeader {
 
 extension JWEHeader: CompactDeserializable {
     public static var count: Int {
-        return 1
+        return 5
     }
     
-    public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWEHeader.self, at: 0)
+    public init(from deserializer: CompactDeserializer) throws {
+        self = try deserializer.deserialize(JWEHeader.self, at: 0)
     }
 }

@@ -17,9 +17,15 @@ protocol JOSEHeader: JOSEObjectComponent {
 
 // `JOSEObjectComponent` implementation.
 extension JOSEHeader {
-    public init(_ data: Data) {
-        let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-        try! self.init(parameters: parameters) //TODO: Refactor force try as soon as error handling gets implemented
+    public init?(_ data: Data) {
+        guard
+            let json = try? JSONSerialization.jsonObject(with: data, options: []),
+            let parameters = json as? [String: Any]
+        else {
+            return nil
+        }
+        
+        try? self.init(parameters: parameters)
     }
     
     public func data() -> Data {

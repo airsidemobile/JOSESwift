@@ -11,15 +11,16 @@ import Foundation
 enum DeserializationError: Error {
     case invalidCompactSerializationLength
     case componentNotValidBase64URL(component: String)
+    case componentCouldNotBeInitializedWithData(component: JOSEObjectComponent.Type, data: Data)
 }
 
 public protocol CompactDeserializable {
     static var count: Int { get }
-    init(from deserializer: CompactDeserializer)
+    init(from deserializer: CompactDeserializer) throws
 }
 
 public protocol CompactDeserializer {
-    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T
+    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) throws -> T
 }
 
 public struct JOSEDeserializer {
@@ -41,14 +42,19 @@ public struct JOSEDeserializer {
         
         let deserializer = _CompactDeserializer(components: decodedComponents)
         
-        return T(from: deserializer)
+        return try T(from: deserializer)
     }
 }
 
 fileprivate struct _CompactDeserializer: CompactDeserializer {
     let components: [Data]
     
-    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T {
-        return T(components[index])
+    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) throws -> T {
+        let componentData = components[index]
+        guard let component = T(componentData) else {
+            throw DeserializationError.componentCouldNotBeInitializedWithData(component: type, data: componentData)
+        }
+        
+        return component
     }
 }

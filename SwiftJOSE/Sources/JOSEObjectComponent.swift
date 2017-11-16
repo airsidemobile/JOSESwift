@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol JOSEObjectComponent {
-    init(_ data: Data)
+    init?(_ data: Data)
     func data() -> Data
 }
 

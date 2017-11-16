@@ -73,10 +73,10 @@ extension JWS: CompactDeserializable {
         return 3
     }
     
-    public init(from deserializer: CompactDeserializer) {
-        let header = JWSHeader(from: deserializer)
-        let payload = JWSPayload(from: deserializer)
-        let signature = Signature(from: deserializer)
+    public init(from deserializer: CompactDeserializer) throws {
+        let header = try JWSHeader(from: deserializer)
+        let payload = try JWSPayload(from: deserializer)
+        let signature = try Signature(from: deserializer)
         self.init(header: header, payload: payload, signature: signature)
     }
 }
