@@ -38,7 +38,7 @@ public struct Encrypter {
         self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData)
     }
     
-    func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionContext {
+    func encrypt(header: JWEHeader, payload: Payload) -> EncryptionContext {
         return symmetricEncrypter.encrypt(payload.data(), with: header.data().base64URLEncodedData())
     }
 }

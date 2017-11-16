@@ -8,13 +8,14 @@
 
 import Foundation
 
-protocol Payload: JOSEObjectComponent {
-    var data: Data { get }
-    init(_ data: Data)
-}
-
-extension Payload {
+public struct Payload: JOSEObjectComponent {
+    let payload: Data
+    
+    public init(_ payload: Data) {
+        self.payload = payload
+    }
+    
     public func data() -> Data {
-        return data
+        return payload
     }
 }

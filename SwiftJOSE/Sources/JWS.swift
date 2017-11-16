@@ -13,7 +13,7 @@ import Foundation
 /// cannot be changed once the object is initialized.
 public struct JWS {
     let header: JWSHeader
-    let payload: JWSPayload
+    let payload: Payload
     let signature: Signature
     
     /// The compact serialization of this JWS object.
@@ -28,7 +28,7 @@ public struct JWS {
          - payload: A fully initialized `JWSPayload`.
          - signer: The `Signer` used to compute the JWS signature from the header and payload.
     */
-    public init(header: JWSHeader, payload: JWSPayload, signer: Signer) {
+    public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
         self.signature = Signature(from: signer, using: header, and: payload)!
@@ -43,7 +43,7 @@ public struct JWS {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
-    fileprivate init(header: JWSHeader, payload: JWSPayload, signature: Signature) {
+    fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
         self.header = header
         self.payload = payload
         self.signature = signature
@@ -75,7 +75,7 @@ extension JWS: CompactDeserializable {
     
     public init(from deserializer: CompactDeserializer) throws {
         let header = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
-        let payload = try deserializer.deserialize(JWSPayload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
+        let payload = try deserializer.deserialize(Payload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
         let signature = try deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
         self.init(header: header, payload: payload, signature: signature)
     }
