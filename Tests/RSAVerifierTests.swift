@@ -25,7 +25,7 @@ class RSAVerifierTests: CryptoTestCase {
             return
         }
         
-        let jws = JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
         let verifier = RSAVerifier(key: publicKey!)
         
         XCTAssertTrue(jws.validates(against: verifier))

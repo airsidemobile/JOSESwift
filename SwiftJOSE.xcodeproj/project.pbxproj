@@ -33,7 +33,6 @@
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSTests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
-		C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 		C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */; };
 		C803EFF31FA8A98F00B71335 /* DataExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */; };
@@ -83,7 +82,6 @@
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C803EFE41FA77E3000B71335 /* JWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSTests.swift; sourceTree = "<group>"; };
 		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
-		C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSPayloadTests.swift; sourceTree = "<group>"; };
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
@@ -142,7 +140,6 @@
 			children = (
 				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
-				C803EFEA1FA8756900B71335 /* JWSPayloadTests.swift */,
 				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
 				C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */,
@@ -347,7 +344,6 @@
 				C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */,
 				C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */,
 				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
-				C803EFEB1FA8756900B71335 /* JWSPayloadTests.swift in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 				C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */,
 			);

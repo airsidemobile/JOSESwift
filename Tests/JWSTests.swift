@@ -25,14 +25,14 @@ class JWSTests: CryptoTestCase {
         }
         
         let header = JWSHeader(algorithm: .RS512)
-        let payload = JWSPayload(message.data(using: .utf8)!)
+        let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
         let jws = JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerialized
 
         XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
         
-        let secondJWS = JWS(compactSerialization: compactSerializedJWS)
+        let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
         let verifier = RSAVerifier(key: publicKey!)
         
         XCTAssertTrue(secondJWS.validates(against: verifier))
@@ -44,12 +44,12 @@ class JWSTests: CryptoTestCase {
             return
         }
         
-        let jws = JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"RS512\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
         
         let signer = RSASigner(key: privateKey!)
-        let signature = Signature(from: signer, using: JWSHeader(algorithm: .RS512), and: JWSPayload(message.data(using: .utf8)!))
+        let signature = Signature(from: signer, using: JWSHeader(algorithm: .RS512), and: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature?.data())
     }
 }

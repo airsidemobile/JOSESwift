@@ -30,7 +30,7 @@ class JWEHeaderTests: XCTestCase {
     
     func testInitWithData() {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
-        let header = JWEHeader(data)
+        let header = JWEHeader(data)!
         
         XCTAssertEqual(header.parameters["enc"] as? String, Algorithm.AESGCM256.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RSAOAEP.rawValue)
