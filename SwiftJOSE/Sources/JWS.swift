@@ -80,10 +80,3 @@ extension JWS: CompactDeserializable {
         self.init(header: header, payload: payload, signature: signature)
     }
 }
-
-// For testing only
-extension JWS: CustomStringConvertible {
-    public var description: String {
-        return self.compactSerialized
-    }
-}
