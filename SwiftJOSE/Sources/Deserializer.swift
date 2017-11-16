@@ -11,7 +11,7 @@ import Foundation
 enum DeserializationError: Error {
     case invalidCompactSerializationLength
     case componentNotValidBase64URL(component: String)
-    case componentCouldNotBeInitializedWithData(component: JOSEObjectComponent.Type, data: Data)
+    case componentCouldNotBeInitializedWithData(data: Data)
     case requiredHeaderParameterMissing(parameter: String)
     case headerParameterValueIsInvalid(parameter: String, value: String)
     case headerIsNotValidJSONObject
@@ -55,7 +55,7 @@ fileprivate struct _CompactDeserializer: CompactDeserializer {
     func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) throws -> T {
         let componentData = components[index]
         guard let component = T(componentData) else {
-            throw DeserializationError.componentCouldNotBeInitializedWithData(component: type, data: componentData)
+            throw DeserializationError.componentCouldNotBeInitializedWithData(data: componentData)
         }
         
         return component
