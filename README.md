@@ -1,5 +1,6 @@
 # SwiftJOSE
 
+[![Build Status](https://mohemian.synology.me/job/jose-ios/master/badge/icon)](https://mohemian.synology.me/job/jose-ios/master)
 SwiftJOSE is a [JavaScript Object Signing and Encryption (JOSE)](http://jose.readthedocs.io/en/latest) framework written in Swift.
 
 ⚠️ This is work in progress.
