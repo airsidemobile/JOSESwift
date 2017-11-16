@@ -31,7 +31,7 @@ public struct JWE {
  
     /// The Compact Serialization of this JWE.
     public var compactSerialized: String {
-        return JOSESerializer().compact(self)
+        return JOSESerializer().serialize(compact: self)
     }
     
     /// Initializes a JWE with a given header, payload and encrypter.

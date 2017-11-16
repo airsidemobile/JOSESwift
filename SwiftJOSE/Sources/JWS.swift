@@ -18,7 +18,7 @@ public struct JWS {
     
     /// The compact serialization of this JWS object.
     public var compactSerialized: String {
-        return JOSESerializer().compact(self)
+        return JOSESerializer().serialize(compact: self)
     }
     
     /**
