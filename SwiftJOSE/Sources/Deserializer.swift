@@ -12,6 +12,9 @@ enum DeserializationError: Error {
     case invalidCompactSerializationLength
     case componentNotValidBase64URL(component: String)
     case componentCouldNotBeInitializedWithData(component: JOSEObjectComponent.Type, data: Data)
+    case requiredHeaderParameterMissing(parameter: String)
+    case headerParameterValueIsInvalid(parameter: String, value: String)
+    case headerIsNotValidJSONObject
 }
 
 public protocol CompactDeserializable {

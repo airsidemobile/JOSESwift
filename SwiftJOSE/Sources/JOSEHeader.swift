@@ -29,6 +29,7 @@ extension JOSEHeader {
     }
     
     public func data() -> Data {
+        // Forcing the try is ok here since we checked `isValidJSONObject(_:)` in `init(parameters:)` earlier.
         // The resulting data of this operation is UTF-8 encoded.
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
     }

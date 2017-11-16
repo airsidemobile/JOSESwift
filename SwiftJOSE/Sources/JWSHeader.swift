@@ -13,8 +13,15 @@ public struct JWSHeader: JOSEHeader {
     let parameters: [String: Any]
     
     init(parameters: [String: Any]) throws {
-        guard let algorithm = parameters["alg"] as? String, Algorithm(rawValue: algorithm) != nil else {
-            throw NSError(domain: "com.airsidemobile.SwiftJOSE.error", code: 666, userInfo: nil) //TODO: Implement error class as soon as the error handling stands
+        guard JSONSerialization.isValidJSONObject(parameters) else {
+            throw DeserializationError.headerIsNotValidJSONObject
+        }
+        
+        guard let alg = parameters["alg"] as? String else {
+            throw DeserializationError.requiredHeaderParameterMissing(parameter: "alg")
+        }
+        guard Algorithm(rawValue: alg) != nil else {
+            throw DeserializationError.headerParameterValueIsInvalid(parameter: "alg", value: alg)
         }
         
         self.parameters = parameters
@@ -22,6 +29,7 @@ public struct JWSHeader: JOSEHeader {
     
     /// Initializes a `JWSHeader` with the specified algorithm.
     public init(algorithm: Algorithm) {
+        // Forcing the try is ok here, since "alg" is the only required header parameter.
         try! self.init(parameters: ["alg": algorithm.rawValue])
     }
 }
@@ -30,6 +38,8 @@ public struct JWSHeader: JOSEHeader {
 extension JWSHeader: CommonHeaderParameterSpace {
     /// The algorithm used to sign the payload.
     public var algorithm: Algorithm {
+        // Forced unwrap is ok here since we checked both that "alg" exists
+        // and has a valid `Algorithm` value earlier
         return Algorithm(rawValue: parameters["alg"] as! String)!
     }
     
