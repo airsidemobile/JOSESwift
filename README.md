@@ -12,6 +12,19 @@ We plan to support:
 - [ ] [JWE](https://tools.ietf.org/html/rfc7516)
 - [ ] [JWK](https://tools.ietf.org/html/rfc7517)
 
+## Usage
+
+### Signing
+
+## Contributing
+TODO: Contribution welcome, link to contributing.md and code of coduct
+
+## Communication
+
+## Testing
+
+To run the project's iOS unit tests select the `SwiftJOSE` scheme and use the `Cmd+U` shortcut or the **Product->Test** menu bar action.  
+
 ## Installation
 
 ### Carthage
