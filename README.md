@@ -47,7 +47,7 @@ if jws.validates(against: verifier) {
 }
 ```
 
-## Installation
+## Installation :hammer_and_wrench:
 
 ### Carthage
 
@@ -75,13 +75,13 @@ dependencies: [
 ]
 ```
 
-## Contributing
+## Contributing :construction_worker_man: :construction_worker_woman:
 
 
 
 TODO: Contribution welcome, link to contributing.md and code of coduct
 
-## Communication
+## Communication :speech_balloon:
 
 ## Testing
 
