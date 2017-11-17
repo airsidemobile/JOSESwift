@@ -30,7 +30,7 @@ let signer = RSASigner(key: privateKey)
 let jws = JWS(header: header, payload: payload, signer: signer)
 ```
 
-### Verify :white_check_mark: :vs: :negative_squared_cross_mark:
+### Verify :white_check_mark::vs::negative_squared_cross_mark:
 
 To verify a signature of a received compact serialized `JWS`, initialize a `JWS` with the compact serialization and create a `Verifier` with the corresponding public key of the signature's private key.
 
@@ -75,17 +75,9 @@ dependencies: [
 ]
 ```
 
-## Contributing :construction_worker_man: :construction_worker_woman:
+## Contributing :woman_technologist::man_technologist:
 
-
-
-TODO: Contribution welcome, link to contributing.md and code of coduct
-
-## Communication :speech_balloon:
-
-## Testing
-
-To run the project's iOS unit tests select the `SwiftJOSE` scheme and use the `Cmd+U` shortcut or the **Product->Test** menu bar action.  
+If you want to contribute to this project don't hesitate to check out the [Contribution Guidelines](https://github.com/mohemian/jose-ios/blob/master/CONTRIBUTING.md). 
 
 ## Credits
 
