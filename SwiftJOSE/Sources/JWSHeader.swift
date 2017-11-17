@@ -14,11 +14,11 @@ public struct JWSHeader: JOSEHeader {
     
     init(parameters: [String: Any]) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
-            throw DeserializationError.headerIsNotValidJSONObject
+            throw HeaderParsingError.headerIsNotValidJSONObject
         }
         
         guard parameters["alg"] is String else {
-            throw DeserializationError.requiredHeaderParameterMissing(parameter: "alg")
+            throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
         
         self.parameters = parameters

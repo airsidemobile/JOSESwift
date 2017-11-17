@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum HeaderParsingError: Error {
+    case requiredHeaderParameterMissing(parameter: String)
+    case headerIsNotValidJSONObject
+}
+
 /// A `JOSEHeader` is a JSON object representing various Header Parameters.
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
