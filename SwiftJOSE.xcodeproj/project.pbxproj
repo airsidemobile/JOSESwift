@@ -108,6 +108,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		65125A2C1FBF6B79007CF3AE /* JWS */ = {
+			isa = PBXGroup;
+			children = (
+				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
+				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
+			);
+			name = JWS;
+			sourceTree = "<group>";
+		};
+		65125A2E1FBF6B9E007CF3AE /* JWE */ = {
+			isa = PBXGroup;
+			children = (
+				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
+				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
+			);
+			name = JWE;
+			sourceTree = "<group>";
+		};
+		65125A2F1FBF6BAC007CF3AE /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
+				C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */,
+				C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */,
+			);
+			name = Crypto;
+			sourceTree = "<group>";
+		};
+		65125A301FBF6BBA007CF3AE /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
 		653355281F8F6B4A00A660C6 /* JWE */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,14 +171,10 @@
 		65A9D3D81F45CDD7004E0B61 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
-				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
-				C803EFEC1FA8849C00B71335 /* JWETests.swift */,
-				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
-				C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */,
-				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
-				C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */,
-				C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */,
+				65125A301FBF6BBA007CF3AE /* Common */,
+				65125A2F1FBF6BAC007CF3AE /* Crypto */,
+				65125A2E1FBF6B9E007CF3AE /* JWE */,
+				65125A2C1FBF6B79007CF3AE /* JWS */,
 				C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);

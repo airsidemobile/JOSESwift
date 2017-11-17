@@ -10,7 +10,7 @@ import XCTest
 @testable import SwiftJOSE
 
 class JWSHeaderTests: XCTestCase {
-    let parameterDict = ["alg": "\(Algorithm.RS512.rawValue)"]
+    let parameterDict = ["alg": "\(SigningAlgorithm.RS512.rawValue)"]
     
     override func setUp() {
         super.setUp()
@@ -31,7 +31,7 @@ class JWSHeaderTests: XCTestCase {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
         let header = JWSHeader(data)!
         
-        XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, SigningAlgorithm.RS512.rawValue)
         XCTAssertEqual(header.data(), data)
     }
     
