@@ -17,11 +17,8 @@ public struct JWSHeader: JOSEHeader {
             throw DeserializationError.headerIsNotValidJSONObject
         }
         
-        guard let alg = parameters["alg"] as? String else {
+        guard parameters["alg"] is String else {
             throw DeserializationError.requiredHeaderParameterMissing(parameter: "alg")
-        }
-        guard Algorithm(rawValue: alg) != nil else {
-            throw DeserializationError.headerParameterValueIsInvalid(parameter: "alg", value: alg)
         }
         
         self.parameters = parameters
