@@ -1,6 +1,6 @@
 # SwiftJOSE
 
-⚠️ **This is work in progress.**
+⚠️ **This is work in progress.** ⚠️ 
 
 SwiftJOSE is a [JavaScript Object Signing and Encryption (JOSE)](http://jose.readthedocs.io/en/latest) framework written in Swift.
 
@@ -14,7 +14,7 @@ We plan to support:
 
 ## Usage
 
-Below you can find a small code example of how to sign and verify a `JWS` object. For more detailed documentation and other code examples please refer to the [documentation section](https://github.com/mohemian/jose-ios/blob/master/Documentation)
+Below you can find a small code example of how to sign and verify a `JWS` object. For more detailed documentation and other code examples please refer to the [documentation section](https://github.com/mohemian/jose-ios/blob/master/Documentation).
 
 ### Sign
 
