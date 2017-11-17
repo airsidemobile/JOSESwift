@@ -22,9 +22,10 @@ class DataExtensionTests: XCTestCase {
     }
     
     func testBase64URLStringInit() {
-        let data = Data(base64URLEncoded: base64URLTestString)!
+        let data = Data(base64URLEncoded: base64URLTestString)
         
-        XCTAssertEqual(String(data: data, encoding: .utf8)!, testString)
+        XCTAssertNotNil(data)
+        XCTAssertEqual(data, testString.data(using: .utf8))
     }
     
     func testBase64URLDataInit() {
