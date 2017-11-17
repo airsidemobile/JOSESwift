@@ -1,4 +1,4 @@
-# SwiftJOSE :bird:
+# SwiftJOSE :bird: 
 
 :warning: **This is work in progress.** :warning:
 
@@ -16,7 +16,7 @@ We plan to support:
 
 Below you can find a small code example of how to sign and verify a `JWS` object. For more detailed documentation and other code examples please refer to the [documentation section](https://github.com/mohemian/jose-ios/blob/master/Documentation).
 
-### Sign
+### Sign :lock_with_ink_pen:
 
 To sign a payload and initialize a `JWS` provide a private key corresponding to the chosen signing algorithm.
 
@@ -30,7 +30,7 @@ let signer = RSASigner(key: privateKey)
 let jws = JWS(header: header, payload: payload, signer: signer)
 ```
 
-### Verify
+### Verify :white_check_mark: :vs: :negative_squared_cross_mark:
 
 To verify a signature of a received compact serialized `JWS`, initialize a `JWS` with the compact serialization and create a `Verifier` with the corresponding public key of the signature's private key.
 
