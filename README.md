@@ -1,4 +1,4 @@
-# SwiftJOSE
+# SwiftJOSE :bird:
 
 :warning: **This is work in progress.** :warning:
 
