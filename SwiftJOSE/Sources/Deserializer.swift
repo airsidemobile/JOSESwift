@@ -9,9 +9,9 @@
 import Foundation
 
 enum DeserializationError: Error {
-    case invalidCompactSerializationLength
+    case invalidCompactSerializationComponentCount(count: Int)
     case componentNotValidBase64URL(component: String)
-    case componentCouldNotBeInitializedWithData(data: Data)
+    case componentCouldNotBeInitializedFromData(data: Data)
 }
 
 public protocol CompactDeserializable {
@@ -30,7 +30,7 @@ public struct JOSEDeserializer {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
         
         guard encodedComponents.count == type.componentCount else {
-            throw DeserializationError.invalidCompactSerializationLength
+            throw DeserializationError.invalidCompactSerializationComponentCount(count: encodedComponents.count)
         }
         
         let decodedComponents = try encodedComponents.map { (component: String) throws -> Data in
@@ -52,7 +52,7 @@ fileprivate struct _CompactDeserializer: CompactDeserializer {
     func deserialize<T: DataConvertible>(_ type: T.Type, at index: Int) throws -> T {
         let componentData = components[index]
         guard let component = T(componentData) else {
-            throw DeserializationError.componentCouldNotBeInitializedWithData(data: componentData)
+            throw DeserializationError.componentCouldNotBeInitializedFromData(data: componentData)
         }
         
         return component
