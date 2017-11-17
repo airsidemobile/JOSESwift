@@ -10,7 +10,7 @@ import Foundation
 
 /// A `JOSEHeader` is a JSON object representing various Header Parameters.
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
-protocol JOSEHeader: JOSEObjectComponent, CommonHeaderParameterSpace {
+protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any]) throws
     
@@ -41,7 +41,6 @@ extension JOSEHeader {
 /// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
 /// Those header parameters may have a different meaning depending on wheter thery are part of a JWE or JWS.
 public protocol CommonHeaderParameterSpace {
-    var algorithm: Algorithm? { get }
     var jku: URL? { get }
     var jwk: String? { get } //TODO: Use JWK class
     var kid: String? { get }

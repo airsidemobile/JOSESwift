@@ -74,7 +74,7 @@ extension Data {
     }
 }
 
-extension Data: JOSEObjectComponent {
+extension Data: DataConvertible {
     public init(_ data: Data) {
         self = data
     }

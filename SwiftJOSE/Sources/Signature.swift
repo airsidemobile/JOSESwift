@@ -27,7 +27,7 @@ public struct Signature {
         return verifier.verify(signature, against: Signature.signingInput(from: [header, payload]), using: header.algorithm!)
     }
     
-    private static func signingInput(from components: [JOSEObjectComponent]) -> Data {
+    private static func signingInput(from components: [DataConvertible]) -> Data {
         let encodedComponents = components.map { component in
             return component.data().base64URLEncodedString()
         }
@@ -36,7 +36,7 @@ public struct Signature {
     }
 }
 
-extension Signature: JOSEObjectComponent {    
+extension Signature: DataConvertible {    
     public func data() -> Data {
         return signature
     }

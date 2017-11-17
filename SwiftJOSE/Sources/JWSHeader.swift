@@ -25,20 +25,22 @@ public struct JWSHeader: JOSEHeader {
     }
     
     /// Initializes a `JWSHeader` with the specified algorithm.
-    public init(algorithm: Algorithm) {
+    public init(algorithm: SigningAlgorithm) {
         // Forcing the try is ok here, since "alg" is the only required header parameter.
         try! self.init(parameters: ["alg": algorithm.rawValue])
     }
 }
 
-extension JWSHeader: CommonHeaderParameterSpace {
+extension JWSHeader {
     /// The algorithm used to sign the payload.
-    public var algorithm: Algorithm? {
+    public var algorithm: SigningAlgorithm? {
         // Forced unwrap is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`
-        return Algorithm(rawValue: parameters["alg"] as! String)
+        return SigningAlgorithm(rawValue: parameters["alg"] as! String)
     }
-    
+}
+
+extension JWSHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to sign the JWS.
     public var jku: URL? {

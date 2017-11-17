@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Payload: JOSEObjectComponent {
+public struct Payload: DataConvertible {
     let payload: Data
     
     public init(_ payload: Data) {

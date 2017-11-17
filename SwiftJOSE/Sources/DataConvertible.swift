@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol JOSEObjectComponent {
+public protocol DataConvertible {
     init?(_ data: Data)
     func data() -> Data
 }

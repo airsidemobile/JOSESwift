@@ -29,7 +29,7 @@ public struct JWEHeader: JOSEHeader {
     }
     
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: Algorithm, encryptionAlgorithm: Algorithm) {
+    public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
         // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
         try! self.init(parameters: [
             "alg": algorithm.rawValue,
@@ -39,13 +39,6 @@ public struct JWEHeader: JOSEHeader {
 }
 
 extension JWEHeader: CommonHeaderParameterSpace {
-    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: Algorithm? {
-        // Forced unwrap is ok here since we checked both that "alg" exists
-        // and holds a `String` value in `init(parameters:)`.
-        return Algorithm(rawValue: parameters["alg"] as! String)
-    }
-    
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to encrypt the JWE.
     public var jku: URL? {
@@ -104,11 +97,18 @@ extension JWEHeader: CommonHeaderParameterSpace {
 
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
+    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
+    public var algorithm: AsymmetricEncryptionAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "alg" exists
+        // and holds a `String` value in `init(parameters:)`.
+        return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
+    }
+    
     /// The encryption algorithm used to perform authenicated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: Algorithm? {
+    public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
         // Forced unwrap is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
-        return Algorithm(rawValue: parameters["enc"] as! String)
+        return SymmetricEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
     }
 }
