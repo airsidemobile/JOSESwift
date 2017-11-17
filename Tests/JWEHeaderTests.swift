@@ -45,4 +45,43 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
     }
     
+    func testInitWithMissingRequiredEncParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["alg": "RSA-OAEP"])
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "enc")
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
+    func testInitWithMissingRequiredAlgParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["enc": "something"])
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
+    func testInitWithInvalidJSONDictionary() {
+        do {
+            _ = try JWEHeader(parameters: ["typ": JOSEDeserializer()])
+        } catch HeaderParsingError.headerIsNotValidJSONObject {
+            XCTAssertTrue(true)
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
 }

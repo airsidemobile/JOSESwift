@@ -35,4 +35,30 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), data)
     }
     
+    func testInitWithMissingRequiredParameters() {
+        do {
+            _ = try JWSHeader(parameters: ["typ": "JWT"])
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
+    func testInitWithInvalidJSONDictionary() {
+        do {
+            _ = try JWSHeader(parameters: ["typ": JOSEDeserializer()])
+        } catch HeaderParsingError.headerIsNotValidJSONObject {
+            XCTAssertTrue(true)
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
 }
