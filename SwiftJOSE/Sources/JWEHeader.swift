@@ -38,6 +38,24 @@ public struct JWEHeader: JOSEHeader {
     }
 }
 
+// Header parameters that are specific to a JWE Header.
+public extension JWEHeader {
+    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
+    public var algorithm: AsymmetricEncryptionAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "alg" exists
+        // and holds a `String` value in `init(parameters:)`.
+        return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
+    }
+    
+    /// The encryption algorithm used to perform authenicated encryption of the plaintext
+    /// to produce the ciphertext and the Authentication Tag.
+    public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "enc" exists
+        // and holds a `String` value in `init(parameters:)`.
+        return SymmetricEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
+    }
+}
+
 extension JWEHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to encrypt the JWE.
@@ -92,23 +110,5 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
         return parameters["crit"] as? [String]
-    }
-}
-
-// Header parameters that are specific to a JWE Header.
-public extension JWEHeader {
-    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: AsymmetricEncryptionAlgorithm? {
-        // Forced unwrap is ok here since we checked both that "alg" exists
-        // and holds a `String` value in `init(parameters:)`.
-        return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
-    }
-    
-    /// The encryption algorithm used to perform authenicated encryption of the plaintext
-    /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
-        // Forced unwrap is ok here since we checked both that "enc" exists
-        // and holds a `String` value in `init(parameters:)`.
-        return SymmetricEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
     }
 }

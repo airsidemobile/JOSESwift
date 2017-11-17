@@ -31,6 +31,7 @@ public struct JWSHeader: JOSEHeader {
     }
 }
 
+// Header parameters that are specific to a JWS Header.
 extension JWSHeader {
     /// The algorithm used to sign the payload.
     public var algorithm: SigningAlgorithm? {
