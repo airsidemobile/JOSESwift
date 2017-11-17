@@ -13,9 +13,6 @@ import Foundation
 protocol JOSEHeader: JOSEObjectComponent {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any]) throws
-    
-    init?(_ data: Data)
-    func data() -> Data
 }
 
 // `JOSEObjectComponent` implementation.
@@ -38,59 +35,18 @@ extension JOSEHeader {
     }
 }
 
-extension JOSEHeader {
-    /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
-    /// one of which corresponds to the key used to sign the JWS.
-    public var jku: URL? {
-        return parameters["jku"] as? URL
-    }
-    
-    /// The JSON Web key corresponding to the key used to digitally sign the JWS.
-    public var jwk: String? {
-        return parameters["jwk"] as? String
-    }
-    
-    /// The Key ID indicates the key which was used to secure the JWS.
-    public var kid: String? {
-        return parameters["kid"] as? String
-    }
-    
-    /// The X.509 URL that referes to a resource for the X.509 public key certificate
-    /// or certificate chain corresponding to the key used to sign the JWS.
-    public var x5u: URL? {
-        return parameters["x5u"] as? URL
-    }
-    
-    /// The X.509 certificate chain contains the X.509 public key certificate or
-    /// certificate chain corresponding to the key used to sign the JWS.
-    public var x5c: [String : Any]? {
-        return parameters["x5c"] as? [String: Any]
-    }
-    
-    /// The X.509 certificate SHA-1 thumbprint of the DER encoding of the X.509 certificate
-    /// corresponding to the key used to sign the JWS.
-    public var x5t: String? {
-        return parameters["x5t"] as? String
-    }
-    
-    /// The X.509 certificate SHA-256 thumbprint of the DER encoding of the X.509 certificate
-    /// corresponding to the key used to sign the JWS.
-    public var x5tS256: String? {
-        return parameters["jwk"] as? String
-    }
-    
-    /// The type to declare the media type of the JWS object.
-    public var typ: String? {
-        return parameters["typ"] as? String
-    }
-    
-    /// The content type to declare the media type of the secured content (payload).
-    public var cty: String? {
-        return parameters["cty"] as? String
-    }
-    
-    /// The critical header parameter indicates the header parameter extensions.
-    public var crit: [String]? {
-        return parameters["crit"] as? [String]
-    }
+/// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
+public protocol CommonHeaderParameterSpace {
+    var algorithm: Algorithm { get }
+    var jku: URL? { get }
+    var jwk: String? { get } //TODO: Use JWK class
+    var kid: String? { get }
+    var x5u: URL? { get }
+    var x5c: [String: Any]? { get }
+    var x5t: String? { get }
+    var x5tS256: String? { get }
+    var typ: String? { get }
+    var cty: String? { get }
+    var crit: [String]? { get }
 }
+
