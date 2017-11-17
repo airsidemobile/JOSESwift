@@ -47,18 +47,6 @@ if jws.validates(against: verifier) {
 }
 ```
 
-## Contributing
-
-
-
-TODO: Contribution welcome, link to contributing.md and code of coduct
-
-## Communication
-
-## Testing
-
-To run the project's iOS unit tests select the `SwiftJOSE` scheme and use the `Cmd+U` shortcut or the **Product->Test** menu bar action.  
-
 ## Installation
 
 ### Carthage
@@ -83,9 +71,21 @@ Add the following dependency to your `Package.swift`:
 
 ``` swift
 dependencies: [
-	.package(url: "https://github.com/mohemian/jose-ios.git", from: "1.0.0")
+    .package(url: "https://github.com/mohemian/jose-ios.git", from: "1.0.0")
 ]
 ```
+
+## Contributing
+
+
+
+TODO: Contribution welcome, link to contributing.md and code of coduct
+
+## Communication
+
+## Testing
+
+To run the project's iOS unit tests select the `SwiftJOSE` scheme and use the `Cmd+U` shortcut or the **Product->Test** menu bar action.  
 
 ## Credits
 
