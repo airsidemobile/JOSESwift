@@ -31,13 +31,12 @@ public struct JWSHeader: JOSEHeader {
     }
 }
 
-// Header parameters that both a JWS Header and a JWE Header must support.
 extension JWSHeader: CommonHeaderParameterSpace {
     /// The algorithm used to sign the payload.
-    public var algorithm: Algorithm {
+    public var algorithm: Algorithm? {
         // Forced unwrap is ok here since we checked both that "alg" exists
-        // and has a valid `Algorithm` value earlier
-        return Algorithm(rawValue: parameters["alg"] as! String)!
+        // and holds a `String` value in `init(parameters:)`
+        return Algorithm(rawValue: parameters["alg"] as! String)
     }
     
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,

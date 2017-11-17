@@ -17,18 +17,12 @@ public struct JWEHeader: JOSEHeader {
             throw DeserializationError.headerIsNotValidJSONObject
         }
         
-        guard let alg = parameters["alg"] as? String else {
+        guard parameters["alg"] is String else {
             throw DeserializationError.requiredHeaderParameterMissing(parameter: "alg")
         }
-        guard Algorithm(rawValue: alg) != nil else {
-            throw DeserializationError.headerParameterValueIsInvalid(parameter: "alg", value: alg)
-        }
         
-        guard let enc = parameters["enc"] as? String else {
+        guard parameters["enc"] is String else {
             throw DeserializationError.requiredHeaderParameterMissing(parameter: "enc")
-        }
-        guard Algorithm(rawValue: enc) != nil else {
-            throw DeserializationError.headerParameterValueIsInvalid(parameter: "enc", value: enc)
         }
         
         self.parameters = parameters
@@ -44,13 +38,12 @@ public struct JWEHeader: JOSEHeader {
     }
 }
 
-// Header parameters that both a JWS Header and a JWE Header must support.
 extension JWEHeader: CommonHeaderParameterSpace {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: Algorithm {
+    public var algorithm: Algorithm? {
         // Forced unwrap is ok here since we checked both that "alg" exists
-        // and has a valid `Algorithm` value earlier
-        return Algorithm(rawValue: parameters["alg"] as! String)!
+        // and holds a `String` value in `init(parameters:)`.
+        return Algorithm(rawValue: parameters["alg"] as! String)
     }
     
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
@@ -113,9 +106,9 @@ extension JWEHeader: CommonHeaderParameterSpace {
 public extension JWEHeader {
     /// The encryption algorithm used to perform authenicated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: Algorithm {
+    public var encryptionAlgorithm: Algorithm? {
         // Forced unwrap is ok here since we checked both that "enc" exists
-        // and has a valid `Algorithm` value earlier
-        return Algorithm(rawValue: parameters["enc"] as! String)!
+        // and holds a `String` value in `init(parameters:)`.
+        return Algorithm(rawValue: parameters["enc"] as! String)
     }
 }
