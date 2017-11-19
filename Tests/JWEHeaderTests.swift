@@ -43,6 +43,11 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAOAEP.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        
+        XCTAssertNotNil(header.algorithm)
+        XCTAssertNotNil(header.encryptionAlgorithm)
+        XCTAssertEqual(header.algorithm!, .RSAOAEP)
+        XCTAssertEqual(header.encryptionAlgorithm!, .AESGCM256)
     }
     
     func testInitWithMissingRequiredEncParameter() {

@@ -35,6 +35,16 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), data)
     }
     
+    func testInitWithAlg() {
+        let header = JWSHeader(algorithm: .RS512)
+        
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
+        XCTAssertEqual(header.parameters["alg"] as? String, SigningAlgorithm.RS512.rawValue)
+        
+        XCTAssertNotNil(header.algorithm)
+        XCTAssertEqual(header.algorithm!, .RS512)
+    }
+    
     func testInitWithMissingRequiredParameters() {
         do {
             _ = try JWSHeader(parameters: ["typ": "JWT"])
