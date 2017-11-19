@@ -43,12 +43,12 @@ class JWSDeserializationTests: XCTestCase {
     
     func testDeserializationWithInvalidBase64URLInSerialization() {
         // Make the base64url encoding of the signature invalid in length.
-        let wrongSerialization = serialized + "aa"
+        let wrongSerialization = serialized + "XX"
         
         do {
             _ = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: wrongSerialization)
         } catch DeserializationError.componentNotValidBase64URL(let component) {
-            XCTAssertEqual(component, "x2cs4hRCGTt26GSwzk9DHqnt1Qk6jN-s9OEB7EBTAQIaa")
+            XCTAssertEqual(component, "x2cs4hRCGTt26GSwzk9DHqnt1Qk6jN-s9OEB7EBTAQIXX")
             return
         } catch {
             XCTFail()
@@ -74,7 +74,7 @@ class JWSDeserializationTests: XCTestCase {
     }
     
     func testDeserializationWithNonStringAnyHeaderInSerialization() {
-        // Set header to: `{"typ":"JWT",1:"HS256"} which is not a valid `[String: Any]` dictionary.
+        // Set header to: `{"typ":"JWS",1:"HS256"}` which is not a valid `[String: Any]` dictionary.
         let wrongSerialization = serialized.replacingOccurrences(of: "eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9", with: "eyJ0eXAiOiJKV1QiLDE6IkhTMjU2In0")
         
         do {

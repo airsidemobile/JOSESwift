@@ -43,6 +43,18 @@
                <Test
                   Identifier = "CryptoTestCase">
                </Test>
+               <Test
+                  Identifier = "JWETests">
+               </Test>
+               <Test
+                  Identifier = "JWSTests">
+               </Test>
+               <Test
+                  Identifier = "RSASignerTests">
+               </Test>
+               <Test
+                  Identifier = "RSAVerifierTests">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

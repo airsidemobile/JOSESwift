@@ -110,10 +110,10 @@ extension JWE: CompactDeserializable {
 extension JWE: CustomStringConvertible {
     public var description: String {
         let header = self.header.parameters.description
-        let encryptedKey = String(data: self.encryptedKey, encoding: .utf8)!
-        let initializationVector = String(data: self.initializationVector, encoding: .utf8)!
-        let ciphertext = String(data: self.ciphertext, encoding: .utf8)!
-        let authenticationTag = String(data: self.authenticationTag, encoding: .utf8)!
+        let encryptedKey = String(data: self.encryptedKey, encoding: .utf8) ?? "encryptedKey"
+        let initializationVector = String(data: self.initializationVector, encoding: .utf8) ?? "iv"
+        let ciphertext = String(data: self.ciphertext, encoding: .utf8) ?? "ciphertext"
+        let authenticationTag = String(data: self.authenticationTag, encoding: .utf8) ?? "authTag"
         return "\(header) . \(encryptedKey) . \(initializationVector) . \(ciphertext) . \(authenticationTag)"
     }
 }
