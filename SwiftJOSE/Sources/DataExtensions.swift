@@ -37,7 +37,7 @@ extension Data {
      Creates a new data buffer from base64url, UTF-8 encoded data.
      
      - Parameters:
-     - base64URLData: The base64url, UTF-8 encoded data.
+         - base64URLData: The base64url, UTF-8 encoded data.
      
      - Returns: `nil` if the input is not recognized as valid base64url.
      */
