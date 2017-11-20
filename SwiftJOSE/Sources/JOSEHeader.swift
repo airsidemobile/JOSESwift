@@ -44,7 +44,7 @@ extension JOSEHeader {
 }
 
 /// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
-/// Those header parameters may have a different meaning depending on wheter thery are part of a JWE or JWS.
+/// Those header parameters may have a different meaning depending on whether they are part of a JWE or JWS.
 public protocol CommonHeaderParameterSpace {
     var jku: URL? { get }
     var jwk: String? { get } //TODO: Use JWK class
