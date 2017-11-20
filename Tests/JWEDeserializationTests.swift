@@ -1,5 +1,5 @@
 //
-//  JWSDeserializationTests.swift
+//  JWEDeserializationTests.swift
 //  Tests
 //
 //  Created by Daniel Egger on 17.11.17.
