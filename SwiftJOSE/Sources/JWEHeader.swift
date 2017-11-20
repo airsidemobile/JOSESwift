@@ -47,7 +47,7 @@ public extension JWEHeader {
         return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
     }
     
-    /// The encryption algorithm used to perform authenicated encryption of the plaintext
+    /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
     public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
         // Forced unwrap is ok here since we checked both that "enc" exists
