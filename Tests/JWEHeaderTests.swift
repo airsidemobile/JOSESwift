@@ -23,17 +23,17 @@ class JWEHeaderTests: XCTestCase {
     func testInitWithParameters() {
         let header = try! JWEHeader(parameters: parameterDict)
         
-        XCTAssertEqual(header.parameters["enc"] as? String, Algorithm.AESGCM256.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RSAOAEP.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAOAEP.rawValue)
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
     }
     
     func testInitWithData() {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
-        let header = JWEHeader(data)
+        let header = JWEHeader(data)!
         
-        XCTAssertEqual(header.parameters["enc"] as? String, Algorithm.AESGCM256.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RSAOAEP.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAOAEP.rawValue)
         XCTAssertEqual(header.data(), data)
     }
     
@@ -41,8 +41,52 @@ class JWEHeaderTests: XCTestCase {
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
-        XCTAssertEqual(header.parameters["alg"] as? String, Algorithm.RSAOAEP.rawValue)
-        XCTAssertEqual(header.parameters["enc"] as? String, Algorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAOAEP.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        
+        XCTAssertNotNil(header.algorithm)
+        XCTAssertNotNil(header.encryptionAlgorithm)
+        XCTAssertEqual(header.algorithm!, .RSAOAEP)
+        XCTAssertEqual(header.encryptionAlgorithm!, .AESGCM256)
+    }
+    
+    func testInitWithMissingRequiredEncParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["alg": "RSA-OAEP"])
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "enc")
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
+    func testInitWithMissingRequiredAlgParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["enc": "something"])
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
+    }
+    
+    func testInitWithInvalidJSONDictionary() {
+        do {
+            _ = try JWEHeader(parameters: ["typ": JOSEDeserializer()])
+        } catch HeaderParsingError.headerIsNotValidJSONObject {
+            XCTAssertTrue(true)
+            return
+        } catch {
+            XCTFail()
+        }
+        
+        XCTFail()
     }
     
 }

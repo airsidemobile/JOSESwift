@@ -8,28 +8,64 @@
 
 import Foundation
 
+enum DeserializationError: Error {
+    case invalidCompactSerializationComponentCount(count: Int)
+    case componentNotValidBase64URL(component: String)
+    case componentCouldNotBeInitializedFromData(data: Data)
+}
+
 public protocol CompactDeserializable {
-    init(from deserializer: CompactDeserializer)
+    static var componentCount: Int { get }
+    init(from deserializer: CompactDeserializer) throws
 }
 
 public protocol CompactDeserializer {
-    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T
+    func deserialize<T: DataConvertible>(_ type: T.Type, at index: Int) throws -> T
 }
 
 public struct JOSEDeserializer {
     public init() { }
-    public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) -> T {
+    
+    public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) throws -> T {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
-        let decodedComponents = encodedComponents.map { component in Data(base64URLEncoded: component)! }
+        
+        guard encodedComponents.count == type.componentCount else {
+            throw DeserializationError.invalidCompactSerializationComponentCount(count: encodedComponents.count)
+        }
+        
+        let decodedComponents = try encodedComponents.map { (component: String) throws -> Data in
+            guard let data = Data(base64URLEncoded: component) else {
+                throw DeserializationError.componentNotValidBase64URL(component: component)
+            }
+            return data
+        }
+        
         let deserializer = _CompactDeserializer(components: decodedComponents)
-        return T(from: deserializer)
+        
+        return try T(from: deserializer)
     }
 }
 
 fileprivate struct _CompactDeserializer: CompactDeserializer {
     let components: [Data]
     
-    func deserialize<T: JOSEObjectComponent>(_ type: T.Type, at index: Int) -> T {
-        return T(components[index])
+    func deserialize<T: DataConvertible>(_ type: T.Type, at index: Int) throws -> T {
+        let componentData = components[index]
+        guard let component = T(componentData) else {
+            throw DeserializationError.componentCouldNotBeInitializedFromData(data: componentData)
+        }
+        
+        return component
     }
+}
+
+public enum ComponentCompactSerializedIndex {
+    static let jwsHeaderIndex = 0
+    static let jwsPayloadIndex = 1
+    static let jwsSignatureIndex = 2
+    static let jweHeaderIndex = 0
+    static let jweEncryptedKeyIndex = 1
+    static let jweInitializationVectorIndex = 2
+    static let jweCiphertextIndex = 3
+    static let jweAuthenticationTagIndex = 4
 }

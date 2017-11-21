@@ -13,26 +13,35 @@ public struct JWSHeader: JOSEHeader {
     let parameters: [String: Any]
     
     init(parameters: [String: Any]) throws {
-        guard let algorithm = parameters["alg"] as? String, Algorithm(rawValue: algorithm) != nil else {
-            throw NSError(domain: "com.airsidemobile.SwiftJOSE.error", code: 666, userInfo: nil) //TODO: Implement error class as soon as the error handling stands
+        guard JSONSerialization.isValidJSONObject(parameters) else {
+            throw HeaderParsingError.headerIsNotValidJSONObject
+        }
+        
+        guard parameters["alg"] is String else {
+            throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
         
         self.parameters = parameters
     }
     
     /// Initializes a `JWSHeader` with the specified algorithm.
-    public init(algorithm: Algorithm) {
+    public init(algorithm: SigningAlgorithm) {
+        // Forcing the try is ok here, since "alg" is the only required header parameter.
         try! self.init(parameters: ["alg": algorithm.rawValue])
     }
 }
 
-// Header parameters that both a JWS Header and a JWE Header must support.
-extension JWSHeader: CommonHeaderParameterSpace {
+// Header parameters that are specific to a JWS Header.
+extension JWSHeader {
     /// The algorithm used to sign the payload.
-    public var algorithm: Algorithm {
-        return Algorithm(rawValue: parameters["alg"] as! String)!
+    public var algorithm: SigningAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "alg" exists
+        // and holds a `String` value in `init(parameters:)`
+        return SigningAlgorithm(rawValue: parameters["alg"] as! String)
     }
-    
+}
+
+extension JWSHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to sign the JWS.
     public var jku: URL? {
@@ -86,11 +95,5 @@ extension JWSHeader: CommonHeaderParameterSpace {
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
         return parameters["crit"] as? [String]
-    }
-}
-
-extension JWSHeader: CompactDeserializable {
-    public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
     }
 }

@@ -13,12 +13,12 @@ public protocol CompactSerializable {
 }
 
 public protocol CompactSerializer {
-    var components: [JOSEObjectComponent] { get }
-    mutating func serialize<T: JOSEObjectComponent>(_ object: T)
+    var components: [DataConvertible] { get }
+    mutating func serialize<T: DataConvertible>(_ object: T)
 }
 
 public struct JOSESerializer {
-    public func compact<T: CompactSerializable>(_ object: T) -> String {
+    public func serialize<T: CompactSerializable>(compact object: T) -> String {
         var serializer: CompactSerializer = _CompactSerializer()
         object.serialize(to: &serializer)
         let base64URLEncodings = serializer.components.map { component in component.data().base64URLEncodedString() }
@@ -27,9 +27,9 @@ public struct JOSESerializer {
 }
 
 fileprivate struct _CompactSerializer: CompactSerializer {
-    var components: [JOSEObjectComponent] = []
+    var components: [DataConvertible] = []
     
-    mutating func serialize<T: JOSEObjectComponent>(_ object: T) {
+    mutating func serialize<T: DataConvertible>(_ object: T) {
         components.append(object)
     }
 }

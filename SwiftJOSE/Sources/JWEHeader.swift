@@ -13,34 +13,50 @@ public struct JWEHeader: JOSEHeader {
     let parameters: [String: Any]
     
     init(parameters: [String: Any]) throws {
-        guard
-            let algorithm = parameters["alg"] as? String,
-            Algorithm(rawValue: algorithm) != nil,
-            let encryptionAlgorithm = parameters["enc"] as? String,
-            Algorithm(rawValue: encryptionAlgorithm) != nil
-        else {
-            throw NSError(domain: "com.airsidemobile.SwiftJOSE.error", code: 666, userInfo: nil) //TODO: Implement error class as soon as the error handling stands
+        guard JSONSerialization.isValidJSONObject(parameters) else {
+            throw HeaderParsingError.headerIsNotValidJSONObject
+        }
+        
+        guard parameters["alg"] is String else {
+            throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
+        }
+        
+        guard parameters["enc"] is String else {
+            throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "enc")
         }
         
         self.parameters = parameters
     }
     
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: Algorithm, encryptionAlgorithm: Algorithm) {
+    public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
+        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
         try! self.init(parameters: [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
-            ])
+        ])
     }
 }
 
-// Header parameters that both a JWS Header and a JWE Header must support.
-extension JWEHeader: CommonHeaderParameterSpace {
+// Header parameters that are specific to a JWE Header.
+public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: Algorithm {
-        return Algorithm(rawValue: parameters["alg"] as! String)!
+    public var algorithm: AsymmetricEncryptionAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "alg" exists
+        // and holds a `String` value in `init(parameters:)`.
+        return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
     }
     
+    /// The encryption algorithm used to perform authenticated encryption of the plaintext
+    /// to produce the ciphertext and the Authentication Tag.
+    public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
+        // Forced unwrap is ok here since we checked both that "enc" exists
+        // and holds a `String` value in `init(parameters:)`.
+        return SymmetricEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
+    }
+}
+
+extension JWEHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to encrypt the JWE.
     public var jku: URL? {
@@ -94,20 +110,5 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
         return parameters["crit"] as? [String]
-    }
-}
-
-// Header parameters that are specific to a JWE Header.
-public extension JWEHeader {
-    /// The encryption algorithm used to perform authenicated encryption of the plaintext
-    /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: Algorithm {
-        return Algorithm(rawValue: parameters["enc"] as! String)!
-    }
-}
-
-extension JWEHeader: CompactDeserializable {
-    public init(from deserializer: CompactDeserializer) {
-        self = deserializer.deserialize(JWEHeader.self, at: 0)
     }
 }

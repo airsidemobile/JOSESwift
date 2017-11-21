@@ -29,7 +29,7 @@ public struct DecryptionContext {
 public struct Decrypter {
     let asymmetricDecrypter: AsymmetricDecrypter
     
-    public init(keyDecryptionAlgorithm: Algorithm, keyDecryptionKey kdk: SecKey) {
+    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey) {
         // Todo: Find out which available encrypter supports the specified algorithm. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.asymmetricDecrypter = RSADecrypter(privateKey: kdk)
     }

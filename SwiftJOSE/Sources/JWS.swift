@@ -13,12 +13,12 @@ import Foundation
 /// cannot be changed once the object is initialized.
 public struct JWS {
     let header: JWSHeader
-    let payload: JWSPayload
+    let payload: Payload
     let signature: Signature
     
     /// The compact serialization of this JWS object.
     public var compactSerialized: String {
-        return JOSESerializer().compact(self)
+        return JOSESerializer().serialize(compact: self)
     }
     
     /**
@@ -28,7 +28,7 @@ public struct JWS {
          - payload: A fully initialized `JWSPayload`.
          - signer: The `Signer` used to compute the JWS signature from the header and payload.
     */
-    public init(header: JWSHeader, payload: JWSPayload, signer: Signer) {
+    public init(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
         self.signature = Signature(from: signer, using: header, and: payload)!
@@ -39,11 +39,11 @@ public struct JWS {
      - parameters:
          - compactSerialization: A compact serialized JWS object as received e.g. from the server.
     */
-    public init(compactSerialization: String) {
-        self = JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
+    public init(compactSerialization: String) throws {
+        self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
     
-    fileprivate init(header: JWSHeader, payload: JWSPayload, signature: Signature) {
+    fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
         self.header = header
         self.payload = payload
         self.signature = signature
@@ -69,17 +69,14 @@ extension JWS: CompactSerializable {
 }
 
 extension JWS: CompactDeserializable {
-    public init(from deserializer: CompactDeserializer) {
-        let header = JWSHeader(from: deserializer)
-        let payload = JWSPayload(from: deserializer)
-        let signature = Signature(from: deserializer)
-        self.init(header: header, payload: payload, signature: signature)
+    public static var componentCount: Int {
+        return 3
     }
-}
-
-// For testing only
-extension JWS: CustomStringConvertible {
-    public var description: String {
-        return self.compactSerialized
+    
+    public init(from deserializer: CompactDeserializer) throws {
+        let header = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
+        let payload = try deserializer.deserialize(Payload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
+        let signature = try deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
+        self.init(header: header, payload: payload, signature: signature)
     }
 }

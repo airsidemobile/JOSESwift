@@ -15,7 +15,7 @@ public struct RSASigner: Signer {
         self.key = key
     }
     
-    public func sign(_ signingInput: Data, using algorithm: Algorithm) -> Data? {
+    public func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data? {
         //TODO: Add error handling for signing error
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(key, .sign, algorithm) else {
             return nil

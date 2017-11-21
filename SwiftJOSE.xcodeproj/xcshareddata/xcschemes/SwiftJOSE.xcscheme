@@ -27,7 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -41,6 +42,18 @@
             <SkippedTests>
                <Test
                   Identifier = "CryptoTestCase">
+               </Test>
+               <Test
+                  Identifier = "JWETests">
+               </Test>
+               <Test
+                  Identifier = "JWSTests">
+               </Test>
+               <Test
+                  Identifier = "RSASignerTests">
+               </Test>
+               <Test
+                  Identifier = "RSAVerifierTests">
                </Test>
             </SkippedTests>
          </TestableReference>

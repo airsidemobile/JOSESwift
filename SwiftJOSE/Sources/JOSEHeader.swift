@@ -8,29 +8,44 @@
 
 import Foundation
 
+enum HeaderParsingError: Error {
+    case requiredHeaderParameterMissing(parameter: String)
+    case headerIsNotValidJSONObject
+}
+
 /// A `JOSEHeader` is a JSON object representing various Header Parameters.
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
-protocol JOSEHeader: JOSEObjectComponent {
+protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any]) throws
+    
+    init?(_ data: Data)
+    func data() -> Data
 }
 
 // `JOSEObjectComponent` implementation.
 extension JOSEHeader {
-    public init(_ data: Data) {
-        let parameters = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-        try! self.init(parameters: parameters) //TODO: Refactor force try as soon as error handling gets implemented
+    public init?(_ data: Data) {
+        guard
+            let json = try? JSONSerialization.jsonObject(with: data, options: []),
+            let parameters = json as? [String: Any]
+        else {
+            return nil
+        }
+        
+        try? self.init(parameters: parameters)
     }
     
     public func data() -> Data {
+        // Forcing the try is ok here since we checked `isValidJSONObject(_:)` in `init(parameters:)` earlier.
         // The resulting data of this operation is UTF-8 encoded.
         return try! JSONSerialization.data(withJSONObject: parameters, options: [])
     }
 }
 
 /// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
+/// Those header parameters may have a different meaning depending on whether they are part of a JWE or JWS.
 public protocol CommonHeaderParameterSpace {
-    var algorithm: Algorithm { get }
     var jku: URL? { get }
     var jwk: String? { get } //TODO: Use JWK class
     var kid: String? { get }

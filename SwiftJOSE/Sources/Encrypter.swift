@@ -8,6 +8,28 @@
 
 import Foundation
 
+public enum AsymmetricEncryptionAlgorithm: String {
+    case RSAOAEP = "RSA-OAEP"
+    
+    var secKeyAlgorithm: SecKeyAlgorithm? {
+        switch self {
+        default:
+            return nil
+        }
+    }
+}
+
+public enum SymmetricEncryptionAlgorithm: String {
+    case AESGCM256 = "A256GCM"
+    
+    var secKeyAlgorithm: SecKeyAlgorithm? {
+        switch self {
+        default:
+            return nil
+        }
+    }
+}
+
 internal protocol AsymmetricEncrypter {
     init(publicKey: SecKey)
     func encrypt(_ plaintext: Data) -> Data
@@ -28,7 +50,7 @@ public struct Encrypter {
     let symmetricEncrypter: SymmetricEncrypter
     let encryptedKey: Data
     
-    public init(keyEncryptionAlgorithm: Algorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: Algorithm, contentEncryptionKey cek: SecKey) {
+    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm, contentEncryptionKey cek: SecKey) {
         // Todo: Find out which available encrypters support the specified algorithms. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
         
@@ -38,7 +60,7 @@ public struct Encrypter {
         self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData)
     }
     
-    func encrypt(header: JWEHeader, payload: JWEPayload) -> EncryptionContext {
+    func encrypt(header: JWEHeader, payload: Payload) -> EncryptionContext {
         return symmetricEncrypter.encrypt(payload.data(), with: header.data().base64URLEncodedData())
     }
 }

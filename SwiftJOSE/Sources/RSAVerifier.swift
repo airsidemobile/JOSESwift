@@ -15,7 +15,7 @@ public struct RSAVerifier: Verifier {
         self.key = key
     }
     
-    public func verify(_ signature: Data, against signingInput: Data, using algorithm: Algorithm) -> Bool {
+    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(key, .verify, algorithm) else {
             return false
         }

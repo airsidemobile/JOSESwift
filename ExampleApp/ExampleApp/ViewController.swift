@@ -35,7 +35,7 @@ class ViewController: UIViewController {
         print("Message:\n\(message)\n")
         
         let header = JWSHeader(algorithm: .RS512)
-        let payload = JWSPayload(message.data(using: .utf8)!)
+        let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
      
         var jws = JWS(header: header, payload: payload, signer: signer)
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         
         print("JWS:\n\(serialized)\n")
         
-        jws = JWS(compactSerialization: serialized)
+        jws = try! JWS(compactSerialization: serialized)
         
         let verifier = RSAVerifier(key: publicKey!)
         if jws.validates(against: verifier) {
@@ -62,23 +62,20 @@ class ViewController: UIViewController {
         print("Message:\n\(message)\n")
         
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
-        let payload = JWEPayload(message.data(using: .utf8)!)
+        let payload = Payload(message.data(using: .utf8)!)
         let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!)
         let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
         let compactSerializationFirstJWE = firstJwe.compactSerialized
         
         print("Serialized:\n\(compactSerializationFirstJWE)\n")
         
-        let secondJWE = JWE(compactSerialization: compactSerializationFirstJWE)
+        let secondJWE = try! JWE(compactSerialization: compactSerializationFirstJWE)
         print("Deserialized:\n\(secondJWE)\n")
         
         let decrypter = Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!)
         if let payload = secondJWE.decrypt(with: decrypter) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }
-        
-        let justTheHeader = JOSEDeserializer().deserialize(JWEHeader.self, fromCompactSerialization: compactSerializationFirstJWE)
-        print("Just The Header:\n\(justTheHeader)\n")
     }
 
     private func setupKeys() {
