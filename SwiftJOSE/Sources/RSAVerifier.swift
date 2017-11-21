@@ -15,15 +15,17 @@ public struct RSAVerifier: Verifier {
         self.key = key
     }
     
-    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) -> Bool {
+    public func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) throws -> Bool {
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(key, .verify, algorithm) else {
-            return false
+            throw SigningError.algorithmNotSupported
         }
         
-        var verifyError: Unmanaged<CFError>?
-        guard SecKeyVerifySignature(key, algorithm, signingInput as CFData, signature as CFData, &verifyError) else {
-            //TODO: throw verify error
-            print("\(verifyError!)")
+        var verificationError: Unmanaged<CFError>?
+        guard SecKeyVerifySignature(key, algorithm, signingInput as CFData, signature as CFData, &verificationError) else {
+            if let description = verificationError?.takeRetainedValue().localizedDescription {
+                throw SigningError.verificationFailed(descritpion: description)
+            }
+            
             return false
         }
         

@@ -16,15 +16,20 @@ public struct Signature {
     }
     
     internal init?(from signer: Signer, using header: JWSHeader, and payload: Payload) {
-        if let signature = signer.sign(Signature.signingInput(from: [header, payload]), using: header.algorithm!) {
+        if let signature = try? signer.sign(Signature.signingInput(from: [header, payload]), using: header.algorithm!) {
             self.init(signature)
             return
         }
+        
         return nil
     }
     
     internal func validate(with verifier: Verifier, against header: JWSHeader, and payload: Payload) -> Bool {
-        return verifier.verify(signature, against: Signature.signingInput(from: [header, payload]), using: header.algorithm!)
+        guard let result = try? verifier.verify(signature, against: Signature.signingInput(from: [header, payload]), using: header.algorithm!) else {
+            return false
+        }
+        
+        return result
     }
     
     private static func signingInput(from components: [DataConvertible]) -> Data {
