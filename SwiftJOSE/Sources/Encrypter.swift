@@ -10,9 +10,12 @@ import Foundation
 
 public enum AsymmetricEncryptionAlgorithm: String {
     case RSAOAEP = "RSA-OAEP"
+    case RSAPKCS = "RSA1_5"
     
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
+        case .RSAPKCS:
+            return .rsaEncryptionPKCS1
         default:
             return nil
         }
