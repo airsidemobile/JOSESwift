@@ -35,7 +35,7 @@ public enum SymmetricEncryptionAlgorithm: String {
 
 internal protocol AsymmetricEncrypter {
     init(publicKey: SecKey)
-    func encrypt(_ plaintext: Data) -> Data
+    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) -> Data?
 }
 
 internal protocol SymmetricEncrypter {
@@ -60,7 +60,7 @@ public struct Encrypter {
         // Todo: Convert key to correct representation (check RFC).
         var error: Unmanaged<CFError>?
         let keyData = SecKeyCopyExternalRepresentation(cek, &error)! as Data;
-        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData)
+        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData, using: keyEncryptionAlgorithm)!
     }
     
     func encrypt(header: JWEHeader, payload: Payload) -> EncryptionContext {
