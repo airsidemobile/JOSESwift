@@ -8,6 +8,12 @@
 
 import Foundation
 
+public enum SigningError: Error {
+    case algorithmNotSupported
+    case signingFailed(description: String)
+    case verificationFailed(descritpion: String)
+}
+
 public enum SigningAlgorithm: String {
     case RS512 = "RS512"
     
@@ -21,5 +27,5 @@ public enum SigningAlgorithm: String {
 
 public protocol Signer {
     init(key: SecKey)
-    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data?
+    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data
 }

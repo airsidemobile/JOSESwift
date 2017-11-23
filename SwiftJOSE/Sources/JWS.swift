@@ -28,10 +28,15 @@ public struct JWS {
          - payload: A fully initialized `JWSPayload`.
          - signer: The `Signer` used to compute the JWS signature from the header and payload.
     */
-    public init(header: JWSHeader, payload: Payload, signer: Signer) {
+    public init?(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
-        self.signature = Signature(from: signer, using: header, and: payload)!
+        
+        if let signature = Signature(from: signer, using: header, and: payload) {
+            self.signature = signature
+        } else {
+            return nil
+        }
     }
     
     /**
