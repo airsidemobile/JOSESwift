@@ -70,21 +70,19 @@ public struct JWE {
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public func decrypt(with decrypter: Decrypter) -> Payload? {
-        let plaintext = try? decrypter.decrypt(
-            DecryptionContext(
-                header: header,
-                encryptedKey: encryptedKey,
-                initializationVector: initializationVector,
-                ciphertext: ciphertext,
-                authenticationTag: authenticationTag
-            )
+        let context = DecryptionContext(
+            header: header,
+            encryptedKey: encryptedKey,
+            initializationVector: initializationVector,
+            ciphertext: ciphertext,
+            authenticationTag: authenticationTag
         )
         
-        guard plaintext != nil else {
+        guard let plaintext = try? decrypter.decrypt(context) else {
             return nil
         }
-        
-        return Payload(plaintext!)
+    
+        return Payload(plaintext)
     }
 }
 
