@@ -28,7 +28,7 @@ class RSADecrypterTests: CryptoTestCase {
         }
         
         let decrypter = RSADecrypter(privateKey: privateKey!)
-        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!)
+        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!, using: .RSAPKCS)
         
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
