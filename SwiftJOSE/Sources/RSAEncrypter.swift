@@ -11,10 +11,6 @@ import Foundation
 public struct RSAEncrypter: AsymmetricEncrypter {
     let publicKey: SecKey
     
-    init(publicKey: SecKey) {
-        self.publicKey = publicKey
-    }
-    
     func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
             throw EncryptionError.keyEncryptionAlgorithmNotSupported
