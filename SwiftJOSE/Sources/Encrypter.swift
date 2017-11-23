@@ -58,7 +58,6 @@ public struct Encrypter {
     let encryptedKey: Data
     
     public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm, contentEncryptionKey cek: SecKey) throws {
-        // Signing test
         // Todo: Find out which available encrypters support the specified algorithms and throw `algorithmNotSupported` error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
         
