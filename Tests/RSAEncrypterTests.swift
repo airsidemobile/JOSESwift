@@ -38,6 +38,10 @@ class RSAEncrypterTests: CryptoTestCase {
         
         XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
     }
+    
+    func testPlainTextTooLong() {
         
     }
+    
+    
 }
