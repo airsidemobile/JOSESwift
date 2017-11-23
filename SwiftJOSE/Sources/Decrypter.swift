@@ -10,7 +10,7 @@ import Foundation
 
 internal protocol AsymmetricDecrypter {
     init(privateKey: SecKey)
-    func decrypt(_ ciphertext: Data) throws -> Data
+    func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
 }
 
 internal protocol SymmetricDecrypter {
@@ -35,7 +35,7 @@ public struct Decrypter {
     }
     
     func decrypt(_ context: DecryptionContext) throws -> Data {
-        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey)
+        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey, using: context.header.algorithm!)
         
         // Todo: Find out which available decrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
         return try AESDecrypter(symmetricKey: cdk).decrypt(
