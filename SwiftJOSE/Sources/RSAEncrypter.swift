@@ -15,22 +15,18 @@ public struct RSAEncrypter: AsymmetricEncrypter {
         self.publicKey = publicKey
     }
     
-    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) -> Data? {
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, algorithm) else {
-            //TODO: Error handling
-            return nil
+    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
+        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
+            throw EncryptionError.keyEncryptionAlgorithmNotSupported
         }
-        
-        guard (plaintext.count < (SecKeyGetBlockSize(publicKey) - 11)) else {
-            //TODO: Think of adding this to the `AsymmetricEncryptionAlgorithm` enum
-            //TODO: Error handling
-            return nil
+
+        guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
+            throw EncryptionError.plainTextLengthNotSatisfied
         }
         
         var encryptionError: Unmanaged<CFError>?
-        guard let cipherText = SecKeyCreateEncryptedData(publicKey, algorithm, plaintext as CFData, &encryptionError) else {
-            //TODO: Error handling
-            return nil
+        guard let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError) else {
+            throw EncryptionError.encryptingFailed(description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
         }
         
         return cipherText as Data

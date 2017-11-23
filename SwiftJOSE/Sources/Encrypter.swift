@@ -11,6 +11,7 @@ import Foundation
 public enum EncryptionError: Error {
     case keyEncryptionAlgorithmNotSupported
     case contentEncryptionAlgorithmNotSupported
+    case plainTextLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(descritpion: String)
 }
@@ -25,6 +26,15 @@ public enum AsymmetricEncryptionAlgorithm: String {
             return .rsaEncryptionPKCS1
         default:
             return nil
+        }
+    }
+    
+    func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
+        switch self {
+        case .RSAPKCS:
+            return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
+        default:
+            return false
         }
     }
 }
@@ -42,7 +52,7 @@ public enum SymmetricEncryptionAlgorithm: String {
 
 internal protocol AsymmetricEncrypter {
     init(publicKey: SecKey)
-    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) -> Data?
+    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
 }
 
 internal protocol SymmetricEncrypter {
@@ -67,7 +77,7 @@ public struct Encrypter {
         // Todo: Convert key to correct representation (check RFC).
         var error: Unmanaged<CFError>?
         let keyData = SecKeyCopyExternalRepresentation(cek, &error)! as Data;
-        self.encryptedKey = RSAEncrypter(publicKey: kek).encrypt(keyData, using: keyEncryptionAlgorithm)!
+        self.encryptedKey = try RSAEncrypter(publicKey: kek).encrypt(keyData, using: keyEncryptionAlgorithm)
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
