@@ -38,9 +38,13 @@ public struct JWE {
     /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
     /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
-    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
+    public init?(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
         self.header = header
-        let encryptionContext = encrypter.encrypt(header: header, payload: payload)
+        
+        guard let encryptionContext = try? encrypter.encrypt(header: header, payload: payload) else {
+            return nil
+        }
+        
         self.encryptedKey = encrypter.encryptedKey
         self.ciphertext = encryptionContext.ciphertext
         self.initializationVector = encryptionContext.initializationVector
@@ -66,7 +70,7 @@ public struct JWE {
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
     /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
     public func decrypt(with decrypter: Decrypter) -> Payload? {
-        let plaintext = decrypter.decrypt(
+        let plaintext = try? decrypter.decrypt(
             DecryptionContext(
                 header: header,
                 encryptedKey: encryptedKey,
@@ -75,6 +79,11 @@ public struct JWE {
                 authenticationTag: authenticationTag
             )
         )
+        
+        guard plaintext != nil else {
+            return nil
+        }
+        
         return Payload(plaintext!)
     }
 }
