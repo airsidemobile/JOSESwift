@@ -11,7 +11,8 @@ import Foundation
 public struct RSAEncrypter: AsymmetricEncrypter {
     let publicKey: SecKey
     
-    func encrypt(_ plaintext: Data) -> Data {
+    func encrypt(_ plaintext: Data) throws -> Data {
+        // Todo: Throw error if necessary.
         return "encryptedKey".data(using: .utf8)!
     }
 }

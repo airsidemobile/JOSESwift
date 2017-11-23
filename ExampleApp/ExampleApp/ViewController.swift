@@ -38,15 +38,22 @@ class ViewController: UIViewController {
         let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
      
-        var jws = JWS(header: header, payload: payload, signer: signer)
-        let serialized = jws.compactSerialized
+        guard let firstJWS = JWS(header: header, payload: payload, signer: signer) else {
+            print("Could not create JWS.")
+            return
+        }
+        
+        let serialized = firstJWS.compactSerialized
         
         print("JWS:\n\(serialized)\n")
         
-        jws = try! JWS(compactSerialization: serialized)
+        guard let secondJWS = try? JWS(compactSerialization: serialized) else {
+            print("Could not parse JWS.")
+            return
+        }
         
         let verifier = RSAVerifier(key: publicKey!)
-        if jws.validates(against: verifier) {
+        if secondJWS.validates(against: verifier) {
             print("Signature correct.")
         } else {
             print("Signature wrong")
@@ -63,16 +70,29 @@ class ViewController: UIViewController {
         
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!)
-        let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter)
+        guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!) else {
+            print("Could not create Encrypter")
+            return
+        }
+        guard let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter) else {
+            print("Could not create JWE.")
+            return
+        }
         let compactSerializationFirstJWE = firstJwe.compactSerialized
         
         print("Serialized:\n\(compactSerializationFirstJWE)\n")
         
-        let secondJWE = try! JWE(compactSerialization: compactSerializationFirstJWE)
+        guard let secondJWE = try? JWE(compactSerialization: compactSerializationFirstJWE) else {
+            print("Could not parse JWE")
+            return
+        }
+        
         print("Deserialized:\n\(secondJWE)\n")
         
-        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!)
+        guard let decrypter = try? Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!) else {
+            print("Could not createDecrypter.")
+            return
+        }
         if let payload = secondJWE.decrypt(with: decrypter) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }

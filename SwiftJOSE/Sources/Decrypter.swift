@@ -10,12 +10,12 @@ import Foundation
 
 internal protocol AsymmetricDecrypter {
     init(privateKey: SecKey)
-    func decrypt(_ ciphertext: Data) -> Data?
+    func decrypt(_ ciphertext: Data) throws -> Data
 }
 
 internal protocol SymmetricDecrypter {
     init(symmetricKey: Data)
-    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) -> Data?
+    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data
 }
 
 public struct DecryptionContext {
@@ -29,15 +29,16 @@ public struct DecryptionContext {
 public struct Decrypter {
     let asymmetricDecrypter: AsymmetricDecrypter
     
-    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey) {
-        // Todo: Find out which available encrypter supports the specified algorithm. See https://mohemian.atlassian.net/browse/JOSE-58.
+    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey) throws {
+        // Todo: Find out which available encrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
         self.asymmetricDecrypter = RSADecrypter(privateKey: kdk)
     }
     
-    func decrypt(_ context: DecryptionContext) -> Data? {
-        let cdk = asymmetricDecrypter.decrypt(context.encryptedKey)!
-        // Todo: Find out which available encrypter supports the specified algorithm. See https://mohemian.atlassian.net/browse/JOSE-58.
-        return AESDecrypter(symmetricKey: cdk).decrypt(
+    func decrypt(_ context: DecryptionContext) throws -> Data {
+        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey)
+        
+        // Todo: Find out which available decrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
+        return try AESDecrypter(symmetricKey: cdk).decrypt(
             context.ciphertext,
             initializationVector: context.initializationVector,
             additionalAuthenticatedData: context.header.data().base64URLEncodedData(),

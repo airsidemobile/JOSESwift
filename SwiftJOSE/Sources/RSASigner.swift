@@ -15,17 +15,14 @@ public struct RSASigner: Signer {
         self.key = key
     }
     
-    public func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) -> Data? {
-        //TODO: Add error handling for signing error
+    public func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data {
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(key, .sign, algorithm) else {
-            return nil
+            throw SigningError.algorithmNotSupported
         }
         
         var signingError: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(key, algorithm, signingInput as CFData, &signingError) else {
-            //TODO: throw signing error
-            print("\(signingError!)")
-            return nil
+            throw SigningError.signingFailed(description: signingError?.takeRetainedValue().localizedDescription ?? "No description available.")
         }
         
         return signature as Data
