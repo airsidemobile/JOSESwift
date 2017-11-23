@@ -38,15 +38,22 @@ class ViewController: UIViewController {
         let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
      
-        var jws = JWS(header: header, payload: payload, signer: signer)!
-        let serialized = jws.compactSerialized
+        guard let firstJWS = JWS(header: header, payload: payload, signer: signer) else {
+            print("Could not create JWS.")
+            return
+        }
+        
+        let serialized = firstJWS.compactSerialized
         
         print("JWS:\n\(serialized)\n")
         
-        jws = try! JWS(compactSerialization: serialized)
+        guard let secondJWS = try? JWS(compactSerialization: serialized) else {
+            print("Could not parse JWS.")
+            return
+        }
         
         let verifier = RSAVerifier(key: publicKey!)
-        if jws.validates(against: verifier) {
+        if secondJWS.validates(against: verifier) {
             print("Signature correct.")
         } else {
             print("Signature wrong")
