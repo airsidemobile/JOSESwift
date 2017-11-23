@@ -16,7 +16,7 @@ public struct Signature {
     }
     
     internal init?(from signer: Signer, using header: JWSHeader, and payload: Payload) {
-        if let signature = try? signer.sign(Signature.signingInput(from: [header, payload]), using: header.algorithm!) {
+        if let algorithm = header.algorithm, let signature = try? signer.sign(Signature.signingInput(from: [header, payload]), using: algorithm) {
             self.init(signature)
             return
         }
@@ -25,7 +25,7 @@ public struct Signature {
     }
     
     internal func validate(with verifier: Verifier, against header: JWSHeader, and payload: Payload) -> Bool {
-        guard let result = try? verifier.verify(signature, against: Signature.signingInput(from: [header, payload]), using: header.algorithm!) else {
+        guard let algorithm = header.algorithm, let result = try? verifier.verify(signature, against: Signature.signingInput(from: [header, payload]), using: algorithm) else {
             return false
         }
         
