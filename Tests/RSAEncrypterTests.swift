@@ -25,7 +25,7 @@ class RSAEncrypterTests: CryptoTestCase {
         }
         
         let encrypter = RSAEncrypter(publicKey: publicKey!)
-        guard let cipherText = encrypter.encrypt(message.data(using: .utf8)!, using: .RSAPKCS) else {
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!, using: .RSAPKCS) else {
             XCTFail()
             return
         }
@@ -40,7 +40,13 @@ class RSAEncrypterTests: CryptoTestCase {
     }
     
     func testPlainTextTooLong() {
+        guard publicKey != nil else {
+            XCTFail()
+            return
+        }
         
+        let encrypter = RSAEncrypter(publicKey: publicKey!)
+        XCTAssertThrowsError(try encrypter.encrypt(Data(count:300), using: .RSAPKCS))
     }
     
     
