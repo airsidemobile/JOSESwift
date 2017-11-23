@@ -56,7 +56,7 @@ class ViewController: UIViewController {
         if secondJWS.validates(against: verifier) {
             print("Signature correct.")
         } else {
-            print("Signature wrong")
+            print("Signature wrong.")
         }
     }
     
@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .AESGCM256)
         let payload = Payload(message.data(using: .utf8)!)
         guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAOAEP, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!) else {
-            print("Could not create Encrypter")
+            print("Could not create Encrypter.")
             return
         }
         guard let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter) else {
@@ -83,14 +83,14 @@ class ViewController: UIViewController {
         print("Serialized:\n\(compactSerializationFirstJWE)\n")
         
         guard let secondJWE = try? JWE(compactSerialization: compactSerializationFirstJWE) else {
-            print("Could not parse JWE")
+            print("Could not parse JWE.")
             return
         }
         
         print("Deserialized:\n\(secondJWE)\n")
         
         guard let decrypter = try? Decrypter(keyDecryptionAlgorithm: .RSAOAEP, keyDecryptionKey: privateKey!) else {
-            print("Could not createDecrypter.")
+            print("Could not create Decrypter.")
             return
         }
         if let payload = secondJWE.decrypt(with: decrypter) {
