@@ -11,7 +11,8 @@ import Foundation
 public struct AESDecrypter: SymmetricDecrypter {
     let symmetricKey: Data
     
-    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) -> Data? {
-        return "The true sign of intelligence is not knowledge but imagination.".data(using: .utf8)
+    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data {
+        // Todo: Throw error if necessary.
+        return "The true sign of intelligence is not knowledge but imagination.".data(using: .utf8)!
     }
 }

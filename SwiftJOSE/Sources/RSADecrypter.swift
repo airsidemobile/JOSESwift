@@ -11,7 +11,8 @@ import Foundation
 public struct RSADecrypter: AsymmetricDecrypter {
     let privateKey: SecKey
     
-    func decrypt(_ ciphertext: Data) -> Data? {
-        return "decryptedKey".data(using: .utf8)
+    func decrypt(_ ciphertext: Data) throws -> Data {
+        // Todo: Throw error if necessary.
+        return "decryptedKey".data(using: .utf8)!
     }
 }
