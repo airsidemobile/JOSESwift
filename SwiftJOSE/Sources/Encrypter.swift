@@ -12,6 +12,7 @@ public enum EncryptionError: Error {
     case keyEncryptionAlgorithmNotSupported
     case contentEncryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
+    case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(descritpion: String)
 }
@@ -33,6 +34,15 @@ public enum AsymmetricEncryptionAlgorithm: String {
         switch self {
         case .RSAPKCS:
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
+        default:
+            return false
+        }
+    }
+    
+    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
+        switch self {
+        case .RSAPKCS:
+            return cipherText.count == SecKeyGetBlockSize(privateKey)
         default:
             return false
         }

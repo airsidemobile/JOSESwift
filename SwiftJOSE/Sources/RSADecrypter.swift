@@ -12,16 +12,16 @@ public struct RSADecrypter: AsymmetricDecrypter {
     let privateKey: SecKey
     
     func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {
+        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
             throw EncryptionError.keyEncryptionAlgorithmNotSupported
         }
         
-        guard ciphertext.count == SecKeyGetBlockSize(privateKey) else {
-            throw EncryptionError.plainTextLengthNotSatisfied
+        guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
+            throw EncryptionError.cipherTextLenghtNotSatisfied
         }
         
         var decryptionError: Unmanaged<CFError>?
-        guard let plainText = SecKeyCreateDecryptedData(privateKey, algorithm, ciphertext as CFData, &decryptionError) else {
+        guard let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError) else {
             throw EncryptionError.encryptingFailed(description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
         }
         
