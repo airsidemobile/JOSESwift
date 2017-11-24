@@ -8,13 +8,24 @@
 
 import Foundation
 
-public enum EncryptionError: Error {
+public enum EncryptionError: Error, Equatable {
     case keyEncryptionAlgorithmNotSupported
     case contentEncryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(descritpion: String)
+    
+    public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
+        switch (lhs, rhs) {
+        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
+            return true
+        case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public enum AsymmetricEncryptionAlgorithm: String {
