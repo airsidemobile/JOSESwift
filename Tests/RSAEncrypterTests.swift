@@ -10,6 +10,7 @@ import XCTest
 @testable import SwiftJOSE
 
 class RSAEncrypterTests: CryptoTestCase {
+    
     override func setUp() {
         super.setUp()
     }
@@ -50,6 +51,5 @@ class RSAEncrypterTests: CryptoTestCase {
             XCTAssertEqual(error as? EncryptionError, EncryptionError.plainTextLengthNotSatisfied)
         }
     }
-    
     
 }
