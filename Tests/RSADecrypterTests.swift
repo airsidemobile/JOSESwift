@@ -33,4 +33,16 @@ class RSADecrypterTests: CryptoTestCase {
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
     
+    func testCipherTextLengthTooLong() {
+        guard privateKey != nil else {
+            XCTFail()
+            return
+        }
+        
+        let decrypter = RSADecrypter(privateKey: privateKey!)
+        XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300), using: .RSAPKCS)) { (error: Error) in
+            XCTAssertEqual(error as? EncryptionError, EncryptionError.cipherTextLenghtNotSatisfied)
+        }
+    }
+    
 }
