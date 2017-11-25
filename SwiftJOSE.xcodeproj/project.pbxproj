@@ -317,7 +317,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = "Airside Mobile, Inc.";
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					65A9D3D61F45CDD7004E0B61 = {
 						CreatedOnToolsVersion = 8.3.3;

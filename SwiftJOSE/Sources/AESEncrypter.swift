@@ -3,7 +3,6 @@
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 09.11.17.
-//  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
 //
 
 import Foundation
