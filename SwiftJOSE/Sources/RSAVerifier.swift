@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A `Verifier` to verify a signature created with a `RSA` algorithm. 
 public struct RSAVerifier: Verifier {
     let key: SecKey
     
