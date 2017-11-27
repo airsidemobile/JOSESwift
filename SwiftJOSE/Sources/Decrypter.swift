@@ -17,6 +17,11 @@ internal protocol AsymmetricDecrypter {
         - ciphertext: The encrypted cipher text to decrypt.
         - algorithm: The algorithm used to decrypt the cipher text.
      
+     - Throws:
+        - `EncryptionError.keyEncryptionAlgorithmNotSupported`: If the provided algorithm is not supported for key decryption.
+        - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the allowed maximum.
+        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
+     
      - Returns: The plain text (decrypted cipher text).
      */
     func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
