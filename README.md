@@ -9,8 +9,14 @@ SwiftJOSE is a [JavaScript Object Signing and Encryption (JOSE)](http://jose.rea
 We plan to support:
 
 - [ ] [JWS](https://tools.ietf.org/html/rfc7515)
+  - [x] Supporting signing/verifying with RSASSA-PKCS1-v1_5 using SHA-512
 - [ ] [JWE](https://tools.ietf.org/html/rfc7516)
+  - [x] Supporting key encryption/decryption with RSAES-PKCS1-v1_5
 - [ ] [JWK](https://tools.ietf.org/html/rfc7517)
+
+## Supported Algorithms
+
+At the moment the implemented algorithms are limited to a minimum. Therefore, to create and verify the signature of a `JWS` only `RSASSA-PKCS1-v1_5 using SHA-512` can be used. `JWE` supports `RSAES-PKCS1-v1_5` for key encryption/decryption.
 
 ## Usage
 
@@ -46,6 +52,11 @@ if jws.validates(against: verifier) {
     print("Signature wrong")
 }
 ```
+
+### Encrypt :closed_lock_with_key:
+
+
+### Decrypt :unlock:
 
 ## Installation :hammer_and_wrench:
 
