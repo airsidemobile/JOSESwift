@@ -25,7 +25,7 @@ public enum SigningAlgorithm: String {
 }
 
 public protocol Signer {
-    /// Initializes a `Signer` with the specified key.
+    /// Initializes a `Signer` with a specified key.
     init(key: SecKey)
 
     /**

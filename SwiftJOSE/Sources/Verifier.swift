@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol Verifier {
-    /// Initializes a `Verifier` with the specified key.
+    /// Initializes a `Verifier` with a specified key.
     init(key: SecKey)
     
     /**
