@@ -8,7 +8,17 @@
 import Foundation
 
 internal protocol AsymmetricDecrypter {
+    /// Initializes an `AsymmetricDecrypter` with a specified private key.
     init(privateKey: SecKey)
+    
+    /**
+     Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
+     - Parameters:
+        - ciphertext: The encrypted cipher text to decrypt.
+        - algorithm: The algorithm used to decrypt the cipher text.
+     
+     - Returns: The plain text (decrypted cipher text).
+     */
     func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
 }
 
