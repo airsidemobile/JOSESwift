@@ -18,6 +18,9 @@ public protocol Verifier {
         - signingInput: The input to verify against.
         - algorithm: The algorithm with which the signature was created.
      
+     - Throws:
+     - `SigningError.verificationFailed(description: String)`: If verifying failed with description.
+     
      - Returns: True if the signature is verified, false if it is not verified.
      */
     func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) throws -> Bool

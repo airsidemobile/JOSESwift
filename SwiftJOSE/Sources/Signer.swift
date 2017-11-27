@@ -34,6 +34,10 @@ public protocol Signer {
         - signingInput: The input to sign.
         - algorithm: The algorithm to sign the input.
      
+     - Throws:
+        - `SigningError.algorithmNotSupported`: If the provided is not supported for signing
+        - `SigningError.signingFailes(description: String)`: If the signing failed with description
+     
      - Returns: The signature.
      */
     func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data
