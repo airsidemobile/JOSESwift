@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A `Signer` to sign an input with a `RSA` algorithm.
 public struct RSASigner: Signer {
     let key: SecKey
     

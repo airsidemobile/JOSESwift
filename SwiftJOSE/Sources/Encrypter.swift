@@ -71,7 +71,17 @@ public enum SymmetricEncryptionAlgorithm: String {
 }
 
 internal protocol AsymmetricEncrypter {
+    /// Initializes an `AsymmetricEncrypter` with a specified public key.
     init(publicKey: SecKey)
+    
+    /**
+     Encrypt a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
+     - Parameters:
+        - plaintext: The plain text to encrypt.
+        - algorithm: The algorithm used to encrypt the plain text.
+     
+     - Returns: The cipher text (encrypted plain text).
+     */
     func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
 }
 
