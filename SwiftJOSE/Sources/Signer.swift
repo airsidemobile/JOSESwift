@@ -35,8 +35,8 @@ public protocol Signer {
         - algorithm: The algorithm to sign the input.
      
      - Throws:
-        - `SigningError.algorithmNotSupported`: If the provided is not supported for signing
-        - `SigningError.signingFailes(description: String)`: If the signing failed with description
+        - `SigningError.algorithmNotSupported`: If the provided algorithm is not supported for signing.
+        - `SigningError.signingFailes(description: String)`: If the signing failed with a specific error description.
      
      - Returns: The signature.
      */

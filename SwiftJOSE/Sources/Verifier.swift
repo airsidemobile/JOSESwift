@@ -19,7 +19,7 @@ public protocol Verifier {
         - algorithm: The algorithm with which the signature was created.
      
      - Throws:
-     - `SigningError.verificationFailed(description: String)`: If verifying failed with description.
+     - `SigningError.verificationFailed(description: String)`: If verifying failed with a specific error description.
      
      - Returns: True if the signature is verified, false if it is not verified.
      */

@@ -80,6 +80,11 @@ internal protocol AsymmetricEncrypter {
         - plaintext: The plain text to encrypt.
         - algorithm: The algorithm used to encrypt the plain text.
      
+     - Throws:
+        - `EncryptionError.keyEncryptionAlgorithmNotSupported`: If the provided algorithm is not supported for key encryption.
+        - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the allowed maximum.
+        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
+     
      - Returns: The cipher text (encrypted plain text).
      */
     func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
