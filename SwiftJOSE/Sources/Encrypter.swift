@@ -8,8 +8,7 @@
 import Foundation
 
 public enum EncryptionError: Error {
-    case keyEncryptionAlgorithmNotSupported
-    case contentEncryptionAlgorithmNotSupported
+    case encryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(descritpion: String)
@@ -57,7 +56,7 @@ internal protocol AsymmetricEncrypter {
         - algorithm: The algorithm used to encrypt the plain text.
      
      - Throws:
-        - `EncryptionError.keyEncryptionAlgorithmNotSupported`: If the provided algorithm is not supported for key encryption.
+        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for encryption.
         - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the allowed maximum.
         - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
      
