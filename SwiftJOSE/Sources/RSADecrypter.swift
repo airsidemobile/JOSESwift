@@ -26,7 +26,7 @@ public struct RSADecrypter: AsymmetricDecrypter {
         // Decrypt the cipher text with a given SecKeyAlgorithm and a private key, return cipher text if no error occured
         var decryptionError: Unmanaged<CFError>?
         guard let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError) else {
-            throw EncryptionError.encryptingFailed(description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
+            throw EncryptionError.decryptingFailed(description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
         }
         
         return plainText as Data
