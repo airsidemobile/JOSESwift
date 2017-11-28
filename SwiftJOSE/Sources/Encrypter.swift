@@ -12,7 +12,7 @@ public enum EncryptionError: Error {
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
-    case decryptingFailed(descritpion: String)
+    case decryptingFailed(description: String)
     
     public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
         switch (lhs, rhs) {
