@@ -14,7 +14,7 @@ public struct RSAEncrypter: AsymmetricEncrypter {
     func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
         // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to encrypt with a given public key.
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
-            throw EncryptionError.keyEncryptionAlgorithmNotSupported
+            throw EncryptionError.encryptionAlgorithmNotSupported
         }
         
         // Check if the plain text length does not exceed the maximum.

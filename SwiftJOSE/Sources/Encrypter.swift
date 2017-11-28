@@ -7,9 +7,8 @@
 
 import Foundation
 
-public enum EncryptionError: Error, Equatable {
-    case keyEncryptionAlgorithmNotSupported
-    case contentEncryptionAlgorithmNotSupported
+public enum EncryptionError: Error {
+    case encryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
@@ -28,24 +27,21 @@ public enum EncryptionError: Error, Equatable {
 }
 
 public enum AsymmetricEncryptionAlgorithm: String {
-    case RSAOAEP = "RSA-OAEP"
     case RSAPKCS = "RSA1_5"
     
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RSAPKCS:
             return .rsaEncryptionPKCS1
-        default:
-            return nil
         }
     }
     
+    /// Checks if the plain text length does not exceed the maximum for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         switch self {
         case .RSAPKCS:
+            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
-        default:
-            return false
         }
     }
     
@@ -81,7 +77,7 @@ internal protocol AsymmetricEncrypter {
         - algorithm: The algorithm used to encrypt the plain text.
      
      - Throws:
-        - `EncryptionError.keyEncryptionAlgorithmNotSupported`: If the provided algorithm is not supported for key encryption.
+        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for encryption.
         - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the allowed maximum.
         - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
      
