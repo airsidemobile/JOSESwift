@@ -11,11 +11,14 @@ public struct AESEncrypter: SymmetricEncrypter {
     let symmetricKey: SecKey
     
     func encrypt(_ plaintext: Data, aad: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
+        // Todo: Generate IV
+        let iv = "iv".data(using: .utf8)!
+        
         // Todo: Throw error if necessary.
         return SymmetricEncryptionContext(
             ciphertext: "ciphertext".data(using: .utf8)!,
             authenticationTag: "authTag".data(using: .utf8)!,
-            initializationVector: "iv".data(using: .utf8)!
+            initializationVector: iv
         )
     }
 }
