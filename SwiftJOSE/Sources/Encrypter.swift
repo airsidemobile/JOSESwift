@@ -16,7 +16,6 @@ public enum EncryptionError: Error {
 }
 
 public enum AsymmetricEncryptionAlgorithm: String {
-    case RSAOAEP = "RSA-OAEP"
     case RSAPKCS = "RSA1_5"
     
     var secKeyAlgorithm: SecKeyAlgorithm? {
