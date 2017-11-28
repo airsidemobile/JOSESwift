@@ -44,9 +44,7 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    var symmetricKey: SecKey { get }
-    init(symmetricKey: SecKey)
-    func encrypt(_ plaintext: Data, aad: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext
+    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: SecKey, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext
 }
 
 public struct EncryptionContext {
@@ -71,25 +69,29 @@ public struct Encrypter {
         // Throw `algorithmNotSupported` error if necessary.
         // See https://mohemian.atlassian.net/browse/JOSE-58.
         
-         // Todo: Generate CEK using a trusted cryptography library.
-        let cek = kek
-        
         self.asymmetric = RSAEncrypter(publicKey: kek)
-        self.symmetric = AESEncrypter(symmetricKey: cek)
+        self.symmetric = AESEncrypter()
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         guard let alg = header.algorithm else { throw EncryptionError.keyEncryptionAlgorithmNotSupported }
         guard let enc = header.encryptionAlgorithm else { throw EncryptionError.contentEncryptionAlgorithmNotSupported }
         
-        // Todo: Convert key to correct representation (check RFC).
-        var error: Unmanaged<CFError>?
-        guard let cek = SecKeyCopyExternalRepresentation(symmetric.symmetricKey, &error) else {
-            throw EncryptionError.contentEncryptionKeyConversionFailed
-        }
+        // Todo: Generate CEK using a trusted crypto library.
+        let cekData = Data(count: 256)
+        let tag = "todo.com".data(using: .utf8)!
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassKey,
+            kSecAttrApplicationTag as String: tag,
+            kSecValueRef as String: cekData,
+            kSecReturnRef as String: kCFBooleanTrue
+        ]
+        var item: CFTypeRef?
+        SecItemAdd(query as CFDictionary, &item)
+        let cek = item as! SecKey
         
-        let encryptedKey = try asymmetric.encrypt(cek as Data, using: alg)
-        let symmetricContext = try symmetric.encrypt(payload.data(), aad: header.data(), using: enc)
+        let encryptedKey = try asymmetric.encrypt(cekData, using: alg)
+        let symmetricContext = try symmetric.encrypt(payload.data(), aad: header.data(), with: cek, using: enc)
         
         return EncryptionContext(
             encryptedKey: encryptedKey,

@@ -8,9 +8,7 @@
 import Foundation
 
 public struct AESEncrypter: SymmetricEncrypter {
-    let symmetricKey: SecKey
-    
-    func encrypt(_ plaintext: Data, aad: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
+    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: SecKey, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
         // Todo: Generate IV using a trusted cryptography library.
         let iv = "iv".data(using: .utf8)!
         
