@@ -25,6 +25,20 @@ public enum SigningAlgorithm: String {
 }
 
 public protocol Signer {
+    /// Initializes a `Signer` with a specified key.
     init(key: SecKey)
+
+    /**
+     Signs input data with a given algorithm and the corresponding key.
+     - Parameters:
+        - signingInput: The input to sign.
+        - algorithm: The algorithm to sign the input.
+     
+     - Throws:
+        - `SigningError.algorithmNotSupported`: If the provided algorithm is not supported for signing.
+        - `SigningError.signingFailes(description: String)`: If the signing failed with a specific error description.
+     
+     - Returns: The signature.
+     */
     func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data
 }
