@@ -53,17 +53,17 @@ public struct EncryptionContext {
 }
 
 public struct Encrypter {
+    let asymmetricEncrypter: AsymmetricEncrypter
     let symmetricEncrypter: SymmetricEncrypter
-    let encryptedKey: Data
     
-    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm, contentEncryptionKey cek: SecKey) throws {
-        // Todo: Find out which available encrypters support the specified algorithms and throw `algorithmNotSupported` error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
-        self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
+    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
+        // Todo: Find out which available encrypters support the specified algorithms and throw `algorithmNotSupported` error if necessary.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
         
-        // Todo: Convert key to correct representation (check RFC).
-        var error: Unmanaged<CFError>?
-        let keyData = SecKeyCopyExternalRepresentation(cek, &error)! as Data;
-        self.encryptedKey = try RSAEncrypter(publicKey: kek).encrypt(keyData)
+        let cek = kek // Todo: Generate CEK
+        
+        self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
+        self.asymmetricEncrypter = RSAEncrypter(publicKey: kek)
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
