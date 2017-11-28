@@ -40,6 +40,7 @@
 		C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */; };
 		C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */; };
 		C84BDE1B1FAB461B0002B5D0 /* TestKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */; };
+		C8A592401FC71586009CEFA6 /* RSADecrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */; };
 		C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */; };
 		C8F096501FC56B25000BEE4D /* RSAEncrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 		C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTestCase.swift; sourceTree = "<group>"; };
 		C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestKey.plist; sourceTree = "<group>"; };
+		C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSADecrypterTests.swift; sourceTree = "<group>"; };
 		C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAVerifierTests.swift; sourceTree = "<group>"; };
 		C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAEncrypterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +143,7 @@
 				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
 				C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */,
 				C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */,
+				C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */,
 			);
 			name = Crypto;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
+				C8A592401FC71586009CEFA6 /* RSADecrypterTests.swift in Sources */,
 				C803EFF31FA8A98F00B71335 /* DataExtensionTests.swift in Sources */,
 				65676D8B1FC220C70031B26D /* JWEDeserializationTests.swift in Sources */,
 				C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */,
