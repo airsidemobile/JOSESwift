@@ -60,7 +60,8 @@ public struct Encrypter {
         // Todo: Find out which available encrypters support the specified algorithms and throw `algorithmNotSupported` error if necessary.
         // See https://mohemian.atlassian.net/browse/JOSE-58.
         
-        let cek = kek // Todo: Generate CEK
+         // Todo: Generate CEK
+        let cek = kek
         
         self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
         self.asymmetricEncrypter = RSAEncrypter(publicKey: kek)
