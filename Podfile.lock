@@ -1,0 +1,12 @@
+PODS:
+  - IDZSwiftCommonCrypto (0.10.0)
+
+DEPENDENCIES:
+  - IDZSwiftCommonCrypto (~> 0.10.0)
+
+SPEC CHECKSUMS:
+  IDZSwiftCommonCrypto: 4eef2c46e262dfbcbc1fd76365e066336680ad7d
+
+PODFILE CHECKSUM: 00da7dcf7841470d197eb40fa672c225787612f0
+
+COCOAPODS: 1.3.1
