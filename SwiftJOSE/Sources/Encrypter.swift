@@ -71,7 +71,7 @@ public struct Encrypter {
         // Throw `algorithmNotSupported` error if necessary.
         // See https://mohemian.atlassian.net/browse/JOSE-58.
         
-         // Todo: Generate CEK
+         // Todo: Generate CEK using a trusted cryptography library.
         let cek = kek
         
         self.asymmetric = RSAEncrypter(publicKey: kek)

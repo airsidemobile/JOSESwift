@@ -11,7 +11,7 @@ public struct AESEncrypter: SymmetricEncrypter {
     let symmetricKey: SecKey
     
     func encrypt(_ plaintext: Data, aad: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
-        // Todo: Generate IV
+        // Todo: Generate IV using a trusted cryptography library.
         let iv = "iv".data(using: .utf8)!
         
         // Todo: Throw error if necessary.
