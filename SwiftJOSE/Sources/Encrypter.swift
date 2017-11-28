@@ -22,8 +22,6 @@ public enum AsymmetricEncryptionAlgorithm: String {
         switch self {
         case .RSAPKCS:
             return .rsaEncryptionPKCS1
-        default:
-            return nil
         }
     }
     
@@ -31,8 +29,6 @@ public enum AsymmetricEncryptionAlgorithm: String {
         switch self {
         case .RSAPKCS:
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
-        default:
-            return false
         }
     }
 }
