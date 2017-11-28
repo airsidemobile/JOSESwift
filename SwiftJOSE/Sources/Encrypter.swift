@@ -7,11 +7,23 @@
 
 import Foundation
 
-public enum EncryptionError: Error {
+public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
+    case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
-    case decryptingFailed(descritpion: String)
+    case decryptingFailed(description: String)
+    
+    public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
+        switch (lhs, rhs) {
+        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
+            return true
+        case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 public enum AsymmetricEncryptionAlgorithm: String {
@@ -30,6 +42,13 @@ public enum AsymmetricEncryptionAlgorithm: String {
         case .RSAPKCS:
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
+        }
+    }
+    
+    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
+        switch self {
+        case .RSAPKCS:
+            return cipherText.count == SecKeyGetBlockSize(privateKey)
         }
     }
 }
