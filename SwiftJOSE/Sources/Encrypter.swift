@@ -49,8 +49,6 @@ public enum AsymmetricEncryptionAlgorithm: String {
         switch self {
         case .RSAPKCS:
             return cipherText.count == SecKeyGetBlockSize(privateKey)
-        default:
-            return false
         }
     }
 }

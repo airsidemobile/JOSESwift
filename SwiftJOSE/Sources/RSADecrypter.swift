@@ -14,7 +14,7 @@ public struct RSADecrypter: AsymmetricDecrypter {
     func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
         // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to decrypt with a given private key
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
-            throw EncryptionError.keyEncryptionAlgorithmNotSupported
+            throw EncryptionError.encryptionAlgorithmNotSupported
         }
         
         // Check if the cipher text length does not exceed the maximum

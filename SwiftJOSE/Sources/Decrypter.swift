@@ -18,7 +18,7 @@ internal protocol AsymmetricDecrypter {
         - algorithm: The algorithm used to decrypt the cipher text.
      
      - Throws:
-        - `EncryptionError.keyEncryptionAlgorithmNotSupported`: If the provided algorithm is not supported for key decryption.
+        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for decryption.
         - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the allowed maximum.
         - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
      
