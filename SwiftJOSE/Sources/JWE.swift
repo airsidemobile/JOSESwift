@@ -44,7 +44,7 @@ public struct JWE {
             return nil
         }
         
-        self.encryptedKey = encrypter.encryptedKey
+        self.encryptedKey = encryptionContext.encryptedKey
         self.ciphertext = encryptionContext.ciphertext
         self.initializationVector = encryptionContext.initializationVector
         self.authenticationTag = encryptionContext.authenticationTag

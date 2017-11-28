@@ -10,9 +10,9 @@ import Foundation
 public struct AESEncrypter: SymmetricEncrypter {
     let symmetricKey: SecKey
     
-    func encrypt(_ plaintext: Data, with aad: Data) throws -> EncryptionContext {
+    func encrypt(_ plaintext: Data, aad: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
         // Todo: Throw error if necessary.
-        return EncryptionContext(
+        return SymmetricEncryptionContext(
             ciphertext: "ciphertext".data(using: .utf8)!,
             authenticationTag: "authTag".data(using: .utf8)!,
             initializationVector: "iv".data(using: .utf8)!
