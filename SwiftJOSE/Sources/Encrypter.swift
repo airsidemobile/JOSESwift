@@ -54,7 +54,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
 }
 
 public enum SymmetricEncryptionAlgorithm: String {
-    case AESGCM256 = "A256GCM"
+    case AES256CBCHS512 = "A256CBC-HS512"
     
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
