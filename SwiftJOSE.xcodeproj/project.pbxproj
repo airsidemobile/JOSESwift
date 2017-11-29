@@ -40,6 +40,7 @@
 		C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */; };
 		C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */; };
 		C84BDE1B1FAB461B0002B5D0 /* TestKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */; };
+		C86AC8CB1FCEC20F0007E611 /* AESEncrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86AC8CA1FCEC20F0007E611 /* AESEncrypterTests.swift */; };
 		C8A592401FC71586009CEFA6 /* RSADecrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */; };
 		C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */; };
 		C8F096501FC56B25000BEE4D /* RSAEncrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */; };
@@ -92,6 +93,7 @@
 		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 		C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTestCase.swift; sourceTree = "<group>"; };
 		C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestKey.plist; sourceTree = "<group>"; };
+		C86AC8CA1FCEC20F0007E611 /* AESEncrypterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESEncrypterTests.swift; sourceTree = "<group>"; };
 		C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSADecrypterTests.swift; sourceTree = "<group>"; };
 		C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAVerifierTests.swift; sourceTree = "<group>"; };
 		C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAEncrypterTests.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		65125A2F1FBF6BAC007CF3AE /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				C86AC8CA1FCEC20F0007E611 /* AESEncrypterTests.swift */,
 				C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */,
 				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
 				C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */,
@@ -391,6 +394,7 @@
 				65125A321FBF85FA007CF3AE /* JWSDeserializationTests.swift in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 				C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */,
+				C86AC8CB1FCEC20F0007E611 /* AESEncrypterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
