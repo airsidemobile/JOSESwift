@@ -44,16 +44,10 @@
                   Identifier = "CryptoTestCase">
                </Test>
                <Test
-                  Identifier = "JWETests">
+                  Identifier = "JWETests/testDecrypt()">
                </Test>
                <Test
-                  Identifier = "JWSTests">
-               </Test>
-               <Test
-                  Identifier = "RSASignerTests">
-               </Test>
-               <Test
-                  Identifier = "RSAVerifierTests">
+                  Identifier = "JWETests/testEncryptAndSerialize()">
                </Test>
             </SkippedTests>
          </TestableReference>
