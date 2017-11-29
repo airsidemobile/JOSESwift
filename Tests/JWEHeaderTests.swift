@@ -22,7 +22,7 @@ class JWEHeaderTests: XCTestCase {
     func testInitWithParameters() {
         let header = try! JWEHeader(parameters: parameterDict)
         
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
     }
@@ -31,22 +31,22 @@ class JWEHeaderTests: XCTestCase {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
         let header = JWEHeader(data)!
         
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
         XCTAssertEqual(header.data(), data)
     }
     
     func testInitWithAlgAndEnc() {
-        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AESGCM256)
+        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
         
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AESGCM256.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
         
         XCTAssertNotNil(header.algorithm)
         XCTAssertNotNil(header.encryptionAlgorithm)
         XCTAssertEqual(header.algorithm!, .RSAPKCS)
-        XCTAssertEqual(header.encryptionAlgorithm!, .AESGCM256)
+        XCTAssertEqual(header.encryptionAlgorithm!, .AES256CBCHS512)
     }
     
     func testInitWithMissingRequiredEncParameter() {

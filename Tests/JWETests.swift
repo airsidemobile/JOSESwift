@@ -20,9 +20,9 @@ class JWETests: CryptoTestCase {
 
     //TODO: Adapt tests as soon as JWE skeleton is finished and merged
     func testEncryptAndSerialize() {
-        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AESGCM256)
+        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = try! Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: privateKey!)
+        let encrypter = try! Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512, contentEncryptionKey: privateKey!)
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)!
         let compactSerializedJWE = jwe.compactSerialized
         
