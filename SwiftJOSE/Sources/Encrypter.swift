@@ -12,7 +12,6 @@ public enum EncryptionError: Error, Equatable {
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
-    case contentEncryptionKeyConversionFailed
     case decryptingFailed(description: String)
     
     public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
