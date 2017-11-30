@@ -22,7 +22,7 @@ class JWETests: CryptoTestCase {
     func testEncryptAndSerialize() {
         let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = try! Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512, contentEncryptionKey: privateKey!)
+        let encrypter = try! Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256)
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)!
         let compactSerializedJWE = jwe.compactSerialized
         
@@ -33,8 +33,7 @@ class JWETests: CryptoTestCase {
         let compactSerializedJWE = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.ZW5jcnlwdGVkS2V5.aXY.Y2lwaGVydGV4dA.YXV0aFRhZw"
         
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
-        let decrypter = try! Decrypter(keyDecryptionAlgorithm: .RSAPKCS, keyDecryptionKey: privateKey!)
-        let payloadString = String(data: (jwe.decrypt(with: decrypter)?.data())!, encoding: .utf8)!
+        let payloadString = String(data: (jwe.decrypt(with: privateKey!)!).data(), encoding: .utf8)!
         
         XCTAssertEqual(payloadString, "The true sign of intelligence is not knowledge but imagination.")
     }

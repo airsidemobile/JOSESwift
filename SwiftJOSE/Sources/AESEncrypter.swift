@@ -8,14 +8,27 @@
 import Foundation
 
 public struct AESEncrypter: SymmetricEncrypter {
-    let symmetricKey: SecKey
+    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
+        // Todo: Generate CEK using a trusted cryptography library.
+        // See: https://mohemian.atlassian.net/browse/JOSE-62.
+        return Data(count: 64)
+    }
     
-    func encrypt(_ plaintext: Data, with aad: Data) throws -> EncryptionContext {
+    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
+        // Todo: Generate IV using a trusted cryptography library.
+        // See: https://mohemian.atlassian.net/browse/JOSE-62.
+        return "iv".data(using: .utf8)!
+    }
+    
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
+        
+        let iv = randomIV(for: algorithm)
+        
         // Todo: Throw error if necessary.
-        return EncryptionContext(
+        return SymmetricEncryptionContext(
             ciphertext: "ciphertext".data(using: .utf8)!,
             authenticationTag: "authTag".data(using: .utf8)!,
-            initializationVector: "iv".data(using: .utf8)!
+            initializationVector: iv
         )
     }
 }
