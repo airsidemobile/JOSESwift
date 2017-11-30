@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         
         let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AESGCM256)
         let payload = Payload(message.data(using: .utf8)!)
-        guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256, contentEncryptionKey: symmetricKey!) else {
+        guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256) else {
             print("Could not create Encrypter.")
             return
         }
@@ -88,11 +88,7 @@ class ViewController: UIViewController {
         
         print("Deserialized:\n\(secondJWE)\n")
         
-        guard let decrypter = try? Decrypter(keyDecryptionAlgorithm: .RSAPKCS, keyDecryptionKey: privateKey!) else {
-            print("Could not create Decrypter.")
-            return
-        }
-        if let payload = secondJWE.decrypt(with: decrypter) {
+        if let payload = secondJWE.decrypt(with: privateKey!) {
             print("Plaintext:\n\(String(data: payload.data(), encoding: .utf8)!)\n")
         }
     }

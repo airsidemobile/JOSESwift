@@ -85,31 +85,53 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    init(symmetricKey: SecKey)
-    func encrypt(_ plaintext: Data, with aad: Data) throws -> EncryptionContext
+    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
+    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
 public struct EncryptionContext {
+    let encryptedKey: Data
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
+}
+
+public struct SymmetricEncryptionContext {
     let ciphertext: Data
     let authenticationTag: Data
     let initializationVector: Data
 }
 
 public struct Encrypter {
-    let symmetricEncrypter: SymmetricEncrypter
-    let encryptedKey: Data
+    let asymmetric: AsymmetricEncrypter
+    let symmetric: SymmetricEncrypter
     
-    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm, contentEncryptionKey cek: SecKey) throws {
-        // Todo: Find out which available encrypters support the specified algorithms and throw `algorithmNotSupported` error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
-        self.symmetricEncrypter = AESEncrypter(symmetricKey: cek)
+    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
+        // Todo: Find out which available encrypters support the specified algorithms.
+        // Throw `algorithmNotSupported` error if necessary.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
         
-        // Todo: Convert key to correct representation (check RFC).
-        var error: Unmanaged<CFError>?
-        let keyData = SecKeyCopyExternalRepresentation(cek, &error)! as Data;
-        self.encryptedKey = try RSAEncrypter(publicKey: kek).encrypt(keyData, using: keyEncryptionAlgorithm)
+        self.asymmetric = RSAEncrypter(publicKey: kek)
+        self.symmetric = AESEncrypter()
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        return try symmetricEncrypter.encrypt(payload.data(), with: header.data().base64URLEncodedData())
+        // Todo: This check might be redundant since it will already be done in the init.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
+        guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
+            throw EncryptionError.encryptionAlgorithmNotSupported
+        }
+        
+        let cek = symmetric.randomCEK(for: enc)
+        let encryptedKey = try asymmetric.encrypt(cek, using: alg)
+        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, using: enc, additionalAuthenticatedData: header.data())
+        
+        return EncryptionContext(
+            encryptedKey: encryptedKey,
+            ciphertext: symmetricContext.ciphertext,
+            authenticationTag: symmetricContext.authenticationTag,
+            initializationVector: symmetricContext.initializationVector
+        )
     }
 }
