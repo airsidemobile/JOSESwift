@@ -8,8 +8,23 @@
 import Foundation
 
 internal protocol AsymmetricDecrypter {
+    /// Initializes an `AsymmetricDecrypter` with a specified private key.
     init(privateKey: SecKey)
-    func decrypt(_ ciphertext: Data) throws -> Data
+    
+    /**
+     Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
+     - Parameters:
+        - ciphertext: The encrypted cipher text to decrypt.
+        - algorithm: The algorithm used to decrypt the cipher text.
+     
+     - Throws:
+        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for decryption.
+        - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the allowed maximum.
+        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
+     
+     - Returns: The plain text (decrypted cipher text).
+     */
+    func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
 }
 
 internal protocol SymmetricDecrypter {
@@ -34,7 +49,7 @@ public struct Decrypter {
     }
     
     func decrypt(_ context: DecryptionContext) throws -> Data {
-        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey)
+        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey, using: context.header.algorithm!)
         
         // Todo: Find out which available decrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
         return try AESDecrypter(symmetricKey: cdk).decrypt(
