@@ -66,7 +66,6 @@ public enum SymmetricEncryptionAlgorithm: String {
 }
 
 internal protocol AsymmetricEncrypter {
-    var publicKey: SecKey { get }
     /// Initializes an `AsymmetricEncrypter` with a specified public key.
     init(publicKey: SecKey)
     
