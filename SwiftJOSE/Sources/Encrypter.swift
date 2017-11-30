@@ -86,7 +86,7 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: SecKey, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext
+    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext
 }
 
 public struct EncryptionContext {
@@ -116,24 +116,15 @@ public struct Encrypter {
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
+        // Todo: This check might be redundant since it will already be done in the init.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
         guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
         
-        // Todo: Generate CEK using a trusted crypto library.
-        let cekData = Data(count: 256)
-        let tag = "todo.com".data(using: .utf8)!
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassKey,
-            kSecAttrApplicationTag as String: tag,
-            kSecValueRef as String: cekData,
-            kSecReturnRef as String: kCFBooleanTrue
-        ]
-        var item: CFTypeRef?
-        SecItemAdd(query as CFDictionary, &item)
-        let cek = item as! SecKey
-        
-        let encryptedKey = try asymmetric.encrypt(cekData, using: alg)
+        // Todo: Generate CEK using a trusted crypto library and fix SecKey stuff.
+        let cek = Data(count: 128)
+        let encryptedKey = try asymmetric.encrypt(cek, using: alg)
         let symmetricContext = try symmetric.encrypt(payload.data(), aad: header.data(), with: cek, using: enc)
         
         return EncryptionContext(
