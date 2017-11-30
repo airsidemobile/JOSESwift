@@ -88,7 +88,7 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
-    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
 public struct EncryptionContext {
@@ -126,7 +126,7 @@ public struct Encrypter {
         
         let cek = symmetric.randomCEK(for: enc)
         let encryptedKey = try asymmetric.encrypt(cek, using: alg)
-        let symmetricContext = try symmetric.encrypt(payload.data(), aad: header.data(), with: cek, using: enc)
+        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, using: enc, additionalAuthenticatedData: header.data())
         
         return EncryptionContext(
             encryptedKey: encryptedKey,
