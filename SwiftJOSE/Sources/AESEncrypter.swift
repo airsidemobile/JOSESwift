@@ -20,7 +20,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         return "iv".data(using: .utf8)!
     }
     
-    func encrypt(_ plaintext: Data, aad: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> SymmetricEncryptionContext {
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
         
         let iv = randomIV(for: algorithm)
         

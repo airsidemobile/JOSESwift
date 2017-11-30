@@ -28,7 +28,7 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
-    func decrypt(_ ciphertext: Data, iv: Data, aad: Data, authTag: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data
+    func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data
 }
 
 public struct DecryptionContext {
@@ -36,6 +36,13 @@ public struct DecryptionContext {
     let encryptedKey: Data
     let initializationVector: Data
     let ciphertext: Data
+    let authenticationTag: Data
+}
+
+public struct SymmetricDecryptionContext {
+    let ciphertext: Data
+    let initializationVector: Data
+    let additionalAuthenticatedData: Data
     let authenticationTag: Data
 }
 
@@ -59,13 +66,13 @@ public struct Decrypter {
         
         let cek = try asymmetric.decrypt(context.encryptedKey, using: alg)
         
-        return try symmetric.decrypt(
-            context.ciphertext,
-            iv: context.initializationVector,
-            aad: context.header.data(),
-            authTag: context.authenticationTag,
-            with: cek,
-            using: enc
+        let symmetricContext = SymmetricDecryptionContext(
+            ciphertext: context.ciphertext,
+            initializationVector: context.initializationVector,
+            additionalAuthenticatedData: context.header.data(),
+            authenticationTag: context.authenticationTag
         )
+        
+        return try symmetric.decrypt(symmetricContext, with: cek, using: enc)
     }
 }
