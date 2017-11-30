@@ -28,8 +28,7 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
-    init(symmetricKey: Data)
-    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data
+    func decrypt(_ ciphertext: Data, iv: Data, aad: Data, authTag: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data
 }
 
 public struct DecryptionContext {
@@ -41,22 +40,32 @@ public struct DecryptionContext {
 }
 
 public struct Decrypter {
-    let asymmetricDecrypter: AsymmetricDecrypter
+    let asymmetric: AsymmetricDecrypter
+    let symmetric: SymmetricDecrypter
     
-    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey) throws {
-        // Todo: Find out which available encrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
-        self.asymmetricDecrypter = RSADecrypter(privateKey: kdk)
+    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
+        // Todo: Find out which available encrypter supports the specified algorithm and throw error if necessary.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
+        self.asymmetric = RSADecrypter(privateKey: kdk)
+        self.symmetric = AESDecrypter()
     }
     
     func decrypt(_ context: DecryptionContext) throws -> Data {
-        let cdk = try asymmetricDecrypter.decrypt(context.encryptedKey, using: context.header.algorithm!)
+        // Todo: This check might be redundant since it's already done in the `JWE.decrypt` step.
+        // See https://mohemian.atlassian.net/browse/JOSE-58.
+        guard let alg = context.header.algorithm, let enc = context.header.encryptionAlgorithm else {
+            throw EncryptionError.encryptionAlgorithmNotSupported
+        }
         
-        // Todo: Find out which available decrypter supports the specified algorithm and throw error if necessary. See https://mohemian.atlassian.net/browse/JOSE-58.
-        return try AESDecrypter(symmetricKey: cdk).decrypt(
+        let cek = try asymmetric.decrypt(context.encryptedKey, using: alg)
+        
+        return try symmetric.decrypt(
             context.ciphertext,
-            initializationVector: context.initializationVector,
-            additionalAuthenticatedData: context.header.data().base64URLEncodedData(),
-            authenticationTag: context.authenticationTag
+            iv: context.initializationVector,
+            aad: context.header.data(),
+            authTag: context.authenticationTag,
+            with: cek,
+            using: enc
         )
     }
 }
