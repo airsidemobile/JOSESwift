@@ -9,7 +9,7 @@ import XCTest
 @testable import SwiftJOSE
 
 class JWEHeaderTests: XCTestCase {
-    let parameterDict = ["alg": "RSA1_5", "enc": "A256GCM"]
+    let parameterDict = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]
     
     override func setUp() {
         super.setUp()

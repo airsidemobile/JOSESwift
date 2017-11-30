@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         
         let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AESGCM256) else {
+        guard let encrypter = try? Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512) else {
             print("Could not create Encrypter.")
             return
         }
