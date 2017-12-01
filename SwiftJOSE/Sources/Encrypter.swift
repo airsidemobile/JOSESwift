@@ -11,6 +11,7 @@ public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
+    case keyLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
     
@@ -60,6 +61,20 @@ public enum SymmetricEncryptionAlgorithm: String {
         switch self {
         default:
             return nil
+        }
+    }
+
+    func checkKeyLength(for key: Data) -> Bool {
+        switch self {
+        case .AES256CBCHS512:
+            return key.count == 64
+        }
+    }
+    
+    func retrieveKeys(from inputKey: Data) -> (hmacKey: Data, encryptionKey: Data) {
+        switch self {
+        case .AES256CBCHS512:
+            return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         }
     }
 }
