@@ -99,7 +99,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         let keyLength = size_t(kCCKeySizeAES256)
         var hmacOutData = Data(count: 64)
         
-        hmacOutData.withUnsafeMutableBytes { macOutBytes in
+        hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
                 input.withUnsafeBytes { inputBytes in
                     CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
