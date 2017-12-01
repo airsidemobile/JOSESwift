@@ -12,6 +12,7 @@ public enum EncryptionError: Error, Equatable {
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case keyLengthNotSatisfied
+    case hmacNotAuthenticated
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
     
