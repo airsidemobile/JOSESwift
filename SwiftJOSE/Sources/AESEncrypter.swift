@@ -9,6 +9,7 @@ import Foundation
 import IDZSwiftCommonCrypto
 import CommonCrypto
 
+/// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
 public struct AESEncrypter: SymmetricEncrypter {
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
         // Todo: Generate CEK using a trusted cryptography library.
@@ -23,38 +24,45 @@ public struct AESEncrypter: SymmetricEncrypter {
     }
     
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
-        // Todo: Throw error if necessary.
-        
+
+        // Generate random intitializationVector
 //        let iv = randomIV(for: algorithm)
         
         let iv = "1a f3 8c 2d c2 b9 6f fd d8 66 94 09 23 41 bc 04".hexadecimalToData()!
         
+        // Check if the key length contains both HMAC key and the actual symmetric key
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied
         }
         
+        // Get the two keys for the HMAC and the symmetric encryption
         let keys = algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
         
         let additionalAuthenticatedDataLengthHex = "00 00 00 00 00 00 01 50".hexadecimalToData()
         
+        // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
+        // return the ciphertext if no error occured.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: iv)
         
 //        var additionalAuthenticatedDataLength = CFSwapInt64(UInt64(additionalAuthenticatedData.count))
 //        var aadLengthByte = Data(buffer: UnsafeBufferPointer(start: &additionalAuthenticatedDataLength, count: 1))
 //        var aadLengthByte = Data(bytes: &additionalAuthenticatedDataLength, count: MemoryLayout.size(ofValue: additionalAuthenticatedDataLength))
         
+        // But the input data for the HMAC together. It consists of A || IV || E || AL
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
         concatData.append(additionalAuthenticatedDataLengthHex!)
         
+        // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm
         let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: CCAlgorithm(kCCHmacAlgSHA512))
+        let authenticationTag = hmacOutput.subdata(in: 0..<32)
         
         return SymmetricEncryptionContext(
             ciphertext: cipherText,
-            authenticationTag: hmacOutput.subdata(in: 0..<32),
+            authenticationTag: authenticationTag,
             initializationVector: iv
         )
     }

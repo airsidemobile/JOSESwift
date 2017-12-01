@@ -94,6 +94,5 @@ class AESEncrypterTests: CryptoTestCase {
         }
         
         XCTAssertEqual(cryptData, plaintext)
-        
     }
 }
