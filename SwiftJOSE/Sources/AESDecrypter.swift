@@ -83,7 +83,7 @@ public struct AESDecrypter: SymmetricDecrypter {
             }
         }
         
-        if authenticationTag == hmacOutData {
+        if authenticationTag == hmacOutData.subdata(in: 0..<32) {
             return true
         } else {
             return false
