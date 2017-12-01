@@ -95,14 +95,14 @@ public struct AESEncrypter: SymmetricEncrypter {
         return cryptData
     }
     
-    func hmac(input: Data, hmacKey: Data, using algoritghm: CCAlgorithm) -> Data {
+    func hmac(input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Data {
         let keyLength = size_t(kCCKeySizeAES256)
         var macOutData = Data(count: 64)
         
         macOutData.withUnsafeMutableBytes { macOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
                 input.withUnsafeBytes { inputBytes in
-                    CCHmac(algoritghm, hmacKeyBytes, keyLength, inputBytes, input.count, macOutBytes)
+                    CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, macOutBytes)
                 }
             }
         }
