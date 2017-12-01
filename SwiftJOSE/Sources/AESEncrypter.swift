@@ -25,17 +25,17 @@ public struct AESEncrypter: SymmetricEncrypter {
     
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
 
-        // Generate random intitializationVector
+        // Generate random intitializationVector.
 //        let iv = randomIV(for: algorithm)
         
         let iv = "1a f3 8c 2d c2 b9 6f fd d8 66 94 09 23 41 bc 04".hexadecimalToData()!
         
-        // Check if the key length contains both HMAC key and the actual symmetric key
+        // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied
         }
         
-        // Get the two keys for the HMAC and the symmetric encryption
+        // Get the two keys for the HMAC and the symmetric encryption.
         let keys = algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
@@ -50,13 +50,13 @@ public struct AESEncrypter: SymmetricEncrypter {
 //        var aadLengthByte = Data(buffer: UnsafeBufferPointer(start: &additionalAuthenticatedDataLength, count: 1))
 //        var aadLengthByte = Data(bytes: &additionalAuthenticatedDataLength, count: MemoryLayout.size(ofValue: additionalAuthenticatedDataLength))
         
-        // But the input data for the HMAC together. It consists of A || IV || E || AL
+        // Put the input data for the HMAC together. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
         concatData.append(additionalAuthenticatedDataLengthHex!)
         
-        // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm
+        // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: CCAlgorithm(kCCHmacAlgSHA512))
         let authenticationTag = hmacOutput.subdata(in: 0..<32)
         
@@ -67,6 +67,19 @@ public struct AESEncrypter: SymmetricEncrypter {
         )
     }
     
+    /**
+     Encrypts a plain text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
+     - Parameters:
+        - plaintext: The plain text to encrypt.
+        - encryptionKey: The symmetric key.
+        - algorithm: The algorithm used to encrypt the plain text.
+        - initializationVector: The initial block.
+     
+     - Throws:
+        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
+     
+     - Returns: The cipher text (encrypted plain text).
+     */
     func aesEncrypt(_ plaintext: Data, encryptionKey: Data, using algorithm: CCAlgorithm, and initializationVector: Data) throws -> Data {
         let dataLength = plaintext.count
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
@@ -103,6 +116,15 @@ public struct AESEncrypter: SymmetricEncrypter {
         return cryptData
     }
     
+    /**
+     Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
+     - Parameters:
+        - input: The input to calculate a HMAC of.
+        - hmacKey: The key for the HMAC algorithm.
+        - algorithm: The algorithm used to calculate the HMAC.
+     
+     - Returns: The calculated HMAC.
+     */
     func hmac(input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Data {
         let keyLength = size_t(kCCKeySizeAES256)
         var hmacOutData = Data(count: 64)
@@ -120,6 +142,7 @@ public struct AESEncrypter: SymmetricEncrypter {
     
 }
 
+// TODO: Delete as soon as the IV and the additionalAuthenticatedData length is calculated in a right way.
 extension String {
     
     func hexadecimalToData() -> Data? {
