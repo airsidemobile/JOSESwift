@@ -103,6 +103,21 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
+    
+    /**
+     Encrypts a plain text using a given `SymmetricEncryptionAlgorithm`, the corresponding symmetric key and additional authenticated data.
+     - Parameters:
+        - plaintext: The plain text to encrypt.
+        - symmetricKey: The key which contains the HMAC and encryption key.
+        - algorithm: The algorithm used to encrypt the plain text.
+        - additionalAuthenticatedData: ??????? TODO??????
+     
+     - Throws:
+        - `EncryptionError.keyLengthNotSatisfied`: If the provided key is not long enough to contain the HMAC and the actual encryption key.
+        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
+     
+     - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
+     */
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 

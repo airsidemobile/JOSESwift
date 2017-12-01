@@ -28,6 +28,19 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
+    
+    /**
+     Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given `SymmetricEncryptionAlgorithm` and the corresponding symmetric key.
+     - Parameters:
+        - context: The `SymmetricDecryptionContext` containing the ciphertext, the initialization vector, additional authenticated data and the authentication tag.
+        - symmetricKey: The key which contains the HMAC and encryption key.
+        - algorithm: The algorithm used to decrypt the cipher text.
+     
+     - Throws:
+        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
+     
+     - Returns: The plain text (decrypted cipher text).
+     */
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data
 }
 
