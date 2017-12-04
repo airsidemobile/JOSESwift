@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import IDZSwiftCommonCrypto
+import CommonCrypto
 
 public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported
@@ -58,10 +60,10 @@ public enum AsymmetricEncryptionAlgorithm: String {
 public enum SymmetricEncryptionAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
     
-    var secKeyAlgorithm: SecKeyAlgorithm? {
+    var algorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: CCAlgorithm) {
         switch self {
-        default:
-            return nil
+        case .AES256CBCHS512:
+            return (CCAlgorithm(kCCAlgorithmAES128), CCAlgorithm(kCCHmacAlgSHA512))
         }
     }
 

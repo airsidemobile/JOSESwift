@@ -33,12 +33,12 @@ public struct AESDecrypter: SymmetricDecrypter {
         concatData.append(additionalAuthenticatedDataLength)
         
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
-        guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: CCAlgorithm(kCCHmacAlgSHA512)) else {
+        guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm) else {
             throw EncryptionError.hmacNotAuthenticated
         }
         
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
-        let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: context.initializationVector)
+        let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: algorithm.algorithms.aesAlgorithm, and: context.initializationVector)
         
         return plaintext
     }
