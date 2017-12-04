@@ -46,15 +46,18 @@ public struct AESEncrypter: SymmetricEncrypter {
         // return the ciphertext if no error occured.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: iv)
         
-//        var additionalAuthenticatedDataLength = CFSwapInt64(UInt64(additionalAuthenticatedData.count))
-//        var aadLengthByte = Data(buffer: UnsafeBufferPointer(start: &additionalAuthenticatedDataLength, count: 1))
-//        var aadLengthByte = Data(bytes: &additionalAuthenticatedDataLength, count: MemoryLayout.size(ofValue: additionalAuthenticatedDataLength))
+        let additionalAuthenticatedDataLength = UInt64(additionalAuthenticatedData.count * 8)
+        let additionalAuthenticatedDataHexShort = String(additionalAuthenticatedDataLength, radix: 16, uppercase: false)
+        let additionalAuthenticatedDataHexLong = String(format: "%016d", Int(additionalAuthenticatedDataHexShort)!)
+        let hexData = additionalAuthenticatedDataHexLong.hexadecimalToData()!
+        
+        
         
         // Put the input data for the HMAC together. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
-        concatData.append(additionalAuthenticatedDataLengthHex!)
+        concatData.append(hexData)
         
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: CCAlgorithm(kCCHmacAlgSHA512))
