@@ -37,7 +37,7 @@ public struct AESDecrypter: SymmetricDecrypter {
             throw EncryptionError.hmacNotAuthenticated
         }
         
-        // Decrypt the cipher text with an symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
+        // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
         let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: context.initializationVector)
         
         return plaintext
