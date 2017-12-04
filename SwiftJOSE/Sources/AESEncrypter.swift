@@ -23,7 +23,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         return "iv".data(using: .utf8)!
     }
     
-    // TODO: Refector this method to be more generic, see: JOSE-79
+    // TODO: Refactor this method to be more generic, see: JOSE-79
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
 
         // Generate random intitializationVector.
