@@ -27,7 +27,7 @@ public struct AESEncrypter: SymmetricEncrypter {
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
 
         // Generate random intitializationVector.
-//        let iv = randomIV(for: algorithm)
+        // let iv = randomIV(for: algorithm)
         
         let iv = "1a f3 8c 2d c2 b9 6f fd d8 66 94 09 23 41 bc 04".hexadecimalToData()!
         
