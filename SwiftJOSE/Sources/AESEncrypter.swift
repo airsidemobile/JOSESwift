@@ -40,8 +40,6 @@ public struct AESEncrypter: SymmetricEncrypter {
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
         
-        let additionalAuthenticatedDataLengthHex = "00 00 00 00 00 00 01 50".hexadecimalToData()
-        
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
         // return the ciphertext if no error occured.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: iv)
@@ -133,7 +131,7 @@ public struct AESEncrypter: SymmetricEncrypter {
                 }
             }
         }
-        
+
         return hmacOutData
     }
     
@@ -147,7 +145,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var hexChunk = ""
             if dataLengthInHex.count == 1 {
-                hexChunk = "0\(dataLengthInHex)"
+                hexChunk = dataLengthInHex
             } else {
                 let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
                 let startIndex = dataLengthInHex.index(endIndex, offsetBy: -2)
@@ -155,6 +153,17 @@ public struct AESEncrypter: SymmetricEncrypter {
                 hexChunk = String(dataLengthInHex[range])
                 dataLengthInHex.removeLast(2)
             }
+            
+            if let hexBytes = UInt8(hexChunk, radix: 16) {
+                additionalAuthenticatedDataLenghtBytes[dataIndex] = hexBytes
+            }
+            
+            dataIndex -= 1
+        }
+        
+        return Data(bytes: additionalAuthenticatedDataLenghtBytes)
+    }
+}
 
 // TODO: Delete as soon as the IV and the additionalAuthenticatedData length is calculated in a right way.
 extension String {
