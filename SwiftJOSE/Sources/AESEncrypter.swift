@@ -45,19 +45,13 @@ public struct AESEncrypter: SymmetricEncrypter {
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
         // return the ciphertext if no error occured.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: CCAlgorithm(kCCAlgorithmAES), and: iv)
-        
-        let additionalAuthenticatedDataLength = UInt64(additionalAuthenticatedData.count * 8)
-        let additionalAuthenticatedDataHexShort = String(additionalAuthenticatedDataLength, radix: 16, uppercase: false)
-        let additionalAuthenticatedDataHexLong = String(format: "%016d", Int(additionalAuthenticatedDataHexShort)!)
-        let hexData = additionalAuthenticatedDataHexLong.hexadecimalToData()!
-        
-        
+        let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: additionalAuthenticatedData)
         
         // Put the input data for the HMAC together. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
-        concatData.append(hexData)
+        concatData.append(additionalAuthenticatedDataLength)
         
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: CCAlgorithm(kCCHmacAlgSHA512))
@@ -143,7 +137,24 @@ public struct AESEncrypter: SymmetricEncrypter {
         return hmacOutData
     }
     
-}
+    func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
+        let dataLength = UInt64(additionalAuthenticatedData.count * 8)
+        var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
+        
+        var additionalAuthenticatedDataLenghtBytes = [UInt8](repeatElement(0x00, count: 8))
+        
+        var dataIndex = additionalAuthenticatedDataLenghtBytes.count-1
+        for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
+            var hexChunk = ""
+            if dataLengthInHex.count == 1 {
+                hexChunk = "0\(dataLengthInHex)"
+            } else {
+                let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
+                let startIndex = dataLengthInHex.index(endIndex, offsetBy: -2)
+                let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
+                hexChunk = String(dataLengthInHex[range])
+                dataLengthInHex.removeLast(2)
+            }
 
 // TODO: Delete as soon as the IV and the additionalAuthenticatedData length is calculated in a right way.
 extension String {
