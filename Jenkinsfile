@@ -107,6 +107,7 @@ node(slave) {
       def cmd = {
         shRVM "bundle install"
         shRVM "bundle exec pod repo update"
+        shRVM "bundle exec pod install"
       }
       def cmdFinally = {}
       executeCommand(cmd, cmdFinally, githubStatusJose, context)
