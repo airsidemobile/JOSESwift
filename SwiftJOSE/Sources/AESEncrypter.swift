@@ -120,6 +120,7 @@ public struct AESEncrypter: SymmetricEncrypter {
      
      - Returns: The calculated HMAC.
      */
+    // TODO: Refactor this see: JOSE-81
     func hmac(input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Data {
         let keyLength = size_t(kCCKeySizeAES256)
         var hmacOutData = Data(count: 64)
@@ -135,6 +136,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         return hmacOutData
     }
     
+    // TODO: Refactor this see: JOSE-82
     func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)

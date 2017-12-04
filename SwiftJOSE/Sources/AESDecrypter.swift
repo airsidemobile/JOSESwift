@@ -100,6 +100,7 @@ public struct AESDecrypter: SymmetricDecrypter {
      
      - Returns: True if the message is authenticated (the authentication tags match), false if the message is not authenticated (the authentication tags do not match)
      */
+    // TODO: Refactor this see: JOSE-81
     func authenticateHmac(_ authenticationTag: Data, input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Bool { //TODO: Naming
         let keyLength = size_t(kCCKeySizeAES256)
         var hmacOutData = Data(count: 64)
@@ -119,6 +120,7 @@ public struct AESDecrypter: SymmetricDecrypter {
         }
     }
     
+    // TODO: Refactor this see: JOSE-82
     func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
