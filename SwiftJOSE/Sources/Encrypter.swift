@@ -110,7 +110,7 @@ internal protocol SymmetricEncrypter {
         - plaintext: The plain text to encrypt.
         - symmetricKey: The key which contains the HMAC and encryption key.
         - algorithm: The algorithm used to encrypt the plain text.
-        - additionalAuthenticatedData: ??????? TODO??????
+        - additionalAuthenticatedData: The data used for integrity protection. 
      
      - Throws:
         - `EncryptionError.keyLengthNotSatisfied`: If the provided key is not long enough to contain the HMAC and the actual encryption key.
