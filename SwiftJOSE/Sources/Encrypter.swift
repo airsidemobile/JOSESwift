@@ -84,6 +84,13 @@ public enum SymmetricEncryptionAlgorithm: String {
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         }
     }
+    
+    func authenticationTag(for hmac: Data) -> Data {
+        switch self {
+        case .AES256CBCHS512:
+            return hmac.subdata(in: 0..<32)
+        }
+    }
 }
 
 internal protocol AsymmetricEncrypter {
