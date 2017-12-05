@@ -116,7 +116,7 @@ node(slave) {
     stage('Tests') {
       def context = 'jenkins-tests'
       def cmd = {
-        shRVM "bundle exec fastlane scan"
+        shRVM "bundle exec fastlane scan -s SwiftJOSE"
       }
       def cmdFinally = {
         publishTestReport()
