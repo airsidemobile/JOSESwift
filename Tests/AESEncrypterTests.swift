@@ -47,7 +47,7 @@ class AESEncrypterTests: CryptoTestCase {
         XCTAssertEqual(symmetricEncryptionContext.ciphertext.toHexadecimal(), cipherTestText)
         XCTAssertEqual(symmetricEncryptionContext.authenticationTag.toHexadecimal(), authenticationTestTag)
         
-        let keys = SymmetricEncryptionAlgorithm.AES256CBCHS512.retrieveKeys(from: keyData!)
+        let keys = try! SymmetricEncryptionAlgorithm.AES256CBCHS512.retrieveKeys(from: keyData!)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
         

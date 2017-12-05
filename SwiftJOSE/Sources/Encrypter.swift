@@ -74,9 +74,13 @@ public enum SymmetricEncryptionAlgorithm: String {
         }
     }
     
-    func retrieveKeys(from inputKey: Data) -> (hmacKey: Data, encryptionKey: Data) {
+    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
         switch self {
         case .AES256CBCHS512:
+            guard checkKeyLength(for: inputKey) else {
+                throw EncryptionError.keyLengthNotSatisfied
+            }
+            
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         }
     }

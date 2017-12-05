@@ -37,7 +37,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         }
         
         // Get the two keys for the HMAC and the symmetric encryption.
-        let keys = algorithm.retrieveKeys(from: symmetricKey)
+        let keys = try algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
         
