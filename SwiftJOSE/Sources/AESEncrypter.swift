@@ -53,7 +53,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         concatData.append(additionalAuthenticatedDataLength)
 
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
-        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
+        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
         let authenticationTag = algorithm.authenticationTag(for: hmacOutput)
         
         return SymmetricEncryptionContext(

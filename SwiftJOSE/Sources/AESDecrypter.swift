@@ -33,7 +33,7 @@ public struct AESDecrypter: SymmetricDecrypter {
         concatData.append(additionalAuthenticatedDataLength)
         
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
-        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
+        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
         
         guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
             throw EncryptionError.hmacNotAuthenticated
