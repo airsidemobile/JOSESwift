@@ -40,7 +40,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         switch self {
         case .RSAPKCS:
-            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
+            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2). yes this is a very very long line :D:D
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
         }
     }
