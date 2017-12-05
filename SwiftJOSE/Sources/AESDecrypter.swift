@@ -40,7 +40,7 @@ public struct AESDecrypter: SymmetricDecrypter {
         }
 
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
-        let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: algorithm.algorithms.aesAlgorithm, and: context.initializationVector)
+        let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: context.initializationVector)
 
         return plaintext
     }
