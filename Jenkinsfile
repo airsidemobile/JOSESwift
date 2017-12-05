@@ -87,7 +87,7 @@ def isJobStartedByUser() {
 def slave = findNode()
 
 node(slave) {
-  withCredentials([[$class: 'StringBinding', credentialsId: '8c157f6e-431b-40dc-969d-edb840552bd5', variable: 'GITHUB_API_TOKEN']]) {
+  withCredentials([[$class: 'StringBinding', credentialsId: '0163c533-6fe6-4712-a930-dd12b01ebca9', variable: 'GITHUB_API_TOKEN']]) {
 
     def scmVars = checkout scm
     def githubStatusJose = { context, status -> githubStatus(GITHUB_API_TOKEN, "jose-ios", scmVars.GIT_COMMIT, context, status) }
