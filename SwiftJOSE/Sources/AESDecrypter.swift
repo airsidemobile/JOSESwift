@@ -11,38 +11,38 @@ import CommonCrypto
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
 public struct AESDecrypter: SymmetricDecrypter {
-    
+
     // TODO: Refactor this method to be more generic, see: JOSE-79
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data {
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied
         }
-        
+
         // Get the two keys for the HMAC and the symmetric encryption.
         let keys = try algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
         let decryptionKey = keys.encryptionKey
-        
+
         let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: context.additionalAuthenticatedData)
-        
+
         // Put the input data for the HMAC together. It consists of A || IV || E || AL.
         var concatData = context.additionalAuthenticatedData
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
         concatData.append(additionalAuthenticatedDataLength)
-        
+
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
         guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm) else {
             throw EncryptionError.hmacNotAuthenticated
         }
-        
+
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
         let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: algorithm.algorithms.aesAlgorithm, and: context.initializationVector)
-        
+
         return plaintext
     }
-    
+
     /**
      Decrypts a cipher text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
      - Parameters:
@@ -60,12 +60,12 @@ public struct AESDecrypter: SymmetricDecrypter {
         let dataLength = ciphertext.count
         let decryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var decryptData = Data(count:decryptLength)
-        
+
         let keyLength = size_t(kCCKeySizeAES256)
         let options = CCOptions(kCCOptionPKCS7Padding)
-        
-        var numBytesEncrypted :size_t = 0
-        
+
+        var numBytesEncrypted: size_t = 0
+
         let decryptStatus = decryptData.withUnsafeMutableBytes {decryptBytes in
             ciphertext.withUnsafeBytes {dataBytes in
                 initializationVector.withUnsafeBytes {ivBytes in
@@ -82,16 +82,16 @@ public struct AESDecrypter: SymmetricDecrypter {
                 }
             }
         }
-        
+
         if UInt32(decryptStatus) == UInt32(kCCSuccess) {
             decryptData.removeSubrange(numBytesEncrypted..<decryptData.count)
         } else {
             throw EncryptionError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decryptStatus).")
         }
-        
+
         return decryptData
     }
-    
+
     /**
      Checks if the reference authentication tag matches with, from the input calculated, authentication tag.
      - Parameters:
@@ -106,7 +106,7 @@ public struct AESDecrypter: SymmetricDecrypter {
     func authenticateHmac(_ authenticationTag: Data, input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Bool {
         let keyLength = size_t(kCCKeySizeAES256)
         var hmacOutData = Data(count: 64)
-        
+
         hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
                 input.withUnsafeBytes { inputBytes in
@@ -114,17 +114,17 @@ public struct AESDecrypter: SymmetricDecrypter {
                 }
             }
         }
-        
+
         return authenticationTag == hmacOutData.subdata(in: 0..<32) ? true : false
     }
-    
+
     // TODO: Refactor this see: JOSE-82
     func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-        
+
         var additionalAuthenticatedDataLenghtBytes = [UInt8](repeatElement(0x00, count: 8))
-        
+
         var dataIndex = additionalAuthenticatedDataLenghtBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var hexChunk = ""
@@ -137,14 +137,14 @@ public struct AESDecrypter: SymmetricDecrypter {
                 hexChunk = String(dataLengthInHex[range])
                 dataLengthInHex.removeLast(2)
             }
-            
+
             if let hexBytes = UInt8(hexChunk, radix: 16) {
                 additionalAuthenticatedDataLenghtBytes[dataIndex] = hexBytes
             }
-            
+
             dataIndex -= 1
         }
-        
+
         return Data(bytes: additionalAuthenticatedDataLenghtBytes)
     }
 }

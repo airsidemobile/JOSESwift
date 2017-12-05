@@ -15,7 +15,7 @@ public enum SigningError: Error {
 
 public enum SigningAlgorithm: String {
     case RS512 = "RS512"
-    
+
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RS512:

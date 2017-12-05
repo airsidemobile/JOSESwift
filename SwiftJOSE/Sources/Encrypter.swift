@@ -17,7 +17,7 @@ public enum EncryptionError: Error, Equatable {
     case hmacNotAuthenticated
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
-    
+
     public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
         switch (lhs, rhs) {
         case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
@@ -32,14 +32,14 @@ public enum EncryptionError: Error, Equatable {
 
 public enum AsymmetricEncryptionAlgorithm: String {
     case RSAPKCS = "RSA1_5"
-    
+
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RSAPKCS:
             return .rsaEncryptionPKCS1
         }
     }
-    
+
     /// Checks if the plain text length does not exceed the maximum for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         switch self {
@@ -48,7 +48,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
         }
     }
-    
+
     func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
         switch self {
         case .RSAPKCS:
@@ -59,7 +59,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
 
 public enum SymmetricEncryptionAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
-    
+
     var algorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: CCAlgorithm) {
         switch self {
         case .AES256CBCHS512:
@@ -73,14 +73,14 @@ public enum SymmetricEncryptionAlgorithm: String {
             return key.count == 64
         }
     }
-    
+
     func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
         switch self {
         case .AES256CBCHS512:
             guard checkKeyLength(for: inputKey) else {
                 throw EncryptionError.keyLengthNotSatisfied
             }
-            
+
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         }
     }
@@ -89,7 +89,7 @@ public enum SymmetricEncryptionAlgorithm: String {
 internal protocol AsymmetricEncrypter {
     /// Initializes an `AsymmetricEncrypter` with a specified public key.
     init(publicKey: SecKey)
-    
+
     /**
      Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
      - Parameters:
@@ -109,7 +109,7 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
-    
+
     /**
      Encrypts a plain text using a given `SymmetricEncryptionAlgorithm`, the corresponding symmetric key and additional authenticated data.
      - Parameters:
@@ -143,27 +143,27 @@ public struct SymmetricEncryptionContext {
 public struct Encrypter {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
-    
+
     public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
         // Todo: Find out which available encrypters support the specified algorithms.
         // Throw `algorithmNotSupported` error if necessary.
         // See https://mohemian.atlassian.net/browse/JOSE-58.
-        
+
         self.asymmetric = RSAEncrypter(publicKey: kek)
         self.symmetric = AESEncrypter()
     }
-    
+
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         // Todo: This check might be redundant since it will already be done in the init.
         // See https://mohemian.atlassian.net/browse/JOSE-58.
         guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
-        
+
         let cek = symmetric.randomCEK(for: enc)
         let encryptedKey = try asymmetric.encrypt(cek, using: alg)
         let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, using: enc, additionalAuthenticatedData: header.data())
-        
+
         return EncryptionContext(
             encryptedKey: encryptedKey,
             ciphertext: symmetricContext.ciphertext,

@@ -9,11 +9,11 @@ import XCTest
 @testable import SwiftJOSE
 
 class RSAVerifierTests: CryptoTestCase {
-    
+
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
@@ -23,11 +23,11 @@ class RSAVerifierTests: CryptoTestCase {
             XCTFail()
             return
         }
-        
+
         let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
         let verifier = RSAVerifier(key: publicKey!)
-        
+
         XCTAssertTrue(jws.validates(against: verifier))
     }
-    
+
 }
