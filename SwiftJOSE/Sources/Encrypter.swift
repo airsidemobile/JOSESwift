@@ -9,6 +9,8 @@ import Foundation
 
 public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported
+    case keyEncryptionAlgorithmMismatch
+    case contentEncryptionAlgorithmMismatch
     case plainTextLengthNotSatisfied
     case cipherTextLenghtNotSatisfied
     case encryptingFailed(description: String)
@@ -65,8 +67,11 @@ public enum SymmetricEncryptionAlgorithm: String {
 }
 
 internal protocol AsymmetricEncrypter {
-    /// Initializes an `AsymmetricEncrypter` with a specified public key.
-    init(publicKey: SecKey)
+    /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
+    init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
+    
+    /// The algorithm used to encrypt plaintext.
+    var algorithm: AsymmetricEncryptionAlgorithm { get }
     
     /**
      Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
@@ -81,13 +86,15 @@ internal protocol AsymmetricEncrypter {
      
      - Returns: The cipher text (encrypted plain text).
      */
-    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
+    func encrypt(_ plaintext: Data) throws -> Data
 }
 
 internal protocol SymmetricEncrypter {
+    init(algorithm: SymmetricEncryptionAlgorithm)
+    var algorithm: SymmetricEncryptionAlgorithm { get }
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
-    func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
 public struct EncryptionContext {
@@ -108,24 +115,21 @@ public struct Encrypter {
     let symmetric: SymmetricEncrypter
     
     public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
-        // Todo: Find out which available encrypters support the specified algorithms.
-        // Throw `algorithmNotSupported` error if necessary.
-        // See https://mohemian.atlassian.net/browse/JOSE-58.
-        
-        self.asymmetric = RSAEncrypter(publicKey: kek)
-        self.symmetric = AESEncrypter()
+        self.asymmetric = CryptorFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
+        self.symmetric = CryptorFactory.encrypter(for: contentEncyptionAlgorithm)
     }
     
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        // Todo: This check might be redundant since it will already be done in the init.
-        // See https://mohemian.atlassian.net/browse/JOSE-58.
-        guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+        guard let alg = header.algorithm, alg == asymmetric.algorithm else {
+            throw EncryptionError.keyEncryptionAlgorithmMismatch
+        }
+        guard let enc = header.encryptionAlgorithm, enc == symmetric.algorithm else {
+            throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
         
         let cek = symmetric.randomCEK(for: enc)
-        let encryptedKey = try asymmetric.encrypt(cek, using: alg)
-        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, using: enc, additionalAuthenticatedData: header.data())
+        let encryptedKey = try asymmetric.encrypt(cek)
+        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data())
         
         return EncryptionContext(
             encryptedKey: encryptedKey,
