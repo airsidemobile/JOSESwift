@@ -115,7 +115,7 @@ public struct AESDecrypter: SymmetricDecrypter {
             }
         }
 
-        return authenticationTag == hmacOutData.subdata(in: 0..<32) ? true : false
+        return authenticationTag == hmacOutData.subdata(in: 0..<32)
     }
 
     // TODO: Refactor this see: JOSE-82
