@@ -198,6 +198,7 @@ DEPENDENCIES
   cocoapods
   fastlane
   slather
+  xcpretty
 
 BUNDLED WITH
    1.16.0
