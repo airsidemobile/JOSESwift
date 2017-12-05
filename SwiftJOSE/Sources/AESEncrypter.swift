@@ -53,7 +53,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         concatData.append(additionalAuthenticatedDataLength)
         
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
-        let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
+        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
         let authenticationTag = hmacOutput.subdata(in: 0..<32)
         
         return SymmetricEncryptionContext(
@@ -110,31 +110,6 @@ public struct AESEncrypter: SymmetricEncrypter {
         }
         
         return cryptData
-    }
-    
-    /**
-     Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
-     - Parameters:
-        - input: The input to calculate a HMAC of.
-        - hmacKey: The key for the HMAC algorithm.
-        - algorithm: The algorithm used to calculate the HMAC.
-     
-     - Returns: The calculated HMAC.
-     */
-    // TODO: Refactor this see: JOSE-81
-    func hmac(input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Data {
-        let keyLength = size_t(kCCKeySizeAES256)
-        var hmacOutData = Data(count: 64)
-        
-        hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
-            hmacKey.withUnsafeBytes { hmacKeyBytes in
-                input.withUnsafeBytes { inputBytes in
-                    CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
-                }
-            }
-        }
-
-        return hmacOutData
     }
     
     // TODO: Refactor this see: JOSE-82

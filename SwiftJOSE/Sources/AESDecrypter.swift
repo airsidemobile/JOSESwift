@@ -33,7 +33,9 @@ public struct AESDecrypter: SymmetricDecrypter {
         concatData.append(additionalAuthenticatedDataLength)
         
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
-        guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm) else {
+        guard
+            HMAC.authenticate(input: concatData, for: context.authenticationTag, and: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
+        else {
             throw EncryptionError.hmacNotAuthenticated
         }
         
@@ -90,32 +92,6 @@ public struct AESDecrypter: SymmetricDecrypter {
         }
         
         return decryptData
-    }
-    
-    /**
-     Checks if the reference authentication tag matches with, from the input calculated, authentication tag.
-     - Parameters:
-        - authenticationTag: The reference authentication tag received with the message.
-        - input: The concatenated data in the format A || IV || E || AL.
-        - algorithm: The algorithm used to calculate the HMAC.
-        - initializationVector: The initial block.
-     
-     - Returns: True if the message is authenticated (the authentication tags match), false if the message is not authenticated (the authentication tags do not match)
-     */
-    // TODO: Refactor this see: JOSE-81
-    func authenticateHmac(_ authenticationTag: Data, input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Bool {
-        let keyLength = size_t(kCCKeySizeAES256)
-        var hmacOutData = Data(count: 64)
-        
-        hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
-            hmacKey.withUnsafeBytes { hmacKeyBytes in
-                input.withUnsafeBytes { inputBytes in
-                    CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
-                }
-            }
-        }
-        
-        return authenticationTag == hmacOutData.subdata(in: 0..<32) ? true : false
     }
     
     // TODO: Refactor this see: JOSE-82
