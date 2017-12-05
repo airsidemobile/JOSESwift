@@ -11,22 +11,22 @@ import CommonCrypto
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
 public struct AESDecrypter: SymmetricDecrypter {
-    
+
     // TODO: Refactor this method to be more generic, see: JOSE-79
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data {
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied
         }
-        
+
         // Get the two keys for the HMAC and the symmetric encryption.
         let keys = try algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
         let decryptionKey = keys.encryptionKey
-        
+
         let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: context.additionalAuthenticatedData)
-        
-        // Put the input data for the HMAC together. It consists of A || IV || E || AL.
+
+        // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = context.additionalAuthenticatedData
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
@@ -38,13 +38,13 @@ public struct AESDecrypter: SymmetricDecrypter {
         guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
             throw EncryptionError.hmacNotAuthenticated
         }
-        
+
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.
         let plaintext = try aesDecrypt(context.ciphertext, decryptionKey: decryptionKey, using: algorithm.algorithms.aesAlgorithm, and: context.initializationVector)
-        
+
         return plaintext
     }
-    
+
     /**
      Decrypts a cipher text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
      - Parameters:
@@ -62,12 +62,12 @@ public struct AESDecrypter: SymmetricDecrypter {
         let dataLength = ciphertext.count
         let decryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var decryptData = Data(count:decryptLength)
-        
+
         let keyLength = size_t(kCCKeySizeAES256)
         let options = CCOptions(kCCOptionPKCS7Padding)
-        
-        var numBytesEncrypted :size_t = 0
-        
+
+        var numBytesEncrypted: size_t = 0
+
         let decryptStatus = decryptData.withUnsafeMutableBytes {decryptBytes in
             ciphertext.withUnsafeBytes {dataBytes in
                 initializationVector.withUnsafeBytes {ivBytes in
@@ -84,13 +84,13 @@ public struct AESDecrypter: SymmetricDecrypter {
                 }
             }
         }
-        
+
         if UInt32(decryptStatus) == UInt32(kCCSuccess) {
-            decryptData.removeSubrange(numBytesEncrypted..<decryptData.count)
+            decryptData.removeSubrange(numBytesEncrypted..<decryptLength)
         } else {
             throw EncryptionError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decryptStatus).")
         }
-        
+
         return decryptData
     }
     
@@ -98,10 +98,10 @@ public struct AESDecrypter: SymmetricDecrypter {
     func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-        
-        var additionalAuthenticatedDataLenghtBytes = [UInt8](repeatElement(0x00, count: 8))
-        
-        var dataIndex = additionalAuthenticatedDataLenghtBytes.count-1
+
+        var additionalAuthenticatedDataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
+
+        var dataIndex = additionalAuthenticatedDataLengthBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var hexChunk = ""
             if dataLengthInHex.count == 1 {
@@ -113,14 +113,14 @@ public struct AESDecrypter: SymmetricDecrypter {
                 hexChunk = String(dataLengthInHex[range])
                 dataLengthInHex.removeLast(2)
             }
-            
+
             if let hexBytes = UInt8(hexChunk, radix: 16) {
-                additionalAuthenticatedDataLenghtBytes[dataIndex] = hexBytes
+                additionalAuthenticatedDataLengthBytes[dataIndex] = hexBytes
             }
-            
+
             dataIndex -= 1
         }
-        
-        return Data(bytes: additionalAuthenticatedDataLenghtBytes)
+
+        return Data(bytes: additionalAuthenticatedDataLengthBytes)
     }
 }

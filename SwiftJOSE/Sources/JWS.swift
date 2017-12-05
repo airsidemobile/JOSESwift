@@ -7,19 +7,18 @@
 
 import Foundation
 
-
 /// A JWS object consisting of a header, payload and signature. The three components of a JWS object
 /// cannot be changed once the object is initialized.
 public struct JWS {
     let header: JWSHeader
     let payload: Payload
     let signature: Signature
-    
+
     /// The compact serialization of this JWS object.
     public var compactSerialized: String {
         return JOSESerializer().serialize(compact: self)
     }
-    
+
     /**
      Constructs a JWS object from a given header, payload, and signer.
      - Parameters:
@@ -30,14 +29,14 @@ public struct JWS {
     public init?(header: JWSHeader, payload: Payload, signer: Signer) {
         self.header = header
         self.payload = payload
-        
+
         if let signature = Signature(from: signer, using: header, and: payload) {
             self.signature = signature
         } else {
             return nil
         }
     }
-    
+
     /**
      Constructs a JWS object from a given compact serialization.
      - parameters:
@@ -46,13 +45,13 @@ public struct JWS {
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
-    
+
     fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
         self.header = header
         self.payload = payload
         self.signature = signature
     }
-    
+
     /**
      Validates a JWS using a given verifier.
      - parameters:
@@ -76,7 +75,7 @@ extension JWS: CompactDeserializable {
     public static var componentCount: Int {
         return 3
     }
-    
+
     public init(from deserializer: CompactDeserializer) throws {
         let header = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
         let payload = try deserializer.deserialize(Payload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)

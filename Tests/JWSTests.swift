@@ -12,17 +12,17 @@ class JWSTests: CryptoTestCase {
     override func setUp() {
         super.setUp()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     func testSignAndSerialize() {
         guard publicKey != nil, privateKey != nil else {
             XCTFail()
             return
         }
-        
+
         let header = JWSHeader(algorithm: .RS512)
         let payload = Payload(message.data(using: .utf8)!)
         let signer = RSASigner(key: privateKey!)
@@ -30,23 +30,23 @@ class JWSTests: CryptoTestCase {
         let compactSerializedJWS = jws.compactSerialized
 
         XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
-        
+
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
         let verifier = RSAVerifier(key: publicKey!)
-        
+
         XCTAssertTrue(secondJWS.validates(against: verifier))
     }
-    
+
     func testDeserializeFromCompactSerialization() {
         guard privateKey != nil else {
             XCTFail()
             return
         }
-        
+
         let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"RS512\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
-        
+
         let signer = RSASigner(key: privateKey!)
         let signature = Signature(from: signer, using: JWSHeader(algorithm: .RS512), and: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature?.data())

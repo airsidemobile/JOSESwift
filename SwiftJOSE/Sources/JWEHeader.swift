@@ -10,23 +10,23 @@ import Foundation
 /// The header of a `JWE` object.
 public struct JWEHeader: JOSEHeader {
     let parameters: [String: Any]
-    
+
     init(parameters: [String: Any]) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
-        
+
         guard parameters["alg"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
-        
+
         guard parameters["enc"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "enc")
         }
-        
+
         self.parameters = parameters
     }
-    
+
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
     public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
         // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
@@ -45,7 +45,7 @@ public extension JWEHeader {
         // and holds a `String` value in `init(parameters:)`.
         return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
     }
-    
+
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
     public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
@@ -61,51 +61,51 @@ extension JWEHeader: CommonHeaderParameterSpace {
     public var jku: URL? {
         return parameters["jku"] as? URL
     }
-    
+
     /// The JSON Web key corresponding to the key used to encrypt the JWE.
     public var jwk: String? {
         return parameters["jwk"] as? String
     }
-    
+
     /// The Key ID indicates the key which was used to encrypt the JWE.
     public var kid: String? {
         return parameters["kid"] as? String
     }
-    
+
     /// The X.509 URL that referes to a resource for the X.509 public key certificate
     /// or certificate chain corresponding to the key used to encrypt the JWE.
     public var x5u: URL? {
         return parameters["x5u"] as? URL
     }
-    
+
     /// The X.509 certificate chain contains the X.509 public key certificate or
     /// certificate chain corresponding to the key used to encrypt the JWE.
-    public var x5c: [String : Any]? {
+    public var x5c: [String: Any]? {
         return parameters["x5c"] as? [String: Any]
     }
-    
+
     /// The X.509 certificate SHA-1 thumbprint of the DER encoding of the X.509 certificate
     /// corresponding to the key used to encrypt the JWE.
     public var x5t: String? {
         return parameters["x5t"] as? String
     }
-    
+
     /// The X.509 certificate SHA-256 thumbprint of the DER encoding of the X.509 certificate
     /// corresponding to the key used to encrypt the JWE.
     public var x5tS256: String? {
         return parameters["x5tS256"] as? String
     }
-    
+
     /// The type to declare the media type of the JWE object.
     public var typ: String? {
         return parameters["typ"] as? String
     }
-    
+
     /// The content type to declare the media type of the secured content (payload).
     public var cty: String? {
         return parameters["cty"] as? String
     }
-    
+
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
         return parameters["crit"] as? [String]
