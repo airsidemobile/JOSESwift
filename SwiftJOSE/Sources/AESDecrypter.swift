@@ -84,7 +84,7 @@ public struct AESDecrypter: SymmetricDecrypter {
         }
 
         if UInt32(decryptStatus) == UInt32(kCCSuccess) {
-            decryptData.removeSubrange(numBytesEncrypted..<decryptData.count)
+            decryptData.removeSubrange(numBytesEncrypted..<decryptLength)
         } else {
             throw EncryptionError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decryptStatus).")
         }

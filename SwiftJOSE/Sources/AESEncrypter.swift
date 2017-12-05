@@ -104,7 +104,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         }
 
         if UInt32(cryptStatus) == UInt32(kCCSuccess) {
-            cryptData.removeSubrange(numBytesEncrypted..<cryptData.count)
+            cryptData.removeSubrange(numBytesEncrypted..<cryptLength)
         } else {
             throw EncryptionError.encryptingFailed(description: "Encryption failed with CryptorStatus: \(cryptStatus).")
         }
