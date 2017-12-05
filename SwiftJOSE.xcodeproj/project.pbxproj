@@ -101,8 +101,6 @@
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
-		C81DD9231FD6A75E00026024 /* HMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
-		C81DD9251FD6F07F00026024 /* HMACTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACTests.swift; sourceTree = "<group>"; };
 		C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypterTests.swift; sourceTree = "<group>"; };
 		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 		C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTestCase.swift; sourceTree = "<group>"; };
