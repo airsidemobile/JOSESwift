@@ -121,7 +121,7 @@ node(slave) {
          sh "sh -x run-sonar-swift.sh -nosonarscanner -nounittests"
          // extract the # without the PR- prefix
          prNo = (env.BRANCH_NAME =~ /^PR-(\d+)$/)[0][1]
-         githubToken = env.GITHUB_ACCESS_TOKEN
+         githubToken = env.GITHUB_API_TOKEN
          // to be configured in the global configuration of the master jenkins instance
          withSonarQubeEnv('SonarQube mohemian Jenkins') {
            sh "${scannerHome}/bin/sonar-scanner -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=${prNo} -Dsonar.github.oauth=${githubToken}"
