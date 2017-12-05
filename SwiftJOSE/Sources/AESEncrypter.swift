@@ -43,7 +43,7 @@ public struct AESEncrypter: SymmetricEncrypter {
 
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
         // return the ciphertext if no error occured.
-        let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.algorithms.aesAlgorithm, and: iv)
+        let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
         let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: additionalAuthenticatedData)
 
         // Put the input data for the HMAC together. It consists of A || IV || E || AL.
@@ -53,7 +53,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         concatData.append(additionalAuthenticatedDataLength)
 
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
-        let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm)
+        let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
         let authenticationTag = hmacOutput.subdata(in: 0..<32)
 
         return SymmetricEncryptionContext(

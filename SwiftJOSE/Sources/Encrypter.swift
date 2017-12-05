@@ -60,7 +60,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
 public enum SymmetricEncryptionAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
 
-    var algorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: CCAlgorithm) {
+    var ccAlgorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: CCAlgorithm) {
         switch self {
         case .AES256CBCHS512:
             return (CCAlgorithm(kCCAlgorithmAES128), CCAlgorithm(kCCHmacAlgSHA512))
