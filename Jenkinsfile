@@ -102,6 +102,16 @@ node(slave) {
       }
     }
 
+    stage('Install Dependencies') {
+      def context = 'jenkins-prepare'
+      def cmd = {
+        shRVM "bundle install"
+        shRVM "bundle exec pod repo update"
+      }
+      def cmdFinally = {}
+      executeCommand(cmd, cmdFinally, githubStatusJose, context)
+    }
+
      stage('SonarQube') {
        // requires SonarQube Scanner 2.8+ to be configured in the build tools section of the jenkins instance
        def scannerHome = tool 'SonarQube Scanner Latest'
@@ -124,16 +134,6 @@ node(slave) {
            sh "${scannerHome}/bin/sonar-scanner"
          }
       }
-    }
-
-    stage('Install Dependencies') {
-      def context = 'jenkins-prepare'
-      def cmd = {
-        shRVM "bundle install"
-        shRVM "bundle exec pod repo update"
-      }
-      def cmdFinally = {}
-      executeCommand(cmd, cmdFinally, githubStatusJose, context)
     }
 
     stage('Tests') {
