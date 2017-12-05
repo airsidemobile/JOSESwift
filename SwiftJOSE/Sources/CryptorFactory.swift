@@ -26,14 +26,14 @@ struct CryptorFactory {
     static func decrypter(for algorithm: AsymmetricEncryptionAlgorithm, with privateKey: SecKey) -> AsymmetricDecrypter {
         switch algorithm {
         case .RSAPKCS:
-            return RSADecrypter(privateKey: privateKey)
+            return RSADecrypter(algorithm: algorithm, privateKey: privateKey)
         }
     }
     
     static func decrypter(for algotithm: SymmetricEncryptionAlgorithm) -> SymmetricDecrypter {
         switch algotithm {
         case .AESGCM256:
-            return AESDecrypter()
+            return AESDecrypter(algorithm: algotithm)
         }
     }
     

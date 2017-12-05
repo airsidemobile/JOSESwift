@@ -9,9 +9,10 @@ import Foundation
 
 /// An `AsymmetricDecrypter` to decrypt cipher text with a `RSA` algorithm.
 public struct RSADecrypter: AsymmetricDecrypter {
+    let algorithm: AsymmetricEncryptionAlgorithm
     let privateKey: SecKey
     
-    func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
+    func decrypt(_ ciphertext: Data) throws -> Data {
         // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to decrypt with a given private key
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
             throw EncryptionError.encryptionAlgorithmNotSupported
