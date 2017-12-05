@@ -118,7 +118,7 @@ node(slave) {
        
        if (env.BRANCH_NAME ==~ /^PR-\d+$/) {
          // do the analysis first and do not rely on the built-in scanner
-         sh "./run-sonar-swift.sh -nosonarscanner"
+         sh "sh -x run-sonar-swift.sh -nosonarscanner"
          // extract the # without the PR- prefix
          prNo = (env.BRANCH_NAME =~ /^PR-(\d+)$/)[0][1]
          githubToken = env.GITHUB_ACCESS_TOKEN
