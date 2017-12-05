@@ -26,8 +26,8 @@ class RSADecrypterTests: CryptoTestCase {
             return
         }
         
-        let decrypter = RSADecrypter(privateKey: privateKey!)
-        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!, using: .RSAPKCS)
+        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey!)
+        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!)
         
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
@@ -38,8 +38,8 @@ class RSADecrypterTests: CryptoTestCase {
             return
         }
         
-        let decrypter = RSADecrypter(privateKey: privateKey!)
-        XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300), using: .RSAPKCS)) { (error: Error) in
+        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey!)
+        XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
             XCTAssertEqual(error as? EncryptionError, EncryptionError.cipherTextLenghtNotSatisfied)
         }
     }
