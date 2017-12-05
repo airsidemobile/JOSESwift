@@ -26,7 +26,7 @@ public struct AESDecrypter: SymmetricDecrypter {
 
         let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: context.additionalAuthenticatedData)
 
-        // Put the input data for the HMAC together. It consists of A || IV || E || AL.
+        // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = context.additionalAuthenticatedData
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
