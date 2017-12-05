@@ -102,6 +102,30 @@ node(slave) {
       }
     }
 
+     stage('SonarQube') {
+       // requires SonarQube Scanner 2.8+ to be configured in the build tools section of the jenkins instance
+       def scannerHome = tool 'SonarQube Scanner Latest'
+       
+       if (env.BRANCH_NAME ==~ /^PR-\d+$/) {
+         // do the analysis first and do not rely on the built-in scanner
+         sh "run-sonar-swift.sh -nosonarscanner"
+         // extract the # without the PR- prefix
+         prNo = (env.BRANCH_NAME =~ /^PR-(\d+)$/)[0][1]
+         githubToken = env.GITHUB_ACCESS_TOKEN
+         // to be configured in the global configuration of the master jenkins instance
+         withSonarQubeEnv('SonarQube mohemian Jenkins') {
+           sh "${scannerHome}/bin/sonar-scanner -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=${prNo} -Dsonar.github.oauth=${githubToken}"
+         }
+      }
+      if(env.BRANCH_NAME == 'master') {
+        withSonarQubeEnv('SonarQube mohemian Jenkins') {
+          // do the analysis first and do not rely on the built-in scanner
+           sh "run-sonar-swift.sh -nosonarscanner"
+           sh "${scannerHome}/bin/sonar-scanner"
+         }
+      }
+    }
+
     stage('Install Dependencies') {
       def context = 'jenkins-prepare'
       def cmd = {

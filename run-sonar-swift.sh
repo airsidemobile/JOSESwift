@@ -158,6 +158,7 @@ do
     -noswiftlint) swiftlint="";;
     -notailor) tailor="";;
     -usesonarscanner) sonarscanner="on";;
+    -nosonarscanner) sonarscanner="off";;
 	--)	shift; break;;
 	-*)
         echo >&2 "Usage: $0 [-v]"
@@ -400,20 +401,22 @@ else
 	numVersionSonarRunner='';
 fi
 # SonarQube
-if [ "$sonarscanner" = "on" ]; then
+if [ "$sonarscanner" != "off" ]; then
+  if [ "$sonarscanner" = "on" ]; then
     echo -n 'Running SonarQube using SonarQube Scanner'
     if hash /dev/stdout sonar-scanner 2>/dev/null; then
         runCommand /dev/stdout sonar-scanner $numVersionSonarRunner
     else
         echo 'Skipping sonar-scanner (not installed!)'
     fi
-else
+  else
     echo -n 'Running SonarQube using SonarQube Runner'
     if hash /dev/stdout sonar-runner 2>/dev/null; then
 	   runCommand /dev/stdout sonar-runner $numVersionSonarRunner
     else
 	   runCommand /dev/stdout sonar-scanner $numVersionSonarRunner
     fi
+  fi
 fi
 
 # Kill progress indicator

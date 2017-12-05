@@ -100,3 +100,4 @@ fastlane/test_output
 
 # sonarqube
 sonar-reports/
+.scannerwork/
