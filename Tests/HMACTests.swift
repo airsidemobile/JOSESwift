@@ -18,6 +18,11 @@ class HMACTests: CryptoTestCase {
         super.tearDown()
     }
     
+    /**
+     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
+     
+     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
+     */
     func testHMACCalculation() {
         let key = "0102030405060708090a0b0c0d0e0f10111213141516171819".hexadecimalToData()!
         let data = "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".hexadecimalToData()!
@@ -28,6 +33,11 @@ class HMACTests: CryptoTestCase {
         XCTAssertEqual(hmacOutput, hmacTestOutput)
     }
     
+    /**
+     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
+     
+     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
+     */
     func testHMACCalculationWithFalseKey() {
         let key = "1102030405060708090a0b0c0d0e0f10111213141516171819".hexadecimalToData()!
         let data = "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".hexadecimalToData()!
@@ -38,6 +48,11 @@ class HMACTests: CryptoTestCase {
         XCTAssertNotEqual(hmacOutput, hmacTestOutput)
     }
     
+    /**
+     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
+     
+     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
+     */
     func testHMACCalculationWithFalseData() {
         let key = "0102030405060708090a0b0c0d0e0f10111213141516171819".hexadecimalToData()!
         let data = "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".hexadecimalToData()!
