@@ -20,7 +20,7 @@ extension Data {
         var s = base64URLString
             .replacingOccurrences(of: "-", with: "+")
             .replacingOccurrences(of: "_", with: "/")
-        
+
         let mod = s.count % 4
         switch mod {
             case 0: break
@@ -28,10 +28,10 @@ extension Data {
             case 3: s.append("=")
             default: return nil
         }
-        
+
         self.init(base64Encoded: s)
     }
-    
+
     /**
      Creates a new data buffer from base64url, UTF-8 encoded data.
      
@@ -44,10 +44,10 @@ extension Data {
         guard let s = String(data: base64URLData, encoding: .utf8) else {
             return nil
         }
-        
+
         self.init(base64URLEncoded: s)
     }
-    
+
     /**
      Returns a base64url encoded string.
      
@@ -60,7 +60,7 @@ extension Data {
             .replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
     }
-    
+
     /**
      Returns base64url encoded data.
      
@@ -77,7 +77,7 @@ extension Data: DataConvertible {
     public init(_ data: Data) {
         self = data
     }
-    
+
     public func data() -> Data {
         return self
     }

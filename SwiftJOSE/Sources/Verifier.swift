@@ -10,7 +10,7 @@ import Foundation
 public protocol Verifier {
     /// Initializes a `Verifier` with a specified key.
     init(key: SecKey)
-    
+
     /**
      Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
      - Parameters:

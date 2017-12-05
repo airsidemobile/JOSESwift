@@ -9,11 +9,11 @@ import Foundation
 
 public struct Payload: DataConvertible {
     let payload: Data
-    
+
     public init(_ payload: Data) {
         self.payload = payload
     }
-    
+
     public func data() -> Data {
         return payload
     }

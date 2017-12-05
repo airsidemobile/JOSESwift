@@ -17,7 +17,7 @@ enum HeaderParsingError: Error {
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var parameters: [String: Any] { get }
     init(parameters: [String: Any]) throws
-    
+
     init?(_ data: Data)
     func data() -> Data
 }
@@ -31,10 +31,10 @@ extension JOSEHeader {
         else {
             return nil
         }
-        
+
         try? self.init(parameters: parameters)
     }
-    
+
     public func data() -> Data {
         // Forcing the try is ok here since we checked `isValidJSONObject(_:)` in `init(parameters:)` earlier.
         // The resulting data of this operation is UTF-8 encoded.
@@ -56,4 +56,3 @@ public protocol CommonHeaderParameterSpace {
     var cty: String? { get }
     var crit: [String]? { get }
 }
-

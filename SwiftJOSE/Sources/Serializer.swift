@@ -25,9 +25,9 @@ public struct JOSESerializer {
     }
 }
 
-fileprivate struct _CompactSerializer: CompactSerializer {
+private struct _CompactSerializer: CompactSerializer {
     var components: [DataConvertible] = []
-    
+
     mutating func serialize<T: DataConvertible>(_ object: T) {
         components.append(object)
     }

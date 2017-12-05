@@ -24,36 +24,36 @@ public protocol CompactDeserializer {
 
 public struct JOSEDeserializer {
     public init() { }
-    
+
     public func deserialize<T: CompactDeserializable>(_ type: T.Type, fromCompactSerialization compactSerialization: String) throws -> T {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
-        
+
         guard encodedComponents.count == type.componentCount else {
             throw DeserializationError.invalidCompactSerializationComponentCount(count: encodedComponents.count)
         }
-        
+
         let decodedComponents = try encodedComponents.map { (component: String) throws -> Data in
             guard let data = Data(base64URLEncoded: component) else {
                 throw DeserializationError.componentNotValidBase64URL(component: component)
             }
             return data
         }
-        
+
         let deserializer = _CompactDeserializer(components: decodedComponents)
-        
+
         return try T(from: deserializer)
     }
 }
 
-fileprivate struct _CompactDeserializer: CompactDeserializer {
+private struct _CompactDeserializer: CompactDeserializer {
     let components: [Data]
-    
+
     func deserialize<T: DataConvertible>(_ type: T.Type, at index: Int) throws -> T {
         let componentData = components[index]
         guard let component = T(componentData) else {
             throw DeserializationError.componentCouldNotBeInitializedFromData(data: componentData)
         }
-        
+
         return component
     }
 }
