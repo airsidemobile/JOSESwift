@@ -142,9 +142,9 @@ public struct AESEncrypter: SymmetricEncrypter {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
 
-        var additionalAuthenticatedDataLenghtBytes = [UInt8](repeatElement(0x00, count: 8))
+        var additionalAuthenticatedDataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
 
-        var dataIndex = additionalAuthenticatedDataLenghtBytes.count-1
+        var dataIndex = additionalAuthenticatedDataLengthBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var hexChunk = ""
             if dataLengthInHex.count == 1 {
@@ -158,13 +158,13 @@ public struct AESEncrypter: SymmetricEncrypter {
             }
 
             if let hexBytes = UInt8(hexChunk, radix: 16) {
-                additionalAuthenticatedDataLenghtBytes[dataIndex] = hexBytes
+                additionalAuthenticatedDataLengthBytes[dataIndex] = hexBytes
             }
 
             dataIndex -= 1
         }
 
-        return Data(bytes: additionalAuthenticatedDataLenghtBytes)
+        return Data(bytes: additionalAuthenticatedDataLengthBytes)
     }
 }
 

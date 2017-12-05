@@ -32,7 +32,7 @@ public struct AESDecrypter: SymmetricDecrypter {
         concatData.append(context.ciphertext)
         concatData.append(additionalAuthenticatedDataLength)
 
-        // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
+        // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
         guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: algorithm.algorithms.hmacAlgorithm) else {
             throw EncryptionError.hmacNotAuthenticated
         }
@@ -123,9 +123,9 @@ public struct AESDecrypter: SymmetricDecrypter {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)
         var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
 
-        var additionalAuthenticatedDataLenghtBytes = [UInt8](repeatElement(0x00, count: 8))
+        var additionalAuthenticatedDataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
 
-        var dataIndex = additionalAuthenticatedDataLenghtBytes.count-1
+        var dataIndex = additionalAuthenticatedDataLengthBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var hexChunk = ""
             if dataLengthInHex.count == 1 {
@@ -139,12 +139,12 @@ public struct AESDecrypter: SymmetricDecrypter {
             }
 
             if let hexBytes = UInt8(hexChunk, radix: 16) {
-                additionalAuthenticatedDataLenghtBytes[dataIndex] = hexBytes
+                additionalAuthenticatedDataLengthBytes[dataIndex] = hexBytes
             }
 
             dataIndex -= 1
         }
 
-        return Data(bytes: additionalAuthenticatedDataLenghtBytes)
+        return Data(bytes: additionalAuthenticatedDataLengthBytes)
     }
 }
