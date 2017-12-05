@@ -19,13 +19,19 @@ public enum HMACAlgorithm: String {
         }
     }
     
-    var keyLength: size_t {
+    var keyLength: Int {
         switch self {
         case .SHA512:
-            return size_t()
+            return 32
         }
     }
     
+    var outputLength: Int {
+        switch self {
+        case .SHA512:
+            return 64
+        }
+    }
 }
 
 public struct HMAC {
@@ -39,14 +45,13 @@ public struct HMAC {
      
      - Returns: The calculated HMAC.
      */
-    public static func calculate(from input: Data, with key: Data, using algorithm: HMACAlgorithm) -> Data {
-        let keyLength = size_t(kCCKeySizeAES256)
-        var hmacOutData = Data(count: 64)
+    public static func calculate(from input: Data, with key: Data, using algorithm: HMACAlgorithm) throws -> Data {
+        var hmacOutData = Data(count: algorithm.outputLength)
         
         hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
             key.withUnsafeBytes { keyBytes in
                 input.withUnsafeBytes { inputBytes in
-                    CCHmac(algorithm.ccAlgorithm, keyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
+                    CCHmac(algorithm.ccAlgorithm, keyBytes, key.count, inputBytes, input.count, hmacOutBytes)
                 }
             }
         }
