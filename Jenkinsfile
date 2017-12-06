@@ -87,7 +87,7 @@ def isJobStartedByUser() {
 def slave = findNode()
 
 node(slave) {
-  withCredentials([[$class: 'StringBinding', credentialsId: '8c157f6e-431b-40dc-969d-edb840552bd5', variable: 'GITHUB_API_TOKEN']]) {
+  withCredentials([[$class: 'StringBinding', credentialsId: '0163c533-6fe6-4712-a930-dd12b01ebca9', variable: 'GITHUB_API_TOKEN']]) {
 
     def scmVars = checkout scm
     def githubStatusJose = { context, status -> githubStatus(GITHUB_API_TOKEN, "jose-ios", scmVars.GIT_COMMIT, context, status) }
@@ -111,6 +111,30 @@ node(slave) {
       }
       def cmdFinally = {}
       executeCommand(cmd, cmdFinally, githubStatusJose, context)
+    }
+
+     stage('SonarQube') {
+       // requires SonarQube Scanner 2.8+ to be configured in the build tools section of the jenkins instance
+       def scannerHome = tool 'SonarQube Scanner Latest'
+       
+       if (env.BRANCH_NAME ==~ /^PR-\d+$/) {
+         // do the analysis first and do not rely on the built-in scanner
+         sh "./run-sonar-swift.sh -nounittests -nosonarscanner"
+         // extract the # without the PR- prefix
+         prNo = (env.BRANCH_NAME =~ /^PR-(\d+)$/)[0][1]
+         githubToken = env.GITHUB_API_TOKEN
+         // to be configured in the global configuration of the master jenkins instance
+         withSonarQubeEnv('SonarQube mohemian Jenkins') {
+           sh "${scannerHome}/bin/sonar-scanner -Dsonar.analysis.mode=preview -Dsonar.github.pullRequest=${prNo} -Dsonar.github.oauth=${githubToken}"
+         }
+      }
+      if(env.BRANCH_NAME == 'master') {
+        withSonarQubeEnv('SonarQube mohemian Jenkins') {
+          // do the analysis first and do not rely on the built-in scanner
+           sh "./run-sonar-swift.sh -nounittests -nosonarscanner"
+           sh "${scannerHome}/bin/sonar-scanner"
+         }
+      }
     }
 
     stage('Tests') {
