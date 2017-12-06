@@ -19,13 +19,6 @@ public enum HMACAlgorithm: String {
         }
     }
     
-    var keyLength: Int {
-        switch self {
-        case .SHA512:
-            return 32
-        }
-    }
-    
     var outputLength: Int {
         switch self {
         case .SHA512:
