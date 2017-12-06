@@ -49,7 +49,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
-        concatData.append(additionalAuthenticatedData.getHexLength())
+        concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
