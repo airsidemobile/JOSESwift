@@ -11,10 +11,18 @@ import CommonCrypto
 
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
 public struct AESEncrypter: SymmetricEncrypter {
-    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
-        // Todo: Generate CEK using a trusted cryptography library.
-        // See: https://mohemian.atlassian.net/browse/JOSE-62.
-        return Data(count: 64)
+    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) throws -> Data {
+        var generatedKey = Data(count: algorithm.keyLength())
+
+        let keyGenerationStatus = generatedKey.withUnsafeMutableBytes { mutableKeyBytes in
+            SecRandomCopyBytes(kSecRandomDefault, generatedKey.count, mutableKeyBytes)
+        }
+
+        guard keyGenerationStatus == errSecSuccess else {
+            throw EncryptionError.keyGenerationFailed(with: keyGenerationStatus)
+        }
+        
+        return generatedKey
     }
 
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
