@@ -79,31 +79,32 @@ extension Data {
     */
     func getHexLength() -> Data {
         let dataLength = UInt64(self.count * 8)
-        var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-        
+        let dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
+    
         var dataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
         
         var dataIndex = dataLengthBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
+            var offset = 2
             var hexStringChunk = ""
-            if dataLengthInHex.count == 1 {
-                hexStringChunk = dataLengthInHex
-            } else {
-                let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
-                let startIndex = dataLengthInHex.index(endIndex, offsetBy: -2)
-                let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
-                hexStringChunk = String(dataLengthInHex[range])
-                dataLengthInHex.removeLast(2)
+            
+            if dataLengthInHex.count-i == 1 {
+                offset = 1
             }
             
-            if let hexByte = UInt8(hexChunk, radix: 16) {
+            let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
+            let startIndex = dataLengthInHex.index(endIndex, offsetBy: -offset)
+            let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
+            hexStringChunk = String(dataLengthInHex[range])
+            
+            if let hexByte = UInt8(hexStringChunk, radix: 16) {
                 dataLengthBytes[dataIndex] = hexByte
             }
             
             dataIndex -= 1
         }
         
-        return Data(bytes: additionalAuthenticatedDataLengthBytes)
+        return Data(bytes: dataLengthBytes)
     }
 }
 
