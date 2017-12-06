@@ -73,11 +73,11 @@ extension Data {
     }
     
     /**
-     Returns the length of a data object in ???????
+     Returns the byte length of a data object as octet hexadecimal data.
      
-     - Returns: The data length in ???????
+     - Returns: The data byte length as octet hexadecimal data.
     */
-    func getHexLength() -> Data {
+    func getByteLengthAsOctetHexData() -> Data {
         let dataLength = UInt64(self.count * 8)
         let dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
     
