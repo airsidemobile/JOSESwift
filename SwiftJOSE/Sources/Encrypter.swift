@@ -68,6 +68,13 @@ public enum SymmetricEncryptionAlgorithm: String {
         }
     }
 
+    func keyLength() -> Int {
+        switch self {
+        case .AES256CBCHS512:
+            return 64
+        }
+    }
+    
     func checkKeyLength(for key: Data) -> Bool {
         switch self {
         case .AES256CBCHS512:
