@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.homepage          = "https://mohemian.com"
   s.social_media_url  = "https://twitter.com/mohemian_mobile"
 
-  s.platform          = :ios, "9.0"
+  s.platform          = :ios, "10.0"
   s.source            = { :git => "git@github.com:mohemian/jose-ios.git", :tag => "#{s.version}" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
 
