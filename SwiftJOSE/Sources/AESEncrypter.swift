@@ -28,11 +28,10 @@ public struct AESEncrypter: SymmetricEncrypter {
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
 
-        // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
-        // return the ciphertext if no error occured.
+        // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
 
-        // Put the input data for the HMAC together. It consists of A || IV || E || AL.
+        // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
