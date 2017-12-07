@@ -31,7 +31,20 @@ internal protocol AsymmetricDecrypter {
 
 internal protocol SymmetricDecrypter {
     init(algorithm: SymmetricEncryptionAlgorithm)
+    
     var algorithm: SymmetricEncryptionAlgorithm { get }
+
+    /**
+     Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
+     - Parameters:
+        - context: The `SymmetricDecryptionContext` containing the ciphertext, the initialization vector, additional authenticated data and the authentication tag.
+        - symmetricKey: The key which contains the HMAC and encryption key.
+     
+     - Throws:
+        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
+     
+     - Returns: The plain text (decrypted cipher text).
+     */
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data
 }
 
@@ -53,31 +66,30 @@ public struct SymmetricDecryptionContext {
 public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
-    
+
     public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
-        // Todo: Find out which available encrypter supports the specified algorithm and throw error if necessary.
-        // See https://mohemian.atlassian.net/browse/JOSE-58.
         self.asymmetric = CryptorFactory.decrypter(for: keyDecryptionAlgorithm, with: kdk)
         self.symmetric = CryptorFactory.decrypter(for: contentDecryptionAlgorithm)
     }
-    
+
     func decrypt(_ context: DecryptionContext) throws -> Data {
         guard let alg = context.header.algorithm, alg == asymmetric.algorithm else {
             throw EncryptionError.keyEncryptionAlgorithmMismatch
         }
+        
         guard let enc = context.header.encryptionAlgorithm, enc == symmetric.algorithm else {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
-        
+
         let cek = try asymmetric.decrypt(context.encryptedKey)
-        
+
         let symmetricContext = SymmetricDecryptionContext(
             ciphertext: context.ciphertext,
             initializationVector: context.initializationVector,
             additionalAuthenticatedData: context.header.data(),
             authenticationTag: context.authenticationTag
         )
-        
+
         return try symmetric.decrypt(symmetricContext, with: cek)
     }
 }

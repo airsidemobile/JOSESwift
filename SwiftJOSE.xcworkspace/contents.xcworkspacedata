@@ -7,4 +7,10 @@
    <FileRef
       location = "group:ExampleApp/ExampleApp.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:SwiftJOSE.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
 </Workspace>

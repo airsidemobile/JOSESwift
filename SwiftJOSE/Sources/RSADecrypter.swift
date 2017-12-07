@@ -11,25 +11,25 @@ import Foundation
 public struct RSADecrypter: AsymmetricDecrypter {
     let algorithm: AsymmetricEncryptionAlgorithm
     let privateKey: SecKey
-    
+
     func decrypt(_ ciphertext: Data) throws -> Data {
-        // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to decrypt with a given private key
+        // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to decrypt with a given private key.
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
-        
-        // Check if the cipher text length does not exceed the maximum
-        // e.g. for RSAPKCS the cipher text has the same length as the private key's modulus
+
+        // Check if the cipher text length does not exceed the maximum.
+        // e.g. for RSAPKCS the cipher text has the same length as the private key's modulus.
         guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
             throw EncryptionError.cipherTextLenghtNotSatisfied
         }
-        
-        // Decrypt the cipher text with a given SecKeyAlgorithm and a private key, return cipher text if no error occured
+
+        // Decrypt the cipher text with a given SecKeyAlgorithm and a private key, return cipher text if no error occured.
         var decryptionError: Unmanaged<CFError>?
         guard let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError) else {
             throw EncryptionError.decryptingFailed(description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
         }
-        
+
         return plainText as Data
     }
 }

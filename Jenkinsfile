@@ -107,6 +107,7 @@ node(slave) {
       def cmd = {
         shRVM "bundle install"
         shRVM "bundle exec pod repo update"
+        shRVM "bundle exec pod install"
       }
       def cmdFinally = {}
       executeCommand(cmd, cmdFinally, githubStatusJose, context)
@@ -115,7 +116,7 @@ node(slave) {
     stage('Tests') {
       def context = 'jenkins-tests'
       def cmd = {
-        shRVM "bundle exec fastlane scan"
+        shRVM "bundle exec fastlane scan -s SwiftJOSE"
       }
       def cmdFinally = {
         publishTestReport()
