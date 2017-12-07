@@ -128,7 +128,7 @@ node(slave) {
            sh "echo -e 'sonar.github.pullRequest=${prNo}' >> sonar-project.properties"
            sh "echo -e 'sonar.analysis.mode=preview' >> sonar-project.properties"
            // do the analysis. this will also execute tests
-           sh "./run-sonar-swift.sh"
+           sh "./scripts/run-sonar-swift.sh"
            // reset the properties file
            sh "git checkout -- sonar-project.properties"
          }
@@ -138,7 +138,7 @@ node(slave) {
         withSonarQubeEnv('SonarQube mohemian Jenkins') {
            sonarToken = env.SONAR_AUTH_TOKEN
            sh "echo -e 'sonar.login=${sonarToken}' >> sonar-project.properties"
-           sh "./run-sonar-swift.sh"
+           sh "./scripts/run-sonar-swift.sh"
            sh "git checkout -- sonar-project.properties"
          }
       }
