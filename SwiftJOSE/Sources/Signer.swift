@@ -58,14 +58,20 @@ public struct Signer {
             throw SigningError.algorithmMismatch
         }
         
-        let encoded = [header, payload].map { (component: DataConvertible) in
-            return component.data().base64URLEncodedString()
-        }
-        
-        guard let signingInput = encoded.joined(separator: ".").data(using: .ascii) else {
+        guard let signingInput = [header, payload].asJOSESigningInput() else {
             throw SigningError.cannotComputeSigningInput
         }
         
         return try signer.sign(signingInput)
+    }
+}
+
+extension Array where Element == DataConvertible {
+    func asJOSESigningInput() -> Data? {
+        let encoded = self.map { component in
+            return component.data().base64URLEncodedString()
+        }
+        
+        return encoded.joined(separator: ".").data(using: .ascii)
     }
 }

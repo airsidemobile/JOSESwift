@@ -40,12 +40,7 @@ public struct Verifier {
             throw SigningError.algorithmMismatch
         }
         
-        // Todo: DRY
-        let encoded = [header, payload].map { (component: DataConvertible) in
-            return component.data().base64URLEncodedString()
-        }
-        
-        guard let signingInput = encoded.joined(separator: ".").data(using: .ascii) else {
+        guard let signingInput = [header, payload].asJOSESigningInput() else {
             throw SigningError.cannotComputeSigningInput
         }
         
