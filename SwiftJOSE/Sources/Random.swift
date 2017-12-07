@@ -12,6 +12,14 @@ public enum RandomGenerationError: Error {
 }
 
 public struct Random {
+    
+    /**
+     Generates random data with a given count.
+     - Parameters:
+        - count: The count of the random generated data.
+     
+     - Returns: The random generated data.
+     */
     public static func generate(count: Int) throws -> Data {
         var generatedRandom = Data(count: count)
         
