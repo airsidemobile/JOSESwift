@@ -25,10 +25,10 @@ class RSADecrypterTests: CryptoTestCase {
             XCTFail()
             return
         }
-        
+
         let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey!)
         let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!)
-        
+
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
 

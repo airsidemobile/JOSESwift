@@ -45,7 +45,7 @@ class RSAEncrypterTests: CryptoTestCase {
             XCTFail()
             return
         }
-        
+
         let encrypter = RSAEncrypter(algorithm: .RSAPKCS, publicKey: publicKey!)
         XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
             XCTAssertEqual(error as? EncryptionError, EncryptionError.plainTextLengthNotSatisfied)
