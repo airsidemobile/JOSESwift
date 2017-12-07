@@ -24,15 +24,13 @@ public struct AESDecrypter: SymmetricDecrypter {
         let hmacKey = keys.hmacKey
         let decryptionKey = keys.encryptionKey
 
-        let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: context.additionalAuthenticatedData)
-
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = context.additionalAuthenticatedData
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
-        concatData.append(additionalAuthenticatedDataLength)
+        concatData.append(context.additionalAuthenticatedData.getByteLengthAsOctetHexData())
         
-        // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
+        // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag, return true if it matches (authenticated), false (not authenticated) otherwise.
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
         
         guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
@@ -92,35 +90,5 @@ public struct AESDecrypter: SymmetricDecrypter {
         }
 
         return decryptData
-    }
-    
-    // TODO: Refactor this see: JOSE-82
-    func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
-        let dataLength = UInt64(additionalAuthenticatedData.count * 8)
-        var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-
-        var additionalAuthenticatedDataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
-
-        var dataIndex = additionalAuthenticatedDataLengthBytes.count-1
-        for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
-            var hexChunk = ""
-            if dataLengthInHex.count == 1 {
-                hexChunk = dataLengthInHex
-            } else {
-                let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
-                let startIndex = dataLengthInHex.index(endIndex, offsetBy: -2)
-                let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
-                hexChunk = String(dataLengthInHex[range])
-                dataLengthInHex.removeLast(2)
-            }
-
-            if let hexBytes = UInt8(hexChunk, radix: 16) {
-                additionalAuthenticatedDataLengthBytes[dataIndex] = hexBytes
-            }
-
-            dataIndex -= 1
-        }
-
-        return Data(bytes: additionalAuthenticatedDataLengthBytes)
     }
 }
