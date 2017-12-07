@@ -31,9 +31,11 @@ public struct AESDecrypter: SymmetricDecrypter {
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
         concatData.append(additionalAuthenticatedDataLength)
-
+        
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
-        guard authenticateHmac(context.authenticationTag, input: concatData, hmacKey: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm) else {
+        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
+        
+        guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
             throw EncryptionError.hmacNotAuthenticated
         }
 
@@ -91,33 +93,7 @@ public struct AESDecrypter: SymmetricDecrypter {
 
         return decryptData
     }
-
-    /**
-     Checks if the reference authentication tag matches with, from the input calculated, authentication tag.
-     - Parameters:
-        - authenticationTag: The reference authentication tag received with the message.
-        - input: The concatenated data in the format A || IV || E || AL.
-        - algorithm: The algorithm used to calculate the HMAC.
-        - initializationVector: The initial block.
-     
-     - Returns: True if the message is authenticated (the authentication tags match), false if the message is not authenticated (the authentication tags do not match)
-     */
-    // TODO: Refactor this see: JOSE-81
-    func authenticateHmac(_ authenticationTag: Data, input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Bool {
-        let keyLength = size_t(kCCKeySizeAES256)
-        var hmacOutData = Data(count: 64)
-
-        hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
-            hmacKey.withUnsafeBytes { hmacKeyBytes in
-                input.withUnsafeBytes { inputBytes in
-                    CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
-                }
-            }
-        }
-
-        return authenticationTag == hmacOutData.subdata(in: 0..<32)
-    }
-
+    
     // TODO: Refactor this see: JOSE-82
     func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
         let dataLength = UInt64(additionalAuthenticatedData.count * 8)

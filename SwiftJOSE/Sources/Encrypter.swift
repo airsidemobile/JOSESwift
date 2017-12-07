@@ -60,10 +60,10 @@ public enum AsymmetricEncryptionAlgorithm: String {
 public enum SymmetricEncryptionAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
 
-    var ccAlgorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: CCAlgorithm) {
+    var ccAlgorithms: (aesAlgorithm: CCAlgorithm, hmacAlgorithm: HMACAlgorithm) {
         switch self {
         case .AES256CBCHS512:
-            return (CCAlgorithm(kCCAlgorithmAES128), CCAlgorithm(kCCHmacAlgSHA512))
+            return (CCAlgorithm(kCCAlgorithmAES128), .SHA512)
         }
     }
 
@@ -82,6 +82,13 @@ public enum SymmetricEncryptionAlgorithm: String {
             }
 
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
+        }
+    }
+    
+    func authenticationTag(for hmac: Data) -> Data {
+        switch self {
+        case .AES256CBCHS512:
+            return hmac.subdata(in: 0..<32)
         }
     }
 }
