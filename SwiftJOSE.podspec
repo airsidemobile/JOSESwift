@@ -2,7 +2,7 @@
 
 Pod::Spec.new do |s|
   s.name              = "SwiftJOSE"
-  s.version           = "1.0.0"
+  s.version           = "0.0.1"
   s.license           = "Proprietary"
   s.summary           = "JOSE framework for Swift"
   s.authors           = { "Daniel Egger" => "daniel.egger@mohemian.com", "Carol Capek" => "carol.capek@mohemian.com", "Christoph Gigi Fuchs" => "christoph@mohemian.com" }
