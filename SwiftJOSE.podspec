@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.social_media_url  = "https://twitter.com/mohemian_mobile"
 
   s.platform          = :ios, "10.0"
-  s.source            = { :git => "git@github.com:mohemian/jose-ios.git", :tag => "#{s.version}" }
+  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
 
   s.dependency 'IDZSwiftCommonCrypto', '~> 0.10'
