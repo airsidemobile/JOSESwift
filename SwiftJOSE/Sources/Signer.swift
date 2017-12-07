@@ -11,6 +11,8 @@ public enum SigningError: Error {
     case algorithmNotSupported
     case signingFailed(description: String)
     case verificationFailed(descritpion: String)
+    case algorithmMismatch
+    case cannotComputeSigningInput
 }
 
 public enum SigningAlgorithm: String {
@@ -24,9 +26,11 @@ public enum SigningAlgorithm: String {
     }
 }
 
-public protocol Signer {
+protocol SignerProtocol {
+    var algorithm: SigningAlgorithm { get }
+    
     /// Initializes a `Signer` with a specified key.
-    init(key: SecKey)
+    init(privateKey: SecKey, algorithm: SigningAlgorithm)
 
     /**
      Signs input data with a given algorithm and the corresponding key.
@@ -40,5 +44,29 @@ public protocol Signer {
      
      - Returns: The signature.
      */
-    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data
+    func sign(_ signingInput: Data) throws -> Data
+}
+
+public struct Signer {
+    let signer: SignerProtocol
+    
+    public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
+        self.signer = RSASigner(privateKey: privateKey, algorithm: signingAlgorithm) // Todo: factory; don't hard code RSA
+    }
+    
+    func sign(header: JWSHeader, payload: Payload) throws -> Data {
+        guard let alg = header.algorithm, alg == signer.algorithm else {
+            throw SigningError.algorithmMismatch
+        }
+        
+        let encoded = [header, payload].map { (component: DataConvertible) in
+            return component.data().base64URLEncodedString()
+        }
+        
+        guard let signingInput = encoded.joined(separator: ".").data(using: .ascii) else {
+            throw SigningError.cannotComputeSigningInput
+        }
+        
+        return try signer.sign(signingInput)
+    }
 }

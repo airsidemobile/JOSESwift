@@ -25,7 +25,7 @@ class JWSTests: CryptoTestCase {
 
         let header = JWSHeader(algorithm: .RS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = RSASigner(key: privateKey!)
+        let signer = RSASigner(private: privateKey!)
         let jws = JWS(header: header, payload: payload, signer: signer)!
         let compactSerializedJWS = jws.compactSerialized
 

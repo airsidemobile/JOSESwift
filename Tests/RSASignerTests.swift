@@ -25,8 +25,8 @@ class RSASignerTests: CryptoTestCase {
             return
         }
 
-        let signer = RSASigner(key: privateKey!)
-        let signature = try! signer.sign(message.data(using: .utf8)!, using: .RS512)
+        let signer = RSASigner(privateKey: privateKey!, algorithm: .RS512)
+        let signature = try! signer.sign(message.data(using: .utf8)!)
 
         XCTAssertEqual(signature.base64URLEncodedString(), signatureBase64URL)
     }

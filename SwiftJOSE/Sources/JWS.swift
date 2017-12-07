@@ -12,7 +12,7 @@ import Foundation
 public struct JWS {
     let header: JWSHeader
     let payload: Payload
-    let signature: Signature
+    let signature: Data
 
     /// The compact serialization of this JWS object.
     public var compactSerialized: String {
@@ -30,7 +30,7 @@ public struct JWS {
         self.header = header
         self.payload = payload
 
-        if let signature = Signature(from: signer, using: header, and: payload) {
+        if let signature = try? signer.sign(header: header, payload: payload) {
             self.signature = signature
         } else {
             return nil
@@ -46,7 +46,7 @@ public struct JWS {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
 
-    fileprivate init(header: JWSHeader, payload: Payload, signature: Signature) {
+    fileprivate init(header: JWSHeader, payload: Payload, signature: Data) {
         self.header = header
         self.payload = payload
         self.signature = signature
@@ -59,7 +59,7 @@ public struct JWS {
      - returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
     */
     public func validates(against verifier: Verifier) -> Bool {
-        return signature.validate(with: verifier, against: header, and: payload)
+        return false // Todo: signature.validate(with: verifier, against: header, and: payload)
     }
 }
 
@@ -79,7 +79,7 @@ extension JWS: CompactDeserializable {
     public init(from deserializer: CompactDeserializer) throws {
         let header = try deserializer.deserialize(JWSHeader.self, at: ComponentCompactSerializedIndex.jwsHeaderIndex)
         let payload = try deserializer.deserialize(Payload.self, at: ComponentCompactSerializedIndex.jwsPayloadIndex)
-        let signature = try deserializer.deserialize(Signature.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
+        let signature = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jwsSignatureIndex)
         self.init(header: header, payload: payload, signature: signature)
     }
 }
