@@ -12,4 +12,6 @@ Pod::Spec.new do |s|
   s.platform          = :ios, "9.0"
   s.source            = { :git => "git@github.com:mohemian/jose-ios.git", :tag => "#{s.version}" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
+
+  s.dependency 'IDZSwiftCommonCrypto', '~> 0.10'
 end
