@@ -113,6 +113,37 @@ node(slave) {
       executeCommand(cmd, cmdFinally, githubStatusJose, context)
     }
 
+     stage('SonarQube') {
+       if (env.BRANCH_NAME ==~ /^PR-\d+$/) {
+         // to be configured in the global configuration of the master jenkins instance
+         withSonarQubeEnv('SonarQube mohemian Jenkins') {
+           // extract the secrets for passing them to the tool
+           sonarToken = env.SONAR_AUTH_TOKEN
+           prNo = env.CHANGE_ID
+           githubToken = env.GITHUB_API_TOKEN
+           // now write them to the properties file
+           sh "echo -e 'sonar.login=${sonarToken}' >> sonar-project.properties"
+           // the following properties are needed for the github plugin to work
+           sh "echo -e 'sonar.github.oauth=${githubToken}' >> sonar-project.properties"
+           sh "echo -e 'sonar.github.pullRequest=${prNo}' >> sonar-project.properties"
+           sh "echo -e 'sonar.analysis.mode=preview' >> sonar-project.properties"
+           // do the analysis. this will also execute tests
+           sh "./run-sonar-swift.sh"
+           // reset the properties file
+           sh "git checkout -- sonar-project.properties"
+         }
+      }
+      // after the PR merge the analysis is performed again and sent to the sonar server
+      if(env.BRANCH_NAME == 'master') {
+        withSonarQubeEnv('SonarQube mohemian Jenkins') {
+           sonarToken = env.SONAR_AUTH_TOKEN
+           sh "echo -e 'sonar.login=${sonarToken}' >> sonar-project.properties"
+           sh "./run-sonar-swift.sh"
+           sh "git checkout -- sonar-project.properties"
+         }
+      }
+    }
+
     stage('Tests') {
       def context = 'jenkins-tests'
       def cmd = {
