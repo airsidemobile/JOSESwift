@@ -5,9 +5,6 @@
       location = "container:SwiftJOSE.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ExampleApp/ExampleApp.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:SwiftJOSE.xcodeproj">
    </FileRef>
    <FileRef
