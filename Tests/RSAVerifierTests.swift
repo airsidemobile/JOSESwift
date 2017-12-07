@@ -25,9 +25,18 @@ class RSAVerifierTests: CryptoTestCase {
         }
 
         let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
-        let verifier = RSAVerifier(key: publicKey!)
+        let verifier = RSAVerifier(algorithm: .RS512, publicKey: publicKey!)
+        
+        let encoded = [jws.header, jws.payload].map { (component: DataConvertible) in
+            return component.data().base64URLEncodedString()
+        }
+        
+        guard let signingInput = encoded.joined(separator: ".").data(using: .ascii) else {
+            XCTFail()
+            return
+        }
 
-        XCTAssertTrue(jws.validates(against: verifier))
+        XCTAssertTrue(try! verifier.verify(signingInput, against: jws.signature))
     }
 
 }

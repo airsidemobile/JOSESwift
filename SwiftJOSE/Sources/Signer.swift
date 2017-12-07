@@ -30,13 +30,12 @@ protocol SignerProtocol {
     var algorithm: SigningAlgorithm { get }
     
     /// Initializes a `Signer` with a specified key.
-    init(privateKey: SecKey, algorithm: SigningAlgorithm)
+    init(algorithm: SigningAlgorithm, privateKey: SecKey)
 
     /**
-     Signs input data with a given algorithm and the corresponding key.
+     Signs input data.
      - Parameters:
         - signingInput: The input to sign.
-        - algorithm: The algorithm to sign the input.
      
      - Throws:
         - `SigningError.algorithmNotSupported`: If the provided algorithm is not supported for signing.
@@ -51,7 +50,7 @@ public struct Signer {
     let signer: SignerProtocol
     
     public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
-        self.signer = RSASigner(privateKey: privateKey, algorithm: signingAlgorithm) // Todo: factory; don't hard code RSA
+        self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey) // Todo: factory; don't hard code RSA
     }
     
     func sign(header: JWSHeader, payload: Payload) throws -> Data {

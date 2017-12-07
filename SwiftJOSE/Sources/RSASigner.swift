@@ -9,8 +9,8 @@ import Foundation
 
 /// A `Signer` to sign an input with a `RSA` algorithm.
 public struct RSASigner: SignerProtocol {
-    let privateKey: SecKey
     let algorithm: SigningAlgorithm
+    let privateKey: SecKey
 
     public func sign(_ signingInput: Data) throws -> Data {
         // Check if SigningAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to sign with a given private key.

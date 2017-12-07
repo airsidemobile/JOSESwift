@@ -59,7 +59,11 @@ public struct JWS {
      - returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
     */
     public func validates(against verifier: Verifier) -> Bool {
-        return false // Todo: signature.validate(with: verifier, against: header, and: payload)
+        if let result = try? verifier.verify(header: header, and: payload, against: signature), result == true {
+            return true
+        }
+        
+        return false
     }
 }
 
