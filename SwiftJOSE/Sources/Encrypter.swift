@@ -96,11 +96,11 @@ public enum SymmetricEncryptionAlgorithm: String {
 }
 
 internal protocol AsymmetricEncrypter {
-    /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
-    init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
-    
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricEncryptionAlgorithm { get }
+    
+    /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
+    init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
 
     /**
      Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
@@ -119,8 +119,12 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    init(algorithm: SymmetricEncryptionAlgorithm)
+    /// The algorithm used to encrypt plaintext.
     var algorithm: SymmetricEncryptionAlgorithm { get }
+    
+    /// Initializes a `SymmetricEncrypter` with a specified algorithm.
+    init(algorithm: SymmetricEncryptionAlgorithm)
+    
     func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
     func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
 
