@@ -51,6 +51,7 @@ struct CryptorFactory {
      
      - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
      */
+    // swiftlint:disable:next line_length
     static func decrypter(for algorithm: AsymmetricEncryptionAlgorithm, with privateKey: SecKey) -> AsymmetricDecrypter {
         switch algorithm {
         case .RSAPKCS:
