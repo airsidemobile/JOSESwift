@@ -30,7 +30,7 @@ struct CryptorFactory {
     }
     
     /**
-     Returns an symmetric encrypter suitable for a given algorithm.
+     Returns a symmetric encrypter suitable for a given algorithm.
      - Parameters:
      - algorithm: The symmetric algorithm to use.
      
@@ -59,7 +59,7 @@ struct CryptorFactory {
     }
     
     /**
-     Returns an symmetric decrypter suitable for a given algorithm.
+     Returns a symmetric decrypter suitable for a given algorithm.
      - Parameters:
      - algorithm: The symmetric algorithm to use.
      
