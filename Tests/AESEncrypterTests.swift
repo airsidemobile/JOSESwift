@@ -34,8 +34,8 @@ class AESEncrypterTests: CryptoTestCase {
         var cipherTestText = "4a ff aa ad b7 8c 31 c5 da 4b 1b 59 0d 10 ff bd 3d d8 d5 d3 02 42 35 26 91 2d a0 37 ec bc c7 bd 82 2c 30 1d d6 7c 37 3b cc b5 84 ad 3e 92 79 c2 e6 d1 2a 13 74 b7 7f 07 75 53 df 82 94 10 44 6b 36 eb d9 70 66 29 6a e6 42 7e a7 5c 2e 08 46 a1 1a 09 cc f5 37 0d c8 0b fe cb ad 28 c7 3f 09 b3 a3 b7 5e 66 2a 25 94 41 0a e4 96 b2 e2 e6 60 9e 31 e6 e0 2c c8 37 f0 53 d2 1f 37 ff 4f 51 95 0b be 26 38 d0 9d d7 a4 93 09 30 80 6d 07 03 b1 f6"
         var authenticationTestTag = "4d d3 b4 c0 88 a7 f4 5c 21 68 39 64 5b 20 12 bf 2e 62 69 a8 c5 6a 81 6d bc 1b 26 77 61 95 5b c5"
 
-        let encrypter = AESEncrypter()
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext!, with: keyData!, using: .AES256CBCHS512, additionalAuthenticatedData: additionalAuthenticatedData!)
+        let encrypter = AESEncrypter(algorithm: .AES256CBCHS512)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext!, with: keyData!, additionalAuthenticatedData: additionalAuthenticatedData!)
 
         print("Ciphertext: \(symmetricEncryptionContext.ciphertext.toHexadecimal())")
         print("authenticationTag: \(symmetricEncryptionContext.authenticationTag.toHexadecimal())")

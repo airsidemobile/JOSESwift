@@ -11,9 +11,10 @@ import CommonCrypto
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
 public struct AESDecrypter: SymmetricDecrypter {
+    let algorithm: SymmetricEncryptionAlgorithm
 
     // TODO: Refactor this method to be more generic, see: JOSE-79
-    func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data {
+    func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data {
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied

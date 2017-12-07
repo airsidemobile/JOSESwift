@@ -9,9 +9,10 @@ import Foundation
 
 /// An `AsymmetricEncrypter` to encrypt plain text with a `RSA` algorithm.
 public struct RSAEncrypter: AsymmetricEncrypter {
+    let algorithm: AsymmetricEncryptionAlgorithm
     let publicKey: SecKey
 
-    func encrypt(_ plaintext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data {
+    func encrypt(_ plaintext: Data) throws -> Data {
         // Check if AsymmetricEncryptionAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to encrypt with a given public key.
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
             throw EncryptionError.encryptionAlgorithmNotSupported
