@@ -1,0 +1,5 @@
+use_frameworks!
+
+target 'ExampleApp' do
+    pod 'SwiftJOSE', git: 'git@github.com:mohemian/jose-ios.git', tag: '0.0.1'
+end
