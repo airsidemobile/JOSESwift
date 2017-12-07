@@ -47,7 +47,7 @@ struct CryptorFactory {
      Returns an asymmetric decrypter suitable for a given algorithm, initialized with a given private key.
      - Parameters:
         - algorithm: The asymmetric algorithm to use.
-        - publicKey: The private key to initialize the asymmetric decrypter with.
+        - privateKey: The private key to initialize the asymmetric decrypter with.
      
      - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
      */
@@ -65,10 +65,10 @@ struct CryptorFactory {
      
      - Returns: The symmetric decrypter suitable for the given algorithm.
      */
-    static func decrypter(for algotithm: SymmetricEncryptionAlgorithm) -> SymmetricDecrypter {
-        switch algotithm {
+    static func decrypter(for algorithm: SymmetricEncryptionAlgorithm) -> SymmetricDecrypter {
+        switch algorithm {
         case .AES256CBCHS512:
-            return AESDecrypter(algorithm: algotithm)
+            return AESDecrypter(algorithm: algorithm)
         }
     }
     
