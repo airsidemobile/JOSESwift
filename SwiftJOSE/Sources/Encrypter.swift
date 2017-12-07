@@ -15,7 +15,6 @@ public enum EncryptionError: Error, Equatable {
     case cipherTextLenghtNotSatisfied
     case keyLengthNotSatisfied
     case hmacNotAuthenticated
-    case keyGenerationFailed(with: OSStatus)
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
 
@@ -129,8 +128,6 @@ internal protocol AsymmetricEncrypter {
 }
 
 internal protocol SymmetricEncrypter {
-    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) throws -> Data
-    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
 
     /**
      Encrypts a plain text using a given `SymmetricEncryptionAlgorithm`, the corresponding symmetric key and additional authenticated data.
@@ -181,8 +178,8 @@ public struct Encrypter {
         guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
-
-        let cek = try symmetric.randomCEK(for: enc)
+        
+        let cek = try Random.generate(count: enc.keyLength())
         let encryptedKey = try asymmetric.encrypt(cek, using: alg)
         let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, using: enc, additionalAuthenticatedData: header.data())
 

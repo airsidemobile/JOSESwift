@@ -11,33 +11,12 @@ import CommonCrypto
 
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
 public struct AESEncrypter: SymmetricEncrypter {
-    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) throws -> Data {
-        var generatedKey = Data(count: algorithm.keyLength())
-
-        let keyGenerationStatus = generatedKey.withUnsafeMutableBytes { mutableKeyBytes in
-            SecRandomCopyBytes(kSecRandomDefault, generatedKey.count, mutableKeyBytes)
-        }
-
-        guard keyGenerationStatus == errSecSuccess else {
-            throw EncryptionError.keyGenerationFailed(with: keyGenerationStatus)
-        }
-        
-        return generatedKey
-    }
-
-    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
-        // Todo: Generate IV using a trusted cryptography library.
-        // See: https://mohemian.atlassian.net/browse/JOSE-62.
-        return "iv".data(using: .utf8)!
-    }
-
+    
     // TODO: Refactor this method to be more generic, see: JOSE-79
     func encrypt(_ plaintext: Data, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
 
         // Generate random intitializationVector.
-        // let iv = randomIV(for: algorithm)
-
-        let iv = "1a f3 8c 2d c2 b9 6f fd d8 66 94 09 23 41 bc 04".hexadecimalToData()!
+        let iv = try Random.generate(count: algorithm.initializationVectorLength())
 
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
