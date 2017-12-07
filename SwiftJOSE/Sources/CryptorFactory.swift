@@ -38,7 +38,7 @@ struct CryptorFactory {
      */
     static func encrypter(for algorithm: SymmetricEncryptionAlgorithm) -> SymmetricEncrypter {
         switch algorithm {
-        case .AESGCM256:
+        case .AES256CBCHS512:
             return AESEncrypter(algorithm: algorithm)
         }
     }
@@ -67,7 +67,7 @@ struct CryptorFactory {
      */
     static func decrypter(for algotithm: SymmetricEncryptionAlgorithm) -> SymmetricDecrypter {
         switch algotithm {
-        case .AESGCM256:
+        case .AES256CBCHS512:
             return AESDecrypter(algorithm: algotithm)
         }
     }
