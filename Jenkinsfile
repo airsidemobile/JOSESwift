@@ -128,6 +128,7 @@ node(slave) {
            sh "echo -e 'sonar.github.pullRequest=${prNo}' >> sonar-project.properties"
            sh "echo -e 'sonar.analysis.mode=preview' >> sonar-project.properties"
            // do the analysis. this will also execute tests
+           // NOTE! You need to prepare your Jenkins execution node first https://github.com/Backelite/sonar-swift/#prerequisites
            sh "./scripts/run-sonar-swift.sh"
            // reset the properties file
            sh "git checkout -- sonar-project.properties"
