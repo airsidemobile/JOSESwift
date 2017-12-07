@@ -12,33 +12,7 @@
 		6546EC951F45D09400A7D753 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6546EC931F45D09400A7D753 /* Main.storyboard */; };
 		6546EC971F45D09400A7D753 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6546EC961F45D09400A7D753 /* Assets.xcassets */; };
 		6546EC9A1F45D09400A7D753 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6546EC981F45D09400A7D753 /* LaunchScreen.storyboard */; };
-		6546ECB01F45D0F100A7D753 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6546ECAD1F45D0E600A7D753 /* SwiftJOSE.framework */; };
-		6546ECB11F45D0F100A7D753 /* SwiftJOSE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6546ECAD1F45D0E600A7D753 /* SwiftJOSE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		6546ECAC1F45D0E600A7D753 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 65FBFDE21F45CC7C005C7D68;
-			remoteInfo = SwiftJOSE;
-		};
-		6546ECAE1F45D0E600A7D753 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 65A9D3D71F45CDD7004E0B61;
-			remoteInfo = Tests;
-		};
-		6546ECB21F45D0F100A7D753 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 65FBFDE11F45CC7C005C7D68;
-			remoteInfo = SwiftJOSE;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		6546ECB41F45D0F100A7D753 /* Embed Frameworks */ = {
@@ -47,7 +21,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6546ECB11F45D0F100A7D753 /* SwiftJOSE.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -62,7 +35,6 @@
 		6546EC961F45D09400A7D753 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6546EC991F45D09400A7D753 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6546EC9B1F45D09400A7D753 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftJOSE.xcodeproj; path = ../SwiftJOSE.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +42,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6546ECB01F45D0F100A7D753 /* SwiftJOSE.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +51,6 @@
 		6546EC831F45D09400A7D753 = {
 			isa = PBXGroup;
 			children = (
-				6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */,
 				6546EC8E1F45D09400A7D753 /* ExampleApp */,
 				6546EC8D1F45D09400A7D753 /* Products */,
 			);
@@ -107,15 +77,6 @@
 			path = ExampleApp;
 			sourceTree = "<group>";
 		};
-		6546ECA81F45D0E600A7D753 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6546ECAD1F45D0E600A7D753 /* SwiftJOSE.framework */,
-				6546ECAF1F45D0E600A7D753 /* Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -131,7 +92,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6546ECB31F45D0F100A7D753 /* PBXTargetDependency */,
 			);
 			name = ExampleApp;
 			productName = ExampleApp;
@@ -167,35 +127,12 @@
 			mainGroup = 6546EC831F45D09400A7D753;
 			productRefGroup = 6546EC8D1F45D09400A7D753 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 6546ECA81F45D0E600A7D753 /* Products */;
-					ProjectRef = 6546ECA71F45D0E600A7D753 /* SwiftJOSE.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				6546EC8B1F45D09400A7D753 /* ExampleApp */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		6546ECAD1F45D0E600A7D753 /* SwiftJOSE.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SwiftJOSE.framework;
-			remoteRef = 6546ECAC1F45D0E600A7D753 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6546ECAF1F45D0E600A7D753 /* Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = Tests.xctest;
-			remoteRef = 6546ECAE1F45D0E600A7D753 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6546EC8A1F45D09400A7D753 /* Resources */ = {
@@ -221,14 +158,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6546ECB31F45D0F100A7D753 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SwiftJOSE;
-			targetProxy = 6546ECB21F45D0F100A7D753 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6546EC931F45D09400A7D753 /* Main.storyboard */ = {
