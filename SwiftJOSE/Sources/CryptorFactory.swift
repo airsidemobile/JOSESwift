@@ -32,7 +32,7 @@ struct CryptorFactory {
     /**
      Returns a symmetric encrypter suitable for a given algorithm.
      - Parameters:
-     - algorithm: The symmetric algorithm to use.
+        - algorithm: The symmetric algorithm to use.
      
      - Returns: The symmetric encrypter suitable for the given algorithm.
      */
@@ -46,8 +46,8 @@ struct CryptorFactory {
     /**
      Returns an asymmetric decrypter suitable for a given algorithm, initialized with a given private key.
      - Parameters:
-     - algorithm: The asymmetric algorithm to use.
-     - publicKey: The private key to initialize the asymmetric decrypter with.
+        - algorithm: The asymmetric algorithm to use.
+        - publicKey: The private key to initialize the asymmetric decrypter with.
      
      - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
      */
@@ -61,7 +61,7 @@ struct CryptorFactory {
     /**
      Returns a symmetric decrypter suitable for a given algorithm.
      - Parameters:
-     - algorithm: The symmetric algorithm to use.
+        - algorithm: The symmetric algorithm to use.
      
      - Returns: The symmetric decrypter suitable for the given algorithm.
      */
