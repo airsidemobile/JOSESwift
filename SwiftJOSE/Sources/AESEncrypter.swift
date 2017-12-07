@@ -45,17 +45,16 @@ public struct AESEncrypter: SymmetricEncrypter {
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
         // return the ciphertext if no error occured.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
-        let additionalAuthenticatedDataLength = getAdditionalAuthenticatedDataLength(from: additionalAuthenticatedData)
 
         // Put the input data for the HMAC together. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
-        concatData.append(additionalAuthenticatedDataLength)
+        concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
-        let hmacOutput = hmac(input: concatData, hmacKey: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
-        let authenticationTag = hmacOutput.subdata(in: 0..<32)
+        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
+        let authenticationTag = algorithm.authenticationTag(for: hmacOutput)
 
         return SymmetricEncryptionContext(
             ciphertext: cipherText,
@@ -111,61 +110,6 @@ public struct AESEncrypter: SymmetricEncrypter {
         }
 
         return cryptData
-    }
-
-    /**
-     Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
-     - Parameters:
-        - input: The input to calculate a HMAC of.
-        - hmacKey: The key for the HMAC algorithm.
-        - algorithm: The algorithm used to calculate the HMAC.
-     
-     - Returns: The calculated HMAC.
-     */
-    // TODO: Refactor this see: JOSE-81
-    func hmac(input: Data, hmacKey: Data, using algorithm: CCAlgorithm) -> Data {
-        let keyLength = size_t(kCCKeySizeAES256)
-        var hmacOutData = Data(count: 64)
-
-        hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
-            hmacKey.withUnsafeBytes { hmacKeyBytes in
-                input.withUnsafeBytes { inputBytes in
-                    CCHmac(algorithm, hmacKeyBytes, keyLength, inputBytes, input.count, hmacOutBytes)
-                }
-            }
-        }
-
-        return hmacOutData
-    }
-
-    // TODO: Refactor this see: JOSE-82
-    func getAdditionalAuthenticatedDataLength(from additionalAuthenticatedData: Data) -> Data {
-        let dataLength = UInt64(additionalAuthenticatedData.count * 8)
-        var dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-
-        var additionalAuthenticatedDataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
-
-        var dataIndex = additionalAuthenticatedDataLengthBytes.count-1
-        for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
-            var hexChunk = ""
-            if dataLengthInHex.count == 1 {
-                hexChunk = dataLengthInHex
-            } else {
-                let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
-                let startIndex = dataLengthInHex.index(endIndex, offsetBy: -2)
-                let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
-                hexChunk = String(dataLengthInHex[range])
-                dataLengthInHex.removeLast(2)
-            }
-
-            if let hexBytes = UInt8(hexChunk, radix: 16) {
-                additionalAuthenticatedDataLengthBytes[dataIndex] = hexBytes
-            }
-
-            dataIndex -= 1
-        }
-
-        return Data(bytes: additionalAuthenticatedDataLengthBytes)
     }
 }
 
