@@ -9,8 +9,10 @@ import Foundation
 
 internal protocol AsymmetricDecrypter {
     /// Initializes an `AsymmetricDecrypter` with a specified private key.
-    init(privateKey: SecKey)
-
+    init(algorithm: AsymmetricEncryptionAlgorithm, privateKey: SecKey)
+    
+    var algorithm: AsymmetricEncryptionAlgorithm { get }
+    
     /**
      Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
      - Parameters:
@@ -24,24 +26,26 @@ internal protocol AsymmetricDecrypter {
      
      - Returns: The plain text (decrypted cipher text).
      */
-    func decrypt(_ ciphertext: Data, using algorithm: AsymmetricEncryptionAlgorithm) throws -> Data
+    func decrypt(_ ciphertext: Data) throws -> Data
 }
 
 internal protocol SymmetricDecrypter {
+    init(algorithm: SymmetricEncryptionAlgorithm)
+    
+    var algorithm: SymmetricEncryptionAlgorithm { get }
 
     /**
-     Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given `SymmetricEncryptionAlgorithm` and the corresponding symmetric key.
+     Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
      - Parameters:
         - context: The `SymmetricDecryptionContext` containing the ciphertext, the initialization vector, additional authenticated data and the authentication tag.
         - symmetricKey: The key which contains the HMAC and encryption key.
-        - algorithm: The algorithm used to decrypt the cipher text.
      
      - Throws:
         - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
      
      - Returns: The plain text (decrypted cipher text).
      */
-    func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data, using algorithm: SymmetricEncryptionAlgorithm) throws -> Data
+    func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data
 }
 
 public struct DecryptionContext {
@@ -64,20 +68,20 @@ public struct Decrypter {
     let symmetric: SymmetricDecrypter
 
     public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
-        // Todo: Find out which available encrypter supports the specified algorithm and throw error if necessary.
-        // See https://mohemian.atlassian.net/browse/JOSE-58.
-        self.asymmetric = RSADecrypter(privateKey: kdk)
-        self.symmetric = AESDecrypter()
+        self.asymmetric = CryptorFactory.decrypter(for: keyDecryptionAlgorithm, with: kdk)
+        self.symmetric = CryptorFactory.decrypter(for: contentDecryptionAlgorithm)
     }
 
     func decrypt(_ context: DecryptionContext) throws -> Data {
-        // Todo: This check might be redundant since it's already done in the `JWE.decrypt` step.
-        // See https://mohemian.atlassian.net/browse/JOSE-58.
-        guard let alg = context.header.algorithm, let enc = context.header.encryptionAlgorithm else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+        guard let alg = context.header.algorithm, alg == asymmetric.algorithm else {
+            throw EncryptionError.keyEncryptionAlgorithmMismatch
+        }
+        
+        guard let enc = context.header.encryptionAlgorithm, enc == symmetric.algorithm else {
+            throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
 
-        let cek = try asymmetric.decrypt(context.encryptedKey, using: alg)
+        let cek = try asymmetric.decrypt(context.encryptedKey)
 
         let symmetricContext = SymmetricDecryptionContext(
             ciphertext: context.ciphertext,
@@ -86,6 +90,6 @@ public struct Decrypter {
             authenticationTag: context.authenticationTag
         )
 
-        return try symmetric.decrypt(symmetricContext, with: cek, using: enc)
+        return try symmetric.decrypt(symmetricContext, with: cek)
     }
 }

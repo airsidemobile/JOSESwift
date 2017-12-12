@@ -20,6 +20,7 @@
 		6567F4DE1F98C8B50037ECB3 /* RSADecrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6567F4DD1F98C8B50037ECB3 /* RSADecrypter.swift */; };
 		6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6571F6221F7BF786004D53C5 /* JWSHeader.swift */; };
 		6572C2F21F96428800D4186D /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572C2F11F96428800D4186D /* Decrypter.swift */; };
+		659553561FD6F07800A8756F /* CryptorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659553551FD6F07800A8756F /* CryptorFactory.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
@@ -38,7 +39,6 @@
 		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 		C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */; };
 		C803EFF31FA8A98F00B71335 /* DataExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */; };
-		C816CD6E1FD94F9000392A6B /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816CD6D1FD94F9000392A6B /* Random.swift */; };
 		C81DD9241FD6A75E00026024 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		C81DD9261FD6F07F00026024 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		C81DD9281FD7096100026024 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81DD9271FD7096100026024 /* HMAC.swift */; };
@@ -81,6 +81,7 @@
 		6567F4DD1F98C8B50037ECB3 /* RSADecrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSADecrypter.swift; sourceTree = "<group>"; };
 		6571F6221F7BF786004D53C5 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
 		6572C2F11F96428800D4186D /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		659553551FD6F07800A8756F /* CryptorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptorFactory.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,7 +104,6 @@
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
-		C816CD6D1FD94F9000392A6B /* Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
 		C81DD9271FD7096100026024 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
 		C81DD9291FD7096B00026024 /* HMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMACTests.swift; sourceTree = "<group>"; };
 		C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypterTests.swift; sourceTree = "<group>"; };
@@ -241,6 +241,7 @@
 		65FABAE81F4ABF61006D7679 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				659553551FD6F07800A8756F /* CryptorFactory.swift */,
 				C81DD9271FD7096100026024 /* HMAC.swift */,
 				65FABAE91F4AC2D3006D7679 /* RSASigner.swift */,
 				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
@@ -248,7 +249,6 @@
 				6567F4DD1F98C8B50037ECB3 /* RSADecrypter.swift */,
 				6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */,
 				6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */,
-				C816CD6D1FD94F9000392A6B /* Random.swift */,
 			);
 			name = Crypto;
 			sourceTree = "<group>";
@@ -551,12 +551,12 @@
 				65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */,
 				650523701FB494BE00E0B1B1 /* AESDecrypter.swift in Sources */,
 				652F6DE91F73E6780002DEE0 /* Serializer.swift in Sources */,
-				C816CD6E1FD94F9000392A6B /* Random.swift in Sources */,
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
 				C81DD9281FD7096100026024 /* HMAC.swift in Sources */,
 				6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */,
 				65D8680F1F7CE35000769BBF /* RSAVerifier.swift in Sources */,
+				659553561FD6F07800A8756F /* CryptorFactory.swift in Sources */,
 				6505236E1FB4940100E0B1B1 /* AESEncrypter.swift in Sources */,
 				65E810621F79489900C7E2A9 /* Signature.swift in Sources */,
 				65D1D0651F7A4DB3006377CD /* DataConvertible.swift in Sources */,
@@ -585,7 +585,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8DEE3DA71E77FC9F7BC021D9 /* Pods-SwiftJOSE-Tests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				DEVELOPMENT_TEAM = 4857DE3DAC;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
@@ -599,7 +599,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1F82BEAE5D32570EEEF39D74 /* Pods-SwiftJOSE-Tests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				DEVELOPMENT_TEAM = 4857DE3DAC;
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
@@ -612,6 +612,7 @@
 		65FBFDE81F45CC7C005C7D68 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -667,6 +668,7 @@
 		65FBFDE91F45CC7C005C7D68 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -716,6 +718,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FA8792A4FB9F5AE49A01604D /* Pods-SwiftJOSE.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
@@ -739,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 47B3C443DB125E58E0254BFE /* Pods-SwiftJOSE.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
