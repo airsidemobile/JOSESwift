@@ -138,9 +138,6 @@ internal protocol SymmetricEncrypter {
     
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
     init(algorithm: SymmetricEncryptionAlgorithm)
-    
-    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data
-    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data
 
     /**
      Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
@@ -188,7 +185,7 @@ public struct Encrypter {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
 
-        let cek = symmetric.randomCEK(for: enc)
+        let cek = try SecureRandom.generate(count: enc.keyLength())
         let encryptedKey = try asymmetric.encrypt(cek)
         let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data())
 

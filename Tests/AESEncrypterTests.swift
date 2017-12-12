@@ -30,7 +30,7 @@ class AESEncrypterTests: CryptoTestCase {
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
 
         let encrypter = AESEncrypter()
-        let cek = try! Random.generate(count: SymmetricEncryptionAlgorithm.AES256CBCHS512.keyLength())
+        let cek = try! SecureRandom.generate(count: SymmetricEncryptionAlgorithm.AES256CBCHS512.keyLength())
         let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, with: cek, using: .AES256CBCHS512, additionalAuthenticatedData: additionalAuthenticatedData)
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
