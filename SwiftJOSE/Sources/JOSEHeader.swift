@@ -15,8 +15,10 @@ enum HeaderParsingError: Error {
 /// A `JOSEHeader` is a JSON object representing various Header Parameters.
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
+    var headerData: Data { get }
     var parameters: [String: Any] { get }
-    init(parameters: [String: Any]) throws
+    
+    init(parameters: [String: Any], headerData: Data) throws
 
     init?(_ data: Data)
     func data() -> Data
@@ -25,6 +27,7 @@ protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
 // `JOSEObjectComponent` implementation.
 extension JOSEHeader {
     public init?(_ data: Data) {
+        // Verify that the header is a completely valid JSON object.
         guard
             let json = try? JSONSerialization.jsonObject(with: data, options: []),
             let parameters = json as? [String: Any]
@@ -32,13 +35,11 @@ extension JOSEHeader {
             return nil
         }
 
-        try? self.init(parameters: parameters)
+        try? self.init(parameters: parameters, headerData: data)
     }
 
     public func data() -> Data {
-        // Forcing the try is ok here since we checked `isValidJSONObject(_:)` in `init(parameters:)` earlier.
-        // The resulting data of this operation is UTF-8 encoded.
-        return try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        return headerData
     }
 }
 

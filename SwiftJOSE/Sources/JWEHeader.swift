@@ -9,13 +9,14 @@ import Foundation
 
 /// The header of a `JWE` object.
 public struct JWEHeader: JOSEHeader {
+    let headerData: Data
     let parameters: [String: Any]
 
-    init(parameters: [String: Any]) throws {
+    init(parameters: [String: Any], headerData: Data) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
-
+        
         guard parameters["alg"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
@@ -24,16 +25,21 @@ public struct JWEHeader: JOSEHeader {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "enc")
         }
 
+        self.headerData = headerData
         self.parameters = parameters
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
     public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
-        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
-        try! self.init(parameters: [
+        let parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
-        ])
+        ]
+        
+        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        
+        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
+        try! self.init(parameters: parameters, headerData: headerData)
     }
 }
 
