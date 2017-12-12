@@ -12,6 +12,15 @@ public struct JWEHeader: JOSEHeader {
     let headerData: Data
     let parameters: [String: Any]
 
+    /// Initializes a JWE header with given parameters and their original `data` representation.
+    /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
+    /// reseived from the sender in order to guarantee the correctness of later signature validations.
+    ///
+    /// - Parameters:
+    ///   - parameters: The `Dictionary` representation of the `headerData` parameter.
+    ///   - headerData: The (base64-url decoded) `Data` representation of the `parameters` parameter
+    ///                 as it was received from the sender.
+    /// - Throws: `HeaderParsingError` if the header cannot be created.
     init(parameters: [String: Any], headerData: Data) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject

@@ -24,7 +24,7 @@ protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     func data() -> Data
 }
 
-// `JOSEObjectComponent` implementation.
+// `DataConvertible` implementation.
 extension JOSEHeader {
     public init?(_ data: Data) {
         // Verify that the header is a completely valid JSON object.
