@@ -161,7 +161,7 @@ public struct Encrypter {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
-    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
+    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) {
         self.asymmetric = CryptoFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
         self.symmetric = CryptoFactory.encrypter(for: contentEncyptionAlgorithm)
     }
