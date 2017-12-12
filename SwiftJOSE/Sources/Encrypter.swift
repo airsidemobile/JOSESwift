@@ -162,8 +162,8 @@ public struct Encrypter {
     let symmetric: SymmetricEncrypter
 
     public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
-        self.asymmetric = CryptorFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
-        self.symmetric = CryptorFactory.encrypter(for: contentEncyptionAlgorithm)
+        self.asymmetric = CryptoFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
+        self.symmetric = CryptoFactory.encrypter(for: contentEncyptionAlgorithm)
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {

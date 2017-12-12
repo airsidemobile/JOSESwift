@@ -32,7 +32,7 @@ public struct Verifier {
     let verifier: VerifierProtocol
     
     public init(signingAlgorithm: SigningAlgorithm, publicKey: SecKey) {
-        self.verifier = RSAVerifier(algorithm: signingAlgorithm, publicKey: publicKey) // Todo: factory; don't hard code RSA
+        self.verifier = CryptoFactory.verifyer(for: signingAlgorithm, with: publicKey)
     }
     
     func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {

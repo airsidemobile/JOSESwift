@@ -50,7 +50,7 @@ public struct Signer {
     let signer: SignerProtocol
     
     public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
-        self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey) // Todo: factory; don't hard code RSA
+        self.signer = CryptoFactory.signer(for: signingAlgorithm, with: privateKey)
     }
     
     func sign(header: JWSHeader, payload: Payload) throws -> Data {

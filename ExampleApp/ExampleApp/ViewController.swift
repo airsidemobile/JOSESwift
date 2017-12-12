@@ -35,7 +35,7 @@ class ViewController: UIViewController {
 
         let header = JWSHeader(algorithm: .RS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = RSASigner(key: privateKey!)
+        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey!)
 
         guard let firstJWS = JWS(header: header, payload: payload, signer: signer) else {
             print("Could not create JWS.")
@@ -51,8 +51,7 @@ class ViewController: UIViewController {
             return
         }
 
-        let verifier = RSAVerifier(key: publicKey!)
-        if secondJWS.validates(against: verifier) {
+        if secondJWS.isValid(for: publicKey!) {
             print("Signature correct.")
         } else {
             print("Signature wrong.")
