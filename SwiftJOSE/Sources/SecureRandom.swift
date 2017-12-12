@@ -1,5 +1,5 @@
 //
-//  Random.swift
+//  SecureRandom.swift
 //  SwiftJOSE
 //
 //  Created by Carol Capek on 07.12.17.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-public enum RandomGenerationError: Error {
+public enum SecureRandomGenerationError: Error {
     case failed(status: OSStatus)
 }
 
-public struct Random {
+public struct SecureRandom {
     
     /**
-     Generates random data with a given count.
+     Generates secure random data with a given count.
      - Parameters:
         - count: The count of the random generated data.
      
@@ -28,7 +28,7 @@ public struct Random {
         }
         
         guard randomGenerationStatus == errSecSuccess else {
-            throw RandomGenerationError.failed(status: randomGenerationStatus)
+            throw SecureRandomGenerationError.failed(status: randomGenerationStatus)
         }
         
         return generatedRandom
