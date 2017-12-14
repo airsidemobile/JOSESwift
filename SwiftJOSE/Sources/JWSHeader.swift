@@ -14,7 +14,7 @@ public struct JWSHeader: JOSEHeader {
 
     /// Initializes a JWS header with given parameters and their original `data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
-    /// reseived from the sender in order to guarantee the correctness of later signature validations.
+    /// received from the sender in order to guarantee correctness of signature validations.
     ///
     /// - Parameters:
     ///   - parameters: The `Dictionary` representation of the `headerData` parameter.

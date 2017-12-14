@@ -14,7 +14,7 @@ public struct JWEHeader: JOSEHeader {
 
     /// Initializes a JWE header with given parameters and their original `data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
-    /// received from the sender in order to guarantee correctness of signature validations.
+    /// received from the sender.
     ///
     /// - Parameters:
     ///   - parameters: The `Dictionary` representation of the `headerData` parameter.
