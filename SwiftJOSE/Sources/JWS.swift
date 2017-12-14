@@ -55,7 +55,7 @@ public struct JWS {
     /**
      Verifies a JWS using a given public key.
      - parameters:
-         - publicKey: The public used to verify the JWS object's header and payload.
+         - publicKey: The public key used to verify the JWS object's header and payload.
      - returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
     */
     public func isValid(for publicKey: SecKey) -> Bool {
