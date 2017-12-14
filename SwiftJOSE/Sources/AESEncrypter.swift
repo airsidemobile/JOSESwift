@@ -12,25 +12,11 @@ import CommonCrypto
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
 public struct AESEncrypter: SymmetricEncrypter {
     let algorithm: SymmetricEncryptionAlgorithm
-    
-    func randomCEK(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
-        // Todo: Generate CEK using a trusted cryptography library.
-        // See: https://mohemian.atlassian.net/browse/JOSE-62.
-        return Data(count: 64)
-    }
-
-    func randomIV(for algorithm: SymmetricEncryptionAlgorithm) -> Data {
-        // Todo: Generate IV using a trusted cryptography library.
-        // See: https://mohemian.atlassian.net/browse/JOSE-62.
-        return "iv".data(using: .utf8)!
-    }
 
     // TODO: Refactor this method to be more generic, see: JOSE-79
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
-        // Generate random intitializationVector.
-        // let iv = randomIV(for: algorithm)
-
-        let iv = "1a f3 8c 2d c2 b9 6f fd d8 66 94 09 23 41 bc 04".hexadecimalToData()!
+        // Generate random intitialization vector.
+        let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength())
 
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
@@ -42,11 +28,10 @@ public struct AESEncrypter: SymmetricEncrypter {
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
 
-        // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector,
-        // return the ciphertext if no error occured.
+        // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector.
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
 
-        // Put the input data for the HMAC together. It consists of A || IV || E || AL.
+        // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
