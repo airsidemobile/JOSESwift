@@ -9,24 +9,43 @@ import Foundation
 
 /// The header of a `JWS` object.
 public struct JWSHeader: JOSEHeader {
+    let headerData: Data
     let parameters: [String: Any]
 
-    init(parameters: [String: Any]) throws {
+    /// Initializes a JWS header with given parameters and their original `Data` representation.
+    /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
+    /// received from the sender in order to guarantee correctness of signature validations.
+    ///
+    /// - Parameters:
+    ///   - parameters: The `Dictionary` representation of the `headerData` parameter.
+    ///   - headerData: The (base64-url decoded) `Data` representation of the `parameters` parameter
+    ///                 as it was received from the sender.
+    /// - Throws: `HeaderParsingError` if the header cannot be created.
+    internal init(parameters: [String: Any], headerData: Data) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
-
+        
+        // Verify that the implementation understands and can process all
+        // fields that it is required to support.
         guard parameters["alg"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
 
+        self.headerData = headerData
         self.parameters = parameters
     }
 
     /// Initializes a `JWSHeader` with the specified algorithm.
     public init(algorithm: SigningAlgorithm) {
+        let parameters = ["alg": algorithm.rawValue]
+        // Forcing the try is ok here, since [String: String] can be converted to JSON.
+        // swiftlint:disable:next force_try
+        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        
         // Forcing the try is ok here, since "alg" is the only required header parameter.
-        try! self.init(parameters: ["alg": algorithm.rawValue])
+        // swiftlint:disable:next force_try
+        try! self.init(parameters: parameters, headerData: headerData)
     }
 }
 

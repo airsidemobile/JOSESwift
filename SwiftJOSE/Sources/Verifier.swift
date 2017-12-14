@@ -7,9 +7,11 @@
 
 import Foundation
 
-public protocol Verifier {
-    /// Initializes a `Verifier` with a specified key.
-    init(key: SecKey)
+protocol VerifierProtocol {
+    var algorithm: SigningAlgorithm { get }
+    
+    /// Initializes a `Verifier` with a specified key and signing algorithm.
+    init(algorithm: SigningAlgorithm, publicKey: SecKey)
 
     /**
      Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
@@ -23,5 +25,25 @@ public protocol Verifier {
      
      - Returns: True if the signature is verified, false if it is not verified.
      */
-    func verify(_ signature: Data, against signingInput: Data, using algorithm: SigningAlgorithm) throws -> Bool
+    func verify(_ signingInput: Data, against signature: Data) throws -> Bool
+}
+
+public struct Verifier {
+    let verifier: VerifierProtocol
+    
+    public init(signingAlgorithm: SigningAlgorithm, publicKey: SecKey) {
+        self.verifier = CryptoFactory.verifyer(for: signingAlgorithm, with: publicKey)
+    }
+    
+    func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
+        guard let alg = header.algorithm, alg == verifier.algorithm else {
+            throw SigningError.algorithmMismatch
+        }
+        
+        guard let signingInput = [header, payload].asJOSESigningInput() else {
+            throw SigningError.cannotComputeSigningInput
+        }
+        
+        return try verifier.verify(signingInput, against: signature)
+    }
 }

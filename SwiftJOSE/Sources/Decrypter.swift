@@ -67,9 +67,9 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
-    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) throws {
-        self.asymmetric = CryptorFactory.decrypter(for: keyDecryptionAlgorithm, with: kdk)
-        self.symmetric = CryptorFactory.decrypter(for: contentDecryptionAlgorithm)
+    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) {
+        self.asymmetric = CryptoFactory.decrypter(for: keyDecryptionAlgorithm, with: kdk)
+        self.symmetric = CryptoFactory.decrypter(for: contentDecryptionAlgorithm)
     }
 
     func decrypt(_ context: DecryptionContext) throws -> Data {

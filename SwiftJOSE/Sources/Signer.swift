@@ -11,6 +11,8 @@ public enum SigningError: Error {
     case algorithmNotSupported
     case signingFailed(description: String)
     case verificationFailed(descritpion: String)
+    case algorithmMismatch
+    case cannotComputeSigningInput
 }
 
 public enum SigningAlgorithm: String {
@@ -24,15 +26,16 @@ public enum SigningAlgorithm: String {
     }
 }
 
-public protocol Signer {
+protocol SignerProtocol {
+    var algorithm: SigningAlgorithm { get }
+    
     /// Initializes a `Signer` with a specified key.
-    init(key: SecKey)
+    init(algorithm: SigningAlgorithm, privateKey: SecKey)
 
     /**
-     Signs input data with a given algorithm and the corresponding key.
+     Signs input data.
      - Parameters:
         - signingInput: The input to sign.
-        - algorithm: The algorithm to sign the input.
      
      - Throws:
         - `SigningError.algorithmNotSupported`: If the provided algorithm is not supported for signing.
@@ -40,5 +43,35 @@ public protocol Signer {
      
      - Returns: The signature.
      */
-    func sign(_ signingInput: Data, using algorithm: SigningAlgorithm) throws -> Data
+    func sign(_ signingInput: Data) throws -> Data
+}
+
+public struct Signer {
+    let signer: SignerProtocol
+    
+    public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
+        self.signer = CryptoFactory.signer(for: signingAlgorithm, with: privateKey)
+    }
+    
+    func sign(header: JWSHeader, payload: Payload) throws -> Data {
+        guard let alg = header.algorithm, alg == signer.algorithm else {
+            throw SigningError.algorithmMismatch
+        }
+        
+        guard let signingInput = [header, payload].asJOSESigningInput() else {
+            throw SigningError.cannotComputeSigningInput
+        }
+        
+        return try signer.sign(signingInput)
+    }
+}
+
+extension Array where Element == DataConvertible {
+    func asJOSESigningInput() -> Data? {
+        let encoded = self.map { component in
+            return component.data().base64URLEncodedString()
+        }
+        
+        return encoded.joined(separator: ".").data(using: .ascii)
+    }
 }

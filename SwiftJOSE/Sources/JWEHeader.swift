@@ -9,13 +9,23 @@ import Foundation
 
 /// The header of a `JWE` object.
 public struct JWEHeader: JOSEHeader {
+    let headerData: Data
     let parameters: [String: Any]
 
-    init(parameters: [String: Any]) throws {
+    /// Initializes a JWE header with given parameters and their original `Data` representation.
+    /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
+    /// received from the sender.
+    ///
+    /// - Parameters:
+    ///   - parameters: The `Dictionary` representation of the `headerData` parameter.
+    ///   - headerData: The (base64-url decoded) `Data` representation of the `parameters` parameter
+    ///                 as it was received from the sender.
+    /// - Throws: `HeaderParsingError` if the header cannot be created.
+    init(parameters: [String: Any], headerData: Data) throws {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
-
+        
         guard parameters["alg"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
         }
@@ -24,16 +34,24 @@ public struct JWEHeader: JOSEHeader {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "enc")
         }
 
+        self.headerData = headerData
         self.parameters = parameters
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
     public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
-        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
-        try! self.init(parameters: [
+        let parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
-        ])
+        ]
+        
+        // Forcing the try is ok here, since [String: String] can be converted to JSON.
+        // swiftlint:disable:next force_try
+        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        
+        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
+        // swiftlint:disable:next force_try
+        try! self.init(parameters: parameters, headerData: headerData)
     }
 }
 
