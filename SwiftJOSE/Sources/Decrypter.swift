@@ -81,6 +81,7 @@ public struct Decrypter {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
 
+        // Todo: Investigate MMA attack. See: https://mohemian.atlassian.net/browse/JOSE-88
         let cek = try asymmetric.decrypt(context.encryptedKey)
 
         let symmetricContext = SymmetricDecryptionContext(
