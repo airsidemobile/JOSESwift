@@ -12,7 +12,7 @@ public struct JWEHeader: JOSEHeader {
     let headerData: Data
     let parameters: [String: Any]
 
-    /// Initializes a JWE header with given parameters and their original `data` representation.
+    /// Initializes a JWE header with given parameters and their original `Data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
     /// received from the sender.
     ///

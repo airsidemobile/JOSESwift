@@ -12,7 +12,7 @@ public struct JWSHeader: JOSEHeader {
     let headerData: Data
     let parameters: [String: Any]
 
-    /// Initializes a JWS header with given parameters and their original `data` representation.
+    /// Initializes a JWS header with given parameters and their original `Data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
     /// received from the sender in order to guarantee correctness of signature validations.
     ///
