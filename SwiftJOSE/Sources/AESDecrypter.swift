@@ -26,14 +26,14 @@ public struct AESDecrypter: SymmetricDecrypter {
         let decryptionKey = keys.encryptionKey
 
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
-        var concatData = context.additionalAuthenticatedData
+        var concatData = context.additionalAuthenticatedData.base64URLEncodedData()
         concatData.append(context.initializationVector)
         concatData.append(context.ciphertext)
-        concatData.append(context.additionalAuthenticatedData.getByteLengthAsOctetHexData())
+        concatData.append(context.additionalAuthenticatedData.base64URLEncodedData().getByteLengthAsOctetHexData())
         
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
-        
+
         guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
             throw EncryptionError.hmacNotAuthenticated
         }
