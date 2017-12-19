@@ -7,11 +7,19 @@
 
 import Foundation
 
-protocol JWKBuilderProtocol {
+internal enum JWKType {
+    case publicKey
+    case privateKey
+    case keyPair
+}
+
+internal protocol JWKBuilder {
     associatedtype KeyDataType
     
     func set(publicKey: KeyDataType) -> Self
     func set(privateKey: KeyDataType) -> Self
+    
+    func typeToBuild() -> JWKType?
     
     func build() -> JWK?
 }

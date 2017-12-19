@@ -27,7 +27,7 @@ public struct RSAPublicKey: JWK {
     }
 }
 
-struct RSAKeyPair: JWK {
+public struct RSAPrivateKey: JWK {
     public let keyType: KeyType
     let n: String
     let e: String
@@ -49,3 +49,5 @@ struct RSAKeyPair: JWK {
         self.d = d
     }
 }
+
+public typealias RSAKeyPair = RSAPrivateKey

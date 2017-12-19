@@ -7,6 +7,18 @@
 
 import Foundation
 
+public enum JWKError: Error {
+    case JWKToJSONConversionFailed
+}
+
+/// The key type parameter of a JWK identifies the cryptographic algorithm
+/// family used with the key(s) represented by the JWK.
+///
+/// - RSA
+public enum KeyType: String {
+    case RSA = "RSA"
+}
+
 /// A JWK object that represents a key or a key pair of a certain type.
 /// Check `KeyType` for the supproted key types.
 public protocol JWK {
@@ -22,6 +34,7 @@ public protocol JWK {
     /// Computes the JSON representation of the JWK.
     ///
     /// - Returns: The JSON representation of the JWK as `String`.
+    /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
     func json() throws -> String
     
     /// Computes the JSON representation of the JWK.
@@ -29,19 +42,6 @@ public protocol JWK {
     /// - Returns: The JSON representation of the JWK as `Data`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
     func json() throws -> Data
-}
-
-enum JWKError: Error {
-    case JWKToJSONConversionFailed
-}
-
-
-/// The key type parameter of a JWK identifies the cryptographic algorithm
-/// family used with the key(s) represented by the JWK.
-///
-/// - RSA
-public enum KeyType: String {
-    case RSA = "RSA"
 }
 
 public extension JWK {
