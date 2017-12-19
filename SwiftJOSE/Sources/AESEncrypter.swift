@@ -32,10 +32,10 @@ public struct AESEncrypter: SymmetricEncrypter {
         let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
 
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
-        var concatData = additionalAuthenticatedData.base64URLEncodedData()
+        var concatData = additionalAuthenticatedData
         concatData.append(iv)
         concatData.append(cipherText)
-        concatData.append(additionalAuthenticatedData.base64URLEncodedData().getByteLengthAsOctetHexData())
+        concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
         
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
