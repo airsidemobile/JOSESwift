@@ -31,17 +31,17 @@ class AESEncrypterTests: CryptoTestCase {
         
         let cek = try! SecureRandom.generate(count: SymmetricEncryptionAlgorithm.AES256CBCHS512.keyLength())
         let encrypter = AESEncrypter(algorithm: .AES256CBCHS512)
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, with: cek, additionalAuthenticatedData: additionalAuthenticatedData)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, with: cek, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let keys = try! SymmetricEncryptionAlgorithm.AES256CBCHS512.retrieveKeys(from: cek)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
 
-        var concatData = additionalAuthenticatedData
+        var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
         concatData.append(symmetricEncryptionContext.ciphertext)
-        concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
+        concatData.append(String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData().getByteLengthAsOctetHexData())
 
         let keyLength = size_t(kCCKeySizeAES256)
         var macOutData = Data(count: 64)
