@@ -14,19 +14,19 @@ import Foundation
 /// As discussed, it is the responsibility of the framework user to cache e.g. the plaintext. Of course this will have to be communicated clearly.
 public struct JWE {
     /// The JWE's JOSE Header.
-    let header: JWEHeader
+    public let header: JWEHeader
 
     /// The encrypted content encryption key (CEK).
-    let encryptedKey: Data
+    public let encryptedKey: Data
 
     /// The initialization value used when encrypting the plaintext.
-    let initializationVector: Data
+    public let initializationVector: Data
 
     /// The ciphertext resulting from authenticated encryption of the plaintext.
-    let ciphertext: Data
+    public let ciphertext: Data
 
     /// The output of an authenticated encryption with associated data that ensures the integrity of the ciphertext and the additional associeated data.
-    let authenticationTag: Data
+    public let authenticationTag: Data
 
     /// The Compact Serialization of this JWE.
     public var compactSerialized: String {
