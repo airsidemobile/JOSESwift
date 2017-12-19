@@ -45,6 +45,15 @@ public struct JWS {
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
     }
+    
+    public init(compactSerialization: Data) throws {
+        guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
+            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+            return
+        }
+
+        self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerializationString)
+    }
 
     fileprivate init(header: JWSHeader, payload: Payload, signature: Data) {
         self.header = header
