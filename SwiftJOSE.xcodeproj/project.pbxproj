@@ -34,7 +34,7 @@
 		65F44EB11FE2D941000C5EA0 /* JWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB01FE2D941000C5EA0 /* JWK.swift */; };
 		65F44EB31FE2E1C6000C5EA0 /* RSAKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */; };
 		65F44EB51FE2E33A000C5EA0 /* JWKBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB41FE2E33A000C5EA0 /* JWKBuilder.swift */; };
-		65F44EB71FE2E35D000C5EA0 /* SecKeyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */; };
+		65F44EB71FE2E35D000C5EA0 /* SecKeyJWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB61FE2E35D000C5EA0 /* SecKeyJWK.swift */; };
 		65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FABAE91F4AC2D3006D7679 /* RSASigner.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		94066475B674C1AB5F16ADA2 /* Pods_SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DECA6A181B4CDDDFCFDAF73 /* Pods_SwiftJOSE.framework */; };
@@ -101,7 +101,7 @@
 		65F44EB01FE2D941000C5EA0 /* JWK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWK.swift; sourceTree = "<group>"; };
 		65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeys.swift; sourceTree = "<group>"; };
 		65F44EB41FE2E33A000C5EA0 /* JWKBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKBuilder.swift; sourceTree = "<group>"; };
-		65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyExtensions.swift; sourceTree = "<group>"; };
+		65F44EB61FE2E35D000C5EA0 /* SecKeyJWK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyJWK.swift; sourceTree = "<group>"; };
 		65FABAE91F4AC2D3006D7679 /* RSASigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSASigner.swift; path = SwiftJOSE/Sources/RSASigner.swift; sourceTree = SOURCE_ROOT; };
 		65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftJOSE.h; sourceTree = "<group>"; };
@@ -262,6 +262,7 @@
 		65FABAE81F4ABF61006D7679 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				65FFFED01FE96D3B0045586D /* JWK */,
 				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
 				659553551FD6F07800A8756F /* CryptorFactory.swift */,
 				C81DD9271FD7096100026024 /* HMAC.swift */,
@@ -271,7 +272,6 @@
 				6567F4DD1F98C8B50037ECB3 /* RSADecrypter.swift */,
 				6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */,
 				6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */,
-				65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */,
 			);
 			name = Crypto;
 			sourceTree = "<group>";
@@ -315,6 +315,14 @@
 				65A9D3E21F45CDF1004E0B61 /* Sources */,
 			);
 			path = SwiftJOSE;
+			sourceTree = "<group>";
+		};
+		65FFFED01FE96D3B0045586D /* JWK */ = {
+			isa = PBXGroup;
+			children = (
+				65F44EB61FE2E35D000C5EA0 /* SecKeyJWK.swift */,
+			);
+			name = JWK;
 			sourceTree = "<group>";
 		};
 		98CD4F950C09A29804160122 /* Pods */ = {
@@ -579,7 +587,7 @@
 				652F6DE91F73E6780002DEE0 /* Serializer.swift in Sources */,
 				65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */,
 				65A7A1991F7295F5009449E7 /* Payload.swift in Sources */,
-				65F44EB71FE2E35D000C5EA0 /* SecKeyExtensions.swift in Sources */,
+				65F44EB71FE2E35D000C5EA0 /* SecKeyJWK.swift in Sources */,
 				C81DD9281FD7096100026024 /* HMAC.swift in Sources */,
 				6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */,
 				65D8680F1F7CE35000769BBF /* RSAVerifier.swift in Sources */,

@@ -22,7 +22,7 @@ public enum KeyType: String {
 /// A JWK object that represents a key or a key pair of a certain type.
 /// Check `KeyType` for the supproted key types.
 public protocol JWK {
-    ///  The the cryptographic algorithm family used with the JWK.
+    /// The the cryptographic algorithm family used with the JWK.
     var keyType: KeyType { get }
     
     /// The parameters of the JWK representing the properties of the key, including its value.
@@ -30,6 +30,11 @@ public protocol JWK {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: Any] { get }
     
+    
+    /// Accesses the specified parameter
+    ///
+    /// - Parameter parameter: The desired parameter.
+    subscript(key: String) -> Any? { get }
     
     /// Computes the JSON representation of the JWK.
     ///
