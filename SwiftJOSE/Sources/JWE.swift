@@ -68,7 +68,7 @@ public struct JWE {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
 
-    /// Constructs a JWE object from a given compact serialization data.
+    /// Constructs a JWE object from a given compact serialization data object.
     ///
     /// - Parameter compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
     /// - Throws:
