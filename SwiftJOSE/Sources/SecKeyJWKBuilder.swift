@@ -1,5 +1,5 @@
 //
-//  SecKeyExtensions.swift
+//  SecKeyJWKBuilder.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 14.12.17.
@@ -8,6 +8,7 @@
 import Foundation
 import Security
 
+// Naming?
 public class SecKeyJWKBuilder: JWKBuilder {
     typealias KeyDataType = SecKey
     
