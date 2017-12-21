@@ -13,6 +13,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
     
     private var publicKey: SecKey?
     private var privateKey: SecKey?
+    private var parameters: [String: Any] = [:]
     
     public init() { }
     
@@ -25,44 +26,30 @@ public class SecKeyJWKBuilder: JWKBuilder {
         self.privateKey = privateKey
         return self
     }
-    
-    internal func type() -> JWKType? {
-        // No keys set
-        guard (publicKey != nil) || (privateKey != nil) else {
-            return nil
-        }
-        
+
+    public func set(_ parameter: String, to value: Any) -> Self {
+        parameters[parameter] = value
+        return self
+    }
+
+    public func build() -> JWK? {
         // Only public key set
         if (publicKey != nil) && (privateKey == nil) {
-            return .publicKey
+            return RSAPublicKey(n: "0vx...Kgw", e: "AQAB", additionalParameters: parameters)
         }
-        
+
         // Only private key set
         if (publicKey == nil) && (privateKey != nil) {
-            return .privateKey
+            return RSAPrivateKey(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q", additionalParameters: parameters)
         }
-        
+
         // Both public and private key set
-        return .keyPair
-    }
-    
-    public func build() -> JWK? {
-        guard let type = type() else {
-            return nil
+        if (publicKey != nil) && (privateKey != nil) {
+            return RSAKeyPair(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q", additionalParameters: parameters)
         }
-        
-        // Todo: Do conversions from SecKey to modulus/exponent representation.
-        // See https://mohemian.atlassian.net/browse/JOSE-91.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-        
-        switch type {
-        case .publicKey:
-            return RSAPublicKey(n: "0vx...Kgw", e: "AQAB")
-        case .privateKey:
-            return RSAPrivateKey(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q")
-        case .keyPair:
-            return RSAKeyPair(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q")
-        }
+
+        // No keys set
+        return nil
     }
 }
 

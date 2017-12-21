@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// JWK related errors
+///
+/// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
 public enum JWKError: Error {
     case JWKToJSONConversionFailed
 }
@@ -17,6 +20,10 @@ public enum JWKError: Error {
 /// - RSA
 public enum KeyType: String {
     case RSA = "RSA"
+
+    var parameterName: String {
+        return "kty"
+    }
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
@@ -49,32 +56,13 @@ public protocol JWK {
     func jsonData() throws -> Data
 }
 
-public extension JWK {
-    func jsonString() throws -> String {
-        guard JSONSerialization.isValidJSONObject(parameters) else {
-            throw JWKError.JWKToJSONConversionFailed
-        }
-        
-        // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next_line force_try
-        let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        guard let jsonString = String(data: jsonData, encoding: .utf8) else {
-            throw JWKError.JWKToJSONConversionFailed
-        }
-        
-        return jsonString
-    }
-    
-    func jsonData() throws -> Data {
-        guard JSONSerialization.isValidJSONObject(parameters) else {
-            throw JWKError.JWKToJSONConversionFailed
-        }
-        
-        // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next_line force_try
-        let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        return jsonData
-    }
-}
+/// A JWK representing a public key.
+public protocol PublicKey: JWK { }
+
+/// A JWK representing a private key.
+public protocol PrivateKey: JWK { }
+
+/// A JWK representing a key pair.
+public protocol KeyPair: JWK { }
+
+
