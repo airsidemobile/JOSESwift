@@ -12,7 +12,7 @@ class JWSDeserializationTests: XCTestCase {
 
     let serialized = "eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLCJleHAiOjEzMDA4MTkzODAsImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.x2cs4hRCGTt26GSwzk9DHqnt1Qk6jN-s9OEB7EBTAQI"
 
-    let expectedHeader = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}".data(using: .utf8)!
+    let expectedHeader = "{\"typ\":\"JWT\",\r\n \"alg\":\"HS256\"}".data(using: .utf8)!
     let expectedPayload = "{\"iss\":\"joe\",\"exp\":1300819380,\"http://example.com/is_root\":true}".data(using: .utf8)!
     let expectedSignature = Data(base64Encoded: "x2cs4hRCGTt26GSwzk9DHqnt1Qk6jN+s9OEB7EBTAQI=")!
 

@@ -10,6 +10,7 @@ import XCTest
 
 class JWSHeaderTests: XCTestCase {
     let parameterDict = ["alg": "\(SigningAlgorithm.RS512.rawValue)"]
+    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SigningAlgorithm.RS512.rawValue)"], options: [])
 
     override func setUp() {
         super.setUp()
@@ -20,7 +21,7 @@ class JWSHeaderTests: XCTestCase {
     }
 
     func testInitWithParameters() {
-        let header = try! JWSHeader(parameters: parameterDict)
+        let header = try! JWSHeader(parameters: parameterDict, headerData: parameterData)
 
         XCTAssertEqual(header.parameters["alg"] as? String, parameterDict["alg"])
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
@@ -46,7 +47,7 @@ class JWSHeaderTests: XCTestCase {
 
     func testInitWithMissingRequiredParameters() {
         do {
-            _ = try JWSHeader(parameters: ["typ": "JWT"])
+            _ = try JWSHeader(parameters: ["typ": "JWT"], headerData: try! JSONSerialization.data(withJSONObject: ["typ": "JWT"], options: []))
         } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
             XCTAssertEqual(parameter, "alg")
             return
@@ -59,7 +60,7 @@ class JWSHeaderTests: XCTestCase {
 
     func testInitWithInvalidJSONDictionary() {
         do {
-            _ = try JWSHeader(parameters: ["typ": JOSEDeserializer()])
+            _ = try JWSHeader(parameters: ["typ": JOSEDeserializer()], headerData: Data())
         } catch HeaderParsingError.headerIsNotValidJSONObject {
             XCTAssertTrue(true)
             return

@@ -81,9 +81,7 @@ public struct JWE {
             return nil
         }
 
-        guard let decrypter = try? Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc) else {
-            return nil
-        }
+        let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
 
         guard let plaintext = try? decrypter.decrypt(context) else {
             return nil

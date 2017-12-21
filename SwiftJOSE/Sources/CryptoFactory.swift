@@ -8,11 +8,11 @@
 import Foundation
 
 /**
-  Factory deciding which cryptor to use for which algorithm.
+  Factory deciding which crypto implementation to use for which algorithm.
   If we had different cryptor versions e.g. for different platforms,
   we could decide on which version to use here.
  */
-struct CryptorFactory {
+struct CryptoFactory {
     
     /**
      Returns an asymmetric encrypter suitable for a given algorithm, initialized with a given public key.
@@ -70,6 +70,20 @@ struct CryptorFactory {
         switch algorithm {
         case .AES256CBCHS512:
             return AESDecrypter(algorithm: algorithm)
+        }
+    }
+    
+    static func signer(for algorithm: SigningAlgorithm, with privateKey: SecKey) -> SignerProtocol {
+        switch algorithm {
+        case .RS512:
+            return RSASigner(algorithm: algorithm, privateKey: privateKey)
+        }
+    }
+    
+    static func verifyer(for algorithm: SigningAlgorithm, with publicKey: SecKey) -> VerifierProtocol {
+        switch algorithm {
+        case .RS512:
+            return RSAVerifier(algorithm: algorithm, publicKey: publicKey)
         }
     }
     
