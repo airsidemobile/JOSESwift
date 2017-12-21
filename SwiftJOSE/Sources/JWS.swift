@@ -55,7 +55,6 @@ public struct JWS {
     public init(compactSerialization: Data) throws {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
             throw DeserializationError.wrongDataEncoding(data: compactSerialization)
-            return
         }
 
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerializationString)
