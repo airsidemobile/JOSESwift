@@ -14,12 +14,12 @@ public struct JWS {
     public let payload: Payload
     public let signature: Data
 
-    /// The compact serialization of this JWS object as string
+    /// The compact serialization of this JWS object as string.
     public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
     }
     
-    /// The compact serialization of this JWS object as data
+    /// The compact serialization of this JWS object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
         // swiftlint:disable:next force_unwrap
