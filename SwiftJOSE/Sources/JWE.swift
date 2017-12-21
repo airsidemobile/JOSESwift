@@ -59,23 +59,32 @@ public struct JWE {
     
     /// Constructs a JWE object from a given compact serialization string.
     ///
-    /// - Parameter compactSerialization: A compact serialized JWS object as string as received e.g. from the server.
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object as string as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`: If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`: If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`: If a component cannot be initialized from its data object.
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
 
     /// Constructs a JWE object from a given compact serialization data object.
     ///
-    /// - Parameter compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.wrongDataEncoding(data: Data)`: If the compact serialization data object is not convertible to string.
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`: If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`: If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`: If a component cannot be initialized from its data object.
+    ///     - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///         If the compact serialization data object is not convertible to string.
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: Data) throws {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
             throw DeserializationError.wrongDataEncoding(data: compactSerialization)
