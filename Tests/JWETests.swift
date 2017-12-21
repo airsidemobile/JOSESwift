@@ -24,14 +24,13 @@ class JWETests: CryptoTestCase {
         let payload = Payload(message.data(using: .utf8)!)
         let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512)
         let jwe = JWE(header: header, payload: payload, encrypter: encrypter)!
-        let compactSerializedJWE = jwe.compactSerialized
+        let compactSerializedJWE = jwe.compactSerializedString
 
         XCTAssertEqual(compactSerializedJWE, "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.ZW5jcnlwdGVkS2V5.aXY.Y2lwaGVydGV4dA.YXV0aFRhZw")
     }
 
     func testDecrypt() {
         let compactSerializedJWE = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.ZW5jcnlwdGVkS2V5.aXY.Y2lwaGVydGV4dA.YXV0aFRhZw"
-
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
         let payloadString = String(data: (jwe.decrypt(with: privateKey!)!).data(), encoding: .utf8)!
 
