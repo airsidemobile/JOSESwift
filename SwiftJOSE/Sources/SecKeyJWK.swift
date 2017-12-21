@@ -26,7 +26,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
         return self
     }
     
-    internal func typeToBuild() -> JWKType? {
+    internal func type() -> JWKType? {
         // No keys set
         guard (publicKey != nil) || (privateKey != nil) else {
             return nil
@@ -47,7 +47,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
     }
     
     public func build() -> JWK? {
-        guard let type = typeToBuild() else {
+        guard let type = type() else {
             return nil
         }
         

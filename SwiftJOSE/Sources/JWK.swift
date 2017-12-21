@@ -12,7 +12,7 @@ public enum JWKError: Error {
 }
 
 /// The key type parameter of a JWK identifies the cryptographic algorithm
-/// family used with the key(s) represented by the JWK.
+/// family used with the key(s) represented by a JWK.
 ///
 /// - RSA
 public enum KeyType: String {
@@ -20,12 +20,12 @@ public enum KeyType: String {
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
-/// Check `KeyType` for the supproted key types.
+/// Check `KeyType` for the supported key types.
 public protocol JWK {
     /// The the cryptographic algorithm family used with the JWK.
     var keyType: KeyType { get }
     
-    /// The parameters of the JWK representing the properties of the key, including its value.
+    /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: Any] { get }
@@ -40,17 +40,17 @@ public protocol JWK {
     ///
     /// - Returns: The JSON representation of the JWK as `String`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func json() throws -> String
+    func jsonString() throws -> String
     
     /// Computes the JSON representation of the JWK.
     ///
     /// - Returns: The JSON representation of the JWK as `Data`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func json() throws -> Data
+    func jsonData() throws -> Data
 }
 
 public extension JWK {
-    func json() throws -> String {
+    func jsonString() throws -> String {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
@@ -66,7 +66,7 @@ public extension JWK {
         return jsonString
     }
     
-    func json() throws -> Data {
+    func jsonData() throws -> Data {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
