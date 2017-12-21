@@ -17,7 +17,7 @@ public struct AESEncrypter: SymmetricEncrypter {
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
         // Generate random intitialization vector.
         let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength())
-        
+
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
             throw EncryptionError.keyLengthNotSatisfied
@@ -36,7 +36,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         concatData.append(iv)
         concatData.append(cipherText)
         concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
-        
+
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.ccAlgorithms.hmacAlgorithm)
         let authenticationTag = algorithm.authenticationTag(for: hmacOutput)
