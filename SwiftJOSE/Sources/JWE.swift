@@ -28,9 +28,16 @@ public struct JWE {
     /// The output of an authenticated encryption with associated data that ensures the integrity of the ciphertext and the additional associeated data.
     public let authenticationTag: Data
 
-    /// The Compact Serialization of this JWE.
-    public var compactSerialized: String {
+    /// The compact serialization of this JWE object as string.
+    public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
+    }
+    
+    /// The compact serialization of this JWE object as data.
+    public var compactSerializedData: Data {
+        // Force unwrapping is ok here, since `serialize` returns a string generated from data.
+        // swiftlint:disable:next force_unwrap
+        return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
     /// Initializes a JWE with a given header, payload and encrypter.
@@ -54,6 +61,8 @@ public struct JWE {
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
+    
+    
 
     /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
     private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
