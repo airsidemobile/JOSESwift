@@ -14,34 +14,24 @@ public enum JWKError: Error {
     case JWKToJSONConversionFailed
 }
 
-/// The key type parameter of a JWK identifies the cryptographic algorithm
-/// family used with the key(s) represented by a JWK.
-///
-/// - RSA
-public enum KeyType: String {
-    case RSA = "RSA"
-
-    var parameterName: String {
-        return "kty"
-    }
-}
-
 /// A JWK object that represents a key or a key pair of a certain type.
 /// Check `KeyType` for the supported key types.
 public protocol JWK {
     /// The the cryptographic algorithm family used with the JWK.
-    var keyType: KeyType { get }
+    var keyType: JWKKeyType { get }
     
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: Any] { get }
     
-    
-    /// Accesses the specified parameter
+    /// Accesses the specified parameter.
+    /// The parameters of the JWK representing the properties of the key(s), including the value(s).
+    /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
+    /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     ///
     /// - Parameter parameter: The desired parameter.
-    subscript(key: String) -> Any? { get }
+    subscript(parameter: String) -> Any? { get }
     
     /// Computes the JSON representation of the JWK.
     ///

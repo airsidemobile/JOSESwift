@@ -7,16 +7,12 @@
 
 import Foundation
 
-public struct RSAPublicKey: JWK {
-    public let keyType: KeyType
+public struct RSAPublicKey: PublicKey {
+    public let keyType: JWKKeyType
     public let parameters: [String : Any]
     
     public let n: String
     public let e: String
-    
-    public subscript(parameter: String) -> Any? {
-        return parameters[parameter]
-    }
 
     init(n: String, e: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
@@ -24,7 +20,7 @@ public struct RSAPublicKey: JWK {
         self.e = e
 
         self.parameters = parameters.merging(
-            zip([ keyType.parameterName, "n", "e" ], [ keyType.rawValue, n, e ]),
+            zip([ keyType.parameterName, "n", "e" ], [ self.keyType.rawValue, self.n, self.e ]),
             uniquingKeysWith: { (_, new) in new }
         )
     }
@@ -34,18 +30,13 @@ public struct RSAPublicKey: JWK {
     }
 }
 
-public struct RSAPrivateKey: JWK {
-    public let keyType: KeyType
+public struct RSAPrivateKey: PrivateKey, KeyPair {
+    public let keyType: JWKKeyType
     public let parameters: [String : Any]
     
     public let n: String
     public let e: String
     public let d: String
-
-
-    public subscript(parameter: String) -> Any? {
-        return parameters[parameter]
-    }
 
     init(n: String, e: String, d: String, additionalParameters parameters: [String: Any]) {
         self.keyType = .RSA
@@ -54,7 +45,7 @@ public struct RSAPrivateKey: JWK {
         self.d = d
 
         self.parameters = parameters.merging(
-            zip([ keyType.parameterName, "n", "e", "d" ], [ keyType.rawValue, n, e, d ]),
+            zip([ keyType.parameterName, "n", "e", "d" ], [ self.keyType.rawValue, self.n, self.e, self.d ]),
             uniquingKeysWith: { (_, new) in new }
         )
     }

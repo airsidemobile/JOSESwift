@@ -54,6 +54,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
 }
 
 extension JWK {
+    // Todo: Impove https://mohemian.atlassian.net/browse/JOSE-94
     static func secKeyRepresentation() throws -> SecKey {
         // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
         // See https://mohemian.atlassian.net/browse/JOSE-92.
