@@ -61,13 +61,15 @@ public class SecKeyJWKBuilder: JWKBuilder {
 }
 
 extension JWK {
-    // Todo: Impove before implementation https://mohemian.atlassian.net/browse/JOSE-94.
+    // Todo: Improve before implementation https://mohemian.atlassian.net/browse/JOSE-94.
     static func secKeyRepresentation() throws -> SecKey {
         // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
         // See https://mohemian.atlassian.net/browse/JOSE-92.
         // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
 
         var item: CFTypeRef?
+        // This is just a mock will be deleted in the implementation story.
+        // swiftlint:disable:next force_cast
         return item as! SecKey
     }
 }
