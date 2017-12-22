@@ -25,7 +25,6 @@ internal protocol JWKBuilder {
     ///            to set another key or parameter or to build a JWK.
     func set(privateKey: KeyDataType) -> Self
 
-
     /// Set or update the specified parameter to the specified value.
     ///
     /// - Parameters:
