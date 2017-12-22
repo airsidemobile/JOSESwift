@@ -9,7 +9,7 @@ import XCTest
 @testable import SwiftJOSE
 
 class SecKeyJWKBuilderTests: CryptoTestCase {
-    
+
     func testBuildingPublicKey() {
         let builder = SecKeyJWKBuilder()
         let jwk = builder.set(publicKey: publicKey!).build()
@@ -61,5 +61,5 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
 
         XCTAssertNil(jwk)
     }
-    
+
 }

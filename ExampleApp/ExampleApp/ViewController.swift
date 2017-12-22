@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
         let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512)
-        
+
         guard let firstJwe = JWE(header: header, payload: payload, encrypter: encrypter) else {
             print("Could not create JWE.")
             return

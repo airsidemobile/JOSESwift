@@ -71,7 +71,7 @@ extension Data {
         // forced unwrap is safe. See also [this](https://stackoverflow.com/a/46152738/5233456) SO answer.
         return self.base64URLEncodedString().data(using: .utf8)!
     }
-    
+
     /**
      Returns the byte length of a data object as octet hexadecimal data.
      
@@ -80,30 +80,30 @@ extension Data {
     func getByteLengthAsOctetHexData() -> Data {
         let dataLength = UInt64(self.count * 8)
         let dataLengthInHex = String(dataLength, radix: 16, uppercase: false)
-    
+
         var dataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
-        
+
         var dataIndex = dataLengthBytes.count-1
         for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var offset = 2
             var hexStringChunk = ""
-            
+
             if dataLengthInHex.count-i == 1 {
                 offset = 1
             }
-            
+
             let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
             let startIndex = dataLengthInHex.index(endIndex, offsetBy: -offset)
             let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
             hexStringChunk = String(dataLengthInHex[range])
-            
+
             if let hexByte = UInt8(hexStringChunk, radix: 16) {
                 dataLengthBytes[dataIndex] = hexByte
             }
-            
+
             dataIndex -= 1
         }
-        
+
         return Data(bytes: dataLengthBytes)
     }
 }

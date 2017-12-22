@@ -28,7 +28,7 @@ public enum SigningAlgorithm: String {
 
 protocol SignerProtocol {
     var algorithm: SigningAlgorithm { get }
-    
+
     /// Initializes a `Signer` with a specified key.
     init(algorithm: SigningAlgorithm, privateKey: SecKey)
 
@@ -48,20 +48,20 @@ protocol SignerProtocol {
 
 public struct Signer {
     let signer: SignerProtocol
-    
+
     public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
         self.signer = CryptoFactory.signer(for: signingAlgorithm, with: privateKey)
     }
-    
+
     func sign(header: JWSHeader, payload: Payload) throws -> Data {
         guard let alg = header.algorithm, alg == signer.algorithm else {
             throw SigningError.algorithmMismatch
         }
-        
+
         guard let signingInput = [header, payload].asJOSESigningInput() else {
             throw SigningError.cannotComputeSigningInput
         }
-        
+
         return try signer.sign(signingInput)
     }
 }
@@ -71,7 +71,7 @@ extension Array where Element == DataConvertible {
         let encoded = self.map { component in
             return component.data().base64URLEncodedString()
         }
-        
+
         return encoded.joined(separator: ".").data(using: .ascii)
     }
 }

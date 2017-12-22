@@ -11,18 +11,18 @@ import Security
 // Naming?
 public class SecKeyJWKBuilder: JWKBuilder {
     typealias KeyDataType = SecKey
-    
+
     private var publicKey: SecKey?
     private var privateKey: SecKey?
     private var parameters: [String: Any] = [:]
-    
+
     public init() { }
-    
+
     public func set(publicKey: SecKey) -> Self {
         self.publicKey = publicKey
         return self
     }
-    
+
     public func set(privateKey: SecKey) -> Self {
         self.privateKey = privateKey
         return self
@@ -66,7 +66,7 @@ extension JWK {
         // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
         // See https://mohemian.atlassian.net/browse/JOSE-92.
         // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-        
+
         var item: CFTypeRef?
         return item as! SecKey
     }

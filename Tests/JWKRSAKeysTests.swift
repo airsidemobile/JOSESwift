@@ -9,7 +9,7 @@ import XCTest
 @testable import SwiftJOSE
 
 class JWKRSAKeysTests: CryptoTestCase {
-    
+
     func testMergingDuplicateAdditionalParametersInPublicKey() {
         let builder = SecKeyJWKBuilder()
         let jwk = builder.set(publicKey: publicKey!).set("kty", to: "wrongKty").build()!

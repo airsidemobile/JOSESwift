@@ -25,7 +25,7 @@ public struct JWSHeader: JOSEHeader {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
-        
+
         // Verify that the implementation understands and can process all
         // fields that it is required to support.
         guard parameters["alg"] is String else {
@@ -42,7 +42,7 @@ public struct JWSHeader: JOSEHeader {
         // Forcing the try is ok here, since [String: String] can be converted to JSON.
         // swiftlint:disable:next force_try
         let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-        
+
         // Forcing the try is ok here, since "alg" is the only required header parameter.
         // swiftlint:disable:next force_try
         try! self.init(parameters: parameters, headerData: headerData)

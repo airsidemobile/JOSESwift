@@ -17,7 +17,7 @@ enum HeaderParsingError: Error {
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var headerData: Data { get }
     var parameters: [String: Any] { get }
-    
+
     init(parameters: [String: Any], headerData: Data) throws
 
     init?(_ data: Data)

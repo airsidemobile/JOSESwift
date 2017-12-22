@@ -62,7 +62,7 @@ public struct JWS {
         guard let alg = header.algorithm else {
             return false
         }
-        
+
         let verifier = Verifier(signingAlgorithm: alg, publicKey: publicKey)
         guard let result = try? verifier.verify(header: header, and: payload, against: signature) else {
             return false

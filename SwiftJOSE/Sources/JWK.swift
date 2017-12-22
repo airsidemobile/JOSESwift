@@ -19,12 +19,12 @@ public enum JWKError: Error {
 public protocol JWK {
     /// The the cryptographic algorithm family used with the JWK.
     var keyType: JWKKeyType { get }
-    
+
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: Any] { get }
-    
+
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
@@ -32,13 +32,13 @@ public protocol JWK {
     ///
     /// - Parameter parameter: The desired parameter.
     subscript(parameter: String) -> Any? { get }
-    
+
     /// Computes the JSON representation of the JWK.
     ///
     /// - Returns: The JSON representation of the JWK as `String`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
     func jsonString() throws -> String
-    
+
     /// Computes the JSON representation of the JWK.
     ///
     /// - Returns: The JSON representation of the JWK as `Data`.

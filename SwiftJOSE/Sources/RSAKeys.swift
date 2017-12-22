@@ -10,7 +10,7 @@ import Foundation
 public struct RSAPublicKey: PublicKey {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
-    
+
     public let modulus: String
     public let exponent: String
 
@@ -29,7 +29,7 @@ public struct RSAPublicKey: PublicKey {
 public struct RSAPrivateKey: PrivateKey, KeyPair {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
-    
+
     public let modulus: String
     public let exponent: String
     public let privateExponent: String

@@ -72,5 +72,5 @@ class JWKtoJSONTests: CryptoTestCase {
 
         XCTAssertThrowsError(try jwk.jsonData())
     }
-    
+
 }

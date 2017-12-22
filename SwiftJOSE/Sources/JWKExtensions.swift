@@ -11,7 +11,7 @@ extension JWK {
     public subscript(parameter: String) -> Any? {
         return parameters[parameter]
     }
-    
+
     public func jsonString() throws -> String {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed

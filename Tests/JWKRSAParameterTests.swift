@@ -53,5 +53,5 @@ class JWKParameterTests: CryptoTestCase {
 
         XCTAssertEqual(jwk["kid"] as? String ?? "", "new on the block")
     }
-    
+
 }

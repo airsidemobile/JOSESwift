@@ -12,7 +12,7 @@ public enum SecureRandomGenerationError: Error {
 }
 
 public struct SecureRandom {
-    
+
     /**
      Generates secure random data with a given count.
      - Parameters:
@@ -22,15 +22,15 @@ public struct SecureRandom {
      */
     public static func generate(count: Int) throws -> Data {
         var generatedRandom = Data(count: count)
-        
+
         let randomGenerationStatus = generatedRandom.withUnsafeMutableBytes { mutableRandomBytes in
             SecRandomCopyBytes(kSecRandomDefault, generatedRandom.count, mutableRandomBytes)
         }
-        
+
         guard randomGenerationStatus == errSecSuccess else {
             throw SecureRandomGenerationError.failed(status: randomGenerationStatus)
         }
-        
+
         return generatedRandom
     }
 }
