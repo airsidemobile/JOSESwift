@@ -54,5 +54,3 @@ public protocol PrivateKey: JWK { }
 
 /// A JWK representing a key pair.
 public protocol KeyPair: JWK { }
-
-
