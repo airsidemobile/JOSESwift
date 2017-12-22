@@ -11,16 +11,16 @@ public struct RSAPublicKey: PublicKey {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
     
-    public let n: String
-    public let e: String
+    public let modulus: String
+    public let exponent: String
 
-    init(n: String, e: String, additionalParameters parameters: [String: Any] = [:]) {
+    init(modulus: String, exponent: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
-        self.n = n
-        self.e = e
+        self.modulus = modulus
+        self.exponent = exponent
 
         self.parameters = parameters.merging(
-            zip([ keyType.parameterName, "n", "e" ], [ self.keyType.rawValue, self.n, self.e ]),
+            zip([ keyType.parameterName, "n", "e" ], [ self.keyType.rawValue, self.modulus, self.exponent ]),
             uniquingKeysWith: { (_, new) in new }
         )
     }
@@ -30,18 +30,18 @@ public struct RSAPrivateKey: PrivateKey, KeyPair {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
     
-    public let n: String
-    public let e: String
-    public let d: String
+    public let modulus: String
+    public let exponent: String
+    public let privateExponent: String
 
-    init(n: String, e: String, d: String, additionalParameters parameters: [String: Any] = [:]) {
+    init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
-        self.n = n
-        self.e = e
-        self.d = d
+        self.modulus = modulus
+        self.exponent = exponent
+        self.privateExponent = privateExponent
 
         self.parameters = parameters.merging(
-            zip([ keyType.parameterName, "n", "e", "d" ], [ self.keyType.rawValue, self.n, self.e, self.d ]),
+            zip([ keyType.parameterName, "n", "e", "d" ], [ self.keyType.rawValue, self.modulus, self.exponent, self.privateExponent ]),
             uniquingKeysWith: { (_, new) in new }
         )
     }

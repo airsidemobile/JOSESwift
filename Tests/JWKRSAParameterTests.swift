@@ -34,17 +34,17 @@ class JWKParameterTests: CryptoTestCase {
         let builder = SecKeyJWKBuilder()
         let jwk = builder.set(privateKey: privateKey!).build() as! RSAPrivateKey
 
-        XCTAssertFalse(jwk.n.isEmpty)
-        XCTAssertFalse(jwk.e.isEmpty)
-        XCTAssertFalse(jwk.d.isEmpty)
+        XCTAssertFalse(jwk.modulus.isEmpty)
+        XCTAssertFalse(jwk.exponent.isEmpty)
+        XCTAssertFalse(jwk.privateExponent.isEmpty)
     }
 
     func testPublicKeyParametersArePresent() {
         let builder = SecKeyJWKBuilder()
         let jwk = builder.set(publicKey: publicKey!).build() as! RSAPublicKey
 
-        XCTAssertFalse(jwk.n.isEmpty)
-        XCTAssertFalse(jwk.e.isEmpty)
+        XCTAssertFalse(jwk.modulus.isEmpty)
+        XCTAssertFalse(jwk.exponent.isEmpty)
     }
 
     func testSettingAndGettingAdditionalParameter() {

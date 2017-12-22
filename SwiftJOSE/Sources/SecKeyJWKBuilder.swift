@@ -42,17 +42,17 @@ public class SecKeyJWKBuilder: JWKBuilder {
 
         // Only public key set
         if (publicKey != nil) && (privateKey == nil) {
-            return RSAPublicKey(n: "0vx...Kgw", e: "AQAB", additionalParameters: parameters)
+            return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
         }
 
         // Only private key set
         if (publicKey == nil) && (privateKey != nil) {
-            return RSAPrivateKey(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q", additionalParameters: parameters)
+            return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
         }
 
         // Both public and private key set
         if (publicKey != nil) && (privateKey != nil) {
-            return RSAKeyPair(n: "0vx...Kgw", e: "AQAB", d: "X4c...C8Q", additionalParameters: parameters)
+            return RSAKeyPair(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
         }
 
         // No keys set

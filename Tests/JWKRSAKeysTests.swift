@@ -25,15 +25,15 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testInitPublicKeyDirectlyWithoutAdditionalParameters() {
-        let key = RSAPublicKey(n: "n", e: "e")
+        let key = RSAPublicKey(modulus: "n", exponent: "e")
 
         XCTAssertEqual(key.keyType, .RSA)
         XCTAssertEqual(key["kty"] as? String ?? "", "RSA")
 
-        XCTAssertEqual(key.n, "n")
+        XCTAssertEqual(key.modulus, "n")
         XCTAssertEqual(key["n"] as? String ?? "", "n")
 
-        XCTAssertEqual(key.e, "e")
+        XCTAssertEqual(key.exponent, "e")
         XCTAssertEqual(key["e"] as? String ?? "", "e")
 
         // kty, n, e
@@ -41,18 +41,18 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testInitPrivateKeyDirectlyWithoutAdditionalParameters() {
-        let key = RSAPrivateKey(n: "n", e: "e", d: "d")
+        let key = RSAPrivateKey(modulus: "n", exponent: "e", privateExponent: "d")
 
         XCTAssertEqual(key.keyType, .RSA)
         XCTAssertEqual(key["kty"] as? String ?? "", "RSA")
 
-        XCTAssertEqual(key.n, "n")
+        XCTAssertEqual(key.modulus, "n")
         XCTAssertEqual(key["n"] as? String ?? "", "n")
 
-        XCTAssertEqual(key.e, "e")
+        XCTAssertEqual(key.exponent, "e")
         XCTAssertEqual(key["e"] as? String ?? "", "e")
 
-        XCTAssertEqual(key.d, "d")
+        XCTAssertEqual(key.privateExponent, "d")
         XCTAssertEqual(key["d"] as? String ?? "", "d")
 
         // kty, n, e, d
