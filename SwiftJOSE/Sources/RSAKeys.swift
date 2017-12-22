@@ -9,7 +9,7 @@ import Foundation
 
 public struct RSAPublicKey: PublicKey {
     public let keyType: JWKKeyType
-    public let parameters: [String : Any]
+    public let parameters: [String: Any]
     
     public let n: String
     public let e: String
@@ -24,21 +24,17 @@ public struct RSAPublicKey: PublicKey {
             uniquingKeysWith: { (_, new) in new }
         )
     }
-
-    init(n: String, e: String) {
-        self.init(n: n, e: e, additionalParameters: [:])
-    }
 }
 
 public struct RSAPrivateKey: PrivateKey, KeyPair {
     public let keyType: JWKKeyType
-    public let parameters: [String : Any]
+    public let parameters: [String: Any]
     
     public let n: String
     public let e: String
     public let d: String
 
-    init(n: String, e: String, d: String, additionalParameters parameters: [String: Any]) {
+    init(n: String, e: String, d: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
         self.n = n
         self.e = e
@@ -48,10 +44,6 @@ public struct RSAPrivateKey: PrivateKey, KeyPair {
             zip([ keyType.parameterName, "n", "e", "d" ], [ self.keyType.rawValue, self.n, self.e, self.d ]),
             uniquingKeysWith: { (_, new) in new }
         )
-    }
-
-    init(n: String, e: String, d: String) {
-        self.init(n: n, e: e, d: d, additionalParameters: [:])
     }
 }
 
