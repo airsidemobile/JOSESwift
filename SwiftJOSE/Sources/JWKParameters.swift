@@ -16,8 +16,8 @@ import Foundation
 /// - OCT
 public enum JWKKeyType: String {
     case RSA = "RSA"
-    case EC = "EC"
-    case OCT = "oct"
+    case ellipticCurve = "EC"
+    case octetSequence = "oct"
 
     var parameterName: String {
         return "kty"
