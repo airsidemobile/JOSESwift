@@ -18,11 +18,11 @@ extension JWK {
         }
 
         // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next_line force_try
+        // swiftlint:disable:next force_try
         let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
 
         // The forced unwrap is ok here since `JSONSerialization.data()` returns UTF-8.
-        // swiftlint:disable:next_line force_unwrap
+        // swiftlint:disable:next force_unwrap
         return String(data: jsonData, encoding: .utf8)!
     }
 
@@ -32,7 +32,7 @@ extension JWK {
         }
 
         // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next_line force_try
+        // swiftlint:disable:next force_try
         let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
 
         return jsonData
