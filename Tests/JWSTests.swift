@@ -27,7 +27,7 @@ class JWSTests: CryptoTestCase {
         let payload = Payload(message.data(using: .utf8)!)
         let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey!)
         let jws = JWS(header: header, payload: payload, signer: signer)!
-        let compactSerializedJWS = jws.compactSerialized
+        let compactSerializedJWS = jws.compactSerializedString
 
         XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
 

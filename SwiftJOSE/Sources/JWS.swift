@@ -10,13 +10,20 @@ import Foundation
 /// A JWS object consisting of a header, payload and signature. The three components of a JWS object
 /// cannot be changed once the object is initialized.
 public struct JWS {
-    let header: JWSHeader
-    let payload: Payload
-    let signature: Data
+    public let header: JWSHeader
+    public let payload: Payload
+    public let signature: Data
 
-    /// The compact serialization of this JWS object.
-    public var compactSerialized: String {
+    /// The compact serialization of this JWS object as string.
+    public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
+    }
+    
+    /// The compact serialization of this JWS object as data.
+    public var compactSerializedData: Data {
+        // Force unwrapping is ok here, since `serialize` returns a string generated from data.
+        // swiftlint:disable:next force_unwrap
+        return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
     /**
@@ -37,13 +44,40 @@ public struct JWS {
         }
     }
 
-    /**
-     Constructs a JWS object from a given compact serialization.
-     - parameters:
-         - compactSerialization: A compact serialized JWS object as received e.g. from the server.
-    */
+    /// Constructs a JWS object from a given compact serialization string.
+    ///
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object in string format as received e.g. from the server.
+    /// - Throws:
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
+    }
+
+    /// Constructs a JWS object from a given compact serialization data.
+    ///
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
+    /// - Throws:
+    ///     - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///         If the compact serialization data object is not convertible to string.
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
+    public init(compactSerialization: Data) throws {
+        guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
+            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+        }
+
+        self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerializationString)
     }
 
     fileprivate init(header: JWSHeader, payload: Payload, signature: Data) {

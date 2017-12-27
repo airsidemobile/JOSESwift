@@ -14,23 +14,30 @@ import Foundation
 /// As discussed, it is the responsibility of the framework user to cache e.g. the plaintext. Of course this will have to be communicated clearly.
 public struct JWE {
     /// The JWE's JOSE Header.
-    let header: JWEHeader
+    public let header: JWEHeader
 
     /// The encrypted content encryption key (CEK).
-    let encryptedKey: Data
+    public let encryptedKey: Data
 
     /// The initialization value used when encrypting the plaintext.
-    let initializationVector: Data
+    public let initializationVector: Data
 
     /// The ciphertext resulting from authenticated encryption of the plaintext.
-    let ciphertext: Data
+    public let ciphertext: Data
 
     /// The output of an authenticated encryption with associated data that ensures the integrity of the ciphertext and the additional associeated data.
-    let authenticationTag: Data
+    public let authenticationTag: Data
 
-    /// The Compact Serialization of this JWE.
-    public var compactSerialized: String {
+    /// The compact serialization of this JWE object as string.
+    public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
+    }
+    
+    /// The compact serialization of this JWE object as data.
+    public var compactSerializedData: Data {
+        // Force unwrapping is ok here, since `serialize` returns a string generated from data.
+        // swiftlint:disable:next force_unwrap
+        return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
     /// Initializes a JWE with a given header, payload and encrypter.
@@ -49,12 +56,43 @@ public struct JWE {
         self.initializationVector = encryptionContext.initializationVector
         self.authenticationTag = encryptionContext.authenticationTag
     }
-
-    /// Initializes a JWE from a given compact serialization.
+    
+    /// Constructs a JWE object from a given compact serialization string.
+    ///
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object as string as received e.g. from the server.
+    /// - Throws:
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
     }
 
+    /// Constructs a JWE object from a given compact serialization data object.
+    ///
+    /// - Parameters:
+    ///     - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
+    /// - Throws:
+    ///     - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///         If the compact serialization data object is not convertible to string.
+    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///         If the component count of the compact serialization is wrong.
+    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///         If the component is not a valid base64URL string.
+    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///         If a component cannot be initialized from its data object.
+    public init(compactSerialization: Data) throws {
+        guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
+            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+        }
+        
+        self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
+    }
+    
     /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
     private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header

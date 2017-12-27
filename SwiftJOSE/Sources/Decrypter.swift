@@ -87,7 +87,7 @@ public struct Decrypter {
         let symmetricContext = SymmetricDecryptionContext(
             ciphertext: context.ciphertext,
             initializationVector: context.initializationVector,
-            additionalAuthenticatedData: context.header.data(),
+            additionalAuthenticatedData: context.header.data().base64URLEncodedData(),
             authenticationTag: context.authenticationTag
         )
 

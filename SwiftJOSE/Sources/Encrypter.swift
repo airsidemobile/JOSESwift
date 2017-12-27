@@ -187,7 +187,7 @@ public struct Encrypter {
 
         let cek = try SecureRandom.generate(count: enc.keyLength())
         let encryptedKey = try asymmetric.encrypt(cek)
-        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data())
+        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data().base64URLEncodedData())
 
         return EncryptionContext(
             encryptedKey: encryptedKey,

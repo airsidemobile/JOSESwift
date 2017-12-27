@@ -8,6 +8,7 @@
 import Foundation
 
 enum DeserializationError: Error {
+    case wrongDataEncoding(data: Data)
     case invalidCompactSerializationComponentCount(count: Int)
     case componentNotValidBase64URL(component: String)
     case componentCouldNotBeInitializedFromData(data: Data)
