@@ -3,7 +3,7 @@
 //  Tests
 //
 //  Created by Carol Capek on 22.11.17.
-//  Copyright © 2017 Airside Mobile, Inc. All rights reserved.
+//  Copyright © 2017 Airside Mobile Inc. All rights reserved.
 //
 
 import XCTest
