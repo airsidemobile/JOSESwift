@@ -30,5 +30,3 @@ FOUNDATION_EXPORT double SwiftJOSEVersionNumber;
 FOUNDATION_EXPORT const unsigned char SwiftJOSEVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <SwiftJOSE/PublicHeader.h>
-
-
