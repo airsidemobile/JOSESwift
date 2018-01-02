@@ -1,5 +1,3 @@
-# NOTE: We may have to adapt this Podspec once the framework gets distributed and used via CocoaPods.
-
 Pod::Spec.new do |s|
   s.name              = "SwiftJOSE"
   s.version           = "0.0.1"
