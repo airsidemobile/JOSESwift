@@ -17,7 +17,7 @@ public enum JWKError: Error {
 /// A JWK object that represents a key or a key pair of a certain type.
 /// Check `KeyType` for the supported key types.
 public protocol JWK {
-    /// The the cryptographic algorithm family used with the JWK.
+    /// The cryptographic algorithm family used with the JWK.
     var keyType: JWKKeyType { get }
 
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
