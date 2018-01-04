@@ -4,6 +4,22 @@
 //
 //  Created by Carol Capek on 28.11.17.
 //
+//  ---------------------------------------------------------------------------
+//  Copyright 2018 Airside Mobile Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//  ---------------------------------------------------------------------------
+//
 
 import XCTest
 @testable import SwiftJOSE
@@ -31,17 +47,17 @@ class AESEncrypterTests: CryptoTestCase {
 
         let cek = try! SecureRandom.generate(count: SymmetricEncryptionAlgorithm.AES256CBCHS512.keyLength())
         let encrypter = AESEncrypter(algorithm: .AES256CBCHS512)
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, with: cek, additionalAuthenticatedData: additionalAuthenticatedData)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, with: cek, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let keys = try! SymmetricEncryptionAlgorithm.AES256CBCHS512.retrieveKeys(from: cek)
         let hmacKey = keys.hmacKey
         let encryptionKey = keys.encryptionKey
 
-        var concatData = additionalAuthenticatedData
+        var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
         concatData.append(symmetricEncryptionContext.ciphertext)
-        concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
+        concatData.append(String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData().getByteLengthAsOctetHexData())
 
         let keyLength = size_t(kCCKeySizeAES256)
         var macOutData = Data(count: 64)
