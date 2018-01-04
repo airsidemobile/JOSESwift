@@ -36,7 +36,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
     public func build() -> JWK? {
         // Todo: Impove before implementation https://mohemian.atlassian.net/browse/JOSE-94.
 
-        // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
+        // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
         // See https://mohemian.atlassian.net/browse/JOSE-91.
         // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
 
@@ -45,14 +45,10 @@ public class SecKeyJWKBuilder: JWKBuilder {
             return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
         }
 
-        // Only private key set
-        if (publicKey == nil) && (privateKey != nil) {
+        // Private key set.
+        // We don't care about the public key at this point since it is contained in the private key.
+        if (privateKey != nil) {
             return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
-        }
-
-        // Both public and private key set
-        if (publicKey != nil) && (privateKey != nil) {
-            return RSAKeyPair(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
         }
 
         // No keys set
