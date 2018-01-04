@@ -1,5 +1,5 @@
 //
-//  JWKParameterTests.swift
+//  JWKRSAParameterTests.swift
 //  Tests
 //
 //  Created by Daniel Egger on 21.12.17.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import SwiftJOSE
 
-class JWKParameterTests: CryptoTestCase {
+class JWKRSAParameterTests: CryptoTestCase {
 
     func testPrivateKeyBuilding() {
         let builder = SecKeyJWKBuilder()
