@@ -55,7 +55,7 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
         XCTAssertTrue(jwk is RSAKeyPair)
     }
 
-    func testBuildingWithoutSettingAKey() {
+    func testBuildingWithoutSettingKeys() {
         let builder = SecKeyJWKBuilder()
         let jwk = builder.build()
 
