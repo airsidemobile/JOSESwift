@@ -47,7 +47,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
 
         // Private key set.
         // We don't care about the public key at this point since it is contained in the private key.
-        if (privateKey != nil) {
+        if privateKey != nil {
             return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
         }
 
