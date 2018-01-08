@@ -24,6 +24,15 @@
 import Foundation
 import CommonCrypto
 
+fileprivate extension SymmetricEncryptionAlgorithm {
+    var ccAlgorithm: CCAlgorithm {
+        switch self {
+        case .AES256CBCHS512:
+            return CCAlgorithm(kCCAlgorithmAES128)
+        }
+    }
+}
+
 public struct AES {
 
     public static func encrypt(plaintext: Data, encryptionKey: Data, algorithm: SymmetricEncryptionAlgorithm, iv: Data) -> Data {
