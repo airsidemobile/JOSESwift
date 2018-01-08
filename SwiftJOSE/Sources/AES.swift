@@ -31,6 +31,13 @@ fileprivate extension SymmetricEncryptionAlgorithm {
             return CCAlgorithm(kCCAlgorithmAES128)
         }
     }
+
+    func checkAESKeyLength(for key: Data) -> Bool {
+        switch self {
+        case .AES256CBCHS512:
+            return key.count == kCCKeySizeAES256
+        }
+    }
 }
 
 public struct AES {
