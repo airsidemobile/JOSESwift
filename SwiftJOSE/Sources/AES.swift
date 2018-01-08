@@ -102,7 +102,7 @@ public struct AES {
 
         //AES's 128 block size is fix for every key length.
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
-        var cryptData = Data(count:cryptLength)
+        var cryptData = Data(count: cryptLength)
 
         let keyLength = key.count
         var numBytesCrypted: size_t = 0
