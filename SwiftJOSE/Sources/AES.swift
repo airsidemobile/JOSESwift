@@ -52,38 +52,37 @@ public struct AES {
     public static func encrypt256(plaintext: Data, encryptionKey: Data, iv: Data) -> Data {
         let dataLength = plaintext.count
 
+    fileprivate static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
+        let dataLength = data.count
+
+        //AES's 128 block size is fix for every key length.
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var cryptData = Data(count:cryptLength)
 
-        let keyLength = size_t(kCCKeySizeAES256)
-        let options = CCOptions(kCCOptionPKCS7Padding)
+        let keyLength = key.count
+        var numBytesCrypted: size_t = 0
 
-        var numBytesEncrypted: size_t = 0
-
-        // In funktion auslagern
         let cryptStatus = cryptData.withUnsafeMutableBytes {cryptBytes in
-            plaintext.withUnsafeBytes {dataBytes in
+            data.withUnsafeBytes {dataBytes in
                 initializationVector.withUnsafeBytes {ivBytes in
-                    encryptionKey.withUnsafeBytes {keyBytes in
-                        CCCrypt(CCOperation(kCCEncrypt),
+                    key.withUnsafeBytes {keyBytes in
+                        CCCrypt(operation,
                                 algorithm,
-                                options,
+                                padding,
                                 keyBytes, keyLength,
                                 ivBytes,
                                 dataBytes, dataLength,
                                 cryptBytes, cryptLength,
-                                &numBytesEncrypted)
+                                &numBytesCrypted)
                     }
                 }
             }
         }
 
         if UInt32(cryptStatus) == UInt32(kCCSuccess) {
-            cryptData.removeSubrange(numBytesEncrypted..<cryptLength)
-        } else {
-            throw EncryptionError.encryptingFailed(description: "Encryption failed with CryptorStatus: \(cryptStatus).")
+            cryptData.removeSubrange(numBytesCrypted..<cryptLength)
         }
 
-        return cryptData
+        return (cryptData, UInt32(cryptStatus))
     }
 }
