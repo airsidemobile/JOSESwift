@@ -22,8 +22,6 @@
 //
 
 import Foundation
-import IDZSwiftCommonCrypto
-import CommonCrypto
 
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
 public struct AESEncrypter: SymmetricEncrypter {
@@ -44,7 +42,7 @@ public struct AESEncrypter: SymmetricEncrypter {
         let encryptionKey = keys.encryptionKey
 
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector.
-        let cipherText = try aesEncrypt(plaintext, encryptionKey: encryptionKey, using: algorithm.ccAlgorithms.aesAlgorithm, and: iv)
+        let cipherText = try AES.encrypt(plaintext: plaintext, with: encryptionKey, using: algorithm, and: iv)
 
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
@@ -61,54 +59,5 @@ public struct AESEncrypter: SymmetricEncrypter {
             authenticationTag: authenticationTag,
             initializationVector: iv
         )
-    }
-
-    /**
-     Encrypts a plain text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
-     - Parameters:
-        - plaintext: The plain text to encrypt.
-        - encryptionKey: The symmetric key.
-        - algorithm: The algorithm used to encrypt the plain text.
-        - initializationVector: The initial block.
-     
-     - Throws:
-        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-     
-     - Returns: The cipher text (encrypted plain text).
-     */
-    func aesEncrypt(_ plaintext: Data, encryptionKey: Data, using algorithm: CCAlgorithm, and initializationVector: Data) throws -> Data {
-        let dataLength = plaintext.count
-        let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
-        var cryptData = Data(count:cryptLength)
-
-        let keyLength = size_t(kCCKeySizeAES256)
-        let options = CCOptions(kCCOptionPKCS7Padding)
-
-        var numBytesEncrypted: size_t = 0
-
-        let cryptStatus = cryptData.withUnsafeMutableBytes {cryptBytes in
-            plaintext.withUnsafeBytes {dataBytes in
-                initializationVector.withUnsafeBytes {ivBytes in
-                    encryptionKey.withUnsafeBytes {keyBytes in
-                        CCCrypt(CCOperation(kCCEncrypt),
-                                algorithm,
-                                options,
-                                keyBytes, keyLength,
-                                ivBytes,
-                                dataBytes, dataLength,
-                                cryptBytes, cryptLength,
-                                &numBytesEncrypted)
-                    }
-                }
-            }
-        }
-
-        if UInt32(cryptStatus) == UInt32(kCCSuccess) {
-            cryptData.removeSubrange(numBytesEncrypted..<cryptLength)
-        } else {
-            throw EncryptionError.encryptingFailed(description: "Encryption failed with CryptorStatus: \(cryptStatus).")
-        }
-
-        return cryptData
     }
 }
