@@ -28,8 +28,6 @@ import Foundation
 /// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
 ///
 /// - RSA
-/// - ellipticCurve
-/// - octetSequence
 public enum JWKKeyType: String {
     case RSA = "RSA"
 
