@@ -30,6 +30,7 @@ public class SecKeyJWKBuilder: JWKBuilder {
     private var publicKey: SecKey?
     private var privateKey: SecKey?
     private var parameters: [String: Any] = [:]
+    private var keyType: JWKKeyType?
 
     public init() { }
 
@@ -48,25 +49,37 @@ public class SecKeyJWKBuilder: JWKBuilder {
         return self
     }
 
+    public func set(keyType: JWKKeyType) -> Self {
+        self.keyType = keyType
+        return self
+    }
+
     public func build() -> JWK? {
-        // Todo: Impove before implementation https://mohemian.atlassian.net/browse/JOSE-94.
-
-        // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
-        // See https://mohemian.atlassian.net/browse/JOSE-91.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-
-        // Only public key set
-        if (publicKey != nil) && (privateKey == nil) {
-            return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
+        guard let keyType = self.keyType else {
+            return nil
         }
 
-        // Private key set.
-        // We don't care about the public key at this point since it is contained in the private key.
-        if privateKey != nil {
+        switch keyType {
+        case .RSA:
+            return buildRSA()
+        }
+    }
+
+    private func buildRSA() -> JWK? {
+        if let _ = self.publicKey, self.privateKey == nil {
+            // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
+            // Todo: Decide on exact control flow.
+            // See https://mohemian.atlassian.net/browse/JOSE-91.
+            // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
+            return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
+        } else if let _ = self.privateKey {
+            // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
+            // Todo: Decide on exact control flow.
+            // See https://mohemian.atlassian.net/browse/JOSE-91.
+            // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
             return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
         }
 
-        // No keys set
         return nil
     }
 }

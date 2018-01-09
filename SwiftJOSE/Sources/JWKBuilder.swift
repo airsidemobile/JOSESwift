@@ -50,7 +50,17 @@ internal protocol JWKBuilder {
     ///            to set another key or parameter or to build a JWK.
     func set(_ parameter: String, to value: Any) -> Self
 
+
+    /// Set the desired key type.
+    /// Setting the key type is required for `build()` to succeed.
+    ///
+    /// - Parameter keyType: The desired key type. Currently only `.RSA` keys are supported.
+    /// - Returns: A `JWKBuilder` containing the set parameter that can be used
+    ///            to set another key or parameter or to build a JWK.
+    func set(keyType: JWKKeyType) -> Self
+
     /// Builds a JWK containing the previously set key(s).
+    /// Make sure to set the JWK's key type using `set(keyType:)` before calling `build()`.
     ///
     /// - Returns: A JWK containing the previously set key(s).
     ///            `nil` if no key(s) set.
