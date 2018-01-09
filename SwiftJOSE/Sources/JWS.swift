@@ -34,7 +34,7 @@ public struct JWS {
     public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
     }
-    
+
     /// The compact serialization of this JWS object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
