@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
-public struct AESEncrypter: SymmetricEncrypter {
+internal struct AESEncrypter: SymmetricEncrypter {
     let algorithm: SymmetricEncryptionAlgorithm
 
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {

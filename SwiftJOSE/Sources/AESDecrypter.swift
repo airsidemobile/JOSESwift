@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
-public struct AESDecrypter: SymmetricDecrypter {
+internal struct AESDecrypter: SymmetricDecrypter {
     let algorithm: SymmetricEncryptionAlgorithm
 
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data {

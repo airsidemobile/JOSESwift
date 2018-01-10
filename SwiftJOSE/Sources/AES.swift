@@ -22,6 +22,7 @@
 //
 
 import Foundation
+import IDZSwiftCommonCrypto
 import CommonCrypto
 
 fileprivate extension SymmetricEncryptionAlgorithm {
@@ -52,7 +53,7 @@ public struct AES {
     /// - Throws:
     ///   - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
-    public static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
+    internal static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .AES256CBCHS512:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
@@ -80,7 +81,7 @@ public struct AES {
     /// - Throws:
     ///   - `EncryptionError.decryptingFailed(description: String)`: If the encryption failed with a specific error.
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
-    public static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
+    internal static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .AES256CBCHS512:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
