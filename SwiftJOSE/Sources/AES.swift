@@ -41,7 +41,7 @@ fileprivate extension SymmetricEncryptionAlgorithm {
     }
 }
 
-public struct AES {
+internal struct AES {
     /// Encrypts a plain text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
     ///
     /// - Parameters:
@@ -53,7 +53,7 @@ public struct AES {
     /// - Throws:
     ///   - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
-    internal static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
+    static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .AES256CBCHS512:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
@@ -81,7 +81,7 @@ public struct AES {
     /// - Throws:
     ///   - `EncryptionError.decryptingFailed(description: String)`: If the encryption failed with a specific error.
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
-    internal static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
+    static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .AES256CBCHS512:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
@@ -98,7 +98,7 @@ public struct AES {
         }
     }
 
-    fileprivate static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
+    static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
         let dataLength = data.count
 
         //AES's 128 block size is fix for every key length.
