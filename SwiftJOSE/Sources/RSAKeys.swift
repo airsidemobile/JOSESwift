@@ -37,7 +37,7 @@ public struct RSAPublicKey: PublicKey {
 
         self.parameters = parameters.merging(
             zip(
-                [ keyType.parameterName, "n", "e" ],
+                [ JWKKeyType.parameterName, "n", "e" ],
                 [ self.keyType.rawValue, self.modulus, self.exponent ]
             ),
             uniquingKeysWith: { (_, new) in new }
@@ -61,7 +61,7 @@ public struct RSAPrivateKey: PrivateKey, KeyPair {
 
         self.parameters = parameters.merging(
             zip(
-                [ keyType.parameterName, "n", "e", "d" ],
+                [ JWKKeyType.parameterName, "n", "e", "d" ],
                 [ self.keyType.rawValue, self.modulus, self.exponent, self.privateExponent ]
             ),
             uniquingKeysWith: { (_, new) in new }

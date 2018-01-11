@@ -15,8 +15,8 @@ class JWKParameterTests: CryptoTestCase {
         let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build() as! PrivateKey
 
         XCTAssertEqual(jwk.keyType, .RSA)
-        XCTAssertEqual(jwk[JWKKeyType.RSA.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
-        XCTAssertEqual(jwk.parameters[JWKKeyType.RSA.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk[JWKKeyType.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk.parameters[JWKKeyType.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
     }
 
     func testPublicKeyKeyTypeIsPresent() {
@@ -24,8 +24,8 @@ class JWKParameterTests: CryptoTestCase {
         let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build() as! PublicKey
 
         XCTAssertEqual(jwk.keyType, .RSA)
-        XCTAssertEqual(jwk[JWKKeyType.RSA.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
-        XCTAssertEqual(jwk.parameters[JWKKeyType.RSA.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk[JWKKeyType.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk.parameters[JWKKeyType.parameterName] as? String ?? "", JWKKeyType.RSA.rawValue)
     }
 
     func testSettingAndGettingAdditionalParameter() {

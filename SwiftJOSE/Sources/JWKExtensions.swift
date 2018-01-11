@@ -23,12 +23,18 @@
 
 import Foundation
 
-extension JWK {
-    public subscript(parameter: String) -> Any? {
+// MARK: Subscript
+
+public extension JWK {
+    subscript(parameter: String) -> Any? {
         return parameters[parameter]
     }
+}
 
-    public func jsonString() throws -> String {
+// MARK: JSON
+
+public extension JWK {
+    func jsonString() throws -> String {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
@@ -42,7 +48,7 @@ extension JWK {
         return String(data: jsonData, encoding: .utf8)!
     }
 
-    public func jsonData() throws -> Data {
+    func jsonData() throws -> Data {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
@@ -52,5 +58,58 @@ extension JWK {
         let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
 
         return jsonData
+    }
+}
+
+// MARK: Parsing
+
+extension JWK {
+    public static func parse(_ parameters: [String: Any]) throws -> JWK {
+        guard
+            let rawValue = parameters[JWKKeyType.parameterName] as? String,
+            let keyType = JWKKeyType(rawValue: rawValue)
+        else {
+            throw JWKError.RequiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
+        }
+
+        switch keyType {
+        case .RSA:
+            return try parseRSA(from: parameters)
+        }
+    }
+
+    public static func parse(_ data: Data) throws -> JWK {
+        guard
+            let json = try? JSONSerialization.jsonObject(with: data, options: []),
+            let parameters = json as? [String: Any]
+        else {
+            throw JWKError.JWKDataNotInTheRightFormat
+        }
+
+        return try parse(parameters)
+    }
+
+    public static func parse(_ string: String) throws -> JWK {
+        guard let data = string.data(using: .utf8) else {
+            throw JWKError.JWKStringNotInTheRightFormat
+        }
+
+        return try parse(data)
+    }
+
+    private static func parseRSA(from parameters: [String: Any]) throws -> JWK {
+        guard let modulus = parameters["n"] as? String else {
+            throw JWKError.RequiredRSAParameterMissing(parameter: "n")
+        }
+
+        guard let exponent = parameters["e"] as? String else {
+            throw JWKError.RequiredRSAParameterMissing(parameter: "e")
+        }
+
+        guard let privateExponent = parameters["d"] as? String else {
+            return RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: parameters)
+        }
+
+        return RSAPrivateKey(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
     }
 }

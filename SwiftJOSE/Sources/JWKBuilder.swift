@@ -50,7 +50,6 @@ internal protocol JWKBuilder {
     ///            to set another key or parameter or to build a JWK.
     func set(_ parameter: String, to value: Any) -> Self
 
-
     /// Set the desired key type.
     /// Setting the key type is required for `build()` to succeed.
     ///

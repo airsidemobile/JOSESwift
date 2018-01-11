@@ -1,8 +1,8 @@
 //
-//  JWKParameters.swift
+//  JWKParser.swift
 //  SwiftJOSE
 //
-//  Created by Daniel Egger on 21.12.17.
+//  Created by Daniel Egger on 11.01.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -23,17 +23,6 @@
 
 import Foundation
 
-/// The key type parameter of a JWK identifies the cryptographic algorithm
-/// family used with the key(s) represented by a JWK.
-/// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
-///
-/// - RSA
-public enum JWKKeyType: String {
-    case RSA = "RSA"
-
-    static var parameterName: String {
-        return "kty"
-    }
+internal protocol JWKParser {
+    
 }
-
-// Todo: Add more JWK parameters here. See https://tools.ietf.org/html/rfc7517#section-4.

@@ -28,6 +28,10 @@ import Foundation
 /// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
 public enum JWKError: Error {
     case JWKToJSONConversionFailed
+    case RequiredJWKParameterMissing(parameter: String)
+    case RequiredRSAParameterMissing(parameter: String)
+    case JWKDataNotInTheRightFormat
+    case JWKStringNotInTheRightFormat
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
@@ -60,6 +64,10 @@ public protocol JWK {
     /// - Returns: The JSON representation of the JWK as `Data`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
     func jsonData() throws -> Data
+
+    static func parse(_ parameters: [String: Any]) throws -> JWK
+    static func parse(_ data: Data) throws -> JWK
+    static func parse(_ string: String) throws -> JWK
 }
 
 /// A JWK representing a public key.
