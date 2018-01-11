@@ -69,12 +69,3 @@ public protocol JWK {
     static func parse(_ data: Data) throws -> JWK
     static func parse(_ string: String) throws -> JWK
 }
-
-/// A JWK representing a public key.
-public protocol PublicKey: JWK { }
-
-/// A JWK representing a private key.
-public protocol PrivateKey: JWK { }
-
-/// A JWK representing a key pair.
-public protocol KeyPair: JWK { }

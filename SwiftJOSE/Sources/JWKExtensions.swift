@@ -96,20 +96,4 @@ extension JWK {
 
         return try parse(data)
     }
-
-    private static func parseRSA(from parameters: [String: Any]) throws -> JWK {
-        guard let modulus = parameters["n"] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: "n")
-        }
-
-        guard let exponent = parameters["e"] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: "e")
-        }
-
-        guard let privateExponent = parameters["d"] as? String else {
-            return RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: parameters)
-        }
-
-        return RSAPrivateKey(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
-    }
 }

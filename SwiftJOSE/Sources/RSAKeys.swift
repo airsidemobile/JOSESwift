@@ -23,7 +23,31 @@
 
 import Foundation
 
-public struct RSAPublicKey: PublicKey {
+fileprivate enum ParameterName: String {
+    case modulus = "n"
+    case exponent = "e"
+    case privateExponent = "d"
+}
+
+internal extension JWK {
+    static func parseRSA(from parameters: [String: Any]) throws -> JWK {
+        guard let modulus = parameters["n"] as? String else {
+            throw JWKError.RequiredRSAParameterMissing(parameter: "n")
+        }
+
+        guard let exponent = parameters["e"] as? String else {
+            throw JWKError.RequiredRSAParameterMissing(parameter: "e")
+        }
+
+        guard let privateExponent = parameters["d"] as? String else {
+            return RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: parameters)
+        }
+
+        return RSAPrivateKey(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
+    }
+}
+
+public struct RSAPublicKey: JWK {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
 
@@ -37,7 +61,7 @@ public struct RSAPublicKey: PublicKey {
 
         self.parameters = parameters.merging(
             zip(
-                [ JWKKeyType.parameterName, "n", "e" ],
+                [ JWKKeyType.parameterName, ParameterName.modulus.rawValue, ParameterName.exponent.rawValue ],
                 [ self.keyType.rawValue, self.modulus, self.exponent ]
             ),
             uniquingKeysWith: { (_, new) in new }
@@ -45,7 +69,7 @@ public struct RSAPublicKey: PublicKey {
     }
 }
 
-public struct RSAPrivateKey: PrivateKey, KeyPair {
+public struct RSAPrivateKey: JWK {
     public let keyType: JWKKeyType
     public let parameters: [String: Any]
 
@@ -61,7 +85,7 @@ public struct RSAPrivateKey: PrivateKey, KeyPair {
 
         self.parameters = parameters.merging(
             zip(
-                [ JWKKeyType.parameterName, "n", "e", "d" ],
+                [ JWKKeyType.parameterName, ParameterName.modulus.rawValue, ParameterName.exponent.rawValue, ParameterName.privateExponent.rawValue ],
                 [ self.keyType.rawValue, self.modulus, self.exponent, self.privateExponent ]
             ),
             uniquingKeysWith: { (_, new) in new }

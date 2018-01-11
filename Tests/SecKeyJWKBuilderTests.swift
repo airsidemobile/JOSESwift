@@ -16,10 +16,6 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
 
         XCTAssertNotNil(jwk)
 
-        XCTAssertTrue(jwk is PublicKey)
-        XCTAssertFalse(jwk is PrivateKey)
-        XCTAssertFalse(jwk is KeyPair)
-
         XCTAssertTrue(jwk is RSAPublicKey)
         XCTAssertFalse(jwk is RSAPrivateKey)
         XCTAssertFalse(jwk is RSAKeyPair)
@@ -31,10 +27,6 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
 
         XCTAssertNotNil(jwk)
 
-        XCTAssertFalse(jwk is PublicKey)
-        XCTAssertTrue(jwk is PrivateKey)
-        XCTAssertTrue(jwk is KeyPair)
-
         XCTAssertFalse(jwk is RSAPublicKey)
         XCTAssertTrue(jwk is RSAPrivateKey)
         XCTAssertTrue(jwk is RSAKeyPair)
@@ -45,10 +37,6 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
         let jwk = builder.set(privateKey: privateKey!).set(publicKey: publicKey!).set(keyType: .RSA).build()
 
         XCTAssertNotNil(jwk)
-
-        XCTAssertFalse(jwk is PublicKey)
-        XCTAssertTrue(jwk is PrivateKey)
-        XCTAssertTrue(jwk is KeyPair)
 
         XCTAssertFalse(jwk is RSAPublicKey)
         XCTAssertTrue(jwk is RSAPrivateKey)
