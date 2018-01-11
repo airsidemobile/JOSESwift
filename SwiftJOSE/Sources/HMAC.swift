@@ -27,14 +27,14 @@ import CommonCrypto
 
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
-    
+
     var ccAlgorithm: CCAlgorithm {
         switch self {
         case .SHA512:
             return CCAlgorithm(kCCHmacAlgSHA512)
         }
     }
-    
+
     var outputLength: Int {
         switch self {
         case .SHA512:
@@ -44,7 +44,7 @@ public enum HMACAlgorithm: String {
 }
 
 public struct HMAC {
-    
+
     /**
      Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
      - Parameters:
@@ -56,7 +56,7 @@ public struct HMAC {
      */
     public static func calculate(from input: Data, with key: Data, using algorithm: HMACAlgorithm) -> Data {
         var hmacOutData = Data(count: algorithm.outputLength)
-        
+
         hmacOutData.withUnsafeMutableBytes { hmacOutBytes in
             key.withUnsafeBytes { keyBytes in
                 input.withUnsafeBytes { inputBytes in
@@ -64,7 +64,7 @@ public struct HMAC {
                 }
             }
         }
-        
+
         return hmacOutData
     }
 }

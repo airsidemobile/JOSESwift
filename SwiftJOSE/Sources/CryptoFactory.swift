@@ -29,7 +29,7 @@ import Foundation
   we could decide on which version to use here.
  */
 struct CryptoFactory {
-    
+
     /**
      Returns an asymmetric encrypter suitable for a given algorithm, initialized with a given public key.
      - Parameters:
@@ -44,7 +44,7 @@ struct CryptoFactory {
             return RSAEncrypter(algorithm: algorithm, publicKey: publicKey)
         }
     }
-    
+
     /**
      Returns a symmetric encrypter suitable for a given algorithm.
      - Parameters:
@@ -58,7 +58,7 @@ struct CryptoFactory {
             return AESEncrypter(algorithm: algorithm)
         }
     }
-    
+
     /**
      Returns an asymmetric decrypter suitable for a given algorithm, initialized with a given private key.
      - Parameters:
@@ -74,7 +74,7 @@ struct CryptoFactory {
             return RSADecrypter(algorithm: algorithm, privateKey: privateKey)
         }
     }
-    
+
     /**
      Returns a symmetric decrypter suitable for a given algorithm.
      - Parameters:
@@ -88,19 +88,19 @@ struct CryptoFactory {
             return AESDecrypter(algorithm: algorithm)
         }
     }
-    
+
     static func signer(for algorithm: SigningAlgorithm, with privateKey: SecKey) -> SignerProtocol {
         switch algorithm {
         case .RS512:
             return RSASigner(algorithm: algorithm, privateKey: privateKey)
         }
     }
-    
+
     static func verifyer(for algorithm: SigningAlgorithm, with publicKey: SecKey) -> VerifierProtocol {
         switch algorithm {
         case .RS512:
             return RSAVerifier(algorithm: algorithm, publicKey: publicKey)
         }
     }
-    
+
 }

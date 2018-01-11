@@ -26,9 +26,9 @@ import Foundation
 internal protocol AsymmetricDecrypter {
     /// Initializes an `AsymmetricDecrypter` with a specified private key.
     init(algorithm: AsymmetricEncryptionAlgorithm, privateKey: SecKey)
-    
+
     var algorithm: AsymmetricEncryptionAlgorithm { get }
-    
+
     /**
      Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
      - Parameters:
@@ -47,7 +47,7 @@ internal protocol AsymmetricDecrypter {
 
 internal protocol SymmetricDecrypter {
     init(algorithm: SymmetricEncryptionAlgorithm)
-    
+
     var algorithm: SymmetricEncryptionAlgorithm { get }
 
     /**
@@ -92,7 +92,7 @@ public struct Decrypter {
         guard let alg = context.header.algorithm, alg == asymmetric.algorithm else {
             throw EncryptionError.keyEncryptionAlgorithmMismatch
         }
-        
+
         guard let enc = context.header.encryptionAlgorithm, enc == symmetric.algorithm else {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }

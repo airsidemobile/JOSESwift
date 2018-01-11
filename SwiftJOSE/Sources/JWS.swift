@@ -34,7 +34,7 @@ public struct JWS {
     public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
     }
-    
+
     /// The compact serialization of this JWS object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
@@ -112,7 +112,7 @@ public struct JWS {
         guard let alg = header.algorithm else {
             return false
         }
-        
+
         let verifier = Verifier(signingAlgorithm: alg, publicKey: publicKey)
         guard let result = try? verifier.verify(header: header, and: payload, against: signature) else {
             return false

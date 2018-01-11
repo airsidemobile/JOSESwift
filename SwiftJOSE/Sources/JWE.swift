@@ -48,7 +48,7 @@ public struct JWE {
     public var compactSerializedString: String {
         return JOSESerializer().serialize(compact: self)
     }
-    
+
     /// The compact serialization of this JWE object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
@@ -72,7 +72,7 @@ public struct JWE {
         self.initializationVector = encryptionContext.initializationVector
         self.authenticationTag = encryptionContext.authenticationTag
     }
-    
+
     /// Constructs a JWE object from a given compact serialization string.
     ///
     /// - Parameters:
@@ -105,10 +105,10 @@ public struct JWE {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
             throw DeserializationError.wrongDataEncoding(data: compactSerialization)
         }
-        
+
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
     }
-    
+
     /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
     private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header

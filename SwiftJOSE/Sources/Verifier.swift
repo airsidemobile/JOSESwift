@@ -25,7 +25,7 @@ import Foundation
 
 protocol VerifierProtocol {
     var algorithm: SigningAlgorithm { get }
-    
+
     /// Initializes a `Verifier` with a specified key and signing algorithm.
     init(algorithm: SigningAlgorithm, publicKey: SecKey)
 
@@ -46,20 +46,20 @@ protocol VerifierProtocol {
 
 public struct Verifier {
     let verifier: VerifierProtocol
-    
+
     public init(signingAlgorithm: SigningAlgorithm, publicKey: SecKey) {
         self.verifier = CryptoFactory.verifyer(for: signingAlgorithm, with: publicKey)
     }
-    
+
     func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
         guard let alg = header.algorithm, alg == verifier.algorithm else {
             throw SigningError.algorithmMismatch
         }
-        
+
         guard let signingInput = [header, payload].asJOSESigningInput() else {
             throw SigningError.cannotComputeSigningInput
         }
-        
+
         return try verifier.verify(signingInput, against: signature)
     }
 }

@@ -91,14 +91,14 @@ public enum SymmetricEncryptionAlgorithm: String {
             return 64
         }
     }
-    
+
     func initializationVectorLength() -> Int {
         switch self {
         case .AES256CBCHS512:
             return 16
         }
     }
-    
+
     func checkKeyLength(for key: Data) -> Bool {
         switch self {
         case .AES256CBCHS512:
@@ -116,7 +116,7 @@ public enum SymmetricEncryptionAlgorithm: String {
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         }
     }
-    
+
     func authenticationTag(for hmac: Data) -> Data {
         switch self {
         case .AES256CBCHS512:
@@ -128,7 +128,7 @@ public enum SymmetricEncryptionAlgorithm: String {
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricEncryptionAlgorithm { get }
-    
+
     /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
     init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
 
@@ -151,7 +151,7 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: SymmetricEncryptionAlgorithm { get }
-    
+
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
     init(algorithm: SymmetricEncryptionAlgorithm)
 

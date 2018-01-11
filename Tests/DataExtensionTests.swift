@@ -150,22 +150,22 @@ class DataExtensionTests: XCTestCase {
         XCTAssertNotNil(encoded)
         XCTAssertEqual(encoded, edgeCases["=="]!.base64URLEncoded)
     }
-    
+
     func testByteLengthAsOctetHexData() {
         let testData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let testDataLengthAsOctetHex = Data(bytes: [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x50 ])
-        
+
         let dataLength = testData.getByteLengthAsOctetHexData()
-        
+
         XCTAssertEqual(testDataLengthAsOctetHex, dataLength)
     }
-    
+
     func testFalseByteLengthAsOctetHexData() {
         let testData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let falseTestDataLengthAsOctetHex = Data(bytes: [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x50 ])
-        
+
         let dataLength = testData.getByteLengthAsOctetHexData()
-        
+
         XCTAssertNotEqual(falseTestDataLengthAsOctetHex, dataLength)
     }
 }

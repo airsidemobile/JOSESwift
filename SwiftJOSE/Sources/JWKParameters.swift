@@ -1,8 +1,8 @@
 //
-//  RSAVerifierTests.swift
-//  Tests
+//  JWKParameters.swift
+//  SwiftJOSE
 //
-//  Created by Carol Capek on 03.11.17.
+//  Created by Daniel Egger on 21.12.17.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -21,34 +21,19 @@
 //  ---------------------------------------------------------------------------
 //
 
-import XCTest
-@testable import SwiftJOSE
+import Foundation
 
-class RSAVerifierTests: CryptoTestCase {
+/// The key type parameter of a JWK identifies the cryptographic algorithm
+/// family used with the key(s) represented by a JWK.
+/// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
+///
+/// - RSA
+public enum JWKKeyType: String {
+    case RSA = "RSA"
 
-    override func setUp() {
-        super.setUp()
+    var parameterName: String {
+        return "kty"
     }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
-    func testVerifying() {
-        guard publicKey != nil else {
-            XCTFail()
-            return
-        }
-
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
-        let verifier = RSAVerifier(algorithm: .RS512, publicKey: publicKey!)
-
-        guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
-            XCTFail()
-            return
-        }
-
-        XCTAssertTrue(try! verifier.verify(signingInput, against: jws.signature))
-    }
-
 }
+
+// Todo: Add more JWK parameters here. See https://tools.ietf.org/html/rfc7517#section-4.
