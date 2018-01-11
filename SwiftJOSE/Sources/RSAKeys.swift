@@ -32,11 +32,11 @@ fileprivate enum ParameterName: String {
 internal extension JWKParser {
     func parseRSA(from parameters: [String: Any]) throws -> JWK {
         guard let modulus = parameters[ParameterName.modulus.rawValue] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: "n")
+            throw JWKError.RequiredRSAParameterMissing(parameter: ParameterName.modulus.rawValue)
         }
 
         guard let exponent = parameters[ParameterName.exponent.rawValue] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: "e")
+            throw JWKError.RequiredRSAParameterMissing(parameter: ParameterName.exponent.rawValue)
         }
 
         guard let privateExponent = parameters[ParameterName.privateExponent.rawValue] as? String else {
