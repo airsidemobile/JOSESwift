@@ -29,17 +29,17 @@ fileprivate enum ParameterName: String {
     case privateExponent = "d"
 }
 
-internal extension JWK {
-    static func parseRSA(from parameters: [String: Any]) throws -> JWK {
-        guard let modulus = parameters["n"] as? String else {
+internal extension JWKParser {
+    func parseRSA(from parameters: [String: Any]) throws -> JWK {
+        guard let modulus = parameters[ParameterName.modulus.rawValue] as? String else {
             throw JWKError.RequiredRSAParameterMissing(parameter: "n")
         }
 
-        guard let exponent = parameters["e"] as? String else {
+        guard let exponent = parameters[ParameterName.exponent.rawValue] as? String else {
             throw JWKError.RequiredRSAParameterMissing(parameter: "e")
         }
 
-        guard let privateExponent = parameters["d"] as? String else {
+        guard let privateExponent = parameters[ParameterName.privateExponent.rawValue] as? String else {
             return RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: parameters)
         }
 
@@ -60,10 +60,11 @@ public struct RSAPublicKey: JWK {
         self.exponent = exponent
 
         self.parameters = parameters.merging(
-            zip(
-                [ JWKKeyType.parameterName, ParameterName.modulus.rawValue, ParameterName.exponent.rawValue ],
-                [ self.keyType.rawValue, self.modulus, self.exponent ]
-            ),
+            [
+                JWKKeyType.parameterName: self.keyType.rawValue,
+                ParameterName.modulus.rawValue: self.modulus,
+                ParameterName.exponent.rawValue: self.exponent
+            ],
             uniquingKeysWith: { (_, new) in new }
         )
     }
@@ -84,10 +85,12 @@ public struct RSAPrivateKey: JWK {
         self.privateExponent = privateExponent
 
         self.parameters = parameters.merging(
-            zip(
-                [ JWKKeyType.parameterName, ParameterName.modulus.rawValue, ParameterName.exponent.rawValue, ParameterName.privateExponent.rawValue ],
-                [ self.keyType.rawValue, self.modulus, self.exponent, self.privateExponent ]
-            ),
+            [
+                JWKKeyType.parameterName: self.keyType.rawValue,
+                ParameterName.modulus.rawValue: self.modulus,
+                ParameterName.exponent.rawValue: self.exponent,
+                ParameterName.privateExponent.rawValue: self.privateExponent
+            ],
             uniquingKeysWith: { (_, new) in new }
         )
     }

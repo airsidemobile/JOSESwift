@@ -64,8 +64,4 @@ public protocol JWK {
     /// - Returns: The JSON representation of the JWK as `Data`.
     /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
     func jsonData() throws -> Data
-
-    static func parse(_ parameters: [String: Any]) throws -> JWK
-    static func parse(_ data: Data) throws -> JWK
-    static func parse(_ string: String) throws -> JWK
 }
