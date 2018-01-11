@@ -23,7 +23,15 @@
 
 import Foundation
 
+/// Convenience class for parsing JWKs from `Data`, `String`, or `[String: Any] dictionaries.
 public class JWKParser {
+
+
+    /// Constructs a `JWK` from a given dictionary.
+    ///
+    /// - Parameter parameters: The `JWK` parameters dictionary.
+    /// - Returns: A fully initialized `JWK`.
+    /// - Throws: `JWKError` if any errors occur while parsing the provided parameters.
     public func parse(_ parameters: [String: Any]) throws -> JWK {
         guard
             let rawValue = parameters[JWKKeyType.parameterName] as? String,
@@ -38,6 +46,11 @@ public class JWKParser {
         }
     }
 
+    /// Constructs a `JWK` from a given `Data` object.
+    ///
+    /// - Parameter parameters: The `Data` to construct a `JWK` from.
+    /// - Returns: A fully initialized `JWK`.
+    /// - Throws: `JWKError` if any errors occur while parsing the provided data.
     public func parse(_ data: Data) throws -> JWK {
         guard
             let json = try? JSONSerialization.jsonObject(with: data, options: []),
@@ -49,6 +62,11 @@ public class JWKParser {
         return try parse(parameters)
     }
 
+    /// Constructs a `JWK` from a given `String`.
+    ///
+    /// - Parameter parameters: The `String` to construct a `JWK` from.
+    /// - Returns: A fully initialized `JWK`.
+    /// - Throws: `JWKError` if any errors occur while parsing the provided string.
     public func parse(_ string: String) throws -> JWK {
         guard let data = string.data(using: .utf8) else {
             throw JWKError.JWKStringNotInTheRightFormat
