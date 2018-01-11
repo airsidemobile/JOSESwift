@@ -29,21 +29,23 @@ fileprivate enum ParameterName: String {
     case privateExponent = "d"
 }
 
+fileprivate extension Dictionary where Key == String, Value == Any {
+    func get(_ parameterName: ParameterName) throws -> String {
+        guard let parameter = self[parameterName.rawValue] as? String else {
+            throw JWKError.RequiredRSAParameterMissing(parameter: parameterName.rawValue)
+        }
+
+        return parameter
+    }
+}
+
 internal extension JWKParser {
     func parseRSA(from parameters: [String: Any]) throws -> JWK {
-        guard let modulus = parameters[ParameterName.modulus.rawValue] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: ParameterName.modulus.rawValue)
+        do {
+            return try RSAPrivateKey(parameters: parameters)
+        } catch JWKError.RequiredRSAParameterMissing(let parameter) where parameter == ParameterName.privateExponent.rawValue {
+            return try RSAPublicKey(parameters: parameters)
         }
-
-        guard let exponent = parameters[ParameterName.exponent.rawValue] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: ParameterName.exponent.rawValue)
-        }
-
-        guard let privateExponent = parameters[ParameterName.privateExponent.rawValue] as? String else {
-            return RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: parameters)
-        }
-
-        return RSAPrivateKey(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
     }
 }
 
@@ -54,7 +56,7 @@ public struct RSAPublicKey: JWK {
     public let modulus: String
     public let exponent: String
 
-    init(modulus: String, exponent: String, additionalParameters parameters: [String: Any] = [:]) {
+    public init(modulus: String, exponent: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -68,6 +70,13 @@ public struct RSAPublicKey: JWK {
             uniquingKeysWith: { (_, new) in new }
         )
     }
+
+    public init(parameters: [String: Any]) throws {
+        let modulus = try parameters.get(.modulus)
+        let exponent = try parameters.get(.exponent)
+
+        self.init(modulus: modulus, exponent: exponent, additionalParameters: parameters)
+    }
 }
 
 public struct RSAPrivateKey: JWK {
@@ -78,7 +87,7 @@ public struct RSAPrivateKey: JWK {
     public let exponent: String
     public let privateExponent: String
 
-    init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: Any] = [:]) {
+    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -93,6 +102,14 @@ public struct RSAPrivateKey: JWK {
             ],
             uniquingKeysWith: { (_, new) in new }
         )
+    }
+
+    public init(parameters: [String: Any]) throws {
+        let modulus = try parameters.get(.modulus)
+        let exponent = try parameters.get(.exponent)
+        let privateExponent = try parameters.get(.privateExponent)
+
+        self.init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
     }
 }
 
