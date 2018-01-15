@@ -25,8 +25,8 @@ import Foundation
 
 /**
   Factory deciding which crypto implementation to use for which algorithm.
-  If we had different cryptor versions e.g. for different platforms,
-  we could decide on which version to use here.
+  If there are different crypto implementations, e.g. for different platforms,
+  this factory decides which version to use.
  */
 struct CryptoFactory {
 
