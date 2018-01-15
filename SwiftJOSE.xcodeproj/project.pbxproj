@@ -49,6 +49,7 @@
 		C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWETests.swift */; };
 		C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */; };
 		C803EFF31FA8A98F00B71335 /* DataExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */; };
+		C81DBD581FFE66E700ECF69E /* AES.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81DBD571FFE66E700ECF69E /* AES.swift */; };
 		C81DD9241FD6A75E00026024 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		C81DD9261FD6F07F00026024 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		C81DD9281FD7096100026024 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81DD9271FD7096100026024 /* HMAC.swift */; };
@@ -125,6 +126,7 @@
 		C803EFEC1FA8849C00B71335 /* JWETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWETests.swift; sourceTree = "<group>"; };
 		C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFF21FA8A98F00B71335 /* DataExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionTests.swift; sourceTree = "<group>"; };
+		C81DBD571FFE66E700ECF69E /* AES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AES.swift; sourceTree = "<group>"; };
 		C81DD9271FD7096100026024 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
 		C81DD9291FD7096B00026024 /* HMACTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMACTests.swift; sourceTree = "<group>"; };
 		C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypterTests.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				65FFFED01FE96D3B0045586D /* JWK */,
 				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
 				C81DD9271FD7096100026024 /* HMAC.swift */,
+				C81DBD571FFE66E700ECF69E /* AES.swift */,
 				65FABAE91F4AC2D3006D7679 /* RSASigner.swift */,
 				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
 				65617FCC1F90FB7600D8C743 /* RSAEncrypter.swift */,
@@ -635,6 +638,7 @@
 				65E733D11FEBF7960009EAC6 /* JWKParameters.swift in Sources */,
 				C81DD9241FD6A75E00026024 /* (null) in Sources */,
 				65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */,
+				C81DBD581FFE66E700ECF69E /* AES.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
