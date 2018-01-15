@@ -1,5 +1,5 @@
 //
-//  CryptorFactory.swift
+//  CryptoFactory.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 05.12.17.
