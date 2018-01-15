@@ -63,7 +63,7 @@ internal struct AES {
             let encrypted = aes(operation: CCOperation(kCCEncrypt), data: plaintext, key: encryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard encrypted.status == UInt32(kCCSuccess) else {
-                throw EncryptionError.encryptingFailed(description: "Encryption failed with CryptorStatus: \(encrypted.status).")
+                throw EncryptionError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
             }
 
             return encrypted.data
