@@ -53,4 +53,32 @@ class JWETests: CryptoTestCase {
 
         XCTAssertEqual(payloadString, "The true sign of intelligence is not knowledge but imagination.")
     }
+
+    func testDecryptFails() {
+        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
+        let payload = Payload(message.data(using: .utf8)!)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey!, contentEncyptionAlgorithm: .AES256CBCHS512)
+        let jweEnc = JWE(header: header, payload: payload, encrypter: encrypter)!
+
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false,
+                kSecAttrApplicationTag as String: privateKeyTag
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+
+        guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print(error!)
+            return
+        }
+
+        let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+
+        XCTAssertNil(jweDec.decrypt(with: key))
+    }
 }
