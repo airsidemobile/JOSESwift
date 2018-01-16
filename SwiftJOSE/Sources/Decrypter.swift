@@ -97,8 +97,17 @@ public struct Decrypter {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
 
-        // Todo: Investigate MMA attack. See: https://mohemian.atlassian.net/browse/JOSE-88
-        let cek = try asymmetric.decrypt(context.encryptedKey)
+        var cek: Data
+        // Generate random CEK to prevent MMA (Million Message Attack).
+        // For detailed information, please refer to this RFC(https://tools.ietf.org/html/rfc3218#section-2.3.2)
+        // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html
+        let randomCEK = try SecureRandom.generate(count: enc.keyLength())
+
+        if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
+            cek = decryptedCEK
+        } else {
+            cek = randomCEK
+        }
 
         let symmetricContext = SymmetricDecryptionContext(
             ciphertext: context.ciphertext,
