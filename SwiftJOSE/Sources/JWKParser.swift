@@ -47,7 +47,7 @@ public class JWKParser {
 
     /// Constructs a `JWK` from a given `Data` object.
     ///
-    /// - Parameter parameters: The `Data` to construct a `JWK` from.
+    /// - Parameter parameters: The `Data` from which to construct a `JWK`.
     /// - Returns: A fully initialized `JWK`.
     /// - Throws: `JWKError` if any errors occur while parsing the provided data.
     public func parse(_ data: Data) throws -> JWK {
@@ -63,7 +63,7 @@ public class JWKParser {
 
     /// Constructs a `JWK` from a given `String`.
     ///
-    /// - Parameter parameters: The `String` to construct a `JWK` from.
+    /// - Parameter parameters: The `String` from which to construct a `JWK`.
     /// - Returns: A fully initialized `JWK`.
     /// - Throws: `JWKError` if any errors occur while parsing the provided string.
     public func parse(_ string: String) throws -> JWK {
