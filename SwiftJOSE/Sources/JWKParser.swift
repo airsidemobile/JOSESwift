@@ -26,7 +26,6 @@ import Foundation
 /// Convenience class for parsing JWKs from `Data`, `String`, or `[String: Any] dictionaries.
 public class JWKParser {
 
-
     /// Constructs a `JWK` from a given dictionary.
     ///
     /// - Parameter parameters: The `JWK` parameters dictionary.
