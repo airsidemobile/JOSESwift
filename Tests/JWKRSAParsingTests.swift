@@ -12,9 +12,9 @@ extension JWKError: Equatable { }
 extension JWKError {
     public static func ==(lhs: JWKError, rhs: JWKError) -> Bool {
         switch (lhs, rhs) {
-        case (.RequiredJWKParameterMissing(let leftParameter), .RequiredJWKParameterMissing(let rightParameter)):
+        case (.requiredJWKParameterMissing(let leftParameter), .requiredJWKParameterMissing(let rightParameter)):
             return leftParameter == rightParameter
-        case (.RequiredRSAParameterMissing(let leftParameter), .RequiredRSAParameterMissing(let rightParameter)):
+        case (.requiredRSAParameterMissing(let leftParameter), .requiredRSAParameterMissing(let rightParameter)):
             return leftParameter == rightParameter
         case (.JWKDataNotInTheRightFormat, .JWKDataNotInTheRightFormat):
             return true
@@ -87,7 +87,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPublicKeyString = publicKeyString.replacingOccurrences(of: keyType, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPublicKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredJWKParameterMissing(parameter: "kty"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredJWKParameterMissing(parameter: "kty"))
         }
     }
 
@@ -102,7 +102,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPublicKeyString = publicKeyString.replacingOccurrences(of: modulus, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPublicKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredRSAParameterMissing(parameter: "n"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredRSAParameterMissing(parameter: "n"))
         }
     }
 
@@ -112,7 +112,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPublicKeyString = publicKeyString.replacingOccurrences(of: exponent, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPublicKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredRSAParameterMissing(parameter: "e"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredRSAParameterMissing(parameter: "e"))
         }
     }
 
@@ -161,7 +161,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPrivateKeyString = privateKeyString.replacingOccurrences(of: keyType, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPrivateKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredJWKParameterMissing(parameter: "kty"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredJWKParameterMissing(parameter: "kty"))
         }
     }
 
@@ -176,7 +176,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPrivateKeyString = privateKeyString.replacingOccurrences(of: modulus, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPrivateKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredRSAParameterMissing(parameter: "n"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredRSAParameterMissing(parameter: "n"))
         }
     }
 
@@ -186,7 +186,7 @@ class JWKRSAParsingTests: XCTestCase {
         let wrongPrivateKeyString = privateKeyString.replacingOccurrences(of: exponent, with: "")
 
         XCTAssertThrowsError(try JWKParser().parse(wrongPrivateKeyString)) { (error) -> Void in
-            XCTAssertEqual(error as! JWKError, JWKError.RequiredRSAParameterMissing(parameter: "e"))
+            XCTAssertEqual(error as! JWKError, JWKError.requiredRSAParameterMissing(parameter: "e"))
         }
     }
 

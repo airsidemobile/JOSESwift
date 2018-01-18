@@ -28,8 +28,8 @@ import Foundation
 /// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
 public enum JWKError: Error {
     case JWKToJSONConversionFailed
-    case RequiredJWKParameterMissing(parameter: String)
-    case RequiredRSAParameterMissing(parameter: String)
+    case requiredJWKParameterMissing(parameter: String)
+    case requiredRSAParameterMissing(parameter: String)
     case JWKDataNotInTheRightFormat
     case JWKStringNotInTheRightFormat
 }

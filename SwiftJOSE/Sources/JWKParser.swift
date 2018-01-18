@@ -36,7 +36,7 @@ public class JWKParser {
             let rawValue = parameters[JWKKeyType.parameterName] as? String,
             let keyType = JWKKeyType(rawValue: rawValue)
         else {
-            throw JWKError.RequiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
+            throw JWKError.requiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
         }
 
         switch keyType {

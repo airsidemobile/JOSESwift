@@ -143,7 +143,7 @@ public typealias RSAKeyPair = RSAPrivateKey
 fileprivate extension Dictionary where Key == String, Value == Any {
     func get(_ parameterName: RSAParameterName) throws -> String {
         guard let parameter = self[parameterName.rawValue] as? String else {
-            throw JWKError.RequiredRSAParameterMissing(parameter: parameterName.rawValue)
+            throw JWKError.requiredRSAParameterMissing(parameter: parameterName.rawValue)
         }
 
         return parameter
@@ -154,7 +154,7 @@ internal extension JWKParser {
     func parseRSA(from parameters: [String: Any]) throws -> JWK {
         do {
             return try RSAPrivateKey(parameters: parameters)
-        } catch JWKError.RequiredRSAParameterMissing(let parameter) where parameter == RSAParameterName.privateExponent.rawValue {
+        } catch JWKError.requiredRSAParameterMissing(let parameter) where parameter == RSAParameterName.privateExponent.rawValue {
             return try RSAPublicKey(parameters: parameters)
         }
     }
