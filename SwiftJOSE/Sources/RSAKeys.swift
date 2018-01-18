@@ -23,7 +23,7 @@
 
 import Foundation
 
-fileprivate enum RSAParameterName: String {
+private enum RSAParameterName: String {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
