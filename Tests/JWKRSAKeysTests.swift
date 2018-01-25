@@ -11,14 +11,14 @@ import XCTest
 class JWKRSAKeysTests: CryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
-        let builder = SecKeyJWKBuilder()
+        let builder = JWKBuilder<SecKey>()
         let jwk = builder.set(publicKey: publicKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
 
         XCTAssertNotEqual(jwk["kty"] as? String ?? "", "wrongKty")
     }
 
     func testMergingDuplicateAdditionalParametersInPrivateKey() {
-        let builder = SecKeyJWKBuilder()
+        let builder = JWKBuilder<SecKey>()
         let jwk = builder.set(privateKey: privateKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
 
         XCTAssertNotEqual(jwk["kty"] as? String ?? "", "wrongKty")
@@ -60,7 +60,7 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testBuiltPrivateKeyParametersArePresent() {
-        let builder = SecKeyJWKBuilder()
+        let builder = JWKBuilder<SecKey>()
         let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build() as! RSAPrivateKey
 
         XCTAssertFalse(jwk.modulus.isEmpty)
@@ -69,7 +69,7 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testBuiltPublicKeyParametersArePresent() {
-        let builder = SecKeyJWKBuilder()
+        let builder = JWKBuilder<SecKey>()
         let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build() as! RSAPublicKey
 
         XCTAssertFalse(jwk.modulus.isEmpty)

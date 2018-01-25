@@ -11,7 +11,7 @@ import XCTest
 class JWKtoJSONTests: CryptoTestCase {
 
     func testJSONString() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("alg", to: "RS256")
             .set("kid", to: "2011-04-29")
@@ -35,7 +35,7 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONData() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("alg", to: "RS256")
             .set("kid", to: "2011-04-29")
@@ -58,7 +58,7 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONStringWithInvalidParameters() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("notJSONConvertible", to: Date())
             .set(keyType: .RSA)
@@ -68,7 +68,7 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONDataWithInvalidParameters() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("notJSONConvertible", to: Date())
             .set(keyType: .RSA)
