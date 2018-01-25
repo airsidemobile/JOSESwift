@@ -55,4 +55,3 @@ extension JWK {
         return item as! SecKey
     }
 }
-
