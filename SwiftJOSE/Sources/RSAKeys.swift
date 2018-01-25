@@ -71,6 +71,10 @@ public struct RSAPublicKey: JWK {
     /// - Parameter parameters: The JWK parameters.
     /// - Throws: `JWKError` if the provided parameters are incomplete.
     public init(parameters: [String: Any]) throws {
+        guard parameters[JWKKeyType.parameterName] as? String == JWKKeyType.RSA.rawValue else {
+            throw JWKError.requiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
+        }
+        
         let modulus = try parameters.get(.modulus)
         let exponent = try parameters.get(.exponent)
 
@@ -126,6 +130,10 @@ public struct RSAPrivateKey: JWK {
     /// - Parameter parameters: The JWK parameters.
     /// - Throws: `JWKError` if the provided parameters are incomplete.
     public init(parameters: [String: Any]) throws {
+        guard parameters[JWKKeyType.parameterName] as? String == JWKKeyType.RSA.rawValue else {
+            throw JWKError.requiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
+        }
+
         let modulus = try parameters.get(.modulus)
         let exponent = try parameters.get(.exponent)
         let privateExponent = try parameters.get(.privateExponent)

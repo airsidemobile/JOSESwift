@@ -296,7 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				659553551FD6F07800A8756F /* CryptoFactory.swift */,
-				65FFFED01FE96D3B0045586D /* JWK */,
+				65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */,
 				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
 				C81DD9271FD7096100026024 /* HMAC.swift */,
 				65FABAE91F4AC2D3006D7679 /* RSASigner.swift */,
@@ -347,14 +347,6 @@
 				65A9D3E21F45CDF1004E0B61 /* Sources */,
 			);
 			path = SwiftJOSE;
-			sourceTree = "<group>";
-		};
-		65FFFED01FE96D3B0045586D /* JWK */ = {
-			isa = PBXGroup;
-			children = (
-				65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */,
-			);
-			name = JWK;
 			sourceTree = "<group>";
 		};
 		98CD4F950C09A29804160122 /* Pods */ = {

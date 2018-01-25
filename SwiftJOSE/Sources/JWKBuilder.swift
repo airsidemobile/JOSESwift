@@ -23,7 +23,7 @@
 
 import Foundation
 
-/// A key type that can be converted to a JWK and initialized from a JWK.
+/// A key type that can be converted to a JWK.
 public protocol JWKConvertible {
     /// Converts the key to a public RSA JWK if possible.
     ///

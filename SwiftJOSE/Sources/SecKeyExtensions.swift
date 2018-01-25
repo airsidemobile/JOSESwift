@@ -25,7 +25,6 @@ import Foundation
 import Security
 
 extension SecKey: JWKConvertible {
-
     public func publicRSAJWK(with parameters: [String: Any] = [:]) -> RSAPublicKey? {
         // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
         // Todo: Decide on exact control flow.
@@ -41,80 +40,19 @@ extension SecKey: JWKConvertible {
         // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
         return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
     }
-    
 }
 
-//public class SecKeyJWKBuilder: JWKBuilder<<#T: JWKConvertible#>> {
-//    typealias KeyDataType = SecKey
-//
-//    private var publicKey: SecKey?
-//    private var privateKey: SecKey?
-//    private var parameters: [String: Any] = [:]
-//    private var keyType: JWKKeyType?
-//
-//    public init() { }
-//
-//    public func set(publicKey: SecKey) -> Self {
-//        self.publicKey = publicKey
-//        return self
-//    }
-//
-//    public func set(privateKey: SecKey) -> Self {
-//        self.privateKey = privateKey
-//        return self
-//    }
-//
-//    public func set(_ parameter: String, to value: Any) -> Self {
-//        parameters[parameter] = value
-//        return self
-//    }
-//
-//    public func set(keyType: JWKKeyType) -> Self {
-//        self.keyType = keyType
-//        return self
-//    }
-//
-//    public func build() -> JWK? {
-//        guard let keyType = self.keyType else {
-//            return nil
-//        }
-//
-//        switch keyType {
-//        case .RSA:
-//            return buildRSA()
-//        }
-//    }
-//
-//    private func buildRSA() -> JWK? {
-//        if let _ = self.publicKey, self.privateKey == nil {
-//            // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
-//            // Todo: Decide on exact control flow.
-//            // See https://mohemian.atlassian.net/browse/JOSE-91.
-//            // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-//            return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
-//        } else if let _ = self.privateKey {
-//            // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
-//            // Todo: Decide on exact control flow.
-//            // See https://mohemian.atlassian.net/browse/JOSE-91.
-//            // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-//            return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
-//        }
-//
-//        return nil
-//    }
-//}
-//
-//extension JWK {
-//    static func secKeyRepresentation() throws -> SecKey {
-//        // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
-//        // Todo: Decide on exact control flow.
-//        // See https://mohemian.atlassian.net/browse/JOSE-92.
-//        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-//
-//        var item: CFTypeRef?
-//        // This is just a mock will be deleted in the implementation story.
-//        // swiftlint:disable:next force_cast
-//        return item as! SecKey
-//    }
-//}
+extension JWK {
+    static func secKeyRepresentation() throws -> SecKey {
+        // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
+        // Todo: Decide on exact control flow.
+        // See https://mohemian.atlassian.net/browse/JOSE-92.
+        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
+
+        var item: CFTypeRef?
+        // This is just a mock will be deleted in the implementation story.
+        // swiftlint:disable:next force_cast
+        return item as! SecKey
+    }
+}
 
