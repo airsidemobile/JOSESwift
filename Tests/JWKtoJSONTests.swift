@@ -11,10 +11,11 @@ import XCTest
 class JWKtoJSONTests: CryptoTestCase {
 
     func testJSONString() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("alg", to: "RS256")
             .set("kid", to: "2011-04-29")
+            .set(keyType: .RSA)
             .build()!
 
         let jsonString = try? jwk.jsonString()
@@ -24,6 +25,7 @@ class JWKtoJSONTests: CryptoTestCase {
         let dict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [String: Any]
         XCTAssertNotNil(dict!)
 
+        XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
@@ -33,10 +35,11 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONData() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("alg", to: "RS256")
             .set("kid", to: "2011-04-29")
+            .set(keyType: .RSA)
             .build()!
 
         let jsonData = try? jwk.jsonData()
@@ -45,6 +48,7 @@ class JWKtoJSONTests: CryptoTestCase {
         let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
         XCTAssertNotNil(dict!)
 
+        XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
@@ -54,18 +58,20 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONStringWithInvalidParameters() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("notJSONConvertible", to: Date())
+            .set(keyType: .RSA)
             .build()!
 
         XCTAssertThrowsError(try jwk.jsonString())
     }
 
     func testJSONDataWithInvalidParameters() {
-        let jwk = SecKeyJWKBuilder()
+        let jwk = JWKBuilder<SecKey>()
             .set(publicKey: publicKey!)
             .set("notJSONConvertible", to: Date())
+            .set(keyType: .RSA)
             .build()!
 
         XCTAssertThrowsError(try jwk.jsonData())

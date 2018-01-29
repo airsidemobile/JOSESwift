@@ -11,14 +11,10 @@ import XCTest
 class SecKeyJWKBuilderTests: CryptoTestCase {
 
     func testBuildingPublicKey() {
-        let builder = SecKeyJWKBuilder()
-        let jwk = builder.set(publicKey: publicKey!).build()
+        let builder = JWKBuilder<SecKey>()
+        let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build()
 
         XCTAssertNotNil(jwk)
-
-        XCTAssertTrue(jwk is PublicKey)
-        XCTAssertFalse(jwk is PrivateKey)
-        XCTAssertFalse(jwk is KeyPair)
 
         XCTAssertTrue(jwk is RSAPublicKey)
         XCTAssertFalse(jwk is RSAPrivateKey)
@@ -26,14 +22,10 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
     }
 
     func testBuildingPrivateKey() {
-        let builder = SecKeyJWKBuilder()
-        let jwk = builder.set(privateKey: privateKey!).build()
+        let builder = JWKBuilder<SecKey>()
+        let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build()
 
         XCTAssertNotNil(jwk)
-
-        XCTAssertFalse(jwk is PublicKey)
-        XCTAssertTrue(jwk is PrivateKey)
-        XCTAssertTrue(jwk is KeyPair)
 
         XCTAssertFalse(jwk is RSAPublicKey)
         XCTAssertTrue(jwk is RSAPrivateKey)
@@ -41,14 +33,10 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
     }
 
     func testBuildingKeyPair() {
-        let builder = SecKeyJWKBuilder()
-        let jwk = builder.set(privateKey: privateKey!).set(publicKey: publicKey!).build()
+        let builder = JWKBuilder<SecKey>()
+        let jwk = builder.set(privateKey: privateKey!).set(publicKey: publicKey!).set(keyType: .RSA).build()
 
         XCTAssertNotNil(jwk)
-
-        XCTAssertFalse(jwk is PublicKey)
-        XCTAssertTrue(jwk is PrivateKey)
-        XCTAssertTrue(jwk is KeyPair)
 
         XCTAssertFalse(jwk is RSAPublicKey)
         XCTAssertTrue(jwk is RSAPrivateKey)
@@ -56,7 +44,21 @@ class SecKeyJWKBuilderTests: CryptoTestCase {
     }
 
     func testBuildingWithoutSettingKeys() {
-        let builder = SecKeyJWKBuilder()
+        let builder = JWKBuilder<SecKey>()
+        let jwk = builder.set(keyType: .RSA).build()
+
+        XCTAssertNil(jwk)
+    }
+
+    func testBuildingWithoutSettingKeyType() {
+        let builder = JWKBuilder<SecKey>()
+        let jwk = builder.set(privateKey: privateKey!).set(publicKey: publicKey!).build()
+
+        XCTAssertNil(jwk)
+    }
+
+    func testBuildingWithoutAnything() {
+        let builder = JWKBuilder<SecKey>()
         let jwk = builder.build()
 
         XCTAssertNil(jwk)
