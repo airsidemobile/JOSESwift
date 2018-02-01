@@ -48,8 +48,10 @@ public struct RSAPublicKey: JWK {
     /// Initializes a JWK containing an RSA public key.
     ///
     /// - Parameters:
-    ///   - modulus: The modulus value for the RSA public key.
-    ///   - exponent: The exponent value for the RSA public key.
+    ///   - modulus: The modulus value for the RSA public key in `base64urlUInt` encoding
+    ///              as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
+    ///   - exponent: The public exponent value for the RSA public key in `base64urlUInt` encoding
+    ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
     public init(modulus: String, exponent: String, additionalParameters parameters: [String: Any] = [:]) {
         self.keyType = .RSA
@@ -80,9 +82,26 @@ public struct RSAPublicKey: JWK {
 
         self.init(modulus: modulus, exponent: exponent, additionalParameters: parameters)
     }
+
+    public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: Any] = [:]) throws {
+        guard let modulus = publicKey.modulus else {
+            throw JWKError.cannotExtractRSAModulus
+        }
+
+        guard let exponent = publicKey.publicExponent else {
+            throw JWKError.cannotExtractRSAPublicExponent
+        }
+
+        // Todo: Base64urlUInt?
+        self.init(
+            modulus: modulus.base64URLEncodedString(),
+            exponent: exponent.base64URLEncodedString(),
+            additionalParameters: parameters
+        )
+    }
 }
 
-// MARK: Privat Key
+// MARK: Private Key
 
 /// A JWK holding an RSA private key.
 public struct RSAPrivateKey: JWK {
@@ -139,6 +158,28 @@ public struct RSAPrivateKey: JWK {
         let privateExponent = try parameters.get(.privateExponent)
 
         self.init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
+    }
+
+    public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: Any] = [:]) throws {
+        guard let modulus = privateKey.modulus else {
+            throw JWKError.cannotExtractRSAModulus
+        }
+
+        guard let exponent = privateKey.publicExponent else {
+            throw JWKError.cannotExtractRSAPublicExponent
+        }
+
+        guard let privateExponent = privateKey.publicExponent else {
+            throw JWKError.cannotExtractRSAPublicExponent
+        }
+
+        // Todo: Base64urlUInt?
+        self.init(
+            modulus: modulus.base64URLEncodedString(),
+            exponent: exponent.base64URLEncodedString(),
+            privateExponent: privateExponent.base64URLEncodedString(),
+            additionalParameters: parameters
+        )
     }
 }
 

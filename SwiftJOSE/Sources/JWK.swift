@@ -32,6 +32,9 @@ public enum JWKError: Error {
     case requiredRSAParameterMissing(parameter: String)
     case JWKDataNotInTheRightFormat
     case JWKStringNotInTheRightFormat
+    case cannotExtractRSAModulus
+    case cannotExtractRSAPublicExponent
+    case cannotExtractRSAPrivateExponent
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
