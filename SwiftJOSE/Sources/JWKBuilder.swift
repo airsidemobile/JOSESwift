@@ -23,17 +23,7 @@
 
 import Foundation
 
-/// A key type that can be converted to a JWK.
-public protocol JWKConvertible { }
-
-public protocol RSAPublicKeyConvertible: JWKConvertible {
-    var modulus: Data? { get }
-    var publicExponent: Data? { get }
-}
-
-public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
-    var privateExponent: Data? { get }
-}
+public typealias JWKConvertible = RSAPublicKeyConvertible & RSAPrivateKeyConvertible
 
 /// A generic `JWKBuilder` that builds a JWK from a given `JWKConvertible` key.
 public class JWKBuilder<T> where T: JWKConvertible {
@@ -111,9 +101,9 @@ public class JWKBuilder<T> where T: JWKConvertible {
     }
 
     private func buildRSA() -> JWK? {
-        if let publicKey = self.publicKey as? RSAPublicKeyConvertible, self.privateKey == nil {
+        if let publicKey = publicKey, privateKey == nil {
             return try? RSAPublicKey(publicKey: publicKey, additionalParameters: parameters)
-        } else if let privateKey = self.privateKey as? RSAPrivateKeyConvertible {
+        } else if let privateKey = privateKey {
             return try? RSAPrivateKey(privateKey: privateKey, additionalParameters: parameters)
         }
 

@@ -26,17 +26,17 @@ import Security
 
 extension SecKey: RSAPublicKeyConvertible {
     public var modulus: Data? {
-        return "MODULUS".data(using: .utf8)
+        return "0vx...Kgw".data(using: .utf8)
     }
 
-    public var publicExponent: Data? {
-        return "EXPONENT".data(using: .utf8)
+    public var exponent: Data? {
+        return "AQAB".data(using: .utf8)
     }
 }
 
 extension SecKey: RSAPrivateKeyConvertible {
     public var privateExponent: Data? {
-        return "PRIVATE_EXPONENT".data(using: .utf8)
+        return "X4c...C8Q".data(using: .utf8)
     }
 }
 

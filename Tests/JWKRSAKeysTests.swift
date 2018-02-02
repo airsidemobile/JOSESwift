@@ -11,8 +11,9 @@ import XCTest
 class JWKRSAKeysTests: CryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(publicKey: publicKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "kty": "wrongKty"
+        ])
 
         XCTAssertNotEqual(jwk["kty"] as? String ?? "", "wrongKty")
     }

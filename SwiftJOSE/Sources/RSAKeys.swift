@@ -29,6 +29,17 @@ private enum RSAParameterName: String {
     case privateExponent = "d"
 }
 
+// MARK: Convertibles
+
+public protocol RSAPublicKeyConvertible {
+    var modulus: Data? { get }
+    var exponent: Data? { get }
+}
+
+public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
+    var privateExponent: Data? { get }
+}
+
 // MARK: Public Key
 
 /// A JWK holding an RSA pubkic key.
@@ -88,7 +99,7 @@ public struct RSAPublicKey: JWK {
             throw JWKError.cannotExtractRSAModulus
         }
 
-        guard let exponent = publicKey.publicExponent else {
+        guard let exponent = publicKey.exponent else {
             throw JWKError.cannotExtractRSAPublicExponent
         }
 
@@ -165,12 +176,12 @@ public struct RSAPrivateKey: JWK {
             throw JWKError.cannotExtractRSAModulus
         }
 
-        guard let exponent = privateKey.publicExponent else {
+        guard let exponent = privateKey.exponent else {
             throw JWKError.cannotExtractRSAPublicExponent
         }
 
-        guard let privateExponent = privateKey.publicExponent else {
-            throw JWKError.cannotExtractRSAPublicExponent
+        guard let privateExponent = privateKey.privateExponent else {
+            throw JWKError.cannotExtractRSAPrivateExponent
         }
 
         // Todo: Base64urlUInt?
