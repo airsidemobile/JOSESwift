@@ -90,7 +90,6 @@ public struct RSAPublicKey: JWK {
         )
     }
 
-
     /// Initializes an `RSAPublicKey` JWK from given JSON data.
     ///
     /// - Parameter data: The JWK in JSON serialization.
