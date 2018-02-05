@@ -39,7 +39,7 @@ public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
 /// A JWK holding an RSA pubkic key.
 public struct RSAPublicKey: JWK {
     /// The JWK key type.
-    public var keyType: JWKKeyType
+    public let keyType: JWKKeyType
 
     /// The JWK parameters.
     public let parameters: [String: String]

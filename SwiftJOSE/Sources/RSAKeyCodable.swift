@@ -34,19 +34,25 @@ extension RSAPublicKey: Decodable {
         let commonParameters = try decoder.container(keyedBy: JWKParameter.self)
 
         // The key type parameter is required.
-        self.keyType = try commonParameters.decode(JWKKeyType.self, forKey: .keyType)
+        guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.RSA.rawValue else {
+            throw DecodingError.keyNotFound(
+                JWKParameter.keyType,
+                DecodingError.Context.init(codingPath: [JWKParameter.keyType], debugDescription: "Key Type parameter wrong.")
+            )
+        }
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
         for key in commonParameters.allKeys {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
-        self.parameters = parameters
 
         // RSA public key specific parameters.
         let rsaParameters = try decoder.container(keyedBy: RSAParameter.self)
-        self.modulus = try rsaParameters.decode(String.self, forKey: .modulus)
-        self.exponent = try rsaParameters.decode(String.self, forKey: .exponent)
+        let modulus = try rsaParameters.decode(String.self, forKey: .modulus)
+        let exponent = try rsaParameters.decode(String.self, forKey: .exponent)
+
+        self.init(modulus: modulus, exponent: exponent, additionalParameters: parameters)
     }
 }
 
@@ -78,19 +84,25 @@ extension RSAPrivateKey: Decodable {
         let commonParameters = try decoder.container(keyedBy: JWKParameter.self)
 
         // The key type parameter is required.
-        self.keyType = try commonParameters.decode(JWKKeyType.self, forKey: .keyType)
+        guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.RSA.rawValue else {
+            throw DecodingError.keyNotFound(
+                JWKParameter.keyType,
+                DecodingError.Context.init(codingPath: [JWKParameter.keyType], debugDescription: "Key Type parameter wrong.")
+            )
+        }
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
         for key in commonParameters.allKeys {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
-        self.parameters = parameters
 
         // RSA private key specific parameters.
         let rsaParameters = try decoder.container(keyedBy: RSAParameter.self)
-        self.modulus = try rsaParameters.decode(String.self, forKey: .modulus)
-        self.exponent = try rsaParameters.decode(String.self, forKey: .exponent)
-        self.privateExponent = try rsaParameters.decode(String.self, forKey: .privateExponent)
+        let modulus = try rsaParameters.decode(String.self, forKey: .modulus)
+        let exponent = try rsaParameters.decode(String.self, forKey: .exponent)
+        let privateExponent = try rsaParameters.decode(String.self, forKey: .privateExponent)
+
+        self.init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
     }
 }

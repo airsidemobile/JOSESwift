@@ -97,6 +97,24 @@ class JWKRSADencodingTests: CryptoTestCase {
         XCTFail()
     }
 
+    func testDecodingPublicKeyWrongKeyType() {
+        let keyType = "\"kty\":\"RSA\","
+        let wrongKeyType = "\"kty\":\"EC\","
+
+        let wrongPublicKey = String(data: publicKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: wrongKeyType).data(using: .utf8)!
+
+        do {
+            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+        } catch DecodingError.keyNotFound(let key, _) {
+            XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
+            return
+        } catch {
+            XCTFail()
+        }
+
+        XCTFail()
+    }
+
     func testDecodingPublicKeyMissingModulus() {
         let modulus = """
             \"n\":\"0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZ\
@@ -222,6 +240,25 @@ class JWKRSADencodingTests: CryptoTestCase {
 
         XCTFail()
     }
+
+    func testDecodingPrivateKeyWrongKeyType() {
+        let keyType = "\"kty\":\"RSA\","
+        let wrongKeyType = "\"kty\":\"EC\","
+
+        let wrongPublicKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: wrongKeyType).data(using: .utf8)!
+
+        do {
+            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPublicKey)
+        } catch DecodingError.keyNotFound(let key, _) {
+            XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
+            return
+        } catch {
+            XCTFail()
+        }
+
+        XCTFail()
+    }
+
 
     func testDecodingPrivateKeyMissingModulus() {
         let modulus = """
