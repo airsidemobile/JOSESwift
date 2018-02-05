@@ -90,6 +90,12 @@ public struct RSAPublicKey: JWK {
         )
     }
 
+
+    /// Initializes an `RSAPublicKey` JWK from given JSON data.
+    ///
+    /// - Parameter data: The JWK in JSON serialization.
+    /// - Throws: If the data is not valid JSON, this method throws the `dataCorrupted` error.
+    ///           If a value within the JSON fails to decode, this method throws the corresponding error.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPublicKey.self, from: data)
     }
@@ -160,6 +166,11 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
+    /// Initializes an `RSAPrivateKey` JWK from given JSON data.
+    ///
+    /// - Parameter data: The JWK in JSON serialization.
+    /// - Throws: If the data is not valid JSON, this method throws the `dataCorrupted` error.
+    ///           If a value within the JSON fails to decode, this method throws the corresponding error.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPrivateKey.self, from: data)
     }
