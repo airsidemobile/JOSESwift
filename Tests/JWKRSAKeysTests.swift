@@ -15,27 +15,27 @@ class JWKRSAKeysTests: CryptoTestCase {
             "kty": "wrongKty"
         ])
 
-        XCTAssertNotEqual(jwk["kty"] as? String ?? "", "wrongKty")
+        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
     }
 
     func testMergingDuplicateAdditionalParametersInPrivateKey() {
         let builder = JWKBuilder<SecKey>()
         let jwk = builder.set(privateKey: privateKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
 
-        XCTAssertNotEqual(jwk["kty"] as? String ?? "", "wrongKty")
+        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
     }
 
     func testInitPublicKeyDirectlyWithoutAdditionalParameters() {
         let key = RSAPublicKey(modulus: "n", exponent: "e")
 
         XCTAssertEqual(key.keyType, .RSA)
-        XCTAssertEqual(key["kty"] as? String ?? "", "RSA")
+        XCTAssertEqual(key["kty"] ?? "", "RSA")
 
         XCTAssertEqual(key.modulus, "n")
-        XCTAssertEqual(key["n"] as? String ?? "", "n")
+        XCTAssertEqual(key["n"] ?? "", "n")
 
         XCTAssertEqual(key.exponent, "e")
-        XCTAssertEqual(key["e"] as? String ?? "", "e")
+        XCTAssertEqual(key["e"] ?? "", "e")
 
         // kty, n, e
         XCTAssertEqual(key.parameters.count, 3)
@@ -45,16 +45,16 @@ class JWKRSAKeysTests: CryptoTestCase {
         let key = RSAPrivateKey(modulus: "n", exponent: "e", privateExponent: "d")
 
         XCTAssertEqual(key.keyType, .RSA)
-        XCTAssertEqual(key["kty"] as? String ?? "", "RSA")
+        XCTAssertEqual(key["kty"] ?? "", "RSA")
 
         XCTAssertEqual(key.modulus, "n")
-        XCTAssertEqual(key["n"] as? String ?? "", "n")
+        XCTAssertEqual(key["n"] ?? "", "n")
 
         XCTAssertEqual(key.exponent, "e")
-        XCTAssertEqual(key["e"] as? String ?? "", "e")
+        XCTAssertEqual(key["e"] ?? "", "e")
 
         XCTAssertEqual(key.privateExponent, "d")
-        XCTAssertEqual(key["d"] as? String ?? "", "d")
+        XCTAssertEqual(key["d"] ?? "", "d")
 
         // kty, n, e, d
         XCTAssertEqual(key.parameters.count, 4)

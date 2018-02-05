@@ -22,6 +22,9 @@
 		6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6571F6221F7BF786004D53C5 /* JWSHeader.swift */; };
 		6572C2F21F96428800D4186D /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572C2F11F96428800D4186D /* Decrypter.swift */; };
 		65826AB02028659B00AFFC46 /* JWKErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AAF2028659B00AFFC46 /* JWKErrors.swift */; };
+		65826AB22028696000AFFC46 /* RSAKeyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB12028696000AFFC46 /* RSAKeyExtensions.swift */; };
+		65826AB420286B3A00AFFC46 /* JWKRSAEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */; };
+		65826AB6202883BA00AFFC46 /* JWKRSADecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */; };
 		6587A12C20076F9200096DE8 /* JWKRSAParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6587A12B20076F9200096DE8 /* JWKRSAParsingTests.swift */; };
 		659553561FD6F07800A8756F /* CryptoFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659553551FD6F07800A8756F /* CryptoFactory.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
@@ -97,6 +100,9 @@
 		6571F6221F7BF786004D53C5 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
 		6572C2F11F96428800D4186D /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
 		65826AAF2028659B00AFFC46 /* JWKErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKErrors.swift; sourceTree = "<group>"; };
+		65826AB12028696000AFFC46 /* RSAKeyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeyExtensions.swift; sourceTree = "<group>"; };
+		65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKRSAEncodingTests.swift; sourceTree = "<group>"; };
+		65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JWKRSADecodingTests.swift; path = ../JWKRSADecodingTests.swift; sourceTree = "<group>"; };
 		6587A12B20076F9200096DE8 /* JWKRSAParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKRSAParsingTests.swift; sourceTree = "<group>"; };
 		659553551FD6F07800A8756F /* CryptoFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFactory.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
@@ -277,6 +283,8 @@
 				65E733D41FEC031B0009EAC6 /* JWKRSAKeysTests.swift */,
 				65E733D61FEC065B0009EAC6 /* SecKeyJWKBuilderTests.swift */,
 				6587A12B20076F9200096DE8 /* JWKRSAParsingTests.swift */,
+				65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */,
+				65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */,
 			);
 			name = JWK;
 			sourceTree = "<group>";
@@ -288,6 +296,7 @@
 				65E733D01FEBF7960009EAC6 /* JWKParameters.swift */,
 				65E733CB1FEBE8320009EAC6 /* JWKExtensions.swift */,
 				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
+				65826AB12028696000AFFC46 /* RSAKeyExtensions.swift */,
 				65F44EB41FE2E33A000C5EA0 /* JWKBuilder.swift */,
 				65826AAF2028659B00AFFC46 /* JWKErrors.swift */,
 			);
@@ -578,6 +587,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65826AB420286B3A00AFFC46 /* JWKRSAEncodingTests.swift in Sources */,
 				C83070051FD1B7390068C5CB /* AESDecrypterTests.swift in Sources */,
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
 				652C613A1FD99A3300578E2A /* JWSSigningInputTest.swift in Sources */,
@@ -599,6 +609,7 @@
 				C81DD9261FD6F07F00026024 /* (null) in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 				C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */,
+				65826AB6202883BA00AFFC46 /* JWKRSADecodingTests.swift in Sources */,
 				C86AC8CB1FCEC20F0007E611 /* AESEncrypterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,6 +637,7 @@
 				6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */,
 				65D8680F1F7CE35000769BBF /* RSAVerifier.swift in Sources */,
 				659553561FD6F07800A8756F /* CryptoFactory.swift in Sources */,
+				65826AB22028696000AFFC46 /* RSAKeyExtensions.swift in Sources */,
 				65826AB02028659B00AFFC46 /* JWKErrors.swift in Sources */,
 				6505236E1FB4940100E0B1B1 /* AESEncrypter.swift in Sources */,
 				65F44EB51FE2E33A000C5EA0 /* JWKBuilder.swift in Sources */,

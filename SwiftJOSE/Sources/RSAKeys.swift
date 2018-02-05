@@ -23,7 +23,7 @@
 
 import Foundation
 
-private enum RSAKeyParameter: String, CodingKey {
+internal enum RSAKeyParameter: String, CodingKey {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
