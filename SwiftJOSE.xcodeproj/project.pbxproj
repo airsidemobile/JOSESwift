@@ -287,9 +287,9 @@
 				65F44EB01FE2D941000C5EA0 /* JWK.swift */,
 				65E733D01FEBF7960009EAC6 /* JWKParameters.swift */,
 				65E733CB1FEBE8320009EAC6 /* JWKExtensions.swift */,
+				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
 				65F44EB41FE2E33A000C5EA0 /* JWKBuilder.swift */,
 				6587A12D2007724000096DE8 /* JWKParser.swift */,
-				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
 			);
 			name = JWK;
 			sourceTree = "<group>";

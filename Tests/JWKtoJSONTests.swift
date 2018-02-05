@@ -30,8 +30,8 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
         // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "0vx...Kgw")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "AQAB")
+        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
+        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
     }
 
     func testJSONData() {
@@ -53,8 +53,8 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
         // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "0vx...Kgw")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "AQAB")
+        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
+        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
     }
 
     func testJSONStringWithInvalidParameters() {
