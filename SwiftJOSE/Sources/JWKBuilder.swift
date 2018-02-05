@@ -30,7 +30,7 @@ public class JWKBuilder<T> where T: JWKConvertible {
 
     private var publicKey: T?
     private var privateKey: T?
-    private var parameters: [String: Any] = [:]
+    private var parameters: [String: String] = [:]
     private var keyType: JWKKeyType?
 
     /// Initializes a generic `JWKBuilder`.
@@ -62,10 +62,10 @@ public class JWKBuilder<T> where T: JWKConvertible {
     ///
     /// - Parameters:
     ///   - parameter: The parameter to set or update.
-    ///   - value: Teh value to set or update for the specified paramter.
+    ///   - value: the value to set or update for the specified paramter.
     /// - Returns: A `JWKBuilder` containing the set parameter that can be used
     ///            to set another key or parameter or to build a JWK.
-    func set(_ parameter: String, to value: Any) -> Self {
+    func set(_ parameter: String, to value: String) -> Self {
         parameters[parameter] = value
 
         return self

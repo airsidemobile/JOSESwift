@@ -48,7 +48,7 @@ public struct RSAPublicKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: Any]
+    public let parameters: [String: String]
 
     /// The modulus value for the RSA public key.
     public let modulus: String
@@ -64,7 +64,7 @@ public struct RSAPublicKey: JWK {
     ///   - exponent: The public exponent value for the RSA public key in `base64urlUInt` encoding
     ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(modulus: String, exponent: String, additionalParameters parameters: [String: Any] = [:]) {
+    public init(modulus: String, exponent: String, additionalParameters parameters: [String: String] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -79,22 +79,7 @@ public struct RSAPublicKey: JWK {
         )
     }
 
-    /// Initializes a JWK containing an RSA public key.
-    ///
-    /// - Parameter parameters: The JWK parameters.
-    /// - Throws: `JWKError` if the provided parameters are incomplete.
-    public init(parameters: [String: Any]) throws {
-        guard parameters[JWKKeyType.parameterName] as? String == JWKKeyType.RSA.rawValue else {
-            throw JWKError.requiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
-        }
-        
-        let modulus = try parameters.get(.modulus)
-        let exponent = try parameters.get(.exponent)
-
-        self.init(modulus: modulus, exponent: exponent, additionalParameters: parameters)
-    }
-
-    public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: Any] = [:]) throws {
+    public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
         guard let modulus = publicKey.modulus else {
             throw JWKError.cannotExtractRSAModulus
         }
@@ -120,7 +105,7 @@ public struct RSAPrivateKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: Any]
+    public let parameters: [String: String]
 
     /// The modulus value for the RSA private key.
     public let modulus: String
@@ -138,7 +123,7 @@ public struct RSAPrivateKey: JWK {
     ///   - exponent: The exponent value for the RSA private key.
     //    - privateExponent: The private exponent value for the RSA private key.
     ///   - parameters: Additional JWK parameters.
-    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: Any] = [:]) {
+    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: String] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -155,23 +140,7 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
-    /// Initializes a JWK containing an RSA private key.
-    ///
-    /// - Parameter parameters: The JWK parameters.
-    /// - Throws: `JWKError` if the provided parameters are incomplete.
-    public init(parameters: [String: Any]) throws {
-        guard parameters[JWKKeyType.parameterName] as? String == JWKKeyType.RSA.rawValue else {
-            throw JWKError.requiredJWKParameterMissing(parameter: JWKKeyType.parameterName)
-        }
-
-        let modulus = try parameters.get(.modulus)
-        let exponent = try parameters.get(.exponent)
-        let privateExponent = try parameters.get(.privateExponent)
-
-        self.init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
-    }
-
-    public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: Any] = [:]) throws {
+    public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
         guard let modulus = privateKey.modulus else {
             throw JWKError.cannotExtractRSAModulus
         }
@@ -197,25 +166,3 @@ public struct RSAPrivateKey: JWK {
 // MARK: Key Pair
 
 public typealias RSAKeyPair = RSAPrivateKey
-
-// MARK: - Parsing
-
-fileprivate extension Dictionary where Key == String, Value == Any {
-    func get(_ parameterName: RSAParameterName) throws -> String {
-        guard let parameter = self[parameterName.rawValue] as? String else {
-            throw JWKError.requiredRSAParameterMissing(parameter: parameterName.rawValue)
-        }
-
-        return parameter
-    }
-}
-
-internal extension JWKParser {
-    func parseRSA(from parameters: [String: Any]) throws -> JWK {
-        do {
-            return try RSAPrivateKey(parameters: parameters)
-        } catch JWKError.requiredRSAParameterMissing(let parameter) where parameter == RSAParameterName.privateExponent.rawValue {
-            return try RSAPublicKey(parameters: parameters)
-        }
-    }
-}

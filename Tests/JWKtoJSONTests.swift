@@ -56,25 +56,4 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
         XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
     }
-
-    func testJSONStringWithInvalidParameters() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("notJSONConvertible", to: Date())
-            .set(keyType: .RSA)
-            .build()!
-
-        XCTAssertThrowsError(try jwk.jsonString())
-    }
-
-    func testJSONDataWithInvalidParameters() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("notJSONConvertible", to: Date())
-            .set(keyType: .RSA)
-            .build()!
-
-        XCTAssertThrowsError(try jwk.jsonData())
-    }
-
 }

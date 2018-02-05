@@ -46,7 +46,7 @@ public protocol JWK {
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
-    var parameters: [String: Any] { get }
+    var parameters: [String: String] { get }
 
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
@@ -54,7 +54,7 @@ public protocol JWK {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     ///
     /// - Parameter parameter: The desired parameter.
-    subscript(parameter: String) -> Any? { get }
+    subscript(parameter: String) -> String? { get }
 
     /// Computes the JSON representation of the JWK.
     ///
