@@ -55,7 +55,11 @@ extension RSAPublicKey: Decodable {
         let modulus = try rsaParameters.decode(String.self, forKey: .modulus)
         let exponent = try rsaParameters.decode(String.self, forKey: .exponent)
 
-        self.init(modulus: modulus, exponent: exponent, additionalParameters: parameters)
+        self.init(
+            modulus: modulus,
+            exponent: exponent,
+            additionalParameters: parameters
+        )
     }
 }
 
@@ -109,6 +113,11 @@ extension RSAPrivateKey: Decodable {
         let exponent = try rsaParameters.decode(String.self, forKey: .exponent)
         let privateExponent = try rsaParameters.decode(String.self, forKey: .privateExponent)
 
-        self.init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters)
+        self.init(
+            modulus: modulus,
+            exponent: exponent,
+            privateExponent: privateExponent,
+            additionalParameters: parameters
+        )
     }
 }
