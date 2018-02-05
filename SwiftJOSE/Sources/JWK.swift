@@ -62,6 +62,4 @@ public protocol JWK: Encodable {
     /// - Returns: The JSON representation of the JWK as `Data` or
     ///            `nil` if the encoding failed.
     func jsonData() -> Data?
-
-    static func parse(data: Data) throws -> JWK
 }
