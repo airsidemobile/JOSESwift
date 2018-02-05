@@ -31,7 +31,7 @@ public extension JWK {
     }
 }
 
-// MARK: JSON
+// MARK: Encoding Convenience Functions
 
 public extension JWK {
     func jsonString() -> String? {
