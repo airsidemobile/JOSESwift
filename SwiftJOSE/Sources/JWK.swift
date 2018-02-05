@@ -23,18 +23,13 @@
 
 import Foundation
 
-/// JWK related errors
+/// The key type parameter of a JWK identifies the cryptographic algorithm
+/// family used with the key(s) represented by a JWK.
+/// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
 ///
-/// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
-public enum JWKError: Error {
-    case JWKToJSONConversionFailed
-    case requiredJWKParameterMissing(parameter: String)
-    case requiredRSAParameterMissing(parameter: String)
-    case JWKDataNotInTheRightFormat
-    case JWKStringNotInTheRightFormat
-    case cannotExtractRSAModulus
-    case cannotExtractRSAPublicExponent
-    case cannotExtractRSAPrivateExponent
+/// - RSA
+public enum JWKKeyType: String, Codable {
+    case RSA = "RSA"
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.

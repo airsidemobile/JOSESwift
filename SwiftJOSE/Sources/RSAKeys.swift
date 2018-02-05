@@ -23,7 +23,7 @@
 
 import Foundation
 
-private enum RSAParameterName: String {
+private enum RSAKeyParameter: String, CodingKey {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
@@ -71,9 +71,9 @@ public struct RSAPublicKey: JWK {
 
         self.parameters = parameters.merging(
             [
-                JWKKeyType.parameterName: self.keyType.rawValue,
-                RSAParameterName.modulus.rawValue: self.modulus,
-                RSAParameterName.exponent.rawValue: self.exponent
+                JWKParameter.keyType.rawValue: self.keyType.rawValue,
+                RSAKeyParameter.modulus.rawValue: self.modulus,
+                RSAKeyParameter.exponent.rawValue: self.exponent
             ],
             uniquingKeysWith: { (_, new) in new }
         )
@@ -131,10 +131,10 @@ public struct RSAPrivateKey: JWK {
 
         self.parameters = parameters.merging(
             [
-                JWKKeyType.parameterName: self.keyType.rawValue,
-                RSAParameterName.modulus.rawValue: self.modulus,
-                RSAParameterName.exponent.rawValue: self.exponent,
-                RSAParameterName.privateExponent.rawValue: self.privateExponent
+                JWKParameter.keyType.rawValue: self.keyType.rawValue,
+                RSAKeyParameter.modulus.rawValue: self.modulus,
+                RSAKeyParameter.exponent.rawValue: self.exponent,
+                RSAKeyParameter.privateExponent.rawValue: self.privateExponent
             ],
             uniquingKeysWith: { (_, new) in new }
         )
