@@ -23,12 +23,6 @@
 
 import Foundation
 
-internal enum RSAKeyParameter: String, CodingKey {
-    case modulus = "n"
-    case exponent = "e"
-    case privateExponent = "d"
-}
-
 // MARK: Convertibles
 
 public protocol RSAPublicKeyConvertible {
@@ -45,7 +39,7 @@ public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
 /// A JWK holding an RSA pubkic key.
 public struct RSAPublicKey: JWK {
     /// The JWK key type.
-    public let keyType: JWKKeyType
+    public var keyType: JWKKeyType
 
     /// The JWK parameters.
     public let parameters: [String: String]
@@ -72,8 +66,8 @@ public struct RSAPublicKey: JWK {
         self.parameters = parameters.merging(
             [
                 JWKParameter.keyType.rawValue: self.keyType.rawValue,
-                RSAKeyParameter.modulus.rawValue: self.modulus,
-                RSAKeyParameter.exponent.rawValue: self.exponent
+                RSAParameter.modulus.rawValue: self.modulus,
+                RSAParameter.exponent.rawValue: self.exponent
             ],
             uniquingKeysWith: { (_, new) in new }
         )
@@ -94,6 +88,10 @@ public struct RSAPublicKey: JWK {
             exponent: exponent.base64URLEncodedString(),
             additionalParameters: parameters
         )
+    }
+
+    public init(data: Data) throws {
+        self = try JSONDecoder().decode(RSAPublicKey.self, from: data)
     }
 }
 
@@ -132,9 +130,9 @@ public struct RSAPrivateKey: JWK {
         self.parameters = parameters.merging(
             [
                 JWKParameter.keyType.rawValue: self.keyType.rawValue,
-                RSAKeyParameter.modulus.rawValue: self.modulus,
-                RSAKeyParameter.exponent.rawValue: self.exponent,
-                RSAKeyParameter.privateExponent.rawValue: self.privateExponent
+                RSAParameter.modulus.rawValue: self.modulus,
+                RSAParameter.exponent.rawValue: self.exponent,
+                RSAParameter.privateExponent.rawValue: self.privateExponent
             ],
             uniquingKeysWith: { (_, new) in new }
         )
@@ -160,6 +158,10 @@ public struct RSAPrivateKey: JWK {
             privateExponent: privateExponent.base64URLEncodedString(),
             additionalParameters: parameters
         )
+    }
+
+    public init(data: Data) throws {
+        self = try JSONDecoder().decode(RSAPrivateKey.self, from: data)
     }
 }
 

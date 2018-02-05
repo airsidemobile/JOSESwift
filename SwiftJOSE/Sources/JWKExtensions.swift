@@ -34,29 +34,15 @@ public extension JWK {
 // MARK: JSON
 
 public extension JWK {
-    func jsonString() throws -> String {
-        guard JSONSerialization.isValidJSONObject(parameters) else {
-            throw JWKError.JWKToJSONConversionFailed
+    func jsonString() -> String? {
+        guard let json = try? JSONEncoder().encode(self) else {
+            return nil
         }
 
-        // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next force_try
-        let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-
-        // The forced unwrap is ok here since `JSONSerialization.data()` returns UTF-8.
-        // swiftlint:disable:next force_unwrap
-        return String(data: jsonData, encoding: .utf8)!
+        return String(data: json, encoding: .utf8)
     }
 
-    func jsonData() throws -> Data {
-        guard JSONSerialization.isValidJSONObject(parameters) else {
-            throw JWKError.JWKToJSONConversionFailed
-        }
-
-        // The forced unwrap is ok here since we checked `isValidJSONObject` above.
-        // swiftlint:disable:next force_try
-        let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-
-        return jsonData
+    func jsonData() -> Data? {
+        return try? JSONEncoder().encode(self)
     }
 }

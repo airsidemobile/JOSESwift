@@ -42,6 +42,25 @@ class JWKRSADencodingTests: CryptoTestCase {
 
     // MARK: - Public Key Tests
 
+    func testInitializingPublicKeyFromJSONData() {
+        let jwk = try? RSAPublicKey(data: publicKeyJSON)
+
+        XCTAssertNotNil(jwk)
+
+        XCTAssertEqual(jwk!.keyType, .RSA)
+        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!.modulus, """
+            0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
+            3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
+            dAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFC\
+            ur-kEgU8awapJzKnqDKgw
+            """
+        )
+        XCTAssertEqual(jwk!.exponent, "AQAB")
+        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+    }
+
     func testDecodingPublicKey() {
         let jwk = try? JSONDecoder().decode(RSAPublicKey.self, from: publicKeyJSON)
 
@@ -91,7 +110,7 @@ class JWKRSADencodingTests: CryptoTestCase {
         do {
             let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
-            XCTAssertEqual(key.stringValue, RSAKeyParameter.modulus.rawValue)
+            XCTAssertEqual(key.stringValue, RSAParameter.modulus.rawValue)
             return
         } catch {
             XCTFail()
@@ -108,7 +127,7 @@ class JWKRSADencodingTests: CryptoTestCase {
         do {
             let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
-            XCTAssertEqual(key.stringValue, RSAKeyParameter.exponent.rawValue)
+            XCTAssertEqual(key.stringValue, RSAParameter.exponent.rawValue)
             return
         } catch {
             XCTFail()
@@ -133,6 +152,33 @@ class JWKRSADencodingTests: CryptoTestCase {
     }
 
     // MARK: - Private Key Tests
+
+    func testInitializingPrivateKeyFromJSONData() {
+        let jwk = try? RSAPrivateKey(data: privateKeyJSON)
+
+        XCTAssertNotNil(jwk)
+
+        XCTAssertEqual(jwk!.keyType, .RSA)
+        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!.modulus, """
+            0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
+            3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
+            dAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFC\
+            ur-kEgU8awapJzKnqDKgw
+            """
+        )
+        XCTAssertEqual(jwk!.privateExponent, """
+            X4cTteJY_gn4FYPsXB8rdXix5vwsg1FLN5E3EaG6RJoVH-HLLKD9M7dx5oo7GURknchnrRweUkC7hT5fJLM0WbFAKNLWY2vv7B6NqXSzUvx\
+            T0_YSfqijwp3RTzlBaCxWp4doFk5N2o8Gy_nHNKroADIkJ46pRUohsXywbReAdYaMwFs9tv8d_cPVY3i07a3t8MN6TNwm0dSawm9v47UiCl\
+            3Sk5ZiG7xojPLu4sbg1U2jx4IBTNBznbJSzFHK66jT8bgkuqsk0GjskDJk19Z4qwjwbsnn4j2WBii3RL-Us2lGVkY8fkFzme1z0HbIkfz0Y\
+            6mqnOYtqc0X4jfcKoAC8Q
+            """
+        )
+        XCTAssertEqual(jwk!.exponent, "AQAB")
+        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+    }
+
 
     func testDecodingPrivateKey() {
         let jwk = try? JSONDecoder().decode(RSAPrivateKey.self, from: privateKeyJSON)
@@ -190,7 +236,7 @@ class JWKRSADencodingTests: CryptoTestCase {
         do {
             let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
-            XCTAssertEqual(key.stringValue, RSAKeyParameter.modulus.rawValue)
+            XCTAssertEqual(key.stringValue, RSAParameter.modulus.rawValue)
             return
         } catch {
             XCTFail()
@@ -207,7 +253,7 @@ class JWKRSADencodingTests: CryptoTestCase {
         do {
             let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
-            XCTAssertEqual(key.stringValue, RSAKeyParameter.exponent.rawValue)
+            XCTAssertEqual(key.stringValue, RSAParameter.exponent.rawValue)
             return
         } catch {
             XCTFail()
@@ -229,7 +275,7 @@ class JWKRSADencodingTests: CryptoTestCase {
         do {
             let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
-            XCTAssertEqual(key.stringValue, RSAKeyParameter.privateExponent.rawValue)
+            XCTAssertEqual(key.stringValue, RSAParameter.privateExponent.rawValue)
             return
         } catch {
             XCTFail()

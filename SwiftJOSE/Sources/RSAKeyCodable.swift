@@ -23,7 +23,7 @@ extension RSAPublicKey: Encodable {
         }
 
         // RSA public key specific parameters.
-        var rsaParameters = encoder.container(keyedBy: RSAKeyParameter.self)
+        var rsaParameters = encoder.container(keyedBy: RSAParameter.self)
         try rsaParameters.encode(modulus, forKey: .modulus)
         try rsaParameters.encode(exponent, forKey: .exponent)
     }
@@ -44,7 +44,7 @@ extension RSAPublicKey: Decodable {
         self.parameters = parameters
 
         // RSA public key specific parameters.
-        let rsaParameters = try decoder.container(keyedBy: RSAKeyParameter.self)
+        let rsaParameters = try decoder.container(keyedBy: RSAParameter.self)
         self.modulus = try rsaParameters.decode(String.self, forKey: .modulus)
         self.exponent = try rsaParameters.decode(String.self, forKey: .exponent)
     }
@@ -66,7 +66,7 @@ extension RSAPrivateKey: Encodable {
         }
 
         // RSA private key specific parameters.
-        var rsaParameters = encoder.container(keyedBy: RSAKeyParameter.self)
+        var rsaParameters = encoder.container(keyedBy: RSAParameter.self)
         try rsaParameters.encode(modulus, forKey: .modulus)
         try rsaParameters.encode(exponent, forKey: .exponent)
         try rsaParameters.encode(privateExponent, forKey: .privateExponent)
@@ -88,7 +88,7 @@ extension RSAPrivateKey: Decodable {
         self.parameters = parameters
 
         // RSA private key specific parameters.
-        let rsaParameters = try decoder.container(keyedBy: RSAKeyParameter.self)
+        let rsaParameters = try decoder.container(keyedBy: RSAParameter.self)
         self.modulus = try rsaParameters.decode(String.self, forKey: .modulus)
         self.exponent = try rsaParameters.decode(String.self, forKey: .exponent)
         self.privateExponent = try rsaParameters.decode(String.self, forKey: .privateExponent)

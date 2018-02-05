@@ -18,7 +18,7 @@ class JWKtoJSONTests: CryptoTestCase {
             .set(keyType: .RSA)
             .build()!
 
-        let jsonString = try? jwk.jsonString()
+        let jsonString = jwk.jsonString()
         XCTAssertNotNil(jsonString)
 
         let jsonData = jsonString!.data(using: .utf8)!
@@ -42,7 +42,7 @@ class JWKtoJSONTests: CryptoTestCase {
             .set(keyType: .RSA)
             .build()!
 
-        let jsonData = try? jwk.jsonData()
+        let jsonData = jwk.jsonData()
         XCTAssertNotNil(jsonData!)
 
         let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]

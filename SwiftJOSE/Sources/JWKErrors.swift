@@ -24,14 +24,7 @@
 import Foundation
 
 /// JWK related errors
-///
-/// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
 public enum JWKError: Error {
-    case JWKToJSONConversionFailed
-    case requiredJWKParameterMissing(parameter: String)
-    case requiredRSAParameterMissing(parameter: String)
-    case JWKDataNotInTheRightFormat
-    case JWKStringNotInTheRightFormat
     case cannotExtractRSAModulus
     case cannotExtractRSAPublicExponent
     case cannotExtractRSAPrivateExponent

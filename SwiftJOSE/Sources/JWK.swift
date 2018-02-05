@@ -53,13 +53,13 @@ public protocol JWK: Encodable {
 
     /// Computes the JSON representation of the JWK.
     ///
-    /// - Returns: The JSON representation of the JWK as `String`.
-    /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func jsonString() throws -> String
+    /// - Returns: The JSON representation of the JWK as `String` or
+    ///            `nil` if the encoding failed.
+    func jsonString() -> String?
 
     /// Computes the JSON representation of the JWK.
     ///
-    /// - Returns: The JSON representation of the JWK as `Data`.
-    /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func jsonData() throws -> Data
+    /// - Returns: The JSON representation of the JWK as `Data` or
+    ///            `nil` if the encoding failed.
+    func jsonData() -> Data?
 }
