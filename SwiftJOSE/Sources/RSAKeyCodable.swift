@@ -37,7 +37,10 @@ extension RSAPublicKey: Decodable {
         guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.RSA.rawValue else {
             throw DecodingError.keyNotFound(
                 JWKParameter.keyType,
-                DecodingError.Context.init(codingPath: [JWKParameter.keyType], debugDescription: "Key Type parameter wrong.")
+                DecodingError.Context.init(
+                    codingPath: [JWKParameter.keyType],
+                    debugDescription: "Key Type parameter wrong."
+                )
             )
         }
 
@@ -87,7 +90,10 @@ extension RSAPrivateKey: Decodable {
         guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.RSA.rawValue else {
             throw DecodingError.keyNotFound(
                 JWKParameter.keyType,
-                DecodingError.Context.init(codingPath: [JWKParameter.keyType], debugDescription: "Key Type parameter wrong.")
+                DecodingError.Context.init(
+                    codingPath: [JWKParameter.keyType],
+                    debugDescription: "Key Type parameter wrong."
+                )
             )
         }
 
