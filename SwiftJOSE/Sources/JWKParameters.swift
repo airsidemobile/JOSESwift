@@ -31,7 +31,7 @@ import Foundation
 public enum JWKKeyType: String {
     case RSA = "RSA"
 
-    var parameterName: String {
+    static var parameterName: String {
         return "kty"
     }
 }

@@ -23,12 +23,18 @@
 
 import Foundation
 
-extension JWK {
-    public subscript(parameter: String) -> Any? {
+// MARK: Subscript
+
+public extension JWK {
+    subscript(parameter: String) -> Any? {
         return parameters[parameter]
     }
+}
 
-    public func jsonString() throws -> String {
+// MARK: JSON
+
+public extension JWK {
+    func jsonString() throws -> String {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
@@ -42,7 +48,7 @@ extension JWK {
         return String(data: jsonData, encoding: .utf8)!
     }
 
-    public func jsonData() throws -> Data {
+    func jsonData() throws -> Data {
         guard JSONSerialization.isValidJSONObject(parameters) else {
             throw JWKError.JWKToJSONConversionFailed
         }
