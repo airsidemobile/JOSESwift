@@ -27,12 +27,10 @@ import XCTest
 class JWKRSAEncodingTests: CryptoTestCase {
 
     func testPublicKeyEncoding() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()! as! RSAPublicKey
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29"
+        ])
 
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
@@ -50,13 +48,11 @@ class JWKRSAEncodingTests: CryptoTestCase {
     }
 
     func testEncodingPublicKeyWithUnregisteredParameter() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set("breeze", to: "through")
-            .set(keyType: .RSA)
-            .build()! as! RSAPublicKey
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29",
+            "breeze": "through"
+        ])
 
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
@@ -75,12 +71,12 @@ class JWKRSAEncodingTests: CryptoTestCase {
     }
 
     func testPrivateKeyEncoding() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(privateKey: privateKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()! as! RSAPrivateKey
+        let jwk = RSAPrivateKey(
+            modulus: "MHZ4Li4uS2d3",
+            exponent: "QVFBQg",
+            privateExponent: "MHZ4Li4uS2d3",
+            additionalParameters: [ "alg": "RS256", "kid": "2011-04-29" ]
+        )
 
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
@@ -98,13 +94,12 @@ class JWKRSAEncodingTests: CryptoTestCase {
     }
 
     func testEncodingPrivateKeyWithUnregisteredParameter() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(privateKey: privateKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set("breeze", to: "through")
-            .set(keyType: .RSA)
-            .build()! as! RSAPrivateKey
+        let jwk = RSAPrivateKey(
+            modulus: "MHZ4Li4uS2d3",
+            exponent: "QVFBQg",
+            privateExponent: "MHZ4Li4uS2d3",
+            additionalParameters: [ "alg": "RS256", "kid": "2011-04-29", "breeze": "through" ]
+        )
 
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)

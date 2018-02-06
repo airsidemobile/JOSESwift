@@ -31,14 +31,18 @@ class JWKRSAKeysTests: CryptoTestCase {
             "kty": "wrongKty"
         ])
 
-        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
+        XCTAssertEqual(jwk["kty"] ?? "", "RSA")
     }
 
     func testMergingDuplicateAdditionalParametersInPrivateKey() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(privateKey: privateKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
+        let jwk = RSAPrivateKey(
+            modulus: "MHZ4Li4uS2d3",
+            exponent: "QVFBQg",
+            privateExponent: "MHZ4Li4uS2d3",
+            additionalParameters: [ "kty": "wrongKty" ]
+        )
 
-        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
+        XCTAssertEqual(jwk["kty"] ?? "", "RSA")
     }
 
     func testInitPublicKeyDirectlyWithoutAdditionalParameters() {
@@ -74,22 +78,5 @@ class JWKRSAKeysTests: CryptoTestCase {
 
         // kty, n, e, d
         XCTAssertEqual(key.parameters.count, 4)
-    }
-
-    func testBuiltPrivateKeyParametersArePresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build() as! RSAPrivateKey
-
-        XCTAssertFalse(jwk.modulus.isEmpty)
-        XCTAssertFalse(jwk.exponent.isEmpty)
-        XCTAssertFalse(jwk.privateExponent.isEmpty)
-    }
-
-    func testBuiltPublicKeyParametersArePresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build() as! RSAPublicKey
-
-        XCTAssertFalse(jwk.modulus.isEmpty)
-        XCTAssertFalse(jwk.exponent.isEmpty)
     }
 }

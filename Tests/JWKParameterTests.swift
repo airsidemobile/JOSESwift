@@ -27,8 +27,7 @@ import XCTest
 class JWKParameterTests: CryptoTestCase {
 
     func testPrivateKeyKeyTypeIsPresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey!)
 
         XCTAssertEqual(jwk.keyType, .RSA)
         XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
@@ -36,8 +35,11 @@ class JWKParameterTests: CryptoTestCase {
     }
 
     func testPublicKeyKeyTypeIsPresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build()!
+        let jwk = RSAPrivateKey(
+            modulus: "MHZ4Li4uS2d3",
+            exponent: "QVFBQg",
+            privateExponent: "MHZ4Li4uS2d3"
+        )
 
         XCTAssertEqual(jwk.keyType, .RSA)
         XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
@@ -45,8 +47,9 @@ class JWKParameterTests: CryptoTestCase {
     }
 
     func testSettingAndGettingAdditionalParameter() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(publicKey: publicKey!).set("kid", to: "new on the block").set(keyType: .RSA).build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "kid": "new on the block"
+        ])
 
         XCTAssertEqual(jwk["kid"] ?? "", "new on the block")
     }

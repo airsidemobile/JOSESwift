@@ -27,12 +27,10 @@ import XCTest
 class JWKtoJSONTests: CryptoTestCase {
 
     func testJSONString() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29"
+        ])
 
         let jsonString = jwk.jsonString()
         XCTAssertNotNil(jsonString)
@@ -51,12 +49,10 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONData() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29"
+        ])
 
         let jsonData = jwk.jsonData()
         XCTAssertNotNil(jsonData!)
