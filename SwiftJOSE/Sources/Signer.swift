@@ -32,10 +32,10 @@ public enum SigningError: Error {
 }
 
 protocol SignerProtocol {
-    var algorithm: SigningAlgorithm { get }
+    var algorithm: SignatureAlgorithm { get }
 
     /// Initializes a `Signer` with a specified key.
-    init(algorithm: SigningAlgorithm, privateKey: SecKey)
+    init(algorithm: SignatureAlgorithm, privateKey: SecKey)
 
     /**
      Signs input data.
@@ -54,7 +54,7 @@ protocol SignerProtocol {
 public struct Signer {
     let signer: SignerProtocol
 
-    public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
+    public init(signingAlgorithm: SignatureAlgorithm, privateKey: SecKey) {
         self.signer = CryptoFactory.signer(for: signingAlgorithm, with: privateKey)
     }
 

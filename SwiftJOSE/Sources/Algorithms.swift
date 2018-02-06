@@ -23,7 +23,7 @@
 
 import Foundation
 
-public enum SigningAlgorithm: String {
+public enum SignatureAlgorithm: String {
     case RS512 = "RS512"
 
     var secKeyAlgorithm: SecKeyAlgorithm? {
@@ -34,7 +34,7 @@ public enum SigningAlgorithm: String {
     }
 }
 
-public enum AsymmetricEncryptionAlgorithm: String {
+public enum AsymmetricKeyAlgorithm: String {
     case RSAPKCS = "RSA1_5"
 
     var secKeyAlgorithm: SecKeyAlgorithm? {
@@ -61,7 +61,7 @@ public enum AsymmetricEncryptionAlgorithm: String {
     }
 }
 
-public enum SymmetricEncryptionAlgorithm: String {
+public enum SymmetricKeyAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
 
     var hmacAlgorithm: HMACAlgorithm {

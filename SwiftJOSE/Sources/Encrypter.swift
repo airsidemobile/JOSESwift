@@ -50,10 +50,10 @@ public enum EncryptionError: Error, Equatable {
 
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
-    var algorithm: AsymmetricEncryptionAlgorithm { get }
+    var algorithm: AsymmetricKeyAlgorithm { get }
 
     /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
-    init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
+    init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
     /**
      Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
@@ -73,10 +73,10 @@ internal protocol AsymmetricEncrypter {
 
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
-    var algorithm: SymmetricEncryptionAlgorithm { get }
+    var algorithm: SymmetricKeyAlgorithm { get }
 
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
-    init(algorithm: SymmetricEncryptionAlgorithm)
+    init(algorithm: SymmetricKeyAlgorithm)
 
     /**
      Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
@@ -111,7 +111,7 @@ public struct Encrypter {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
-    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) {
+    public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         self.asymmetric = CryptoFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
         self.symmetric = CryptoFactory.encrypter(for: contentEncyptionAlgorithm)
     }

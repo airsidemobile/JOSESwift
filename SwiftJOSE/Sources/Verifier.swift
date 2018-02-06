@@ -24,10 +24,10 @@
 import Foundation
 
 protocol VerifierProtocol {
-    var algorithm: SigningAlgorithm { get }
+    var algorithm: SignatureAlgorithm { get }
 
     /// Initializes a `Verifier` with a specified key and signing algorithm.
-    init(algorithm: SigningAlgorithm, publicKey: SecKey)
+    init(algorithm: SignatureAlgorithm, publicKey: SecKey)
 
     /**
      Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
@@ -47,7 +47,7 @@ protocol VerifierProtocol {
 public struct Verifier {
     let verifier: VerifierProtocol
 
-    public init(signingAlgorithm: SigningAlgorithm, publicKey: SecKey) {
+    public init(signingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
         self.verifier = CryptoFactory.verifyer(for: signingAlgorithm, with: publicKey)
     }
 
