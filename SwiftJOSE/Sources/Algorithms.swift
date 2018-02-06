@@ -23,6 +23,9 @@
 
 import Foundation
 
+/// An algorithm for signing and verifying
+///
+/// - RSA
 public enum SignatureAlgorithm: String {
     case RS512 = "RS512"
 
@@ -34,6 +37,10 @@ public enum SignatureAlgorithm: String {
     }
 }
 
+
+/// An algorithm for asymmetric encryption and decryption
+///
+/// - RSAPKCS
 public enum AsymmetricKeyAlgorithm: String {
     case RSAPKCS = "RSA1_5"
 
@@ -44,11 +51,13 @@ public enum AsymmetricKeyAlgorithm: String {
         }
     }
 
-    /// Checks if the plain text length does not exceed the maximum for the chosen algorithm and the corresponding public key.
+    /// Checks if the plain text length does not exceed the maximum
+    /// for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         switch self {
         case .RSAPKCS:
-            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
+            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
+            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
         }
     }
@@ -61,6 +70,9 @@ public enum AsymmetricKeyAlgorithm: String {
     }
 }
 
+/// An algorithm for symmetric encryption and decryption
+///
+/// - AES256CBCHS512
 public enum SymmetricKeyAlgorithm: String {
     case AES256CBCHS512 = "A256CBC-HS512"
 
@@ -111,6 +123,9 @@ public enum SymmetricKeyAlgorithm: String {
     }
 }
 
+/// An algorithm for HMAC calculation
+///
+/// - SHA512
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
 
