@@ -62,7 +62,7 @@ public class JWKBuilder<T> where T: JWKConvertible {
     ///
     /// - Parameters:
     ///   - parameter: The parameter to set or update.
-    ///   - value: the value to set or update for the specified paramter.
+    ///   - value: The value to set or update for the specified paramter.
     /// - Returns: A `JWKBuilder` containing the set parameter that can be used
     ///            to set another key or parameter or to build a JWK.
     func set(_ parameter: String, to value: String) -> Self {
