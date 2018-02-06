@@ -31,17 +31,6 @@ public enum SigningError: Error {
     case cannotComputeSigningInput
 }
 
-public enum SigningAlgorithm: String {
-    case RS512 = "RS512"
-
-    var secKeyAlgorithm: SecKeyAlgorithm? {
-        switch self {
-        case .RS512:
-            return .rsaSignatureMessagePKCS1v15SHA512
-        }
-    }
-}
-
 protocol SignerProtocol {
     var algorithm: SigningAlgorithm { get }
 
