@@ -51,6 +51,13 @@ public protocol JWK: Codable {
     /// - Parameter parameter: The desired parameter.
     subscript(parameter: String) -> String? { get }
 
+    /// Initializes a JWK from given JSON data.
+    ///
+    /// - Parameter data: The JWK in JSON serialization.
+    /// - Throws: If the data is not valid JSON, this method throws the `dataCorrupted` error.
+    ///           If a value within the JSON fails to decode, this method throws the corresponding error.
+    init(data: Data) throws
+
     /// Computes the JSON representation of the JWK.
     ///
     /// - Returns: The JSON representation of the JWK as `String` or
