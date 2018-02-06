@@ -39,8 +39,8 @@ class JWEHeaderTests: XCTestCase {
     func testInitWithParameters() {
         let header = try! JWEHeader(parameters: parameterDict, headerData: parameterData)
 
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.AES256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
     }
 
@@ -48,8 +48,8 @@ class JWEHeaderTests: XCTestCase {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
         let header = JWEHeader(data)!
 
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.AES256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
         XCTAssertEqual(header.data(), data)
     }
 
@@ -57,8 +57,8 @@ class JWEHeaderTests: XCTestCase {
         let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
 
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricEncryptionAlgorithm.RSAPKCS.rawValue)
-        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricEncryptionAlgorithm.AES256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.AES256CBCHS512.rawValue)
 
         XCTAssertNotNil(header.algorithm)
         XCTAssertNotNil(header.encryptionAlgorithm)

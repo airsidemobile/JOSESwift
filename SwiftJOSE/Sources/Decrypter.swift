@@ -25,9 +25,9 @@ import Foundation
 
 internal protocol AsymmetricDecrypter {
     /// Initializes an `AsymmetricDecrypter` with a specified private key.
-    init(algorithm: AsymmetricEncryptionAlgorithm, privateKey: SecKey)
+    init(algorithm: AsymmetricKeyAlgorithm, privateKey: SecKey)
 
-    var algorithm: AsymmetricEncryptionAlgorithm { get }
+    var algorithm: AsymmetricKeyAlgorithm { get }
 
     /**
      Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
@@ -46,9 +46,9 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
-    init(algorithm: SymmetricEncryptionAlgorithm)
+    init(algorithm: SymmetricKeyAlgorithm)
 
-    var algorithm: SymmetricEncryptionAlgorithm { get }
+    var algorithm: SymmetricKeyAlgorithm { get }
 
     /**
      Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
@@ -83,7 +83,7 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
-    public init(keyDecryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricEncryptionAlgorithm) {
+    public init(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         self.asymmetric = CryptoFactory.decrypter(for: keyDecryptionAlgorithm, with: kdk)
         self.symmetric = CryptoFactory.decrypter(for: contentDecryptionAlgorithm)
     }

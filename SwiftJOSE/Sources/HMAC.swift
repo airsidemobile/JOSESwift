@@ -25,26 +25,16 @@ import Foundation
 import IDZSwiftCommonCrypto
 import CommonCrypto
 
-public enum HMACAlgorithm: String {
-    case SHA512 = "SHA512"
-
+fileprivate extension HMACAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
         case .SHA512:
             return CCAlgorithm(kCCHmacAlgSHA512)
         }
     }
-
-    var outputLength: Int {
-        switch self {
-        case .SHA512:
-            return 64
-        }
-    }
 }
 
 public struct HMAC {
-
     /**
      Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
      - Parameters:

@@ -38,7 +38,7 @@ struct CryptoFactory {
      
      - Returns: The asymmetric encrypter suitable for the given algorithm, initialized with the given public key.
     */
-    static func encrypter(for algorithm: AsymmetricEncryptionAlgorithm, with publicKey: SecKey) -> AsymmetricEncrypter {
+    static func encrypter(for algorithm: AsymmetricKeyAlgorithm, with publicKey: SecKey) -> AsymmetricEncrypter {
         switch algorithm {
         case .RSAPKCS:
             return RSAEncrypter(algorithm: algorithm, publicKey: publicKey)
@@ -52,7 +52,7 @@ struct CryptoFactory {
      
      - Returns: The symmetric encrypter suitable for the given algorithm.
      */
-    static func encrypter(for algorithm: SymmetricEncryptionAlgorithm) -> SymmetricEncrypter {
+    static func encrypter(for algorithm: SymmetricKeyAlgorithm) -> SymmetricEncrypter {
         switch algorithm {
         case .AES256CBCHS512:
             return AESEncrypter(algorithm: algorithm)
@@ -68,7 +68,7 @@ struct CryptoFactory {
      - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
      */
     // swiftlint:disable:next line_length
-    static func decrypter(for algorithm: AsymmetricEncryptionAlgorithm, with privateKey: SecKey) -> AsymmetricDecrypter {
+    static func decrypter(for algorithm: AsymmetricKeyAlgorithm, with privateKey: SecKey) -> AsymmetricDecrypter {
         switch algorithm {
         case .RSAPKCS:
             return RSADecrypter(algorithm: algorithm, privateKey: privateKey)
@@ -82,21 +82,21 @@ struct CryptoFactory {
      
      - Returns: The symmetric decrypter suitable for the given algorithm.
      */
-    static func decrypter(for algorithm: SymmetricEncryptionAlgorithm) -> SymmetricDecrypter {
+    static func decrypter(for algorithm: SymmetricKeyAlgorithm) -> SymmetricDecrypter {
         switch algorithm {
         case .AES256CBCHS512:
             return AESDecrypter(algorithm: algorithm)
         }
     }
 
-    static func signer(for algorithm: SigningAlgorithm, with privateKey: SecKey) -> SignerProtocol {
+    static func signer(for algorithm: SignatureAlgorithm, with privateKey: SecKey) -> SignerProtocol {
         switch algorithm {
         case .RS512:
             return RSASigner(algorithm: algorithm, privateKey: privateKey)
         }
     }
 
-    static func verifyer(for algorithm: SigningAlgorithm, with publicKey: SecKey) -> VerifierProtocol {
+    static func verifyer(for algorithm: SignatureAlgorithm, with publicKey: SecKey) -> VerifierProtocol {
         switch algorithm {
         case .RS512:
             return RSAVerifier(algorithm: algorithm, publicKey: publicKey)

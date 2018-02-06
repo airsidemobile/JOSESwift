@@ -55,7 +55,7 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: AsymmetricEncryptionAlgorithm, encryptionAlgorithm: SymmetricEncryptionAlgorithm) {
+    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
         let parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
@@ -74,18 +74,18 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: AsymmetricEncryptionAlgorithm? {
+    public var algorithm: AsymmetricKeyAlgorithm? {
         // Forced unwrap is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
-        return AsymmetricEncryptionAlgorithm(rawValue: parameters["alg"] as! String)
+        return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
     }
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: SymmetricEncryptionAlgorithm? {
+    public var encryptionAlgorithm: SymmetricKeyAlgorithm? {
         // Forced unwrap is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
-        return SymmetricEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
+        return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
     }
 }
 

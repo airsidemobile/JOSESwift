@@ -31,22 +31,11 @@ public enum SigningError: Error {
     case cannotComputeSigningInput
 }
 
-public enum SigningAlgorithm: String {
-    case RS512 = "RS512"
-
-    var secKeyAlgorithm: SecKeyAlgorithm? {
-        switch self {
-        case .RS512:
-            return .rsaSignatureMessagePKCS1v15SHA512
-        }
-    }
-}
-
 protocol SignerProtocol {
-    var algorithm: SigningAlgorithm { get }
+    var algorithm: SignatureAlgorithm { get }
 
     /// Initializes a `Signer` with a specified key.
-    init(algorithm: SigningAlgorithm, privateKey: SecKey)
+    init(algorithm: SignatureAlgorithm, privateKey: SecKey)
 
     /**
      Signs input data.
@@ -65,7 +54,7 @@ protocol SignerProtocol {
 public struct Signer {
     let signer: SignerProtocol
 
-    public init(signingAlgorithm: SigningAlgorithm, privateKey: SecKey) {
+    public init(signingAlgorithm: SignatureAlgorithm, privateKey: SecKey) {
         self.signer = CryptoFactory.signer(for: signingAlgorithm, with: privateKey)
     }
 
