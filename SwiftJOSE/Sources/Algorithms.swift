@@ -23,7 +23,7 @@
 
 import Foundation
 
-/// An algorithm for signing and verifying
+/// An algorithm for signing and verifying.
 ///
 /// - RSA
 public enum SignatureAlgorithm: String {
@@ -37,7 +37,7 @@ public enum SignatureAlgorithm: String {
     }
 }
 
-/// An algorithm for asymmetric encryption and decryption
+/// An algorithm for asymmetric encryption and decryption.
 ///
 /// - RSAPKCS
 public enum AsymmetricKeyAlgorithm: String {
@@ -69,7 +69,7 @@ public enum AsymmetricKeyAlgorithm: String {
     }
 }
 
-/// An algorithm for symmetric encryption and decryption
+/// An algorithm for symmetric encryption and decryption.
 ///
 /// - AES256CBCHS512
 public enum SymmetricKeyAlgorithm: String {
@@ -122,7 +122,7 @@ public enum SymmetricKeyAlgorithm: String {
     }
 }
 
-/// An algorithm for HMAC calculation
+/// An algorithm for HMAC calculation.
 ///
 /// - SHA512
 public enum HMACAlgorithm: String {
