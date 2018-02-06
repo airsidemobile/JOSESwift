@@ -90,7 +90,7 @@ internal struct RSA {
     ///
     /// - Parameters:
     ///   - verifyingInput: The data to verify.
-    ///   - signature: The siganture to verify against.
+    ///   - signature: The signature to verify against.
     ///   - publicKey: The public key used by the `SignatureAlgorithm`.
     ///   - algorithm: The algorithm to verify the input data.
     /// - Returns: True if the signature is verified, false if it is not verified.
