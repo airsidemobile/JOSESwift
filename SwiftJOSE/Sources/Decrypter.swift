@@ -30,7 +30,7 @@ internal protocol AsymmetricDecrypter {
     var algorithm: AsymmetricKeyAlgorithm { get }
 
     /**
-     Decrypts a cipher text using a given `AsymmetricEncryptionAlgorithm` and the corresponding private key.
+     Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
      - Parameters:
         - ciphertext: The encrypted cipher text to decrypt.
         - algorithm: The algorithm used to decrypt the cipher text.

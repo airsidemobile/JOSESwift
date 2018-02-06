@@ -56,7 +56,7 @@ internal protocol AsymmetricEncrypter {
     init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
     /**
-     Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
+     Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
      - Parameters:
         - plaintext: The plain text to encrypt.
         - algorithm: The algorithm used to encrypt the plain text.
