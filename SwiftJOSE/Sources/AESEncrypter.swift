@@ -29,7 +29,7 @@ internal struct AESEncrypter: SymmetricEncrypter {
 
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
         // Generate random intitialization vector.
-        let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength())
+        let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength)
 
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {

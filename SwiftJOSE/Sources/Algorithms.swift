@@ -50,14 +50,14 @@ public enum SymmetricKeyAlgorithm: String {
         }
     }
 
-    func keyLength() -> Int {
+    var keyLength: Int {
         switch self {
         case .AES256CBCHS512:
             return 64
         }
     }
 
-    func initializationVectorLength() -> Int {
+    var initializationVectorLength: Int {
         switch self {
         case .AES256CBCHS512:
             return 16

@@ -124,7 +124,7 @@ public struct Encrypter {
             throw EncryptionError.contentEncryptionAlgorithmMismatch
         }
 
-        let cek = try SecureRandom.generate(count: enc.keyLength())
+        let cek = try SecureRandom.generate(count: enc.keyLength)
         let encryptedKey = try asymmetric.encrypt(cek)
         let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data().base64URLEncodedData())
 
