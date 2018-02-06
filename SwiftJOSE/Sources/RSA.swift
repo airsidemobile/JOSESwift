@@ -102,4 +102,26 @@ internal struct RSA {
 
         return true
     }
+
+    static func encrypt(_ plaintext: Data, with publicKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+        // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to encrypt with a given public key.
+        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
+            throw EncryptionError.encryptionAlgorithmNotSupported
+        }
+
+        // Check if the plain text length does not exceed the maximum.
+        // e.g. for RSAPKCS the plaintext must be 11 bytes smaller than the public key's modulus.
+        guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
+            throw EncryptionError.plainTextLengthNotSatisfied
+        }
+
+        // Encrypt the plain text with a given `SecKeyAlgorithm` and a public key.
+        var encryptionError: Unmanaged<CFError>?
+        guard let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError) else {
+            throw EncryptionError.encryptingFailed(description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
+        }
+
+        return cipherText as Data
+    }
+
 }
