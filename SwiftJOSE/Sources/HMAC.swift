@@ -35,15 +35,14 @@ fileprivate extension HMACAlgorithm {
 }
 
 internal struct HMAC {
-    /**
-     Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
-     - Parameters:
-        - input: The input to calculate a HMAC for.
-        - key: The key used in the HMAC algorithm.
-        - algorithm: The algorithm used to calculate the HMAC.
-     
-     - Returns: The calculated HMAC.
-     */
+
+    /// Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
+    ///
+    /// - Parameters:
+    ///   - input: The input to calculate a HMAC for.
+    ///   - key: The key used in the HMAC algorithm.
+    ///   - algorithm: The algorithm used to calculate the HMAC.
+    /// - Returns: The calculated HMAC.
     static func calculate(from input: Data, with key: Data, using algorithm: HMACAlgorithm) -> Data {
         var hmacOutData = Data(count: algorithm.outputLength)
 
