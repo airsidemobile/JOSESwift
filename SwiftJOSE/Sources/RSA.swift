@@ -61,14 +61,16 @@ fileprivate extension AsymmetricKeyAlgorithm {
 
 internal struct RSA {
 
-    ///  DESCRITPION
+    ///  Signs input data with a given `RSA` algorithm and the corresponding private key.
     ///
     /// - Parameters:
-    ///   - signingInput:
-    ///   - privateKey:
-    ///   - algorithm:
-    /// - Returns:
+    ///   - signingInput: The data to sign.
+    ///   - privateKey: The private key used by the `SignatureAlgorithm`.
+    ///   - algorithm: The algorithm to sign the input data.
+    /// - Returns: The signature.
     /// - Throws:
+    ///   - `SigningError.algorithmNotSupported`: If the algorithm is not supported for signing.
+    ///   - `SigningError.signingFailed(description: String)`: If signing failed with a specific error.
     static func sign(_ signingInput: Data, with privateKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Data {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to sign with a given private key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
@@ -84,6 +86,17 @@ internal struct RSA {
         return signature as Data
     }
 
+    /// Verifies input data against a signature with a given `RSA` algorithm and the corresponding public key.
+    ///
+    /// - Parameters:
+    ///   - verifyingInput: The data to verify.
+    ///   - signature: The siganture to verify against.
+    ///   - publicKey: The public key used by the `SignatureAlgorithm`.
+    ///   - algorithm: The algorithm to verify the input data.
+    /// - Returns: True if the signature is verified, false if it is not verified.
+    /// - Throws:
+    ///   - `SigningError.algorithmNotSupported`: If the algorithm is not supported for verifying.
+    ///   - `SigningError.verificationFailed(descritpion: String)`: If verifying failed with a specific error.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to verify with a given public key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm) else {
