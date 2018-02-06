@@ -1,8 +1,8 @@
 //
-//  SecKeyExtensions.swift
+//  SecKeyRSAPrivateKey.swift
 //  SwiftJOSE
 //
-//  Created by Daniel Egger on 14.12.17.
+//  Created by Daniel Egger on 06.02.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,16 +24,8 @@
 import Foundation
 import Security
 
-extension JWK {
-    static func secKeyRepresentation() throws -> SecKey {
-        // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
-        // Todo: Decide on exact control flow.
-        // See https://mohemian.atlassian.net/browse/JOSE-92.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-
-        var item: CFTypeRef?
-        // This is just a mock will be deleted in the implementation story.
-        // swiftlint:disable:next force_cast
-        return item as! SecKey
+extension SecKey: RSAPrivateKeyConvertible {
+    public var rsaPrivateKeyComponents: RSAPrivateKeyComponents? {
+        return ("0vx...Kgw".data(using: .utf8)!, "AQAB".data(using: .utf8)!, "X4c...C8Q".data(using: .utf8)!)
     }
 }

@@ -25,7 +25,6 @@ import Foundation
 
 /// JWK related errors
 public enum JWKError: Error {
-    case cannotExtractRSAModulus
-    case cannotExtractRSAPublicExponent
-    case cannotExtractRSAPrivateExponent
+    case cannotExtractRSAPublicKeyComponents
+    case cannotExtractRSAPrivateKeyComponents
 }

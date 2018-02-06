@@ -25,13 +25,23 @@ import Foundation
 
 // MARK: Convertibles
 
+public typealias RSAPublicKeyComponents = (
+    modulus: Data,
+    exponent: Data
+)
+
+public typealias RSAPrivateKeyComponents = (
+    modulus: Data,
+    exponent: Data,
+    privateExponent: Data
+)
+
 public protocol RSAPublicKeyConvertible {
-    var modulus: Data? { get }
-    var exponent: Data? { get }
+    var rsaPublicKeyComponents: RSAPublicKeyComponents? { get }
 }
 
-public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
-    var privateExponent: Data? { get }
+public protocol RSAPrivateKeyConvertible {
+    var rsaPrivateKeyComponents: RSAPrivateKeyComponents? { get }
 }
 
 // MARK: Public Key
@@ -74,12 +84,8 @@ public struct RSAPublicKey: JWK {
     }
 
     public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let modulus = publicKey.modulus else {
-            throw JWKError.cannotExtractRSAModulus
-        }
-
-        guard let exponent = publicKey.exponent else {
-            throw JWKError.cannotExtractRSAPublicExponent
+        guard let (modulus, exponent) = publicKey.rsaPublicKeyComponents else {
+            throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
         // Todo: Base64urlUInt?
@@ -139,16 +145,8 @@ public struct RSAPrivateKey: JWK {
     }
 
     public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let modulus = privateKey.modulus else {
-            throw JWKError.cannotExtractRSAModulus
-        }
-
-        guard let exponent = privateKey.exponent else {
-            throw JWKError.cannotExtractRSAPublicExponent
-        }
-
-        guard let privateExponent = privateKey.privateExponent else {
-            throw JWKError.cannotExtractRSAPrivateExponent
+        guard let (modulus, exponent, privateExponent) = privateKey.rsaPrivateKeyComponents else {
+            throw JWKError.cannotExtractRSAPrivateKeyComponents
         }
 
         // Todo: Base64urlUInt?
