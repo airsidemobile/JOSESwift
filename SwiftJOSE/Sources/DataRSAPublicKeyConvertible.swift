@@ -1,5 +1,5 @@
 //
-//  SecKeyRSAPrivateKey.swift
+//  DataRSAKeyConvertible.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 06.02.18.
@@ -22,10 +22,27 @@
 //
 
 import Foundation
-import Security
 
-extension SecKey: RSAPrivateKeyConvertible {
-    public var rsaPrivateKeyComponents: RSAPrivateKeyComponents? {
-        return ("0vx...Kgw".data(using: .utf8)!, "AQAB".data(using: .utf8)!, "X4c...C8Q".data(using: .utf8)!)
+extension Data: RSAPublicKeyConvertible {
+    public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
+        let publicKeyBytes = [UInt8](self)
+
+        let sequence = try publicKeyBytes.read(.sequence)
+        var modulus = try sequence.read(.integer)
+
+        // Remove potential leading zero byte.
+        // See https://tools.ietf.org/html/rfc7518#section-6.3.1.1.
+        if modulus.first == 0x00 {
+            modulus = Array(modulus.dropFirst())
+        }
+
+        let exponent = try sequence.skip(.integer).read(.integer)
+
+        return (
+            Data(bytes: modulus),
+            Data(bytes: exponent)
+        )
     }
 }
+
+

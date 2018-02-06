@@ -42,7 +42,7 @@ class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
     let expectedExponent = Data(bytes: [ 1, 0, 1 ])
 
     func testPublicKeyModulus() {
-        let components = publicKey!.rsaPublicKeyComponents
+        let components = try? publicKey!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -52,7 +52,7 @@ class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
     }
 
     func testPublicKeyExponent() {
-        let components = publicKey!.rsaPublicKeyComponents
+        let components = try? publicKey!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 

@@ -25,9 +25,20 @@ import Foundation
 import Security
 
 extension SecKey: RSAPublicKeyConvertible {
-    public var rsaPublicKeyComponents: RSAPublicKeyComponents? {
-        let publicKeyData = SecKeyCopyExternalRepresentation(self, nil)!
+    public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
+        guard
+            let attributes = SecKeyCopyAttributes(self) as? [CFString: AnyObject],
+            let keyClass = attributes[kSecAttrKeyClass],
+            keyClass as! CFString == kSecAttrKeyClassPublic
+        else {
+            throw JWKError.notAPublicKey
+        }
 
-        return (publicKeyData as Data).rsaPublicKeyComponents!
+        var error: Unmanaged<CFError>?
+        guard let keyData = SecKeyCopyExternalRepresentation(self, &error) else {
+            throw error!.takeRetainedValue() as Error
+        }
+
+        return try (keyData as Data).rsaPublicKeyComponents()
     }
 }

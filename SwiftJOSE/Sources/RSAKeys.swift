@@ -37,11 +37,11 @@ public typealias RSAPrivateKeyComponents = (
 )
 
 public protocol RSAPublicKeyConvertible {
-    var rsaPublicKeyComponents: RSAPublicKeyComponents? { get }
+    func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
 public protocol RSAPrivateKeyConvertible {
-    var rsaPrivateKeyComponents: RSAPrivateKeyComponents? { get }
+    func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
 // MARK: Public Key
@@ -84,7 +84,7 @@ public struct RSAPublicKey: JWK {
     }
 
     public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (modulus, exponent) = publicKey.rsaPublicKeyComponents else {
+        guard let (modulus, exponent) = try? publicKey.rsaPublicKeyComponents() else {
             throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
@@ -145,7 +145,7 @@ public struct RSAPrivateKey: JWK {
     }
 
     public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (modulus, exponent, privateExponent) = privateKey.rsaPrivateKeyComponents else {
+        guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JWKError.cannotExtractRSAPrivateKeyComponents
         }
 

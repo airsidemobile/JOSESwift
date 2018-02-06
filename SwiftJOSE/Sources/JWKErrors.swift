@@ -27,4 +27,5 @@ import Foundation
 public enum JWKError: Error {
     case cannotExtractRSAPublicKeyComponents
     case cannotExtractRSAPrivateKeyComponents
+    case notAPublicKey
 }
