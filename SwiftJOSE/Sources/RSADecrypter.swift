@@ -25,7 +25,7 @@ import Foundation
 
 /// An `AsymmetricDecrypter` to decrypt cipher text with a `RSA` algorithm.
 public struct RSADecrypter: AsymmetricDecrypter {
-    let algorithm: AsymmetricEncryptionAlgorithm
+    let algorithm: AsymmetricKeyAlgorithm
     let privateKey: SecKey
 
     func decrypt(_ ciphertext: Data) throws -> Data {

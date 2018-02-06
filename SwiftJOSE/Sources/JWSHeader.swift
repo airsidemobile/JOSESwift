@@ -53,7 +53,7 @@ public struct JWSHeader: JOSEHeader {
     }
 
     /// Initializes a `JWSHeader` with the specified algorithm.
-    public init(algorithm: SigningAlgorithm) {
+    public init(algorithm: SignatureAlgorithm) {
         let parameters = ["alg": algorithm.rawValue]
         // Forcing the try is ok here, since [String: String] can be converted to JSON.
         // swiftlint:disable:next force_try
@@ -68,10 +68,10 @@ public struct JWSHeader: JOSEHeader {
 // Header parameters that are specific to a JWS Header.
 extension JWSHeader {
     /// The algorithm used to sign the payload.
-    public var algorithm: SigningAlgorithm? {
+    public var algorithm: SignatureAlgorithm? {
         // Forced unwrap is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`
-        return SigningAlgorithm(rawValue: parameters["alg"] as! String)
+        return SignatureAlgorithm(rawValue: parameters["alg"] as! String)
     }
 }
 

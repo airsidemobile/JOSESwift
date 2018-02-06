@@ -25,7 +25,7 @@ import Foundation
 
 /// An `AsymmetricEncrypter` to encrypt plain text with a `RSA` algorithm.
 public struct RSAEncrypter: AsymmetricEncrypter {
-    let algorithm: AsymmetricEncryptionAlgorithm
+    let algorithm: AsymmetricKeyAlgorithm
     let publicKey: SecKey
 
     func encrypt(_ plaintext: Data) throws -> Data {
