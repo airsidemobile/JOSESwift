@@ -68,11 +68,10 @@ internal struct RSA {
     ///   - privateKey: The private key used by the `SignatureAlgorithm`.
     ///   - algorithm: The algorithm to sign the input data.
     /// - Returns: The signature.
-    /// - Throws:
-    ///   - `SigningError.algorithmNotSupported`: If the algorithm is not supported for signing.
-    ///   - `SigningError.signingFailed(description: String)`: If signing failed with a specific error.
+    /// - Throws: `SigningError` if any errors occur while signing the input data.
     static func sign(_ signingInput: Data, with privateKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Data {
-        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to sign with a given private key.
+        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
+        // if the algorithm is supported to sign with a given private key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
             throw SigningError.algorithmNotSupported
         }
@@ -80,7 +79,9 @@ internal struct RSA {
         // Sign the input with a given `SecKeyAlgorithm` and a private key.
         var signingError: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
-            throw SigningError.signingFailed(description: signingError?.takeRetainedValue().localizedDescription ?? "No description available.")
+            throw SigningError.signingFailed(
+                description: signingError?.takeRetainedValue().localizedDescription ?? "No description available."
+            )
         }
 
         return signature as Data
@@ -94,18 +95,23 @@ internal struct RSA {
     ///   - publicKey: The public key used by the `SignatureAlgorithm`.
     ///   - algorithm: The algorithm to verify the input data.
     /// - Returns: True if the signature is verified, false if it is not verified.
-    /// - Throws:
-    ///   - `SigningError.algorithmNotSupported`: If the algorithm is not supported for verifying.
-    ///   - `SigningError.verificationFailed(descritpion: String)`: If verifying failed with a specific error.
+    /// - Throws: `SigningError` if any errors occur while verifying the input data against the signature.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
-        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to verify with a given public key.
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm) else {
+        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
+        // if the algorithm is supported to verify with a given public key.
+        guard
+            let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm)
+        else {
             throw SigningError.algorithmNotSupported
         }
 
         // Verify the signature against an input with a given `SecKeyAlgorithm` and a public key.
         var verificationError: Unmanaged<CFError>?
-        guard SecKeyVerifySignature(publicKey, algorithm, verifyingInput as CFData, signature as CFData, &verificationError) else {
+        guard
+            SecKeyVerifySignature(
+                publicKey, algorithm, verifyingInput as CFData, signature as CFData, &verificationError
+            )
+        else {
             if let description = verificationError?.takeRetainedValue().localizedDescription {
                 throw SigningError.verificationFailed(descritpion: description)
             }
@@ -116,7 +122,6 @@ internal struct RSA {
         return true
     }
 
-
     /// Encrypts a plain text using a given `RSA` algorithm and the corresponding public key.
     ///
     /// - Parameters:
@@ -124,13 +129,14 @@ internal struct RSA {
     ///   - publicKey: The public key.
     ///   - algorithm: The algorithm used to encrypt the plain text.
     /// - Returns: The cipher text (encrypted plain text).
-    /// - Throws:
-    ///   - `EncryptionError.encryptionAlgorithmNotSupported`: If the encryption algorithm is not supported with the given key.
-    ///   - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the maximum allowed length.
-    ///   - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
+    /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
     static func encrypt(_ plaintext: Data, with publicKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
-        // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to encrypt with a given public key.
-        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
+        // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
+        // if the algorithm is supported to encrypt with a given public key.
+        guard
+            let secKeyAlgorithm = algorithm.secKeyAlgorithm,
+            SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm)
+        else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
 
@@ -142,13 +148,16 @@ internal struct RSA {
 
         // Encrypt the plain text with a given `SecKeyAlgorithm` and a public key.
         var encryptionError: Unmanaged<CFError>?
-        guard let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError) else {
-            throw EncryptionError.encryptingFailed(description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
+        guard
+            let cipherText = SecKeyCreateEncryptedData(publicKey,secKeyAlgorithm, plaintext as CFData, &encryptionError)
+        else {
+            throw EncryptionError.encryptingFailed(
+                description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
+            )
         }
 
         return cipherText as Data
     }
-
 
     /// Decrypts a cipher text using a given `RSA` algorithm and the corresponding private key.
     ///
@@ -157,13 +166,14 @@ internal struct RSA {
     ///   - privateKey: The private key.
     ///   - algorithm: The algorithm used to decrypt the cipher text.
     /// - Returns: The plain text.
-    /// - Throws:
-    ///   - `EncryptionError.encryptionAlgorithmNotSupported`: If the decryption algorithm is not supported with the given key.
-    ///   - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the maximum allowed length.
-    ///   - `EncryptionError.encryptingFailed(description: String)`: If the decryption failed with a specific error.
+    /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
     static func decrypt(_ ciphertext: Data, with privateKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
-        // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to decrypt with a given private key.
-        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
+        // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
+        // if the algorithm is supported to decrypt with a given private key.
+        guard
+            let secKeyAlgorithm = algorithm.secKeyAlgorithm,
+            SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm)
+        else {
             throw EncryptionError.encryptionAlgorithmNotSupported
         }
 
@@ -175,8 +185,12 @@ internal struct RSA {
 
         // Decrypt the cipher text with a given `SecKeyAlgorithm` and a private key.
         var decryptionError: Unmanaged<CFError>?
-        guard let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError) else {
-            throw EncryptionError.decryptingFailed(description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available.")
+        guard
+            let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError)
+        else {
+            throw EncryptionError.decryptingFailed(
+                description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
+            )
         }
 
         return plainText as Data
