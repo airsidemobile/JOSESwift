@@ -60,5 +60,46 @@ fileprivate extension AsymmetricKeyAlgorithm {
 }
 
 internal struct RSA {
-    
+
+    ///  DESCRITPION
+    ///
+    /// - Parameters:
+    ///   - signingInput:
+    ///   - privateKey:
+    ///   - algorithm:
+    /// - Returns:
+    /// - Throws:
+    static func sign(_ signingInput: Data, with privateKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Data {
+        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to sign with a given private key.
+        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
+            throw SigningError.algorithmNotSupported
+        }
+
+        // Sign the input with a given `SecKeyAlgorithm` and a private key.
+        var signingError: Unmanaged<CFError>?
+        guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
+            throw SigningError.signingFailed(description: signingError?.takeRetainedValue().localizedDescription ?? "No description available.")
+        }
+
+        return signature as Data
+    }
+
+    static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
+        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to verify with a given public key.
+        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm) else {
+            throw SigningError.algorithmNotSupported
+        }
+
+        // Verify the signature against an input with a given `SecKeyAlgorithm` and a public key.
+        var verificationError: Unmanaged<CFError>?
+        guard SecKeyVerifySignature(publicKey, algorithm, verifyingInput as CFData, signature as CFData, &verificationError) else {
+            if let description = verificationError?.takeRetainedValue().localizedDescription {
+                throw SigningError.verificationFailed(descritpion: description)
+            }
+
+            return false
+        }
+
+        return true
+    }
 }
