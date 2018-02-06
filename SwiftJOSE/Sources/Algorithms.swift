@@ -37,7 +37,6 @@ public enum SignatureAlgorithm: String {
     }
 }
 
-
 /// An algorithm for asymmetric encryption and decryption
 ///
 /// - RSAPKCS
