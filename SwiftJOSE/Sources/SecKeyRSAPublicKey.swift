@@ -26,6 +26,8 @@ import Security
 
 extension SecKey: RSAPublicKeyConvertible {
     public var rsaPublicKeyComponents: RSAPublicKeyComponents? {
-        return ("0vx...Kgw".data(using: .utf8)!, "AQAB".data(using: .utf8)!)
+        let publicKeyData = SecKeyCopyExternalRepresentation(self, nil)!
+
+        return (publicKeyData as Data).rsaPublicKeyComponents!
     }
 }
