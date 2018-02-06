@@ -48,89 +48,12 @@ public enum EncryptionError: Error, Equatable {
     }
 }
 
-public enum AsymmetricEncryptionAlgorithm: String {
-    case RSAPKCS = "RSA1_5"
-
-    var secKeyAlgorithm: SecKeyAlgorithm? {
-        switch self {
-        case .RSAPKCS:
-            return .rsaEncryptionPKCS1
-        }
-    }
-
-    /// Checks if the plain text length does not exceed the maximum for the chosen algorithm and the corresponding public key.
-    func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
-        switch self {
-        case .RSAPKCS:
-            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
-            return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
-        }
-    }
-
-    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
-        switch self {
-        case .RSAPKCS:
-            return cipherText.count == SecKeyGetBlockSize(privateKey)
-        }
-    }
-}
-
-public enum SymmetricEncryptionAlgorithm: String {
-    case AES256CBCHS512 = "A256CBC-HS512"
-
-    var hmacAlgorithm: HMACAlgorithm {
-        switch self {
-        case .AES256CBCHS512:
-            return .SHA512
-        }
-    }
-
-    func keyLength() -> Int {
-        switch self {
-        case .AES256CBCHS512:
-            return 64
-        }
-    }
-
-    func initializationVectorLength() -> Int {
-        switch self {
-        case .AES256CBCHS512:
-            return 16
-        }
-    }
-
-    func checkKeyLength(for key: Data) -> Bool {
-        switch self {
-        case .AES256CBCHS512:
-            return key.count == 64
-        }
-    }
-
-    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
-        switch self {
-        case .AES256CBCHS512:
-            guard checkKeyLength(for: inputKey) else {
-                throw EncryptionError.keyLengthNotSatisfied
-            }
-
-            return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
-        }
-    }
-
-    func authenticationTag(for hmac: Data) -> Data {
-        switch self {
-        case .AES256CBCHS512:
-            return hmac.subdata(in: 0..<32)
-        }
-    }
-}
-
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
-    var algorithm: AsymmetricEncryptionAlgorithm { get }
+    var algorithm: AsymmetricKeyAlgorithm { get }
 
     /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
-    init(algorithm: AsymmetricEncryptionAlgorithm, publicKey: SecKey)
+    init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
     /**
      Encrypts a plain text using a given `AsymmetricEncryptionAlgorithm` and the corresponding public key.
@@ -150,10 +73,10 @@ internal protocol AsymmetricEncrypter {
 
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
-    var algorithm: SymmetricEncryptionAlgorithm { get }
+    var algorithm: SymmetricKeyAlgorithm { get }
 
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
-    init(algorithm: SymmetricEncryptionAlgorithm)
+    init(algorithm: SymmetricKeyAlgorithm)
 
     /**
      Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
@@ -188,7 +111,7 @@ public struct Encrypter {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
-    public init(keyEncryptionAlgorithm: AsymmetricEncryptionAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricEncryptionAlgorithm) {
+    public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         self.asymmetric = CryptoFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
         self.symmetric = CryptoFactory.encrypter(for: contentEncyptionAlgorithm)
     }

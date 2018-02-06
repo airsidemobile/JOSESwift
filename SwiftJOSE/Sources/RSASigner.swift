@@ -25,7 +25,7 @@ import Foundation
 
 /// A `Signer` to sign an input with a `RSA` algorithm.
 public struct RSASigner: SignerProtocol {
-    let algorithm: SigningAlgorithm
+    let algorithm: SignatureAlgorithm
     let privateKey: SecKey
 
     public func sign(_ signingInput: Data) throws -> Data {

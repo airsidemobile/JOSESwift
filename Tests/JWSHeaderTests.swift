@@ -25,8 +25,8 @@ import XCTest
 @testable import SwiftJOSE
 
 class JWSHeaderTests: XCTestCase {
-    let parameterDict = ["alg": "\(SigningAlgorithm.RS512.rawValue)"]
-    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SigningAlgorithm.RS512.rawValue)"], options: [])
+    let parameterDict = ["alg": "\(SignatureAlgorithm.RS512.rawValue)"]
+    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SignatureAlgorithm.RS512.rawValue)"], options: [])
 
     override func setUp() {
         super.setUp()
@@ -47,7 +47,7 @@ class JWSHeaderTests: XCTestCase {
         let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
         let header = JWSHeader(data)!
 
-        XCTAssertEqual(header.parameters["alg"] as? String, SigningAlgorithm.RS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, SignatureAlgorithm.RS512.rawValue)
         XCTAssertEqual(header.data(), data)
     }
 
@@ -55,7 +55,7 @@ class JWSHeaderTests: XCTestCase {
         let header = JWSHeader(algorithm: .RS512)
 
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
-        XCTAssertEqual(header.parameters["alg"] as? String, SigningAlgorithm.RS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, SignatureAlgorithm.RS512.rawValue)
 
         XCTAssertNotNil(header.algorithm)
         XCTAssertEqual(header.algorithm!, .RS512)
