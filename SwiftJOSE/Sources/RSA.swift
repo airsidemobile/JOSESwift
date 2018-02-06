@@ -116,6 +116,18 @@ internal struct RSA {
         return true
     }
 
+
+    /// Encrypts a plain text using a given `RSA` algorithm and the corresponding public key.
+    ///
+    /// - Parameters:
+    ///   - plaintext: The plain text to encrypt.
+    ///   - publicKey: The public key.
+    ///   - algorithm: The algorithm used to encrypt the plain text.
+    /// - Returns: The cipher text (encrypted plain text).
+    /// - Throws:
+    ///   - `EncryptionError.encryptionAlgorithmNotSupported`: If the encryption algorithm is not supported with the given key.
+    ///   - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the maximum allowed length.
+    ///   - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
     static func encrypt(_ plaintext: Data, with publicKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to encrypt with a given public key.
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm) else {
@@ -137,6 +149,18 @@ internal struct RSA {
         return cipherText as Data
     }
 
+
+    /// Decrypts a cipher text using a given `RSA` algorithm and the corresponding private key.
+    ///
+    /// - Parameters:
+    ///   - ciphertext: The cipher text to decrypt.
+    ///   - privateKey: The private key.
+    ///   - algorithm: The algorithm used to decrypt the cipher text.
+    /// - Returns: The plain text.
+    /// - Throws:
+    ///   - `EncryptionError.encryptionAlgorithmNotSupported`: If the decryption algorithm is not supported with the given key.
+    ///   - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the maximum allowed length.
+    ///   - `EncryptionError.encryptingFailed(description: String)`: If the decryption failed with a specific error.
     static func decrypt(_ ciphertext: Data, with privateKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and if the algorithm is supported to decrypt with a given private key.
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm) else {
