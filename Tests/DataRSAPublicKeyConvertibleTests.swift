@@ -40,7 +40,7 @@ class DataRSAPublicKeyConvertibleTests: CryptoTestCase {
 
         let modulus = components!.modulus
 
-        XCTAssertEqual(modulus, expectedModulusData)
+        XCTAssertEqual(modulus, expectedModulus2048Data)
     }
 
     func testPublicKey2048Exponent() {
@@ -60,7 +60,7 @@ class DataRSAPublicKeyConvertibleTests: CryptoTestCase {
 
         let modulus = components!.modulus
 
-        XCTAssertEqual(modulus.base64URLEncodedString(), expectedModulus4096Base64)
+        XCTAssertEqual(modulus, expectedModulus4096Data)
     }
 
     func testPublicKey4096Exponent() {

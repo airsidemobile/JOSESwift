@@ -22,20 +22,21 @@
 //
 
 import XCTest
+@testable import SwiftJOSE
 
 class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
 
-    func testPublicKeyModulus() {
+    func testPublicKey2048Modulus() {
         let components = try? publicKey!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
         let modulus = components!.modulus
 
-        XCTAssertEqual(modulus, expectedModulusData)
+        XCTAssertEqual(modulus, expectedModulus2048Data)
     }
 
-    func testPublicKeyExponent() {
+    func testPublicKey2048Exponent() {
         let components = try? publicKey!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
@@ -43,6 +44,32 @@ class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
         let exponent = components!.exponent
 
         XCTAssertEqual(exponent, expectedExponentData)
+    }
+
+    func testPublicKey4096Modulus() {
+        let components = try? publicKey4096!.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let modulus = components!.modulus
+
+        XCTAssertEqual(modulus, expectedModulus4096Data)
+    }
+
+    func testPublicKey4096Exponent() {
+        let components = try? publicKey4096!.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let exponent = components!.exponent
+
+        XCTAssertEqual(exponent, expectedExponentData)
+    }
+
+    func testPrivateKeyToPublicComponents() {
+        XCTAssertThrowsError(try privateKey!.rsaPublicKeyComponents()) { error in
+            XCTAssertEqual(error as? JWKError, JWKError.notAPublicKey)
+        }
     }
 
 }
