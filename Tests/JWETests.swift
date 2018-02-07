@@ -66,7 +66,7 @@ class JWETests: CryptoTestCase {
             kSecAttrKeySizeInBits as String: 2048,
             kSecPrivateKeyAttrs as String: [
                 kSecAttrIsPermanent as String: false,
-                kSecAttrApplicationTag as String: privateKeyTag
+                kSecAttrApplicationTag as String: privateKey2048Tag
             ]
         ]
 
