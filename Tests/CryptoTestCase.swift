@@ -46,6 +46,9 @@ class CryptoTestCase: XCTestCase {
 
     let expectedExponentBase64 = "AQAB"
 
+    // Dummy data since wen don't (yet) implemnt any RSAPrivateKEyConvertible.
+    let expectedPrivateExponentBase64 = "MHZ4Li4uS2d3"
+
     let expectedModulusData = Data(bytes: [
         136, 0, 243, 196, 194, 126, 151, 243, 72, 84, 246, 234, 207, 215, 168, 5, 233, 212, 8, 37, 34, 52, 215, 217,
         223, 183, 58, 129, 66, 112, 88, 71, 201, 71, 33, 156, 132, 7, 189, 234, 110, 6, 46, 189, 233, 206, 61, 128, 220,

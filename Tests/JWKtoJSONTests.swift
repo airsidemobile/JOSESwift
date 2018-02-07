@@ -43,7 +43,6 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
         XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
         XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
@@ -64,7 +63,6 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
         XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
         XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
