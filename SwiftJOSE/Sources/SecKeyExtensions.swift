@@ -24,21 +24,19 @@
 import Foundation
 import Security
 
-extension SecKey: JWKConvertible {
-    public func publicRSAJWK(with parameters: [String: Any] = [:]) -> RSAPublicKey? {
-        // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
-        // Todo: Decide on exact control flow.
-        // See https://mohemian.atlassian.net/browse/JOSE-91.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-        return RSAPublicKey(modulus: "0vx...Kgw", exponent: "AQAB", additionalParameters: parameters)
+extension SecKey: RSAPublicKeyConvertible {
+    public var modulus: Data? {
+        return "0vx...Kgw".data(using: .utf8)
     }
 
-    public func privateRSAJWK(with parameters: [String: Any] = [:]) -> RSAPrivateKey? {
-        // Todo: Do conversion from SecKey representation to JWK modulus/exponent.
-        // Todo: Decide on exact control flow.
-        // See https://mohemian.atlassian.net/browse/JOSE-91.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
-        return RSAPrivateKey(modulus: "0vx...Kgw", exponent: "AQAB", privateExponent: "X4c...C8Q", additionalParameters: parameters)
+    public var exponent: Data? {
+        return "AQAB".data(using: .utf8)
+    }
+}
+
+extension SecKey: RSAPrivateKeyConvertible {
+    public var privateExponent: Data? {
+        return "X4c...C8Q".data(using: .utf8)
     }
 }
 
@@ -46,7 +44,7 @@ extension JWK {
     static func secKeyRepresentation() throws -> SecKey {
         // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
         // Todo: Decide on exact control flow.
-        // See https://mohemian.atlassian.net/browse/JOSE-92.
+        // See https://airside.atlassian.net/browse/JOSE-92.
         // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
 
         var item: CFTypeRef?

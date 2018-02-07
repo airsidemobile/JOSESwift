@@ -23,25 +23,14 @@
 
 import Foundation
 
-/// A key type that can be converted to a JWK.
-public protocol JWKConvertible {
-    /// Converts the key to a public RSA JWK if possible.
-    ///
-    /// - Returns: An `RSAPublicKey` or nil if the conversion cannot be made.
-    func publicRSAJWK(with parameters: [String: Any]) -> RSAPublicKey?
-
-    /// Converts the key to a private RSA JWK if possible.
-    ///
-    /// - Returns: An `RSAPrivateKey` or nil if the conversion cannot be made.
-    func privateRSAJWK(with parameters: [String: Any]) -> RSAPrivateKey?
-}
+public typealias JWKConvertible = RSAPublicKeyConvertible & RSAPrivateKeyConvertible
 
 /// A generic `JWKBuilder` that builds a JWK from a given `JWKConvertible` key.
 public class JWKBuilder<T> where T: JWKConvertible {
 
     private var publicKey: T?
     private var privateKey: T?
-    private var parameters: [String: Any] = [:]
+    private var parameters: [String: String] = [:]
     private var keyType: JWKKeyType?
 
     /// Initializes a generic `JWKBuilder`.
@@ -73,10 +62,10 @@ public class JWKBuilder<T> where T: JWKConvertible {
     ///
     /// - Parameters:
     ///   - parameter: The parameter to set or update.
-    ///   - value: Teh value to set or update for the specified paramter.
+    ///   - value: The value to set or update for the specified paramter.
     /// - Returns: A `JWKBuilder` containing the set parameter that can be used
     ///            to set another key or parameter or to build a JWK.
-    func set(_ parameter: String, to value: Any) -> Self {
+    func set(_ parameter: String, to value: String) -> Self {
         parameters[parameter] = value
 
         return self
@@ -112,10 +101,10 @@ public class JWKBuilder<T> where T: JWKConvertible {
     }
 
     private func buildRSA() -> JWK? {
-        if let publicKey = self.publicKey, self.privateKey == nil {
-            return publicKey.publicRSAJWK(with: parameters)
-        } else if let privateKey = self.privateKey {
-            return privateKey.privateRSAJWK(with: parameters)
+        if let publicKey = publicKey, privateKey == nil {
+            return try? RSAPublicKey(publicKey: publicKey, additionalParameters: parameters)
+        } else if let privateKey = privateKey {
+            return try? RSAPrivateKey(privateKey: privateKey, additionalParameters: parameters)
         }
 
         return nil

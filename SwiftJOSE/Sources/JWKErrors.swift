@@ -1,8 +1,8 @@
 //
-//  JWKParameters.swift
+//  JWKErrors.swift
 //  SwiftJOSE
 //
-//  Created by Daniel Egger on 21.12.17.
+//  Created by Daniel Egger on 05.02.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -23,24 +23,9 @@
 
 import Foundation
 
-/// Possible common JWK parameters.
-/// See [RFC-7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) for details.
-public enum JWKParameter: String, CodingKey {
-    case keyType = "kty"
-    case keyUse = "use"
-    case keyOperations = "key_ops"
-    case algorithm = "alg"
-    case keyIdentifier = "kid"
-    case X509URL = "x5u"
-    case X509CertificateChain = "x5c"
-    case X509CertificateSHA1Thumbprint = "x5t"
-    case X509CertificateSHA256Thumbprint = "x5t#S256"
-}
-
-/// RSA specific JWK parameters.
-/// See [RFC-7518, Section 6.3](https://tools.ietf.org/html/rfc7518#section-6.3) for details.
-public enum RSAParameter: String, CodingKey {
-    case modulus = "n"
-    case exponent = "e"
-    case privateExponent = "d"
+/// JWK related errors
+public enum JWKError: Error {
+    case cannotExtractRSAModulus
+    case cannotExtractRSAPublicExponent
+    case cannotExtractRSAPrivateExponent
 }

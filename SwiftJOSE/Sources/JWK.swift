@@ -23,27 +23,25 @@
 
 import Foundation
 
-/// JWK related errors
+/// The key type parameter of a JWK identifies the cryptographic algorithm
+/// family used with the key(s) represented by a JWK.
+/// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
 ///
-/// - JWKToJSONConversionFailed: Thrown if the JWK parameters could not be converted to valid JSON format.
-public enum JWKError: Error {
-    case JWKToJSONConversionFailed
-    case requiredJWKParameterMissing(parameter: String)
-    case requiredRSAParameterMissing(parameter: String)
-    case JWKDataNotInTheRightFormat
-    case JWKStringNotInTheRightFormat
+/// - RSA
+public enum JWKKeyType: String, Codable {
+    case RSA = "RSA"
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
 /// Check `KeyType` for the supported key types.
-public protocol JWK {
+public protocol JWK: Codable {
     /// The cryptographic algorithm family used with the JWK.
     var keyType: JWKKeyType { get }
 
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
-    var parameters: [String: Any] { get }
+    var parameters: [String: String] { get }
 
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
@@ -51,17 +49,24 @@ public protocol JWK {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     ///
     /// - Parameter parameter: The desired parameter.
-    subscript(parameter: String) -> Any? { get }
+    subscript(parameter: String) -> String? { get }
+
+    /// Initializes a JWK from given JSON data.
+    ///
+    /// - Parameter data: The JWK in JSON serialization.
+    /// - Throws: If the data is not valid JSON, this method throws the `dataCorrupted` error.
+    ///           If a value within the JSON fails to decode, this method throws the corresponding error.
+    init(data: Data) throws
 
     /// Computes the JSON representation of the JWK.
     ///
-    /// - Returns: The JSON representation of the JWK as `String`.
-    /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func jsonString() throws -> String
+    /// - Returns: The JSON representation of the JWK as `String` or
+    ///            `nil` if the encoding failed.
+    func jsonString() -> String?
 
     /// Computes the JSON representation of the JWK.
     ///
-    /// - Returns: The JSON representation of the JWK as `Data`.
-    /// - Throws: `JWKError.JWKToJSONConversionFailed` if an error occurs.
-    func jsonData() throws -> Data
+    /// - Returns: The JSON representation of the JWK as `Data` or
+    ///            `nil` if the encoding failed.
+    func jsonData() -> Data?
 }
