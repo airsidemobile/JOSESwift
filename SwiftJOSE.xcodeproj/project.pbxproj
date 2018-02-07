@@ -31,6 +31,7 @@
 		65826AB6202883BA00AFFC46 /* JWKRSADecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */; };
 		659553561FD6F07800A8756F /* CryptoFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659553551FD6F07800A8756F /* CryptoFactory.swift */; };
 		65A103A1202B03BB00D22BF5 /* ASN1DERParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */; };
+		65A103A3202B0CDF00D22BF5 /* DataRSAPublicKeyConvertibleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyConvertibleTests.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
 		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
@@ -111,6 +112,7 @@
 		65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JWKRSADecodingTests.swift; path = ../JWKRSADecodingTests.swift; sourceTree = "<group>"; };
 		659553551FD6F07800A8756F /* CryptoFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoFactory.swift; sourceTree = "<group>"; };
 		65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DERParsingTests.swift; sourceTree = "<group>"; };
+		65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyConvertibleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRSAPublicKeyConvertibleTests.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
 		65A7A1981F7295F5009449E7 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		65A9D3D71F45CDD7004E0B61 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -288,6 +290,7 @@
 				65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */,
 				65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */,
 				65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */,
+				65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyConvertibleTests.swift */,
 				658261482029E2D200B594ED /* SecKeyRSAPublicKeyConvertibleTests.swift */,
 			);
 			name = JWK;
@@ -610,6 +613,7 @@
 				C803EFED1FA8849C00B71335 /* JWETests.swift in Sources */,
 				C8F096501FC56B25000BEE4D /* RSAEncrypterTests.swift in Sources */,
 				65125A321FBF85FA007CF3AE /* JWSDeserializationTests.swift in Sources */,
+				65A103A3202B0CDF00D22BF5 /* DataRSAPublicKeyConvertibleTests.swift in Sources */,
 				C81DD9261FD6F07F00026024 /* (null) in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,
 				C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */,

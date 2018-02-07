@@ -24,6 +24,21 @@
 import XCTest
 @testable import SwiftJOSE
 
+extension ASN1DERParsingError: Equatable {
+    public static func ==(lhs: ASN1DERParsingError, rhs: ASN1DERParsingError) -> Bool {
+        switch (lhs, rhs) {
+        case (.incorrectLengthLength, .incorrectLengthLength):
+            return true
+        case (.incorrectValueLength, .incorrectValueLength):
+            return true
+        case (.incorrectTLVLength, .incorrectTLVLength):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 class ASN1DERParsingTests: XCTestCase {
 
     // 02 81 81          ; INTEGER (81 Bytes)
@@ -85,7 +100,7 @@ class ASN1DERParsingTests: XCTestCase {
     func testParsingIntTLVLong() {
         let tlv = intTLVLong
 
-        let (tag, length, value) = tlv.nextTLVTriplet()
+        let (tag, length, value) = try! tlv.nextTLVTriplet()
 
         XCTAssertEqual(tag, 0x02)
         XCTAssertEqual(length, [ 0x81, 0x81 ])
@@ -105,7 +120,7 @@ class ASN1DERParsingTests: XCTestCase {
     func testParsingIntTLVShort() {
         let tlv = intTLVShort
 
-        let (tag, length, value) = tlv.nextTLVTriplet()
+        let (tag, length, value) = try! tlv.nextTLVTriplet()
 
         XCTAssertEqual(tag, 0x02)
         XCTAssertEqual(length, [ 0x01 ])
@@ -115,7 +130,7 @@ class ASN1DERParsingTests: XCTestCase {
     func testParsingSequenceTLV() {
         let tlv = sequenceTLV
 
-        let (tag, length, value) = tlv.nextTLVTriplet()
+        let (tag, length, value) = try! tlv.nextTLVTriplet()
 
         XCTAssertEqual(tag, 0x30)
         XCTAssertEqual(length, [ 0x82, 0x01, 0x0a ])
@@ -230,6 +245,30 @@ class ASN1DERParsingTests: XCTestCase {
         let remainder = try? tlv.skip(.sequence)
 
         XCTAssertNil(remainder)
+    }
+
+    func testWrongValueLength() {
+        XCTAssertThrowsError(try ([
+            0x02, 0x04 /* should be 0x03 */, 0x01, 0x00, 0x01
+        ] as [UInt8]).nextTLVTriplet()) { error in
+            XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectValueLength)
+        }
+    }
+
+    func testWrongLengthLength() {
+        XCTAssertThrowsError(try ([
+            0x02, 0x83 /* should be 0x81 */, 0x01, 0x01
+        ] as [UInt8]).nextTLVTriplet()) { error in
+            XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectLengthLength)
+        }
+    }
+
+    func testWrongTLVLength() {
+        XCTAssertThrowsError(try ([
+            0x02
+            ] as [UInt8]).nextTLVTriplet()) { error in
+                XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectTLVLength)
+        }
     }
     
 }

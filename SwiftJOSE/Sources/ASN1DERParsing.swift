@@ -25,6 +25,9 @@ import Foundation
 
 internal enum ASN1DERParsingError: Error {
     case incorrectTypeTag(actualTag: UInt8, expectedTag: UInt8)
+    case incorrectLengthLength
+    case incorrectValueLength
+    case incorrectTLVLength
 }
 
 /// Possible ASN.1 types.
@@ -57,7 +60,7 @@ internal extension Array where Element == UInt8 {
     /// - Returns: The value of the specified ASN.1 type. More formally, the value field of the types TLV triplet.
     /// - Throws: An `ASN1DERParsingError` indicating any parsing errors.
     func read(_ type: ASN1Type) throws -> [UInt8] {
-        let triplet = self.nextTLVTriplet()
+        let triplet = try self.nextTLVTriplet()
 
         guard triplet.tag == type.tag else {
             throw ASN1DERParsingError.incorrectTypeTag(actualTag: triplet.tag, expectedTag: type.tag)
@@ -76,7 +79,7 @@ internal extension Array where Element == UInt8 {
     /// - Returns: The remaining bytes of the bytes array that may contain further ASN.1 types.
     /// - Throws: An `ASN1DERParsingError` indicating any parsing errors.
     func skip(_ type: ASN1Type) throws -> [UInt8] {
-        let triplet = self.nextTLVTriplet()
+        let triplet = try self.nextTLVTriplet()
 
         guard triplet.tag == type.tag else {
             throw ASN1DERParsingError.incorrectTypeTag(actualTag: triplet.tag, expectedTag: type.tag)
@@ -94,10 +97,14 @@ internal extension Array where Element == UInt8 {
     /// [here](https://msdn.microsoft.com/en-us/library/windows/desktop/bb540801(v=vs.85).aspx).
     ///
     /// - Returns: A triplet containing the ASN.1 type's tag, length, and value field.
-    func nextTLVTriplet() -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
+    func nextTLVTriplet() throws -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
         var pointer = 0
 
         // DER Transfer Syntax of an ASN.1 value: [ TAG | LENGTH | VALUE ]
+
+        guard self.count >= 2 else {
+            throw ASN1DERParsingError.incorrectTLVLength
+        }
 
         // Read tag
         let tagByte = self[0]
@@ -117,7 +124,13 @@ internal extension Array where Element == UInt8 {
             let countLengthBytes = Int(self[pointer] - 128)
             for i in 1...countLengthBytes {
                 length = (length << 8)
-                length = length + UInt64(self[pointer + i])
+
+                let nextLengthBytePointer = (pointer + i)
+                guard nextLengthBytePointer < self.count else {
+                    throw ASN1DERParsingError.incorrectLengthLength
+                }
+
+                length = length + UInt64(self[nextLengthBytePointer])
             }
 
             lengthBytes = Array(self[pointer...(pointer + countLengthBytes)])
@@ -126,8 +139,13 @@ internal extension Array where Element == UInt8 {
             pointer += (1 + countLengthBytes)
         }
 
+        let endOfValuePointer = (pointer + Int(length))
+        guard endOfValuePointer <= self.count else {
+            throw ASN1DERParsingError.incorrectValueLength
+        }
+
         // Read value
-        let valueBytes = Array(self[pointer..<(pointer + Int(length))])
+        let valueBytes = Array(self[pointer..<endOfValuePointer])
 
         return (
             tag: tagByte,
