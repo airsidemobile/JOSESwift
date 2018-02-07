@@ -42,9 +42,8 @@ class JWKRSAEncodingTests: CryptoTestCase {
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 
     func testEncodingPublicKeyWithUnregisteredParameter() {
@@ -65,15 +64,14 @@ class JWKRSAEncodingTests: CryptoTestCase {
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
         XCTAssertNil(dict!["breeze"])
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 
     func testPrivateKeyEncoding() {
         let jwk = RSAPrivateKey(
-            modulus: "MHZ4Li4uS2d3",
-            exponent: "QVFBQg",
+            modulus: expectedModulusBase64,
+            exponent: expectedExponentBase64,
             privateExponent: "MHZ4Li4uS2d3",
             additionalParameters: [ "alg": "RS256", "kid": "2011-04-29" ]
         )
@@ -89,14 +87,14 @@ class JWKRSAEncodingTests: CryptoTestCase {
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
         // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 
     func testEncodingPrivateKeyWithUnregisteredParameter() {
         let jwk = RSAPrivateKey(
-            modulus: "MHZ4Li4uS2d3",
-            exponent: "QVFBQg",
+            modulus: expectedModulusBase64,
+            exponent: expectedExponentBase64,
             privateExponent: "MHZ4Li4uS2d3",
             additionalParameters: [ "alg": "RS256", "kid": "2011-04-29", "breeze": "through" ]
         )
@@ -113,8 +111,8 @@ class JWKRSAEncodingTests: CryptoTestCase {
         XCTAssertNil(dict!["breeze"])
 
         // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulusBase64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 
 }

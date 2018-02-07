@@ -25,22 +25,6 @@ import XCTest
 
 class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
 
-    let expectedModulus = Data(bytes: [
-        136, 0, 243, 196, 194, 126, 151, 243, 72, 84, 246, 234, 207, 215, 168, 5, 233, 212, 8, 37, 34, 52, 215, 217,
-        223, 183, 58, 129, 66, 112, 88, 71, 201, 71, 33, 156, 132, 7, 189, 234, 110, 6, 46, 189, 233, 206, 61, 128, 220,
-        138, 56, 49, 34, 159, 245, 208, 214, 49, 169, 58, 170, 68, 127, 93, 137, 99, 74, 54, 65, 109, 112, 33, 65, 169,
-        246, 176, 128, 121, 171, 35, 214, 236, 210, 123, 94, 146, 86, 30, 134, 135, 116, 124, 4, 55, 208, 163, 219, 220,
-        203, 249, 107, 69, 147, 169, 66, 214, 179, 195, 152, 211, 209, 78, 100, 114, 209, 203, 120, 16, 254, 24, 39,
-        143, 79, 49, 202, 10, 37, 2, 155, 162, 14, 253, 194, 205, 74, 116, 60, 205, 25, 53, 85, 144, 72, 11, 7, 133, 78,
-        149, 111, 0, 215, 174, 36, 104, 175, 62, 196, 197, 49, 78, 172, 146, 82, 216, 160, 45, 48, 212, 50, 168, 208,
-        255, 205, 82, 22, 11, 13, 156, 197, 42, 159, 26, 124, 237, 178, 131, 239, 186, 37, 96, 24, 154, 243, 202, 252,
-        87, 102, 23, 19, 29, 73, 130, 95, 45, 219, 104, 13, 54, 30, 165, 144, 223, 1, 14, 169, 100, 111, 246, 54, 185,
-        47, 156, 238, 249, 88, 33, 244, 135, 233, 102, 36, 86, 196, 143, 178, 176, 62, 24, 178, 209, 163, 244, 116, 236,
-        81, 177, 190, 205, 140, 230, 6, 113, 158, 105, 111, 123
-    ])
-
-    let expectedExponent = Data(bytes: [ 1, 0, 1 ])
-
     func testPublicKeyModulus() {
         let components = try? publicKey!.rsaPublicKeyComponents()
 
@@ -48,7 +32,7 @@ class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
 
         let modulus = components!.modulus
 
-        XCTAssertEqual(modulus, expectedModulus)
+        XCTAssertEqual(modulus, expectedModulusData)
     }
 
     func testPublicKeyExponent() {
@@ -58,7 +42,7 @@ class SecKeyRSAPublicKeyConvertibleTests: CryptoTestCase {
 
         let exponent = components!.exponent
 
-        XCTAssertEqual(exponent, expectedExponent)
+        XCTAssertEqual(exponent, expectedExponentData)
     }
 
 }
