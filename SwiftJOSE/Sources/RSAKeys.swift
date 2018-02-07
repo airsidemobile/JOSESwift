@@ -48,7 +48,6 @@ public typealias RSAPrivateKeyComponents = (
     privateExponent: Data
 )
 
-
 /// A type that can be converted to an `RSAPublicKey` JWK through
 /// its RSA public key components.
 public protocol RSAPublicKeyConvertible {
