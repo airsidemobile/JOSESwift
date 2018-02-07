@@ -149,7 +149,7 @@ internal struct RSA {
         // Encrypt the plain text with a given `SecKeyAlgorithm` and a public key.
         var encryptionError: Unmanaged<CFError>?
         guard
-            let cipherText = SecKeyCreateEncryptedData(publicKey,secKeyAlgorithm, plaintext as CFData, &encryptionError)
+            let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError)
         else {
             throw EncryptionError.encryptingFailed(
                 description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
