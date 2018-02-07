@@ -25,7 +25,7 @@ import Foundation
 
 internal enum ASN1DERParsingError: Error {
     case incorrectTypeTag(actualTag: UInt8, expectedTag: UInt8)
-    case incorrectLengthLength
+    case incorrectLengthFieldLength
     case incorrectValueLength
     case incorrectTLVLength
 }
@@ -85,7 +85,7 @@ internal extension Array where Element == UInt8 {
             throw ASN1DERParsingError.incorrectTypeTag(actualTag: triplet.tag, expectedTag: type.tag)
         }
 
-        // TLV triplet = 1 byte tag + some bytes length + some bytes value
+        // TLV triplet = 1 tag byte + some length length + some value bytes
         let skippedTripletLength = (1 + triplet.length.count + triplet.value.count)
 
         return Array(self.dropFirst(skippedTripletLength))
@@ -100,58 +100,117 @@ internal extension Array where Element == UInt8 {
     func nextTLVTriplet() throws -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
         var pointer = 0
 
-        // DER Transfer Syntax of an ASN.1 value: [ TAG | LENGTH | VALUE ]
+        // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ]
 
+        // At least the tag and one length byte must be present.
         guard self.count >= 2 else {
             throw ASN1DERParsingError.incorrectTLVLength
         }
 
-        // Read tag
-        let tagByte = self[0]
-        pointer += 1
+        let tag = readTag(from: self, pointer: &pointer)
 
-        // Read length
-        // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb648641(v=vs.85).aspx
-        var length: UInt64 = 0
-        var lengthBytes: [UInt8]
-        if self[pointer] < 128 {
-            // Only one length byte present
-            length = UInt64(self[pointer])
-            lengthBytes = [self[pointer]]
-            pointer += 1
-        } else {
-            // More than one length byte present
-            let countLengthBytes = Int(self[pointer] - 128)
-            for i in 1...countLengthBytes {
-                length = (length << 8)
+        let lengthField = try readLengthField(from: self, pointer: &pointer)
 
-                let nextLengthBytePointer = (pointer + i)
-                guard nextLengthBytePointer < self.count else {
-                    throw ASN1DERParsingError.incorrectLengthLength
-                }
+        let valueFieldLength = try length(encodedBy: lengthField)
 
-                length = length + UInt64(self[nextLengthBytePointer])
-            }
+        let valueField = try readValueField(ofLength: valueFieldLength, from: self, pointer: &pointer)
 
-            lengthBytes = Array(self[pointer...(pointer + countLengthBytes)])
-
-            // Move over *number of length byte* and *length bytes* to *value bytes*
-            pointer += (1 + countLengthBytes)
-        }
-
-        let endOfValuePointer = (pointer + Int(length))
-        guard endOfValuePointer <= self.count else {
-            throw ASN1DERParsingError.incorrectValueLength
-        }
-
-        // Read value
-        let valueBytes = Array(self[pointer..<endOfValuePointer])
-
-        return (
-            tag: tagByte,
-            length: lengthBytes,
-            value: valueBytes
-        )
+        return (tag: tag, length: lengthField, value: valueField)
     }
 
+}
+
+private func readTag(from triplet: [UInt8], pointer: inout Int) -> UInt8 {
+    let tag = triplet[pointer]
+
+    // ---------------------------------------- //
+    //     tag   length field   value field     //
+    //   [ 0xN | ............ | ........... ]   //
+    //      ^                                   //
+    //      |                                   //
+    //    pointer                               //
+    // ---------------------------------------- //
+
+    pointer.advance()
+
+    return tag
+}
+
+private func readLengthField(from triplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
+    if triplet[pointer] < 128 {
+        let lengthField = [ triplet[pointer] ]
+        pointer.advance()
+
+        return lengthField
+    }
+
+    // -------------------------------------------------- //
+    //     tag        length field        value field     //
+    //   [ ... | 0x8N 0x00 0x01 ... 0xN | ........... ]   //
+    //            ^    |             |                    //
+    //            |    -------v-------                    //
+    //            |    lengthFieldCount                   //
+    //            |                                       //
+    //         pointer                                    //
+    // -------------------------------------------------- //
+
+    let lengthFieldCount = Int(triplet[pointer] - 128)
+
+    // Ensure we have enough bytes left.
+    guard (pointer + lengthFieldCount) < triplet.count else {
+        throw ASN1DERParsingError.incorrectLengthFieldLength
+    }
+
+    let lengthField = Array(triplet[pointer...(pointer + lengthFieldCount)])
+
+    pointer.advance()
+    pointer.advance(by: lengthFieldCount)
+
+    return lengthField
+}
+
+private func readValueField(ofLength length: Int, from triplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
+    let endPointer = (pointer + length)
+
+    // --------------------------------------------------------------- //
+    //     tag   length field           value field                    //
+    //   [ ... | ............ | 0x01 0x02 0x03 0x04 ... 0xN ]          //
+    //                           ^                             ^       //
+    //                           |                             |       //
+    //                        pointer                      endPointer  //
+    // --------------------------------------------------------------- //
+
+    // Ensure we have enough bytes left.
+    guard endPointer <= triplet.count else {
+        throw ASN1DERParsingError.incorrectValueLength
+    }
+
+    return Array(triplet[pointer..<endPointer])
+}
+
+private func length(encodedBy lengthField: [UInt8]) throws -> Int {
+    // If the value field contains < 128 bytes, the length field requires only one byte (00000010 = length two).
+    // If the value field contains >= 128 bytes, the highest bit of the length field is 1 and the remaining bits
+    // identify the number of bytes needed to encode the length (10000010 - 10000000 = 10 = two length bytes follow).
+
+    // Length is directly encoded by the only byte in the length field.
+    if lengthField.count == 1 {
+        return Int(lengthField[0])
+    }
+
+    // Length is encoded by all but the first byte in the length field.
+    // The first byte in the length field encodes the number of remaining bytes used to encode the length.
+    var length: UInt64 = 0
+    for byte in lengthField.dropFirst() {
+        length = (length << 8)
+        length = length + UInt64(byte)
+    }
+
+    return Int(length)
+}
+
+private extension Int {
+    mutating func advance(by n: Int = 1) {
+        self = self.advanced(by: n)
+    }
 }

@@ -27,7 +27,7 @@ import XCTest
 extension ASN1DERParsingError: Equatable {
     public static func ==(lhs: ASN1DERParsingError, rhs: ASN1DERParsingError) -> Bool {
         switch (lhs, rhs) {
-        case (.incorrectLengthLength, .incorrectLengthLength):
+        case (.incorrectLengthFieldLength, .incorrectLengthFieldLength):
             return true
         case (.incorrectValueLength, .incorrectValueLength):
             return true
@@ -259,7 +259,7 @@ class ASN1DERParsingTests: XCTestCase {
         XCTAssertThrowsError(try ([
             0x02, 0x83 /* should be 0x81 */, 0x01, 0x01
         ] as [UInt8]).nextTLVTriplet()) { error in
-            XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectLengthLength)
+            XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectLengthFieldLength)
         }
     }
 
