@@ -29,6 +29,8 @@ extension SecKey: RSAPublicKeyConvertible {
         guard
             let attributes = SecKeyCopyAttributes(self) as? [CFString: AnyObject],
             let keyClass = attributes[kSecAttrKeyClass],
+            // All possible keyClasses are of type `CFString`.
+            // swfitlint:disable:next force_cast
             keyClass as! CFString == kSecAttrKeyClassPublic
         else {
             throw JWKError.notAPublicKey
