@@ -59,7 +59,7 @@ public struct JWE {
     /// Initializes a JWE with a given header, payload and encrypter.
     /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
     /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
-    /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
+    /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
     public init?(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
         self.header = header
 
@@ -121,7 +121,7 @@ public struct JWE {
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
-    /// See [JOSE-43](https://mohemian.atlassian.net/browse/JOSE-43).
+    /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
     public func decrypt(with kdk: SecKey) -> Payload? {
         let context = DecryptionContext(
             header: header,

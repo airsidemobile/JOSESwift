@@ -30,7 +30,7 @@ extension RSAPublicKey: Encodable {
         // The key type parameter is required.
         try commonParameters.encode(keyType, forKey: .keyType)
 
-        // Other common paramters are optional.
+        // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
             if let key = JWKParameter(rawValue: parameter.key) {
@@ -86,7 +86,7 @@ extension RSAPrivateKey: Encodable {
         // The key type parameter is required.
         try commonParameters.encode(keyType, forKey: .keyType)
 
-        // Other common paramters are optional.
+        // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
             if let key = JWKParameter(rawValue: parameter.key) {
