@@ -24,23 +24,53 @@
 import XCTest
 @testable import SwiftJOSE
 
-class DataRSAPublicKeyConvertibleTests: XCTestCase {
-
-    let publicKeyData = Data(base64Encoded: """
-        MIIBCgKCAQEAiADzxMJ+l/NIVPbqz9eoBenUCCUiNNfZ37c6gUJwWEfJRyGchAe9\
-        6m4GLr3pzj2A3Io4MSKf9dDWMak6qkR/XYljSjZBbXAhQan2sIB5qyPW7NJ7XpJW\
-        HoaHdHwEN9Cj29zL+WtFk6lC1rPDmNPRTmRy0ct4EP4YJ49PMcoKJQKbog79ws1K\
-        dDzNGTVVkEgLB4VOlW8A164kaK8+xMUxTqySUtigLTDUMqjQ/81SFgsNnMUqnxp8\
-        7bKD77olYBia88r8V2YXEx1Jgl8t22gNNh6lkN8BDqlkb/Y2uS+c7vlYIfSH6WYk\
-        VsSPsrA+GLLRo/R07FGxvs2M5gZxnmlvewIDAQAB
-        """
-    )!
+class DataRSAPublicKeyConvertibleTests: CryptoTestCase {
 
     func testLeadingZeroDropped() {
-        let (modulus, _) = try! publicKeyData.rsaPublicKeyComponents()
+        let (modulus, _) = try! publicKey2048Data.rsaPublicKeyComponents()
 
-        XCTAssertEqual(try! [UInt8](publicKeyData).read(.sequence).read(.integer).first!, 0x00)
+        XCTAssertEqual(try! [UInt8](publicKey2048Data).read(.sequence).read(.integer).first!, 0x00)
         XCTAssertNotEqual([UInt8](modulus).first!, 0x00)
+    }
+
+    func testPublicKey2048Modulus() {
+        let components = try? publicKey2048Data.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let modulus = components!.modulus
+
+        XCTAssertEqual(modulus, expectedModulusData)
+    }
+
+    func testPublicKey2048Exponent() {
+        let components = try? publicKey2048Data.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let exponent = components!.exponent
+
+        XCTAssertEqual(exponent, expectedExponentData)
+    }
+
+    func testPublicKey4096Modulus() {
+        let components = try? publicKey4096Data.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let modulus = components!.modulus
+
+        XCTAssertEqual(modulus.base64URLEncodedString(), expectedModulus4096Base64)
+    }
+
+    func testPublicKey4096Exponent() {
+        let components = try? publicKey4096Data.rsaPublicKeyComponents()
+
+        XCTAssertNotNil(components)
+
+        let exponent = components!.exponent
+
+        XCTAssertEqual(exponent, expectedExponentData)
     }
     
 }
