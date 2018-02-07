@@ -44,5 +44,3 @@ extension Data: RSAPublicKeyConvertible {
         )
     }
 }
-
-
