@@ -202,7 +202,7 @@ private func length(encodedBy lengthField: [UInt8]) throws -> Int {
     var length: UInt64 = 0
     for byte in lengthField.dropFirst() {
         length = (length << 8)
-        length = length + UInt64(byte)
+        length += UInt64(byte)
     }
 
     return Int(length)
