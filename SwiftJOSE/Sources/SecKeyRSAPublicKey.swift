@@ -1,5 +1,5 @@
 //
-//  SecKeyRSAPublicKeyConvertible.swift
+//  SecKeyRSAPublicKey.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 06.02.18.
@@ -24,7 +24,7 @@
 import Foundation
 import Security
 
-extension SecKey: RSAPublicKeyConvertible {
+extension SecKey: ExpressibleAsRSAPublicKeyComponents {
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
         guard
             let attributes = SecKeyCopyAttributes(self) as? [CFString: AnyObject],

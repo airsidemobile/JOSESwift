@@ -50,13 +50,15 @@ public typealias RSAPrivateKeyComponents = (
 
 /// A type that can be converted to an `RSAPublicKey` JWK through
 /// its RSA public key components.
-public protocol RSAPublicKeyConvertible {
+public protocol ExpressibleAsRSAPublicKeyComponents {
+    static func from(rsaPublicKeyCompoenents: RSAPublicKeyComponents) throws -> Self
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
 /// A type that can be converted to an `RSAPrivateKey` JWK through
 /// its RSA private key components.
-public protocol RSAPrivateKeyConvertible {
+public protocol ExpressibleAsRSAPrivateKeyComponents {
+    static func from(rsaPrivateKeyCompoenents: RSAPrivateKeyComponents) throws -> Self
     func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
@@ -99,13 +101,13 @@ public struct RSAPublicKey: JWK {
         )
     }
 
-    public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent) = try? publicKey.rsaPublicKeyComponents() else {
             throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
         // The components are unsigned big-enidan integers encoded using the minimum number of octets needed
-        // to represent their value as required by `RSAPublicKeyConvertible`.
+        // to represent their value as required.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
             modulus: modulus.base64URLEncodedString(),
@@ -165,13 +167,13 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
-    public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JWKError.cannotExtractRSAPrivateKeyComponents
         }
 
         // The components are unsigned big-enidan integers encoded using the minimum number of octets needed
-        // to represent their value as required by `RSAPrivateKeyConvertible`.
+        // to represent their value as required.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
             modulus: modulus.base64URLEncodedString(),

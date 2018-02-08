@@ -1,5 +1,5 @@
 //
-//  DataRSAPublicKeyConvertibleTests.swift
+//  DataExpressibleAsRSAPublicKeyComponentsTests.swift
 //  Tests
 //
 //  Created by Daniel Egger on 07.02.18.
@@ -24,7 +24,7 @@
 import XCTest
 @testable import SwiftJOSE
 
-class DataRSAPublicKeyConvertibleTests: CryptoTestCase {
+class DataExpressibleAsRSAPublicKeyComponentsTests: CryptoTestCase {
 
     func testLeadingZeroDropped() {
         let (modulus, _) = try! publicKey2048Data.rsaPublicKeyComponents()

@@ -1,5 +1,5 @@
 //
-//  DataRSAKeyConvertible.swift
+//  DataRSAPublicKey.swift
 //  SwiftJOSE
 //
 //  Created by Daniel Egger on 06.02.18.
@@ -23,7 +23,7 @@
 
 import Foundation
 
-extension Data: RSAPublicKeyConvertible {
+extension Data: ExpressibleAsRSAPublicKeyComponents {
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
         let publicKeyBytes = [UInt8](self)
 
