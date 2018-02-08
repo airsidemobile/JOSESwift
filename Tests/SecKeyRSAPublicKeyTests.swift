@@ -91,7 +91,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testPublicKey2048FromPublicComponents() {
-        guard let secKey = SecKey.converted(from: (modulus: expectedModulus2048Data, exponent: expectedExponentData)) else {
+        guard let secKey = try? SecKey.converted(from: (modulus: expectedModulus2048Data, exponent: expectedExponentData)) else {
             XCTFail()
             return
         }
@@ -103,7 +103,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testPublicKey4096FromPublicComponents() {
-        guard let secKey = SecKey.converted(from: (modulus: expectedModulus4096Data, exponent: expectedExponentData)) else {
+        guard let secKey = try? SecKey.converted(from: (modulus: expectedModulus4096Data, exponent: expectedExponentData)) else {
             XCTFail()
             return
         }

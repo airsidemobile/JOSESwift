@@ -25,12 +25,25 @@ import Foundation
 import Security
 
 extension SecKey: ExpressibleAsRSAPublicKeyComponents {
-    public static func converted(from components: RSAPublicKeyComponents) -> Self? {
-        return instantiate(self, from: components)
+    public static func converted(from components: RSAPublicKeyComponents) throws -> Self {
+        return try instantiate(self, from: components)
     }
 
-    private static func instantiate<T>(_ type: T.Type, from components: RSAPublicKeyComponents) -> T? {
-        return nil
+    private static func instantiate<T>(_ type: T.Type, from components: RSAPublicKeyComponents) throws -> T {
+        let data = try Data.converted(from: components)
+
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPublic,
+            kSecAttrKeySizeInBits as String : 2048 // TODO
+        ]
+
+        var error: Unmanaged<CFError>?
+        guard let key = SecKeyCreateWithData(data as CFData, attributes as CFDictionary, &error) else {
+            throw error!.takeRetainedValue() as Error
+        }
+
+        return key as! T
     }
 
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
