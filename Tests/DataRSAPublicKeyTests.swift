@@ -72,5 +72,25 @@ class DataRSAPublicKeyTests: CryptoTestCase {
 
         XCTAssertEqual(exponent, expectedExponentData)
     }
+
+    func testDataFromPublicKey2048() {
+        let data = Data.converted(from: (expectedModulus2048Data, expectedExponentData))
+
+        let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist")!
+        let keyDict = NSDictionary(contentsOfFile: path)!
+        let expectedData = Data(base64Encoded: keyDict[privateKey2048Tag] as! String)!
+
+        XCTAssertEqual(data, expectedData)
+    }
+
+    func testDataFromPublicKey4096() {
+        let data = Data.converted(from: (expectedModulus4096Data, expectedExponentData))
+
+        let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist")!
+        let keyDict = NSDictionary(contentsOfFile: path)!
+        let expectedData = Data(base64Encoded: keyDict[privateKey4096Tag] as! String)!
+
+        XCTAssertEqual(data, expectedData)
+    }
     
 }

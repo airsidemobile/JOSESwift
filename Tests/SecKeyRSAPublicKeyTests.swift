@@ -72,4 +72,46 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         }
     }
 
+    func testJWKFromPublicKey2048() {
+        let jwk = try? RSAPublicKey(publicKey: publicKey!)
+
+        XCTAssertNotNil(jwk)
+
+        XCTAssertEqual(jwk!.modulus, expectedModulus2048Base64)
+        XCTAssertEqual(jwk!.exponent, expectedExponentBase64)
+    }
+
+    func testJWKFromPublicKey4096() {
+        let jwk = try? RSAPublicKey(publicKey: publicKey4096!)
+
+        XCTAssertNotNil(jwk)
+
+        XCTAssertEqual(jwk!.modulus, expectedModulus4096Base64)
+        XCTAssertEqual(jwk!.exponent, expectedExponentBase64)
+    }
+
+    func testPublicKey2048FromPublicComponents() {
+        guard let secKey = SecKey.converted(from: (modulus: expectedModulus2048Data, exponent: expectedExponentData)) else {
+            XCTFail()
+            return
+        }
+
+        let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
+        let dataExpected = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+
+        XCTAssertEqual(data, dataExpected)
+    }
+
+    func testPublicKey4096FromPublicComponents() {
+        guard let secKey = SecKey.converted(from: (modulus: expectedModulus4096Data, exponent: expectedExponentData)) else {
+            XCTFail()
+            return
+        }
+
+        let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
+        let dataExpected = SecKeyCopyExternalRepresentation(publicKey4096!, nil)! as Data
+
+        XCTAssertEqual(data, dataExpected)
+    }
+
 }
