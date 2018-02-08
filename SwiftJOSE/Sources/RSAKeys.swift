@@ -51,6 +51,7 @@ public typealias RSAPrivateKeyComponents = (
 /// A type that can be converted to an `RSAPublicKey` JWK through
 /// its RSA public key components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
+    static func converted(from components: RSAPublicKeyComponents) -> Self?
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 

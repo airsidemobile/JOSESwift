@@ -25,6 +25,14 @@ import Foundation
 import Security
 
 extension SecKey: ExpressibleAsRSAPublicKeyComponents {
+    public static func converted(from components: RSAPublicKeyComponents) -> Self? {
+        return instantiate(self, from: components)
+    }
+
+    private static func instantiate<T>(_ type: T.Type, from components: RSAPublicKeyComponents) -> T? {
+        return nil
+    }
+
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
         guard
             let attributes = SecKeyCopyAttributes(self) as? [CFString: AnyObject],
