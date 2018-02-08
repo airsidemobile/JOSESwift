@@ -23,7 +23,7 @@
 
 import Foundation
 
-// MARK: Convertibles
+// MARK: Protocols
 
 /// The components of an RSA public key.
 /// See [RFC-3447, Section 3.1](https://tools.ietf.org/html/rfc3447#section-3.1).
