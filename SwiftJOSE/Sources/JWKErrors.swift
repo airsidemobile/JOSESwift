@@ -28,5 +28,5 @@ public enum JWKError: Error {
     case cannotExtractRSAPublicKeyComponents
     case cannotExtractRSAPrivateKeyComponents
     case notAPublicKey
-    case notASecKey(description: String)
+    case cannotConvertToSecKeyChildClasses
 }

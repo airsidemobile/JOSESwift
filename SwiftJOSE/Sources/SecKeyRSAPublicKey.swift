@@ -48,9 +48,7 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
         }
 
         guard let ret = key as? T else {
-            throw JWKError.notASecKey(description:
-                "You need to convert RSAPublicKeyComponents directly to a `SecKey` not a subclass of it."
-            )
+            throw JWKError.cannotConvertToSecKeyChildClasses
         }
 
         return ret
