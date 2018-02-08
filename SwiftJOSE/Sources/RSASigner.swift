@@ -23,23 +23,12 @@
 
 import Foundation
 
-/// A `Signer` to sign an input with a `RSA` algorithm.
+/// A `Signer` to sign an input with an `RSA` algorithm.
 public struct RSASigner: SignerProtocol {
     let algorithm: SignatureAlgorithm
     let privateKey: SecKey
 
     public func sign(_ signingInput: Data) throws -> Data {
-        // Check if SigningAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to sign with a given private key.
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
-            throw SigningError.algorithmNotSupported
-        }
-
-        // Sign the input with a given SecKeyAlgorithm and a private key, return signature if no error occured.
-        var signingError: Unmanaged<CFError>?
-        guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
-            throw SigningError.signingFailed(description: signingError?.takeRetainedValue().localizedDescription ?? "No description available.")
-        }
-
-        return signature as Data
+        return try RSA.sign(signingInput, with: privateKey, and: algorithm)
     }
 }

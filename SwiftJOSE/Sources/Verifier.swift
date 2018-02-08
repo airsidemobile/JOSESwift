@@ -47,8 +47,8 @@ protocol VerifierProtocol {
 public struct Verifier {
     let verifier: VerifierProtocol
 
-    public init(signingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
-        self.verifier = CryptoFactory.verifyer(for: signingAlgorithm, with: publicKey)
+    public init(verifyingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
+        self.verifier = CryptoFactory.verifyer(for: verifyingAlgorithm, with: publicKey)
     }
 
     func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {

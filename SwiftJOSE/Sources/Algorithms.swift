@@ -28,13 +28,6 @@ import Foundation
 /// - RSA
 public enum SignatureAlgorithm: String {
     case RS512 = "RS512"
-
-    var secKeyAlgorithm: SecKeyAlgorithm? {
-        switch self {
-        case .RS512:
-            return .rsaSignatureMessagePKCS1v15SHA512
-        }
-    }
 }
 
 /// An algorithm for asymmetric encryption and decryption.
@@ -42,31 +35,6 @@ public enum SignatureAlgorithm: String {
 /// - RSAPKCS
 public enum AsymmetricKeyAlgorithm: String {
     case RSAPKCS = "RSA1_5"
-
-    var secKeyAlgorithm: SecKeyAlgorithm? {
-        switch self {
-        case .RSAPKCS:
-            return .rsaEncryptionPKCS1
-        }
-    }
-
-    /// Checks if the plain text length does not exceed the maximum
-    /// for the chosen algorithm and the corresponding public key.
-    func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
-        switch self {
-        case .RSAPKCS:
-            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
-            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
-            return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
-        }
-    }
-
-    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
-        switch self {
-        case .RSAPKCS:
-            return cipherText.count == SecKeyGetBlockSize(privateKey)
-        }
-    }
 }
 
 /// An algorithm for symmetric encryption and decryption.
@@ -82,14 +50,14 @@ public enum SymmetricKeyAlgorithm: String {
         }
     }
 
-    func keyLength() -> Int {
+    var keyLength: Int {
         switch self {
         case .AES256CBCHS512:
             return 64
         }
     }
 
-    func initializationVectorLength() -> Int {
+    var initializationVectorLength: Int {
         switch self {
         case .AES256CBCHS512:
             return 16

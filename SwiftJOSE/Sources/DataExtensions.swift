@@ -24,14 +24,10 @@
 import Foundation
 
 extension Data {
-    /**
-     Creates a new data buffer from a base64url encoded string.
-     
-     - Parameters:
-         - base64URLString: The base64url encoded string to parse.
-     
-     - Returns: `nil` if the input is not recognized as valid base64url.
-     */
+    /// Creates a new data buffer from a base64url encoded string.
+    ///
+    /// - Parameter base64URLString: The base64url encoded string to parse.
+    /// - Returns: `nil` if the input is not recognized as valid base64url.
     init?(base64URLEncoded base64URLString: String) {
         var s = base64URLString
             .replacingOccurrences(of: "-", with: "+")
@@ -48,14 +44,10 @@ extension Data {
         self.init(base64Encoded: s)
     }
 
-    /**
-     Creates a new data buffer from base64url, UTF-8 encoded data.
-     
-     - Parameters:
-         - base64URLData: The base64url, UTF-8 encoded data.
-     
-     - Returns: `nil` if the input is not recognized as valid base64url.
-     */
+    /// Creates a new data buffer from base64url, UTF-8 encoded data.
+    ///
+    /// - Parameter base64URLData: The base64url, UTF-8 encoded data.
+    /// - Returns: `nil` if the input is not recognized as valid base64url.
     init?(base64URLEncoded base64URLData: Data) {
         guard let s = String(data: base64URLData, encoding: .utf8) else {
             return nil
@@ -64,11 +56,9 @@ extension Data {
         self.init(base64URLEncoded: s)
     }
 
-    /**
-     Returns a base64url encoded string.
-     
-     - Returns: The base64url encoded string.
-     */
+    /// Returns a base64url encoded string.
+    ///
+    /// - Returns: The base64url encoded string.
     func base64URLEncodedString() -> String {
         let s = self.base64EncodedString()
         return s
@@ -77,22 +67,18 @@ extension Data {
             .replacingOccurrences(of: "/", with: "_")
     }
 
-    /**
-     Returns base64url encoded data.
-     
-     - Returns: The base64url encoded data.
-     */
+    /// Returns base64url encoded data.
+    ///
+    /// - Returns: The base64url encoded data.
     func base64URLEncodedData() -> Data {
         // UTF-8 can represent [all Unicode characters](https://en.wikipedia.org/wiki/UTF-8), so this 
         // forced unwrap is safe. See also [this](https://stackoverflow.com/a/46152738/5233456) SO answer.
         return self.base64URLEncodedString().data(using: .utf8)!
     }
 
-    /**
-     Returns the byte length of a data object as octet hexadecimal data.
-     
-     - Returns: The data byte length as octet hexadecimal data.
-    */
+    /// Returns the byte length of a data object as octet hexadecimal data.
+    ///
+    /// - Returns: The data byte length as octet hexadecimal data.
     func getByteLengthAsOctetHexData() -> Data {
         let dataLength = UInt64(self.count * 8)
         let dataLengthInHex = String(dataLength, radix: 16, uppercase: false)

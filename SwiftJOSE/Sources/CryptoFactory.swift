@@ -23,21 +23,17 @@
 
 import Foundation
 
-/**
-  Factory deciding which crypto implementation to use for which algorithm.
-  If there are different crypto implementations, e.g. for different platforms,
-  this factory decides which version to use.
- */
+/// Factory deciding which crypto implementation to use for which algorithm.
+/// If there are different crypto implementations, e.g. for different platforms,
+/// this factory decides which version to use.
 struct CryptoFactory {
 
-    /**
-     Returns an asymmetric encrypter suitable for a given algorithm, initialized with a given public key.
-     - Parameters:
-        - algorithm: The asymmetric algorithm to use.
-        - publicKey: The public key to initialize the asymmetric encrypter with.
-     
-     - Returns: The asymmetric encrypter suitable for the given algorithm, initialized with the given public key.
-    */
+    /// Returns an asymmetric encrypter suitable for a given algorithm, initialized with a given public key.
+    ///
+    /// - Parameters:
+    ///   - algorithm: The asymmetric algorithm to use.
+    ///   - publicKey: The public key to initialize the asymmetric encrypter with.
+    /// - Returns: The asymmetric encrypter suitable for the given algorithm, initialized with the given public key.
     static func encrypter(for algorithm: AsymmetricKeyAlgorithm, with publicKey: SecKey) -> AsymmetricEncrypter {
         switch algorithm {
         case .RSAPKCS:
@@ -45,13 +41,10 @@ struct CryptoFactory {
         }
     }
 
-    /**
-     Returns a symmetric encrypter suitable for a given algorithm.
-     - Parameters:
-        - algorithm: The symmetric algorithm to use.
-     
-     - Returns: The symmetric encrypter suitable for the given algorithm.
-     */
+    /// Returns a symmetric encrypter suitable for a given algorithm.
+    ///
+    /// - Parameter algorithm: The symmetric algorithm to use.
+    /// - Returns: The symmetric encrypter suitable for the given algorithm.
     static func encrypter(for algorithm: SymmetricKeyAlgorithm) -> SymmetricEncrypter {
         switch algorithm {
         case .AES256CBCHS512:
@@ -59,14 +52,12 @@ struct CryptoFactory {
         }
     }
 
-    /**
-     Returns an asymmetric decrypter suitable for a given algorithm, initialized with a given private key.
-     - Parameters:
-        - algorithm: The asymmetric algorithm to use.
-        - privateKey: The private key to initialize the asymmetric decrypter with.
-     
-     - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
-     */
+    /// Returns an asymmetric decrypter suitable for a given algorithm, initialized with a given private key.
+    ///
+    /// - Parameters:
+    ///   - algorithm: The asymmetric algorithm to use.
+    ///   - privateKey: The private key to initialize the asymmetric decrypter with.
+    /// - Returns: The asymmetric decrypter suitable for the given algorithm, initialized with the given private key.
     // swiftlint:disable:next line_length
     static func decrypter(for algorithm: AsymmetricKeyAlgorithm, with privateKey: SecKey) -> AsymmetricDecrypter {
         switch algorithm {
@@ -75,13 +66,10 @@ struct CryptoFactory {
         }
     }
 
-    /**
-     Returns a symmetric decrypter suitable for a given algorithm.
-     - Parameters:
-        - algorithm: The symmetric algorithm to use.
-     
-     - Returns: The symmetric decrypter suitable for the given algorithm.
-     */
+    /// Returns a symmetric decrypter suitable for a given algorithm.
+    ///
+    /// - Parameter algorithm: The symmetric algorithm to use.
+    /// - Returns: The symmetric decrypter suitable for the given algorithm.
     static func decrypter(for algorithm: SymmetricKeyAlgorithm) -> SymmetricDecrypter {
         switch algorithm {
         case .AES256CBCHS512:
@@ -89,6 +77,12 @@ struct CryptoFactory {
         }
     }
 
+    /// Returns a signer suitable for a given algorithm.
+    ///
+    /// - Parameters:
+    ///   - algorithm: The signing algorithm to use.
+    ///   - privateKey: The private key to initialize the signer with.
+    /// - Returns: The signer suitable for a given algorithm, initialized with the given private key.
     static func signer(for algorithm: SignatureAlgorithm, with privateKey: SecKey) -> SignerProtocol {
         switch algorithm {
         case .RS512:
@@ -96,6 +90,12 @@ struct CryptoFactory {
         }
     }
 
+    /// Returns a verifyer suitable for a given algorithm, initialized with a given public key.
+    ///
+    /// - Parameters:
+    ///   - algorithm: The verifying algorithm to use.
+    ///   - publicKey: The public key to initialize the verifyer with.
+    /// - Returns: The verifyer suitable for a given algorithm, initialized with the given public key.
     static func verifyer(for algorithm: SignatureAlgorithm, with publicKey: SecKey) -> VerifierProtocol {
         switch algorithm {
         case .RS512:

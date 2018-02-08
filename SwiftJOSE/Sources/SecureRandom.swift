@@ -29,13 +29,11 @@ public enum SecureRandomGenerationError: Error {
 
 public struct SecureRandom {
 
-    /**
-     Generates secure random data with a given count.
-     - Parameters:
-        - count: The count of the random generated data.
-     
-     - Returns: The random generated data.
-     */
+    /// Generates secure random data with a given count.
+    ///
+    /// - Parameter count: The count of the random generated data.
+    /// - Returns: The random generated data.
+    /// - Throws: `SecureRandomGenerationError` if any error occurs during generation of secure random bytes. 
     public static func generate(count: Int) throws -> Data {
         var generatedRandom = Data(count: count)
 
