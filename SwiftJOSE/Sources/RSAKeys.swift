@@ -51,14 +51,12 @@ public typealias RSAPrivateKeyComponents = (
 /// A type that can be converted to an `RSAPublicKey` JWK through
 /// its RSA public key components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
-    static func from(rsaPublicKeyCompoenents: RSAPublicKeyComponents) throws -> Self
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
 /// A type that can be converted to an `RSAPrivateKey` JWK through
 /// its RSA private key components.
 public protocol ExpressibleAsRSAPrivateKeyComponents {
-    static func from(rsaPrivateKeyCompoenents: RSAPrivateKeyComponents) throws -> Self
     func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
