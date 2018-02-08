@@ -37,17 +37,11 @@ protocol SignerProtocol {
     /// Initializes a `Signer` with a specified key.
     init(algorithm: SignatureAlgorithm, privateKey: SecKey)
 
-    /**
-     Signs input data.
-     - Parameters:
-        - signingInput: The input to sign.
-     
-     - Throws:
-        - `SigningError.algorithmNotSupported`: If the provided algorithm is not supported for signing.
-        - `SigningError.signingFailes(description: String)`: If the signing failed with a specific error description.
-     
-     - Returns: The signature.
-     */
+    /// Signs input data.
+    ///
+    /// - Parameter signingInput: The input to sign.
+    /// - Returns: The signature.
+    /// - Throws: `SigningError` if any error occurs while signing.
     func sign(_ signingInput: Data) throws -> Data
 }
 

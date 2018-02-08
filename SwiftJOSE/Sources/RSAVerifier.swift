@@ -28,22 +28,7 @@ public struct RSAVerifier: VerifierProtocol {
     let algorithm: SignatureAlgorithm
     let publicKey: SecKey
 
-    public func verify(_ signingInput: Data, against signature: Data) throws -> Bool {
-        // Check if SigningAlgorithm supports a secKeyAlgorithm and if the algorithm is supported to verify with a given public key.
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm) else {
-            throw SigningError.algorithmNotSupported
-        }
-
-        // Verify the signature against an input with a given SecKeyAlgorithm and a public key, return true if no error occured and the signature is verified.
-        var verificationError: Unmanaged<CFError>?
-        guard SecKeyVerifySignature(publicKey, algorithm, signingInput as CFData, signature as CFData, &verificationError) else {
-            if let description = verificationError?.takeRetainedValue().localizedDescription {
-                throw SigningError.verificationFailed(descritpion: description)
-            }
-
-            return false
-        }
-
-        return true
+    public func verify(_ verifyingInput: Data, against signature: Data) throws -> Bool {
+        return try RSA.verify(verifyingInput, against: signature, with: publicKey, and: algorithm)
     }
 }
