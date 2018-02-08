@@ -1,5 +1,5 @@
 //
-//  SecKeyExpressibleAsRSAPublicKeyComponentsTests.swift
+//  SecKeyRSAPublicKeyTests.swift
 //  Tests
 //
 //  Created by Daniel Egger on 06.02.18.
@@ -24,7 +24,7 @@
 import XCTest
 @testable import SwiftJOSE
 
-class SecKeyExpressibleAsRSAPublicKeyComponentsTests: CryptoTestCase {
+class SecKeyRSAPublicKeyTests: CryptoTestCase {
 
     func testPublicKey2048Modulus() {
         let components = try? publicKey!.rsaPublicKeyComponents()
