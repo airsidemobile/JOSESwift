@@ -51,6 +51,7 @@
 		65FABAEA1F4AC2D3006D7679 /* RSASigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FABAE91F4AC2D3006D7679 /* RSASigner.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* SwiftJOSE.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65FF03CA202C7FF10041BE22 /* ASN1DEREncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF03C9202C7FF10041BE22 /* ASN1DEREncoding.swift */; };
+		65FF03CC202C8B040041BE22 /* ASN1DEREncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FF03CB202C8B040041BE22 /* ASN1DEREncodingTests.swift */; };
 		94066475B674C1AB5F16ADA2 /* Pods_SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DECA6A181B4CDDDFCFDAF73 /* Pods_SwiftJOSE.framework */; };
 		C803EFE51FA77E3000B71335 /* JWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSTests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
@@ -137,6 +138,7 @@
 		65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftJOSE.h; sourceTree = "<group>"; };
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65FF03C9202C7FF10041BE22 /* ASN1DEREncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DEREncoding.swift; sourceTree = "<group>"; };
+		65FF03CB202C8B040041BE22 /* ASN1DEREncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DEREncodingTests.swift; sourceTree = "<group>"; };
 		8DEE3DA71E77FC9F7BC021D9 /* Pods-SwiftJOSE-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftJOSE-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftJOSE-Tests/Pods-SwiftJOSE-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9DECA6A181B4CDDDFCFDAF73 /* Pods_SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C803EFE41FA77E3000B71335 /* JWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSTests.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */,
 				65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */,
 				65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */,
+				65FF03CB202C8B040041BE22 /* ASN1DEREncodingTests.swift */,
 				65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift */,
 				658261482029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift */,
 			);
@@ -602,6 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65FF03CC202C8B040041BE22 /* ASN1DEREncodingTests.swift in Sources */,
 				65826AB420286B3A00AFFC46 /* JWKRSAEncodingTests.swift in Sources */,
 				C83070051FD1B7390068C5CB /* AESDecrypterTests.swift in Sources */,
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,

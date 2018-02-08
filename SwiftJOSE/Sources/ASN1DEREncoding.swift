@@ -26,31 +26,41 @@ import Foundation
 internal extension Array where Element == UInt8 {
 
     func encode(as type: ASN1Type) throws -> [UInt8] {
-        var builder: [UInt8] = []
-        builder.append(type.tag)
-        builder.append(contentsOf: try self.lengthField())
-        builder.append(contentsOf: self)
+        var tlv: [UInt8] = []
+        tlv.append(type.tag)
+        tlv.append(contentsOf: lengthField(of: self))
+        tlv.append(contentsOf: self)
 
-        return builder
+        return tlv
     }
 
-    private func lengthField() throws -> [UInt8] {
-        let count = self.count
+}
 
-        if count < 128 {
-            return [ UInt8(count) ]
-        }
+private func lengthField(of valueField: [UInt8]) -> [UInt8] {
+    var count = valueField.count
 
-        let i = Int(log2(Double(count)) / 8 + 1)
-        var len = count
-        var result: [UInt8] = [UInt8(i + 0x80)]
-
-        for _ in 0..<i {
-            result.insert(UInt8(len & 0xFF), at: 1)
-            len = len >> 8
-        }
-
-        return result
+    if count < 128 {
+        return [ UInt8(count) ]
     }
 
+    // The number of bytes needed to encode count.
+    let lengthBytesCount = Int((log2(Double(count)) / 8) + 1)
+
+    // The first byte in the length field encoding the number of remaining bytes.
+    let firstLengthFieldByte = UInt8(128 + lengthBytesCount)
+
+    var lengthField: [UInt8] = []
+    for _ in 0..<lengthBytesCount {
+        // Take the last 8 bits of count.
+        let lengthByte = UInt8(count & 0xff)
+        // Add them to the length field.
+        lengthField.insert(lengthByte, at: 0)
+        // Delete the last 8 bits of count.
+        count = count >> 8
+    }
+
+    // Include the first byte.
+    lengthField.insert(firstLengthFieldByte, at: 0)
+
+    return lengthField
 }
