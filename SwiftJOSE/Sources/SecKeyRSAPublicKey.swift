@@ -30,20 +30,30 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
     }
 
     private static func instantiate<T>(_ type: T.Type, from components: RSAPublicKeyComponents) throws -> T {
-        let data = try Data.converted(from: components)
+        let keyData = try Data.converted(from: components)
+
+        // RSA key size is the number of bits of the modulus.
+        let keySize = (components.modulus.count * 8)
 
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeyClass as String: kSecAttrKeyClassPublic,
-            kSecAttrKeySizeInBits as String : 2048 // TODO
+            kSecAttrKeySizeInBits as String : keySize,
+            kSecAttrIsPermanent as String: false
         ]
 
         var error: Unmanaged<CFError>?
-        guard let key = SecKeyCreateWithData(data as CFData, attributes as CFDictionary, &error) else {
+        guard let key = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
             throw error!.takeRetainedValue() as Error
         }
 
-        return key as! T
+        guard let ret = key as? T else {
+            throw JWKError.notASecKey(description:
+                "You need to convert RSAPublicKeyComponents directly to a `SecKey` not a subclass of it."
+            )
+        }
+
+        return ret
     }
 
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {

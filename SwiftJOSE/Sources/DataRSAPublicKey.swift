@@ -28,14 +28,15 @@ extension Data: ExpressibleAsRSAPublicKeyComponents {
         var modulusBytes = [UInt8](components.modulus)
         let exponentBytes = [UInt8](components.exponent)
 
+        // Ensure the modulus is prefixed with 0x00.
         if let prefix = modulusBytes.first, prefix != 0x00 {
             modulusBytes.insert(0x00, at: 0)
         }
 
-        let modulusEncoded = try modulusBytes.encode(as: .integer)
-        let exponentEncoded = try  exponentBytes.encode(as: .integer)
+        let modulusEncoded = modulusBytes.encode(as: .integer)
+        let exponentEncoded = exponentBytes.encode(as: .integer)
 
-        let sequence = try  (modulusEncoded + exponentEncoded).encode(as: .sequence)
+        let sequence = (modulusEncoded + exponentEncoded).encode(as: .sequence)
 
         return Data(bytes: sequence)
     }

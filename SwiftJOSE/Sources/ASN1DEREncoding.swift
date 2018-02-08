@@ -25,7 +25,7 @@ import Foundation
 
 internal extension Array where Element == UInt8 {
 
-    func encode(as type: ASN1Type) throws -> [UInt8] {
+    func encode(as type: ASN1Type) -> [UInt8] {
         var tlv: [UInt8] = []
         tlv.append(type.tag)
         tlv.append(contentsOf: lengthField(of: self))

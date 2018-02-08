@@ -101,10 +101,9 @@ class ASN1DEREncodingTests: XCTestCase {
             0x31, 0x5b, 0xb1, 0x9c, 0xbc, 0x20, 0x55, 0xbf, 0x3a, 0x37, 0x42, 0x45, 0x75, 0xdc, 0x90, 0x65
         ]
 
-        let tlv = try? value.encode(as: .integer)
+        let tlv = value.encode(as: .integer)
 
-        XCTAssertNotNil(tlv)
-        XCTAssertEqual(tlv!, expectedLongIntTLV)
+        XCTAssertEqual(tlv, expectedLongIntTLV)
     }
 
     func testEncodeShortInteger() {
@@ -112,24 +111,21 @@ class ASN1DEREncodingTests: XCTestCase {
             0x03
         ]
 
-        let tlv = try? value.encode(as: .integer)
+        let tlv = value.encode(as: .integer)
 
-        XCTAssertNotNil(tlv)
-        XCTAssertEqual(tlv!, expectedShortIntTLV)
+        XCTAssertEqual(tlv, expectedShortIntTLV)
     }
 
     func testEncodeSequenceLongFirst() {
-        let tlv = try? (expectedLongIntTLV + expectedShortIntTLV).encode(as: .sequence)
+        let tlv = (expectedLongIntTLV + expectedShortIntTLV).encode(as: .sequence)
 
-        XCTAssertNotNil(tlv)
-        XCTAssertEqual(tlv!, expectedSequenceTLVLongFirst)
+        XCTAssertEqual(tlv, expectedSequenceTLVLongFirst)
     }
 
     func testEncodeSequenceShortFirst() {
-        let tlv = try? (expectedShortIntTLV + expectedLongIntTLV).encode(as: .sequence)
+        let tlv = (expectedShortIntTLV + expectedLongIntTLV).encode(as: .sequence)
 
-        XCTAssertNotNil(tlv)
-        XCTAssertEqual(tlv!, expectedSequenceTLVShortFirst)
+        XCTAssertEqual(tlv, expectedSequenceTLVShortFirst)
     }
     
 }
