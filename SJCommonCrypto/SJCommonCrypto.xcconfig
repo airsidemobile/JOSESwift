@@ -4,6 +4,5 @@
 //
 //  Created by Carol Capek on 09.02.18.
 //
-
-MODULEMAP_FILE[sdk=iphoneos*] = $(SRCROOT)/CommonCrypto/iphoneos.modulemap
-MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/CommonCrypto/iphonesimulator.modulemap
+MODULEMAP_FILE[sdk=iphoneos*] = $(SRCROOT)/SJCommonCrypto/iphoneos.modulemap
+MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/SJCommonCrypto/iphonesimulator.modulemap

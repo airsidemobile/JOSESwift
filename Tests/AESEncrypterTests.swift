@@ -23,7 +23,6 @@
 
 import XCTest
 @testable import SwiftJOSE
-import IDZSwiftCommonCrypto
 import CommonCrypto
 
 class AESEncrypterTests: CryptoTestCase {
