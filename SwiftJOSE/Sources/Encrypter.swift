@@ -22,7 +22,7 @@
 //
 
 import Foundation
-import CommonCrypto
+import SJCommonCrypto
 
 public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported

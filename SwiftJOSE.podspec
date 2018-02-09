@@ -12,9 +12,6 @@ Pod::Spec.new do |s|
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
   s.preserve_paths    = "SJCommonCrypto/*"
 
-  s.xcconfig          = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphonesimulator/',
-                          'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphoneos/' }
-
   s.prepare_command   = <<-CMD
                           mkdir -p SJCommonCrypto/iphoneos
                           mkdir -p SJCommonCrypto/iphonesimulator
