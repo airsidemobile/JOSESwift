@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.social_media_url  = "https://twitter.com/mohemian_mobile"
 
   s.platform          = :ios, "10.0"
-  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}" }
+  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}-rc1" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
   s.preserve_paths    = "CommonCrypto/*"
 
