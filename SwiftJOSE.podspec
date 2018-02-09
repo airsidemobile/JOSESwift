@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios, "10.0"
   s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}-rc1" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
-  s.preserve_paths    = "CommonCrypto/*"
+  s.preserve_paths    = "SJCommonCrypto/*"
 
   s.xcconfig          = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphonesimulator/',
                           'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphoneos/' }
