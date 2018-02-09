@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import IDZSwiftCommonCrypto
 import CommonCrypto
 
 public enum EncryptionError: Error, Equatable {

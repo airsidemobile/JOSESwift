@@ -1,0 +1,9 @@
+//
+//  CommonCrypto.xcconfig
+//  SwiftJOSE
+//
+//  Created by Carol Capek on 09.02.18.
+//
+
+MODULEMAP_FILE[sdk=iphoneos*] = $(SRCROOT)/CommonCrypto/iphoneos.modulemap
+MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/CommonCrypto/iphonesimulator.modulemap

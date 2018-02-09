@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import IDZSwiftCommonCrypto
 import CommonCrypto
 
 fileprivate extension HMACAlgorithm {
