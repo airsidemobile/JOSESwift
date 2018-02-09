@@ -12,13 +12,13 @@ Pod::Spec.new do |s|
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
   s.preserve_paths    = "CommonCrypto/*"
 
-  s.xcconfig          = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/CommonCrypto/iphonesimulator/',
-                          'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/CommonCrypto/iphoneos/' }
+  s.xcconfig          = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphonesimulator/',
+                          'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphoneos/' }
 
   s.prepare_command   = <<-CMD
-                          mkdir -p CommonCrypto/iphoneos
-                          mkdir -p CommonCrypto/iphonesimulator
-                          cp CommonCrypto/iphoneos.modulemap CommonCrypto/iphoneos/module.modulemap
-                          cp CommonCrypto/iphonesimulator.modulemap CommonCrypto/iphonesimulator/module.modulemap
+                          mkdir -p SJCommonCrypto/iphoneos
+                          mkdir -p SJCommonCrypto/iphonesimulator
+                          cp SJCommonCrypto/iphoneos.modulemap SJCommonCrypto/iphoneos/module.modulemap
+                          cp SJCommonCrypto/iphonesimulator.modulemap SJCommonCrypto/iphonesimulator/module.modulemap
                           CMD
 end
