@@ -48,15 +48,17 @@ public typealias RSAPrivateKeyComponents = (
     privateExponent: Data
 )
 
-/// A type that can be converted to an `RSAPublicKey` JWK through
-/// its RSA public key components.
+/// A type that represents an RSA public key.
+/// It can be expressed through `RSAPublicKeyComponents` meaning it can be converted to cusch components
+/// and it can be created from such components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
     static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
-/// A type that can be converted to an `RSAPrivateKey` JWK through
-/// its RSA private key components.
+/// A type that represents an RSA private key.
+/// It can be expressed through `RSAPrivateKeyComponents` meaning it can be converted to cusch components
+/// and it can be created from such components.
 public protocol ExpressibleAsRSAPrivateKeyComponents {
     static func representing(rsaPrivateKeyComponents components: RSAPrivateKeyComponents) throws -> Self
     func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
