@@ -150,6 +150,8 @@
 		C8610F49202DD7D700859FCC /* SJCommonCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SJCommonCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8610F4C202DD7D700859FCC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8610F51202DD83100859FCC /* SJCommonCrypto.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SJCommonCrypto.xcconfig; sourceTree = "<group>"; };
+		C8610F57203190D100859FCC /* iphoneos.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = iphoneos.modulemap; sourceTree = "<group>"; };
+		C8610F58203190D900859FCC /* iphonesimulator.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = iphonesimulator.modulemap; sourceTree = "<group>"; };
 		C86AC8CA1FCEC20F0007E611 /* AESEncrypterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AESEncrypterTests.swift; sourceTree = "<group>"; };
 		C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSADecrypterTests.swift; sourceTree = "<group>"; };
 		C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAVerifierTests.swift; sourceTree = "<group>"; };
@@ -378,6 +380,8 @@
 			isa = PBXGroup;
 			children = (
 				C8610F4C202DD7D700859FCC /* Info.plist */,
+				C8610F57203190D100859FCC /* iphoneos.modulemap */,
+				C8610F58203190D900859FCC /* iphonesimulator.modulemap */,
 				C8610F51202DD83100859FCC /* SJCommonCrypto.xcconfig */,
 			);
 			path = SJCommonCrypto;
