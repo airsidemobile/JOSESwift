@@ -99,7 +99,7 @@ internal extension Array where Element == UInt8 {
     func nextTLVTriplet() throws -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
         var pointer = 0
 
-        // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ]
+        // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ].
 
         // At least the tag and one length byte must be present.
         guard self.count >= 2 else {
