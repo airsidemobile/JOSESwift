@@ -27,10 +27,10 @@ import XCTest
 class DataRSAPublicKeyConvertibleTests: CryptoTestCase {
 
     func testLeadingZeroDropped() {
-        let (modulus, _) = try! publicKey2048Data.rsaPublicKeyComponents()
+        let components = try! publicKey2048Data.rsaPublicKeyComponents()
 
         XCTAssertEqual(try! [UInt8](publicKey2048Data).read(.sequence).read(.integer).first!, 0x00)
-        XCTAssertNotEqual([UInt8](modulus).first!, 0x00)
+        XCTAssertNotEqual([UInt8](components.modulus).first!, 0x00)
     }
 
     func testPublicKey2048Modulus() {
