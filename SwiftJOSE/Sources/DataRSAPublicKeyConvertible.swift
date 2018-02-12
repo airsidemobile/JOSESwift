@@ -29,14 +29,13 @@ extension Data: RSAPublicKeyConvertible {
 
         let sequence = try publicKeyBytes.read(.sequence)
         var modulus = try sequence.read(.integer)
+        let exponent = try sequence.skip(.integer).read(.integer)
 
         // Remove potential leading zero byte.
         // See https://tools.ietf.org/html/rfc7518#section-6.3.1.1.
         if modulus.first == 0x00 {
             modulus = Array(modulus.dropFirst())
         }
-
-        let exponent = try sequence.skip(.integer).read(.integer)
 
         return (
             Data(bytes: modulus),
