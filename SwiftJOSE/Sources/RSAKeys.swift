@@ -121,6 +121,18 @@ public struct RSAPublicKey: JWK {
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPublicKey.self, from: data)
     }
+
+    public func converted<T>(to: T.Type) throws -> T where T: ExpressibleAsRSAPublicKeyComponents {
+        guard let modulusData = Data(base64URLEncoded: self.modulus) else {
+            throw JWKError.modulusNotBase64URLUIntEncoded
+        }
+
+        guard let exponentData = Data(base64Encoded: self.exponent) else {
+            throw JWKError.exponentNotBase64URLUIntEncoded
+        }
+
+        return try T.representing(rsaPublicKeyComponents: (modulusData, exponentData))
+    }
 }
 
 // MARK: Private Key

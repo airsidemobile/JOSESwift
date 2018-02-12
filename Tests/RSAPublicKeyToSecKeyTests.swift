@@ -1,8 +1,8 @@
 //
-//  JWKErrors.swift
-//  SwiftJOSE
+//  RSAPublicKeyToSecKeyTests.swift
+//  Tests
 //
-//  Created by Daniel Egger on 05.02.18.
+//  Created by Daniel Egger on 12.02.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -21,14 +21,24 @@
 //  ---------------------------------------------------------------------------
 //
 
-import Foundation
+import XCTest
+@testable import SwiftJOSE
 
-/// JWK related errors
-public enum JWKError: Error {
-    case cannotExtractRSAPublicKeyComponents
-    case cannotExtractRSAPrivateKeyComponents
-    case notAPublicKey
-    case cannotConvertToSecKeyChildClasses
-    case modulusNotBase64URLUIntEncoded
-    case exponentNotBase64URLUIntEncoded
+class RSAPublicKeyToSecKeyTests: CryptoTestCase {
+
+    func testPublicKey2048ToData() {
+        let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)
+        let key = try! jwk.converted(to: SecKey.self)
+
+        XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, publicKey2048Data)
+    }
+
+    func testPublicKey4096ToData() {
+        let jwk = RSAPublicKey(modulus: expectedModulus4096Base64, exponent: expectedExponentBase64)
+        let key = try! jwk.converted(to: SecKey.self)
+
+        XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, publicKey4096Data)
+    }
+
 }
+
