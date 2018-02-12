@@ -8,8 +8,10 @@ Pod::Spec.new do |s|
   s.social_media_url  = "https://twitter.com/mohemian_mobile"
 
   s.platform          = :ios, "10.0"
-  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}" }
+  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}-rc1" }
   s.source_files      = "SwiftJOSE/**/*.{h,swift}"
+  s.preserve_paths    = "SJCommonCrypto/*"
 
-  s.dependency 'IDZSwiftCommonCrypto', '~> 0.10'
+  s.pod_target_xcconfig = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphonesimulator/',
+                            'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphoneos/' }
 end

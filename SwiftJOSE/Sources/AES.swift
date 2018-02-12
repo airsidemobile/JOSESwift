@@ -22,8 +22,7 @@
 //
 
 import Foundation
-import IDZSwiftCommonCrypto
-import CommonCrypto
+import SJCommonCrypto
 
 fileprivate extension SymmetricKeyAlgorithm {
     var ccAlgorithm: CCAlgorithm {
