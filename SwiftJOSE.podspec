@@ -14,11 +14,4 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphonesimulator/',
                             'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/SwiftJOSE/SJCommonCrypto/iphoneos/' }
-
-  # s.prepare_command   = <<-CMD
-  #                         mkdir -p SJCommonCrypto/iphoneos
-  #                         mkdir -p SJCommonCrypto/iphonesimulator
-  #                         cp SJCommonCrypto/iphoneos.modulemap SJCommonCrypto/iphoneos/module.modulemap
-  #                         cp SJCommonCrypto/iphonesimulator.modulemap SJCommonCrypto/iphonesimulator/module.modulemap
-  #                         CMD
 end
