@@ -131,7 +131,6 @@ public struct RSAPublicKey: JWK {
         self = try JSONDecoder().decode(RSAPublicKey.self, from: data)
     }
 
-
     /// Converts the `RSAPublicKey` JWK to the specified type.
     /// The specified type must conform to the `ExpressibleAsRSAPublicKeyComponents` protocol.
     ///
