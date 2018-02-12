@@ -22,8 +22,7 @@
 //
 
 import Foundation
-import IDZSwiftCommonCrypto
-import CommonCrypto
+import SJCommonCrypto
 
 public enum EncryptionError: Error, Equatable {
     case encryptionAlgorithmNotSupported

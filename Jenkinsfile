@@ -102,17 +102,6 @@ node(slave) {
       }
     }
 
-    stage('Install Dependencies') {
-      def context = 'jenkins-prepare'
-      def cmd = {
-        shRVM "bundle install"
-        shRVM "bundle exec pod repo update"
-        shRVM "bundle exec pod install"
-      }
-      def cmdFinally = {}
-      executeCommand(cmd, cmdFinally, githubStatusJose, context)
-    }
-
      stage('SonarQube') {
        if (env.BRANCH_NAME ==~ /^PR-\d+$/) {
          // to be configured in the global configuration of the master jenkins instance
