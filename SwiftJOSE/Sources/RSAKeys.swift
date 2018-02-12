@@ -109,8 +109,8 @@ public struct RSAPublicKey: JWK {
         // to represent their value as required.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
-            modulus: modulus.base64URLEncodedString(),
-            exponent: exponent.base64URLEncodedString(),
+            modulus: components.modulus.base64URLEncodedString(),
+            exponent: components.exponent.base64URLEncodedString(),
             additionalParameters: parameters
         )
     }

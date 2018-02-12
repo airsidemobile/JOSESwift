@@ -47,17 +47,19 @@ internal enum ASN1Type {
     }
 }
 
+// Array Extension for Parsing
+
 internal extension Array where Element == UInt8 {
 
     /// Reads the value of the specified ASN.1 type from the front of the bytes array.
-    /// The bytes array is expected to be a DER encoding of a ASN.1 type.
+    /// The bytes array is expected to be a DER encoding of an ASN.1 type.
     /// The specified type's TLV triplet is expected to be at the front of the bytes array.
     /// The bytes array may contain trailing bytes after the TLV triplet that are ignored during parsing.
     ///
     /// - Parameter type: The ASN.1 type to read.
     ///                   More information about the expected DER encoding of the specified ASN.1 type can be found
     ///                   [here](https://msdn.microsoft.com/en-us/library/windows/desktop/bb648640(v=vs.85).aspx).
-    /// - Returns: The value of the specified ASN.1 type. More formally, the value field of the types TLV triplet.
+    /// - Returns: The value of the specified ASN.1 type. More formally, the value field of the type's TLV triplet.
     /// - Throws: An `ASN1DERParsingError` indicating any parsing errors.
     func read(_ type: ASN1Type) throws -> [UInt8] {
         let triplet = try self.nextTLVTriplet()
@@ -99,7 +101,7 @@ internal extension Array where Element == UInt8 {
     func nextTLVTriplet() throws -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
         var pointer = 0
 
-        // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ]
+        // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ].
 
         // At least the tag and one length byte must be present.
         guard self.count >= 2 else {
@@ -119,8 +121,10 @@ internal extension Array where Element == UInt8 {
 
 }
 
-private func readTag(from triplet: [UInt8], pointer: inout Int) -> UInt8 {
-    let tag = triplet[pointer]
+// MARK: Freestanding Helper Functions
+
+private func readTag(from encodedTriplet: [UInt8], pointer: inout Int) -> UInt8 {
+    let tag = encodedTriplet[pointer]
 
     // ---------------------------------------- //
     //     tag   length field   value field     //
@@ -135,9 +139,9 @@ private func readTag(from triplet: [UInt8], pointer: inout Int) -> UInt8 {
     return tag
 }
 
-private func readLengthField(from triplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
-    if triplet[pointer] < 128 {
-        let lengthField = [ triplet[pointer] ]
+private func readLengthField(from encodedTriplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
+    if encodedTriplet[pointer] < 128 {
+        let lengthField = [ encodedTriplet[pointer] ]
         pointer.advance()
 
         return lengthField
@@ -153,14 +157,14 @@ private func readLengthField(from triplet: [UInt8], pointer: inout Int) throws -
     //         pointer                                    //
     // -------------------------------------------------- //
 
-    let lengthFieldCount = Int(triplet[pointer] - 128)
+    let lengthFieldCount = Int(encodedTriplet[pointer] - 128)
 
     // Ensure we have enough bytes left.
-    guard (pointer + lengthFieldCount) < triplet.count else {
+    guard (pointer + lengthFieldCount) < encodedTriplet.count else {
         throw ASN1DERParsingError.incorrectLengthFieldLength
     }
 
-    let lengthField = Array(triplet[pointer...(pointer + lengthFieldCount)])
+    let lengthField = Array(encodedTriplet[pointer...(pointer + lengthFieldCount)])
 
     pointer.advance()
     pointer.advance(by: lengthFieldCount)
@@ -168,7 +172,7 @@ private func readLengthField(from triplet: [UInt8], pointer: inout Int) throws -
     return lengthField
 }
 
-private func readValueField(ofLength length: Int, from triplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
+private func readValueField(ofLength length: Int, from encodedTriplet: [UInt8], pointer: inout Int) throws -> [UInt8] {
     let endPointer = (pointer + length)
 
     // --------------------------------------------------------------- //
@@ -180,11 +184,11 @@ private func readValueField(ofLength length: Int, from triplet: [UInt8], pointer
     // --------------------------------------------------------------- //
 
     // Ensure we have enough bytes left.
-    guard endPointer <= triplet.count else {
+    guard endPointer <= encodedTriplet.count else {
         throw ASN1DERParsingError.incorrectValueLength
     }
 
-    return Array(triplet[pointer..<endPointer])
+    return Array(encodedTriplet[pointer..<endPointer])
 }
 
 private func length(encodedBy lengthField: [UInt8]) throws -> Int {

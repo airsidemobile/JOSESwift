@@ -28,8 +28,8 @@ class CryptoTestCase: XCTestCase {
     let privateKey2048Tag = "com.airsidemobile.SwiftJOSE.testPrivateKey2048"
     let privateKey4096Tag = "com.airsidemobile.SwiftJOSE.testPrivateKey4096"
 
-    var privateKey: SecKey?
-    var publicKey: SecKey?
+    var privateKey2048: SecKey?
+    var publicKey2048: SecKey?
 
     var privateKey4096: SecKey?
     var publicKey4096: SecKey?
@@ -116,14 +116,14 @@ class CryptoTestCase: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        setupKeyPair()
+        setupKeys()
     }
 
     override func tearDown() {
         super.tearDown()
     }
 
-    private func setupKeyPair() {
+    private func setupKeys() {
         if
             let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"),
             let keyDict = NSDictionary(contentsOfFile: path),
@@ -133,49 +133,42 @@ class CryptoTestCase: XCTestCase {
 
             // 2048
 
-            var attributes: [String: Any] = [
-                kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
-                kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
-                kSecAttrKeySizeInBits as String: 2048,
-                kSecPrivateKeyAttrs as String: [
-                    kSecAttrIsPermanent as String: false,
-                    kSecAttrApplicationTag as String: privateKey2048Tag
-                ]
-            ]
+            let keyPair2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKey2048Tag)!
 
-            var error: Unmanaged<CFError>?
-            guard let key2048 = SecKeyCreateWithData(keyData2048 as CFData, attributes as CFDictionary, &error) else {
-                print(error!)
-                return
-            }
-
-            privateKey = key2048
-            publicKey = SecKeyCopyPublicKey(key2048)
-
-            publicKey2048Data = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+            privateKey2048 = keyPair2048.privateKey
+            publicKey2048 = keyPair2048.publicKey
+            publicKey2048Data = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
 
             // 4096
 
-            attributes = [
-                kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
-                kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
-                kSecAttrKeySizeInBits as String: 4096,
-                kSecPrivateKeyAttrs as String: [
-                    kSecAttrIsPermanent as String: false,
-                    kSecAttrApplicationTag as String: privateKey4096Tag
-                ]
-            ]
+            let keyPair4096 = setupSecKeyPair(size: 4096, data: keyData4096, tag: privateKey4096Tag)!
 
-            guard let key4096 = SecKeyCreateWithData(keyData4096 as CFData, attributes as CFDictionary, &error) else {
-                print(error!)
-                return
-            }
-
-            privateKey4096 = key4096
-            publicKey4096 = SecKeyCopyPublicKey(key4096)
-
+            privateKey4096 = keyPair4096.privateKey
+            publicKey4096 = keyPair4096.publicKey
             publicKey4096Data = SecKeyCopyExternalRepresentation(publicKey4096!, nil)! as Data
         }
+    }
+
+    private func setupSecKeyPair(size: Int, data: Data, tag: String) -> (privateKey: SecKey, publicKey: SecKey)? {
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: size,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false,
+                kSecAttrApplicationTag as String: tag
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+        guard let privateKey = SecKeyCreateWithData(data as CFData, attributes as CFDictionary, &error) else {
+            print(error!)
+            return nil
+        }
+
+        let publicKey = SecKeyCopyPublicKey(privateKey)!
+
+        return (privateKey, publicKey)
     }
 }
 

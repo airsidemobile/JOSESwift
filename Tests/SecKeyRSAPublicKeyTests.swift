@@ -27,7 +27,7 @@ import XCTest
 class SecKeyRSAPublicKeyTests: CryptoTestCase {
 
     func testPublicKey2048Modulus() {
-        let components = try? publicKey!.rsaPublicKeyComponents()
+        let components = try? publicKey2048!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -37,7 +37,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testPublicKey2048Exponent() {
-        let components = try? publicKey!.rsaPublicKeyComponents()
+        let components = try? publicKey2048!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -67,7 +67,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testPrivateKeyToPublicComponents() {
-        XCTAssertThrowsError(try privateKey!.rsaPublicKeyComponents()) { error in
+        XCTAssertThrowsError(try privateKey2048!.rsaPublicKeyComponents()) { error in
             XCTAssertEqual(error as? JWKError, JWKError.notAPublicKey)
         }
     }
