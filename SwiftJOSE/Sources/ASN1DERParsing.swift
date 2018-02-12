@@ -47,6 +47,8 @@ internal enum ASN1Type {
     }
 }
 
+// Array Extension for Parsing
+
 internal extension Array where Element == UInt8 {
 
     /// Reads the value of the specified ASN.1 type from the front of the bytes array.
@@ -118,6 +120,8 @@ internal extension Array where Element == UInt8 {
     }
 
 }
+
+// MARK: Freestanding Helper Functions
 
 private func readTag(from triplet: [UInt8], pointer: inout Int) -> UInt8 {
     let tag = triplet[pointer]
