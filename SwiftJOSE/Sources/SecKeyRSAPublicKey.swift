@@ -25,12 +25,13 @@ import Foundation
 import Security
 
 extension SecKey: ExpressibleAsRSAPublicKeyComponents {
-    public static func converted(from components: RSAPublicKeyComponents) throws -> Self {
-        return try instantiate(self, from: components)
+    public static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self {
+        return try instantiate(type: self, from: components)
     }
 
-    private static func instantiate<T>(_ type: T.Type, from components: RSAPublicKeyComponents) throws -> T {
-        let keyData = try Data.converted(from: components)
+    // Generic helper function is needed so the compiler can infer the type of `Self`.
+    private static func instantiate<T>(type: T.Type, from components: RSAPublicKeyComponents) throws -> T {
+        let keyData = try Data.representing(rsaPublicKeyComponents: components)
 
         // RSA key size is the number of bits of the modulus.
         let keySize = (components.modulus.count * 8)
