@@ -100,7 +100,7 @@ public struct RSAPublicKey: JWK {
     }
 
     public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (modulus, exponent) = try? publicKey.rsaPublicKeyComponents() else {
+        guard let components = try? publicKey.rsaPublicKeyComponents() else {
             throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
@@ -108,8 +108,8 @@ public struct RSAPublicKey: JWK {
         // to represent their value as required by `RSAPublicKeyConvertible`.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
-            modulus: modulus.base64URLEncodedString(),
-            exponent: exponent.base64URLEncodedString(),
+            modulus: components.modulus.base64URLEncodedString(),
+            exponent: components.exponent.base64URLEncodedString(),
             additionalParameters: parameters
         )
     }
