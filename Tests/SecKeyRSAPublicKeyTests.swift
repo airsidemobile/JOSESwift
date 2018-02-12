@@ -73,7 +73,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testJWKFromPublicKey2048() {
-        let jwk = try? RSAPublicKey(publicKey: publicKey!)
+        let jwk = try? RSAPublicKey(publicKey: publicKey2048!)
 
         XCTAssertNotNil(jwk)
 
@@ -97,7 +97,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         }
 
         let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
-        let dataExpected = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+        let dataExpected = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
 
         XCTAssertEqual(data, dataExpected)
     }

@@ -101,7 +101,7 @@ public struct RSAPublicKey: JWK {
     }
 
     public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (modulus, exponent) = try? publicKey.rsaPublicKeyComponents() else {
+        guard let components = try? publicKey.rsaPublicKeyComponents() else {
             throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 

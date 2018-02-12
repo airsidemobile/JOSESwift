@@ -76,7 +76,7 @@ class DataRSAPublicKeyTests: CryptoTestCase {
     func testDataFromPublicKeyComponents2048() {
         let data = try! Data.converted(from: (expectedModulus2048Data, expectedExponentData))
 
-        let expectedData = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+        let expectedData = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
 
         XCTAssertEqual(data, expectedData)
     }
