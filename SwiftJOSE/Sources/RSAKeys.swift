@@ -106,11 +106,10 @@ public struct RSAPublicKey: JWK {
         )
     }
 
-
     /// Creates a `RSAPublicKey` JWK with the specified public key and optional additional JWK parameters.
     ///
     /// - Parameters:
-    ///   - publicKey: The public key that the resulting JWK shoudl represent.
+    ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JWKError` indicating any errrors.
     public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
@@ -201,6 +200,12 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
+    /// Creates a `RSAPrivateKey` JWK with the specified private key and optional additional JWK parameters.
+    ///
+    /// - Parameters:
+    ///   - privateKey: The private key that the resulting JWK should represent.
+    ///   - parameters: Any additional parameters to be contained in the JWK.
+    /// - Throws: A `JWKError` indicating any errrors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JWKError.cannotExtractRSAPrivateKeyComponents
@@ -219,6 +224,31 @@ public struct RSAPrivateKey: JWK {
 
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPrivateKey.self, from: data)
+    }
+
+    /// Converts the `RSAPrivateKey` JWK to the specified type.
+    /// The specified type must conform to the `ExpressibleAsRSAPrivateKeyComponents` protocol.
+    ///
+    /// **Example:**
+    /// `let keyData = try jwk.converted(to Data.self)`
+    ///
+    /// - Parameter to: The type to convert the JWK to.
+    /// - Returns: The type initialized with the key data.
+    /// - Throws: A `JWKError` indicating any errors.
+    public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPrivateKeyComponents {
+        guard let modulusData = Data(base64URLEncoded: self.modulus) else {
+            throw JWKError.modulusNotBase64URLUIntEncoded
+        }
+
+        guard let exponentData = Data(base64Encoded: self.exponent) else {
+            throw JWKError.exponentNotBase64URLUIntEncoded
+        }
+
+        guard let privateExponentData = Data(base64Encoded: self.exponent) else {
+            throw JWKError.privateExponentNotBase64URLUIntEncoded
+        }
+
+        return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData))
     }
 }
 

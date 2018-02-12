@@ -31,4 +31,5 @@ public enum JWKError: Error {
     case cannotConvertToSecKeyChildClasses
     case modulusNotBase64URLUIntEncoded
     case exponentNotBase64URLUIntEncoded
+    case privateExponentNotBase64URLUIntEncoded
 }
