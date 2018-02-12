@@ -28,8 +28,8 @@ class CryptoTestCase: XCTestCase {
     let privateKey2048Tag = "com.airsidemobile.SwiftJOSE.testPrivateKey2048"
     let privateKey4096Tag = "com.airsidemobile.SwiftJOSE.testPrivateKey4096"
 
-    var privateKey: SecKey?
-    var publicKey: SecKey?
+    var privateKey2048: SecKey?
+    var publicKey2048: SecKey?
 
     var privateKey4096: SecKey?
     var publicKey4096: SecKey?
@@ -149,10 +149,10 @@ class CryptoTestCase: XCTestCase {
                 return
             }
 
-            privateKey = key2048
-            publicKey = SecKeyCopyPublicKey(key2048)
+            privateKey2048 = key2048
+            publicKey2048 = SecKeyCopyPublicKey(key2048)
 
-            publicKey2048Data = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+            publicKey2048Data = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
 
             // 4096
 
