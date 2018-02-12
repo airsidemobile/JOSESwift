@@ -39,7 +39,7 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeyClass as String: kSecAttrKeyClassPublic,
-            kSecAttrKeySizeInBits as String : keySize,
+            kSecAttrKeySizeInBits as String: keySize,
             kSecAttrIsPermanent as String: false
         ]
 
