@@ -57,7 +57,7 @@ internal extension Array where Element == UInt8 {
     /// - Parameter type: The ASN.1 type to read.
     ///                   More information about the expected DER encoding of the specified ASN.1 type can be found
     ///                   [here](https://msdn.microsoft.com/en-us/library/windows/desktop/bb648640(v=vs.85).aspx).
-    /// - Returns: The value of the specified ASN.1 type. More formally, the value field of the types TLV triplet.
+    /// - Returns: The value of the specified ASN.1 type. More formally, the value field of the type's TLV triplet.
     /// - Throws: An `ASN1DERParsingError` indicating any parsing errors.
     func read(_ type: ASN1Type) throws -> [UInt8] {
         let triplet = try self.nextTLVTriplet()
