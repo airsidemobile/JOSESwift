@@ -50,7 +50,7 @@ internal enum ASN1Type {
 internal extension Array where Element == UInt8 {
 
     /// Reads the value of the specified ASN.1 type from the front of the bytes array.
-    /// The bytes array is expected to be a DER encoding of a ASN.1 type.
+    /// The bytes array is expected to be a DER encoding of an ASN.1 type.
     /// The specified type's TLV triplet is expected to be at the front of the bytes array.
     /// The bytes array may contain trailing bytes after the TLV triplet that are ignored during parsing.
     ///
