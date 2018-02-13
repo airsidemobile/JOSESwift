@@ -9,6 +9,7 @@ It is designed with usage on iOS and pure Swift environments in mind.
 
 ## Contents
 
+- [Features](#features)
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
@@ -20,6 +21,32 @@ It is designed with usage on iOS and pure Swift environments in mind.
 - [Contributing](#contributing)
 - [Credits](#credits)
 - [License](#license)
+
+## Features
+
+### JWS
+
+Digitally signing and verifying arbitrary data using the JWS standard.
+
+Supported algorithms:
+
+- [RS512](https://tools.ietf.org/html/rfc7518#section-3.1)
+
+### JWE
+
+Encrypting and decrypting arbitrary data using the JWE standard.
+
+Supported key encryption algorithms:
+
+- [RSA1_5](https://tools.ietf.org/html/rfc7518#section-4.1)
+
+Supported content encryption algorithms: 
+
+- [AES256CBC-HS512](https://tools.ietf.org/html/rfc7518#section-5.1)
+
+### JWK
+
+Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
 
 ## Installation
 
