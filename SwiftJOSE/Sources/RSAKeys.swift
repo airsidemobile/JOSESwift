@@ -111,7 +111,7 @@ public struct RSAPublicKey: JWK {
     /// - Parameters:
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errrors.
+    /// - Throws: A `JWKError` indicating any errors.
     public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let components = try? publicKey.rsaPublicKeyComponents() else {
             throw JWKError.cannotExtractRSAPublicKeyComponents
@@ -204,7 +204,7 @@ public struct RSAPrivateKey: JWK {
     /// - Parameters:
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errrors.
+    /// - Throws: A `JWKError` indicating any errors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JWKError.cannotExtractRSAPrivateKeyComponents
