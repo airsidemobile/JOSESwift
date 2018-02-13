@@ -85,7 +85,8 @@ JOSESwift has three functional aspects:
 	- [Encrypting data for transmission](#encrypting-data-for-transmission)
 	- [Decrypting data received from someone else](#decrypting-received-data)
 - [JWK: Representing Keys](#jwk-representing-keys)
-	- [RSA Public Keys](#rsa-public-keys)
+	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
+	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
 ### JWS: Digital Signatures
 
 A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
@@ -411,10 +412,6 @@ Similarly you can get a key’s DER encoded data in PKCS#1 format:
 ``` swift
 let key: Data = try! jwk.converted(to: Data.self)
 ```
-
-### Nesting
-
-:warning: **Todo**
 
 ## Contributing
 
