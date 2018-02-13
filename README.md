@@ -5,7 +5,7 @@
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 It is designed with usage on iOS and pure Swift environments in mind.
 
-:warning: **Todo:** Mention incompleteness of standards implementation.
+:bulb: Please note that some details of the JOSE standards are not completely implemented (yet). For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing)!
 
 ## Contents
 
@@ -87,6 +87,7 @@ JOSESwift has three functional aspects:
 - [JWK: Representing Keys](#jwk-representing-keys)
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
+
 ### JWS: Digital Signatures
 
 A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
