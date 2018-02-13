@@ -47,7 +47,8 @@ internal enum ASN1Type {
     }
 }
 
-// Array Extension for Parsing
+// MARK: Array Extension for Parsing
+// Inspired by: https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift
 
 internal extension Array where Element == UInt8 {
 

@@ -23,6 +23,9 @@
 
 import Foundation
 
+// MARK: Array Extension for Encoding
+// Inspired by: https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift
+
 internal extension Array where Element == UInt8 {
 
     func encode(as type: ASN1Type) -> [UInt8] {
@@ -35,6 +38,8 @@ internal extension Array where Element == UInt8 {
     }
 
 }
+
+// MARK: Freestanding Helper Function
 
 private func lengthField(of valueField: [UInt8]) -> [UInt8] {
     var count = valueField.count
