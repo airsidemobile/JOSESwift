@@ -10,7 +10,13 @@ It is designed with usage on iOS and pure Swift environments in mind.
 ## Contents
 
 - [Installation](#installation)
+	- [CocoaPods](#cocoapods)
+	- [Carthage](#carthage)
+	- [Swift Package Manager](#swift-package-manager)
 - [Usage](#usage)
+	- [JWS: Digital Signatures](#jws)
+	- [JWE: Encryption and Decryption](#jwe)
+	- [JWK: Representing Keys](#jwk)
 - [Contributing](#contributing)
 - [Credits](#credits)
 - [License](#license)
@@ -76,11 +82,11 @@ JOSESwift has three functional aspects:
 - Securing data during transmission with encryption: [JWE](#jwe)
 - Representing cryptographic keys for transmission: [JWK](#jwk)
 
-### JWS
+### JWS: Digital Signatures
 
-### JWE
+### JWE: Encryption and Decryption
 
-### JWK
+### JWK: Representing Keys
 
 ### Nesting
 
