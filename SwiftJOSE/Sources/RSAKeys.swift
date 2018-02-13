@@ -106,7 +106,7 @@ public struct RSAPublicKey: JWK {
         )
     }
 
-    /// Creates a `RSAPublicKey` JWK with the specified public key and optional additional JWK parameters.
+    /// Creates an `RSAPublicKey` JWK with the specified public key and optional additional JWK parameters.
     ///
     /// - Parameters:
     ///   - publicKey: The public key that the resulting JWK should represent.
@@ -199,7 +199,7 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
-    /// Creates a `RSAPrivateKey` JWK with the specified private key and optional additional JWK parameters.
+    /// Creates an `RSAPrivateKey` JWK with the specified private key and optional additional JWK parameters.
     ///
     /// - Parameters:
     ///   - privateKey: The private key that the resulting JWK should represent.
