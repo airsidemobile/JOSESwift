@@ -182,7 +182,11 @@ let jws = try! JWS(compactSerialization: serialization)
 
 You can then check it’s signature using the public key of the sender:
 
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
 ``` swift
+let piublicKey: SecKey = /* ... */
+
 guard jws.isValid(for: publicKey) else {
     // Signature is invalid!
 }
@@ -251,6 +255,8 @@ let payload = Payload(data)
 
 Finally we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
 
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
 ``` swift
 let publicKey: SecKey = /* ... */
 
@@ -303,6 +309,8 @@ let jwe = try! JWE(compactSerialization: serialization)
 
 You can then decrypt the JWE using your private key:
 
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
 ``` swift
 let privateKey: SecKey = /* ... */
 
@@ -346,7 +354,7 @@ jwk.jsonString()! // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
 
 `RSAPublicKey` also implements `Encodable`, so you can also use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
 
-Alternatively, you can also use a `Data` object to initialize a JWK:
+Alternatively, you can also use DER encoded data in PKCS#1 format to initialize a JWK:
 
 ``` swift
 let publicKey: Data = /* ... */
