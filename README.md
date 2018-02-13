@@ -335,6 +335,14 @@ JWK is a JSON data structure that represents a cryptographic key. For instance, 
 
 #### Encoding RSA Public Keys
 
+*In short:*
+
+``` swift
+try! RSAPublicKey(publicKey: publicKey).jsonString()! // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
+```
+
+*Now for a more detailed description of what’s going on above.*
+
 We currently support creating a JWK from the DER encoding of an RSA public key represented as specified by [PKCS#1](https://tools.ietf.org/html/rfc3447#appendix-A.1.1). 
 This is the format that the [`SecKeyCopyExternalRepresentation`](https://developer.apple.com/documentation/security/1643698-seckeycopyexternalrepresentation) function of iOS’s `Security` framework returns for a `SecKey`.
 
@@ -373,6 +381,14 @@ let jwk = try! RSAPublicKey(publicKey: publicKey, additionalParameters: [
 ```
 
 #### Decoding RSA Public Keys
+
+*In short:*
+
+``` swift
+let key = try! RSAPublicKey(data: json).converted(to: SecKey.self)
+```
+
+*Now for a more detailed description of what’s going on above.*
 
 If you receive an RSA public key from someone else, you can construct a `Data` object or a `SecKey` object from it in order to subsequently store the key in an iOS device’s keychain for example.
 
