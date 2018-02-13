@@ -78,13 +78,67 @@ Then download it using `swift package resolve`. You should now be able to use JO
 
 JOSESwift has three functional aspects:
 
-- Securing data during transmission with digital signatures: [JWS](#jws-digital-signatures)
-- Securing data during transmission with encryption: [JWE](#jwe-encryption-and-decry)
-- Representing cryptographic keys for transmission: [JWK](#jwk)
+- [JWS](#jws-digital-signatures)
+	- Securing data for transmission with digital signatures
+	- Verifying data received from someone else
+- [JWE](#jwe-encryption-and-decry): Securing data during transmission with encryption
+- [JWK](#jwk-representing-keys): Representing cryptographic keys for transmission
 
 ### JWS: Digital Signatures
 
-:warning: **Todo**
+A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
+
+A JWS consists of three parts:
+
+- Header
+- Payload
+- Signature
+
+#### Securing Data for Transmission
+
+First we create a header which specifies the algorithm we are going to use  later on to sign our data.
+
+``` swift
+let header = JWSHeader(algorithm: .RS512)
+``` 
+
+Then we specify the data we want to send.
+
+``` swift
+let message = "Do you know the way to San Jose?"
+
+let data = message.data(using: .utf8)!
+
+let payload = Payload(data)
+```
+
+Finally we create a signer that will handle all the cryptographic magic for us.
+
+*Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.*
+
+``` swift
+let key = SecKeyCreateRandomKey( /* ... */ )
+
+let signer = Signer(signingAlgorithm: .RS512, privateKey: key)
+```
+
+Now we just put these three parts together to form our JWS.
+
+``` swift
+guard let jws = JWS(header: header, payload: payload, signer: signer) else {
+    // Something went wrong!
+}
+
+// Enjoy your fresh JWS!
+```
+
+Now, you will most probably want to transmit your message, which is now digitally signed inside the JWS, to someone else. To do so, you just transmit the serialized JWS which can be obtained as follows:
+
+``` swift
+jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
+```
+
+The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
 
 ### JWE: Encryption and Decryption
 
