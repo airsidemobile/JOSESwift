@@ -84,8 +84,8 @@ JOSESwift has three functional aspects:
 - [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
 	- [Encrypting data for transmission](#encrypting-data-for-transmission)
 	- [Decrypting data received from someone else](#decrypting-received-data)
-- [JWK](#jwk-representing-keys): Representing cryptographic keys for transmission
-
+- [JWK: Representing Keys](#jwk-representing-keys)
+	- [RSA Public Keys](#rsa-public-keys)
 ### JWS: Digital Signatures
 
 A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
@@ -131,7 +131,7 @@ Finally we pass our private key to a signer that will handle all the cryptograph
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ``` swift
-let key = SecKeyCreateRandomKey( /* ... */ )
+let privateKey: SecKey = /* ... */
 
 let signer = Signer(signingAlgorithm: .RS512, privateKey: key)
 ```
@@ -252,6 +252,8 @@ let payload = Payload(data)
 Finally we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
 
 ``` swift
+let publicKey: SecKey = /* ... */
+
 let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
 ```
 
@@ -302,6 +304,8 @@ let jwe = try! JWE(compactSerialization: serialization)
 You can then decrypt the JWE using your private key:
 
 ``` swift
+let privateKey: SecKey = /* ... */
+
 guard let payload = jwe.decrypt(with: privateKey) else {
     // Decryption failed!
 }
@@ -319,7 +323,28 @@ let message = String(data: data, encoding: .utf8)! // Do you know the way to San
 
 ### JWK: Representing Keys
 
-:warning: **Todo**
+JWK is a JSON data structure that represents a cryptographic key. For instance, you could use it as payload of a JWS or a JWE to transmit your public key to a server.
+
+#### RSA Public Keys
+
+We currently support creating a JWK from the DER encoding of an RSA public key represented as specified by [PKCS#1](https://tools.ietf.org/html/rfc3447#appendix-A.1.1). 
+This is the format that the [`SecKeyCopyExternalRepresentation`](https://developer.apple.com/documentation/security/1643698-seckeycopyexternalrepresentation) function of iOS’s `Security` framework returns for a `SecKey`.
+
+You can create a JWK directly from such a `SecKey` if it represents an RSA public key:
+
+``` swift
+let publicKey: SecKey = /* ... */
+
+let jwk = try! RSAPublicKey(publicKey: publicKey)
+```
+
+You can then obtain the JSON for this JWK like this:
+
+``` swift
+jwk.jsonString() // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
+```
+
+`RSAPublicKey` also implements `Encodable`, so you can also use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
 
 ### Nesting
 
