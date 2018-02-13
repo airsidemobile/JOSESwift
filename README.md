@@ -78,9 +78,9 @@ Then download it using `swift package resolve`. You should now be able to use JO
 
 JOSESwift has three functional aspects:
 
-- [JWS](#jws-digital-signatures)
-	- Securing data for transmission with digital signatures
-	- Verifying data received from someone else
+- [JWS: Digital Signatures](#jws-digital-signatures)
+	- [Securing data for transmission](#securing-data-for-transmission)
+	- [Verifying data received from someone else](#verifying-received-data)
 - [JWE](#jwe-encryption-and-decry): Securing data during transmission with encryption
 - [JWK](#jwk-representing-keys): Representing cryptographic keys for transmission
 
