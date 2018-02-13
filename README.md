@@ -96,6 +96,18 @@ A JWS consists of three parts:
 
 #### Securing Data for Transmission
 
+In short:
+
+``` swift
+let serialization = JWS(
+    header: JWSHeader(algorithm: .RS512),
+    payload: Payload("Do you knwo the way to San Jose?".data(using: .utf8)!),
+    signer: Signer(signingAlgorithm: .RS512, privateKey: key)
+)!.compactSerializedString
+```  
+
+Now for a more detailed description of what’s going on above.
+
 First we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
 ``` swift
@@ -140,17 +152,21 @@ jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 
 The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
 
-Again, in shorter form:
+#### Verifying Received Data
+
+In short: 
 
 ``` swift
-let serialization = JWS(
-    header: JWSHeader(algorithm: .RS512),
-    payload: Payload("Do you knwo the way to San Jose?".data(using: .utf8)!),
-    signer: Signer(signingAlgorithm: .RS512, privateKey: key)
-)!.compactSerializedString
-```  
+guard 
+    let jws = try? JWS(compactSerialization: serialization),
+    jws.isValid(for: publicKey),
+    let message = String(data: jws.payload.data(), encoding: .utf8)
+else {
+    // Signature is invalid!
+}
+```
 
-#### Verifying Received Data
+Now for a more detailed description of what’s going on above.
 
 If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
 
@@ -176,18 +192,6 @@ Now we can trust the message, which we get out of the JWS as follows:
 let data = jws.payload.data()
 
 let message = String(data: data, encoding: .utf8)! // "Do you know the way to San Jose?"
-```
-
-Again, in shorter form:
-
-``` swift
-guard 
-    let jws = try? JWS(compactSerialization: serialization),
-    jws.isValid(for: publicKey),
-    let message = String(data: jws.payload.data(), encoding: .utf8)
-else {
-    // Signature is invalid!
-}
 ```
 
 ### JWE: Encryption and Decryption
