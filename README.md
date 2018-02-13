@@ -96,13 +96,13 @@ A JWS consists of three parts:
 
 #### Securing Data for Transmission
 
-First we create a header which specifies the algorithm we are going to use  later on to sign our data.
+First we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
 ``` swift
 let header = JWSHeader(algorithm: .RS512)
 ``` 
 
-Then we specify the data we want to send.
+Then we specify the data we want to send:
 
 ``` swift
 let message = "Do you know the way to San Jose?"
@@ -112,7 +112,7 @@ let data = message.data(using: .utf8)!
 let payload = Payload(data)
 ```
 
-Finally we create a signer that will handle all the cryptographic magic for us.
+Finally we pass our private key to a signer that will handle all the cryptographic magic for us:
 
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
@@ -122,7 +122,7 @@ let key = SecKeyCreateRandomKey( /* ... */ )
 let signer = Signer(signingAlgorithm: .RS512, privateKey: key)
 ```
 
-Now we just put these three parts together to form our JWS.
+Now we just put these three parts together to form our JWS:
 
 ``` swift
 guard let jws = JWS(header: header, payload: payload, signer: signer) else {
@@ -149,6 +149,46 @@ let serialization = JWS(
     signer: Signer(signingAlgorithm: .RS512, privateKey: key)
 )!.compactSerializedString
 ```  
+
+#### Verifying Received Data
+
+If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
+
+``` swift
+let serialization = /* ... */
+
+let jws = try! JWS(compactSerialization: serialization)
+```
+
+You can then check it’s signature using the public key of the sender:
+
+``` swift
+guard jws.isValid(for: publicKey) else {
+    // Signature is invalid!
+}
+
+// Signature is valid!
+```
+
+Now we can trust the message, which we get out of the JWS as follows:
+
+``` swift
+let data = jws.payload.data()
+
+let message = String(data: data, encoding: .utf8)! // "Do you know the way to San Jose?"
+```
+
+Again, in shorter form:
+
+``` swift
+guard 
+    let jws = try? JWS(compactSerialization: serialization),
+    jws.isValid(for: publicKey),
+    let message = String(data: jws.payload.data(), encoding: .utf8)
+else {
+    // Signature is invalid!
+}
+```
 
 ### JWE: Encryption and Decryption
 
