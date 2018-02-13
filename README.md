@@ -325,7 +325,7 @@ let message = String(data: data, encoding: .utf8)! // Do you know the way to San
 
 JWK is a JSON data structure that represents a cryptographic key. For instance, you could use it as payload of a JWS or a JWE to transmit your public key to a server.
 
-#### RSA Public Keys
+#### Encoding RSA Public Keys
 
 We currently support creating a JWK from the DER encoding of an RSA public key represented as specified by [PKCS#1](https://tools.ietf.org/html/rfc3447#appendix-A.1.1). 
 This is the format that the [`SecKeyCopyExternalRepresentation`](https://developer.apple.com/documentation/security/1643698-seckeycopyexternalrepresentation) function of iOS’s `Security` framework returns for a `SecKey`.
@@ -345,6 +345,24 @@ jwk.jsonString() // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
 ```
 
 `RSAPublicKey` also implements `Encodable`, so you can also use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
+
+Alternatively, you can also use a `Data` object to initialize a JWK:
+
+``` swift
+let publicKey: Data = /* ... */
+
+let jwk = try! RSAPublicKey(publicKey: publicKey)
+```
+
+Passing additional parameters that will be included in the JWK’s JSON is easy as well:
+
+``` swift
+let publicKey: SecKey = /* ... */
+
+let jwk = try! RSAPublicKey(publicKey: publicKey, additionalParameters: [
+    "kid": "123!"
+])
+```
 
 ### Nesting
 
