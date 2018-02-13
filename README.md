@@ -1,93 +1,90 @@
-# SwiftJOSE :bird: 
+![](JOSESwift.png)
 
-:warning: **This is work in progress.** :warning:
+<br>
 
-SwiftJOSE is a [JavaScript Object Signing and Encryption (JOSE)](http://jose.readthedocs.io/en/latest) framework written in Swift.
+**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
+It is designed with usage on iOS and pure Swift environments in mind.
 
-## Features
+⚠️ **Todo:** Mention incompleteness of standards implementation.
 
-We plan to support:
+## Contents
 
-- [ ] [JWS](https://tools.ietf.org/html/rfc7515)
-  - [x] Signing/Verifying with RSASSA-PKCS1-v1_5 using SHA-512
-- [ ] [JWE](https://tools.ietf.org/html/rfc7516)
-  - [x] Key encryption/decryption with RSAES-PKCS1-v1_5
-- [ ] [JWK](https://tools.ietf.org/html/rfc7517)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Credits](#credits)
+- [License](#license)
 
-## Supported Algorithms
-
-At the moment the implemented algorithms are limited to a minimum. Therefore, to create and verify the signature of a `JWS` only `RSASSA-PKCS1-v1_5 using SHA-512` can be used. `JWE` supports `RSAES-PKCS1-v1_5` for key encryption/decryption.
-
-## Usage
-
-Below you can find a small code example of how to sign and verify a `JWS` object. For more detailed documentation and other code examples please refer to the [documentation section](https://github.com/mohemian/jose-ios/blob/master/Documentation).
-
-### Sign :lock_with_ink_pen:
-
-To sign a payload and initialize a `JWS` provide a private key corresponding to the chosen signing algorithm.
-
-```swift
-import SwiftJOSE
-
-let header = JWSHeader(algorithm: .RS512)
-let payload = JWSPayload(message.data(using: .utf8)!)
-let signer = RSASigner(key: privateKey)
-     
-let jws = JWS(header: header, payload: payload, signer: signer)
-```
-
-### Verify :white_check_mark::vs::negative_squared_cross_mark:
-
-To verify a signature of a received compact serialized `JWS`, initialize a `JWS` with the compact serialization and create a `Verifier` with the corresponding public key of the signature's private key.
-
-``` swift
-import SwiftJOSE
-
-let jws = JWS(compactSerialization: serializedJWS)
-        
-let verifier = RSAVerifier(key: publicKey)
-if jws.validates(against: verifier) {
-    print("Signature correct.")
-} else {
-    print("Signature wrong")
-}
-```
-
-### Encrypt :closed_lock_with_key:
-
-### Decrypt :unlock:
-
-## Installation :hammer_and_wrench:
-
-### Carthage
-
-Add the following to your `Cartfile`:
-
-``` shell
-github "mohemian/jose-ios"
-```
+## Installation
 
 ### CocoaPods
 
-Add the following to your `Podfile`:
+To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
+
+⚠️ **Todo:** Publish framework on CocoaPods and update Podfile example.
 
 ``` ruby
-pod 'SwiftJOSE', git: 'git@github.com:mohemian/jose-ios.git',
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '10.0'
+use_frameworks!
+
+target '<Your Target Name>' do
+    pod 'SwiftJOSE', git: 'git@github.com:airsidemobile/JOSESwift.git'
+end
 ```
+
+Then install it by running `pod install`. More documentation on using CocoaPods can be found [here](https://cocoapods.org).
+
+### Carthage
+
+To integrate JOSESwift in your Xcode project, include it in your `Cartfile`:
+
+⚠️ **Todo:** Test if this actually works.
+
+```
+github "airsidemobile/JOSESwift"
+```
+
+Then build it by running `carthage update` and drag the built framework into your Xcode project. More documentation on using Carthage can be found [here](https://github.com/Carthage/Carthage).
 
 ### Swift Package Manager
 
-Add the following dependency to your `Package.swift`:
+To integrate JOSESwift in your Swift project, add it as dependency in your project’s `Package.swift` file:
 
-``` swift
-dependencies: [
-    .package(url: "https://github.com/mohemian/jose-ios.git", from: "1.0.0")
-]
+⚠️ **Todo:** Test if this actually works and mention that non iOS crypto implementation is still to do.
+
+``` Swift
+import PackageDescription
+
+let package = Package(
+
+    /* other configuration */
+    
+    dependencies: [
+        .package(url: "https://github.com/airsidemobile/JOSESwift.git")
+    ]
+)
 ```
 
-## Contributing :woman_technologist::man_technologist:
+Then download it using `swift package resolve`. You should now be able to use JOSESwift in your project. More documentation on using the Swift Package Manager can be found [here](https://swift.org/package-manager/).
 
-If you want to contribute to this project don't hesitate to check out the [Contribution Guidelines](https://github.com/mohemian/jose-ios/blob/master/CONTRIBUTING.md). 
+## Usage
+
+JOSESwift has three functional aspects:
+
+- Securing data during transmission with digital signatures: [JWS](#jws)
+- Securing data during transmission with encryption: [JWE](#jwe)
+- Representing cryptographic keys for transmission: [JWK](#jwk)
+
+### JWS
+
+### JWE
+
+### JWK
+
+### Nesting
+
+## Contributing
 
 ## Credits
 
