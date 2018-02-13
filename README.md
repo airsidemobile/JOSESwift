@@ -96,7 +96,7 @@ A JWS consists of three parts:
 
 #### Securing Data for Transmission
 
-In short:
+*In short:*
 
 ``` swift
 let serialization = JWS(
@@ -106,9 +106,7 @@ let serialization = JWS(
 )!.compactSerializedString
 ```  
 
-Now for a more detailed description of what’s going on above.
-
----
+*Now for a more detailed description of what’s going on above.*
 
 First we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
@@ -156,7 +154,7 @@ The JWS compact serialization is a URL safe string that can easily be transmitte
 
 #### Verifying Received Data
 
-In short: 
+*In short:* 
 
 ``` swift
 guard 
@@ -168,9 +166,7 @@ else {
 }
 ```
 
-Now for a more detailed description of what’s going on above.
-
----
+*Now for a more detailed description of what’s going on above.*
 
 If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
 
