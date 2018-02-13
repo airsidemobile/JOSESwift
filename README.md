@@ -387,13 +387,13 @@ let jwk = try! RSAPublicKey(data: serverKeyJSON)
 Then we create a `SecKey` from it which we could then store in the device’s keychain using [`SecItemAdd`](https://developer.apple.com/documentation/security/1401659-secitemadd) for example:
 
 ``` swift
-let key = try! jwk.converted(to: SecKey.self)
+let key: SecKey = try! jwk.converted(to: SecKey.self)
 ```
 
 Similarly you can get a key’s DER encoded data in PKCS#1 format:
 
 ``` swift
-let data = try! jwk.converted(to: Data.self)
+let key: Data = try! jwk.converted(to: Data.self)
 ```
 
 ### Nesting
