@@ -166,6 +166,8 @@ guard
 else {
     // Signature is invalid!
 }
+
+message // Do you know the way to San Jose?
 ```
 
 *Now for a more detailed description of what’s going on above.*
@@ -188,12 +190,12 @@ guard jws.isValid(for: publicKey) else {
 // Signature is valid!
 ```
 
-Now we can trust the message, which we get out of the JWS as follows:
+Now we can trust the message, which we get from the JWS as follows:
 
 ``` swift
 let data = jws.payload.data()
 
-let message = String(data: data, encoding: .utf8)! // "Do you know the way to San Jose?"
+let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
 ```
 
 ### JWE: Encryption and Decryption
@@ -266,12 +268,54 @@ guard let jwe = JWE(header: header, payload: payload, encrypter: encrypter) else
 Now, you will most probably want to transmit your message, which is now encrypted inside the JWE, to someone else. To do so, you just transmit the serialized JWE which can be obtained as follows:
 
 ``` swift
-jwe.compactSerializedString ey (...) n0.cF (...) qQ.rx (...) CA.0B (...) AG.Ez (...) eY
+jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...) AG.Ez (...) eY
 ```
 
 The JWE compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
 
 #### Decrypting Received Data
+
+*In short:* 
+
+``` swift
+guard 
+    let jwe = try? JWE(compactSerialization: serialization),
+    let payload = jwe.decrypt(with: privateKey)
+    let message = String(data: payload.data(), encoding: .utf8)
+else {
+    // Decryption failed!
+}
+
+message // Do you know the way to San Jose?
+```
+
+*Now for a more detailed description of what’s going on above.*
+
+If you receive a JWE serialization from someone else, you can easily construct a JWE from it:
+
+``` swift
+let serialization = /* ... */
+
+let jwe = try! JWE(compactSerialization: serialization)
+```
+
+You can then decrypt the JWE using your private key:
+
+``` swift
+guard let payload = jwe.decrypt(with: privateKey) else {
+    // Decryption failed!
+}
+
+// Decryption successful!
+```
+
+Now we can read the plain message:
+
+``` swift
+let data = payload.data()
+
+let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
+```
 
 ### JWK: Representing Keys
 
