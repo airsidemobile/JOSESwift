@@ -78,9 +78,11 @@ Then download it using `swift package resolve`. You should now be able to use JO
 
 JOSESwift has three functional aspects:
 
-- Securing data during transmission with digital signatures: [JWS](#jws)
-- Securing data during transmission with encryption: [JWE](#jwe)
+- Securing data during transmission with digital signatures: [JWS](#jws-digital-signatures)
+- Securing data during transmission with encryption: [JWE](#jwe-encryption-and-decry)
 - Representing cryptographic keys for transmission: [JWK](#jwk)
+
+
 
 ### JWS: Digital Signatures
 
@@ -95,3 +97,5 @@ JOSESwift has three functional aspects:
 ## Credits
 
 ## License
+
+JOSESwift is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
