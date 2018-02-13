@@ -108,6 +108,8 @@ let serialization = JWS(
 
 Now for a more detailed description of what’s going on above.
 
+---
+
 First we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
 ``` swift
@@ -167,6 +169,8 @@ else {
 ```
 
 Now for a more detailed description of what’s going on above.
+
+---
 
 If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
 
