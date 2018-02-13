@@ -341,7 +341,7 @@ let jwk = try! RSAPublicKey(publicKey: publicKey)
 You can then obtain the JSON for this JWK like this:
 
 ``` swift
-jwk.jsonString() // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
+jwk.jsonString()! // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
 ```
 
 `RSAPublicKey` also implements `Encodable`, so you can also use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
@@ -363,6 +363,20 @@ let jwk = try! RSAPublicKey(publicKey: publicKey, additionalParameters: [
     "kid": "123!"
 ])
 ```
+
+#### Decoding RSA Public Keys
+
+If you receive an RSA public key from someone else, you can construct a `Data` object or a `SecKey` object from it in order to subsequently store the key in an iOS device’s keychain for example.
+
+First we construct a JWK from the JSON we received:
+
+``` swift
+let serverKeyJSON: Data = /* ... */ 
+
+let jwk = try! RSAPublicKey(data: serverKeyJSON)
+```
+
+
 
 ### Nesting
 
