@@ -114,7 +114,7 @@ let payload = Payload(data)
 
 Finally we create a signer that will handle all the cryptographic magic for us.
 
-*Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.*
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ``` swift
 let key = SecKeyCreateRandomKey( /* ... */ )
