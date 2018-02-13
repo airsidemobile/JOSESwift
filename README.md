@@ -5,7 +5,7 @@
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 It is designed with usage on iOS and pure Swift environments in mind.
 
-⚠️ **Todo:** Mention incompleteness of standards implementation.
+:warning: **Todo:** Mention incompleteness of standards implementation.
 
 ## Contents
 
@@ -27,7 +27,7 @@ It is designed with usage on iOS and pure Swift environments in mind.
 
 To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
 
-⚠️ **Todo:** Publish framework on CocoaPods and update Podfile example.
+:warning: **Todo:** Publish framework on CocoaPods and update Podfile example.
 
 ``` ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -45,7 +45,7 @@ Then install it by running `pod install`. More documentation on using CocoaPods 
 
 To integrate JOSESwift in your Xcode project, include it in your `Cartfile`:
 
-⚠️ **Todo:** Test if this actually works.
+:warning: **Todo:** Test if this actually works.
 
 ```
 github "airsidemobile/JOSESwift"
@@ -57,7 +57,7 @@ Then build it by running `carthage update` and drag the built framework into you
 
 To integrate JOSESwift in your Swift project, add it as dependency in your project’s `Package.swift` file:
 
-⚠️ **Todo:** Test if this actually works and mention that non iOS crypto implementation is still to do.
+:warning: **Todo:** Test if this actually works and mention that non iOS crypto implementation is still to do.
 
 ``` Swift
 import PackageDescription
@@ -84,23 +84,23 @@ JOSESwift has three functional aspects:
 
 ### JWS: Digital Signatures
 
-⚠️ **Todo**
+:warning: **Todo**
 
 ### JWE: Encryption and Decryption
 
-⚠️ **Todo**
+:warning: **Todo**
 
 ### JWK: Representing Keys
 
-⚠️ **Todo**
+:warning: **Todo**
 
 ### Nesting
 
-⚠️ **Todo**
+:warning: **Todo**
 
 ## Contributing
 
-Contributions to the project are encouraged and always welcome. 🤓
+Contributions to the project are encouraged and always welcome. :nerd_face:
 
 If you want to contribute, please submit a pull request. 
 For feature requests, feature discussions or bug reports, just open an issue.
@@ -111,7 +111,7 @@ Checkout our [contributing guidelines](CONTRIBUTING.md) for a little more inform
 
 JOSESwift is developed and maintained by [Airside Mobile](https://www.airsidemobile.com).
 
-⚠️ **Todo:** Add main authors? Add contact addresses.
+:warning: **Todo:** Add main authors? Add contact addresses.
 
 ## License
 
