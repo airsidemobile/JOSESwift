@@ -24,6 +24,8 @@ It is designed with usage on iOS and pure Swift environments in mind.
 
 ## Features
 
+If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
+
 ### JWS
 
 Digitally signing and verifying arbitrary data using the JWS standard.
