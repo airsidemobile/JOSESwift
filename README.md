@@ -198,7 +198,36 @@ let message = String(data: data, encoding: .utf8)! // "Do you know the way to Sa
 
 ### JWE: Encryption and Decryption
 
+A JWE encapsulates and secures data by encrypting it. It can be decrypted by the receiver of the JWE.
+
+A JWE consists of five parts:
+
+- Header
+- Encrypted Key
+- Initialization Vector
+- Additional Authenticated Data
+- Ciphertext
+- Authentication Tag
+
+In order to construct a JWE we will only need to provide the following parts, though:
+
+- Header
+- Plaintext
+- Encrypter
+
 #### Encrypting Data for Transmission
+
+*In short:*
+
+``` swift
+let serialization = JWE(
+    header: JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512),
+    payload: Payload("Do you know the way to San Jose?".data(using: .utf8)!),
+    encrypter: Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
+)!.compactSerializedString
+```  
+
+*Now for a more detailed description of what’s going on above.*
 
 #### Decrypting Received Data
 
