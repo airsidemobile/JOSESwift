@@ -135,9 +135,9 @@ public struct RSAPublicKey: JWK {
     /// The specified type must conform to the `ExpressibleAsRSAPublicKeyComponents` protocol.
     ///
     /// **Example:**
-    /// `let keyData = try jwk.converted(to Data.self)`
+    /// `let keyData = try jwk.converted(to: Data.self)`
     ///
-    /// - Parameter to: The type to convert the JWK to.
+    /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
     /// - Throws: A `JWKError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPublicKeyComponents {
@@ -229,9 +229,9 @@ public struct RSAPrivateKey: JWK {
     /// The specified type must conform to the `ExpressibleAsRSAPrivateKeyComponents` protocol.
     ///
     /// **Example:**
-    /// `let keyData = try jwk.converted(to Data.self)`
+    /// `let keyData = try jwk.converted(to: Data.self)`
     ///
-    /// - Parameter to: The type to convert the JWK to.
+    /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
     /// - Throws: A `JWKError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPrivateKeyComponents {
