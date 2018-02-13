@@ -49,7 +49,7 @@ public typealias RSAPrivateKeyComponents = (
 )
 
 /// A type that represents an RSA public key.
-/// It can be expressed through `RSAPublicKeyComponents` meaning it can be converted to cusch components
+/// It can be expressed through `RSAPublicKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
     static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self
@@ -57,7 +57,7 @@ public protocol ExpressibleAsRSAPublicKeyComponents {
 }
 
 /// A type that represents an RSA private key.
-/// It can be expressed through `RSAPrivateKeyComponents` meaning it can be converted to cusch components
+/// It can be expressed through `RSAPrivateKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPrivateKeyComponents {
     static func representing(rsaPrivateKeyComponents components: RSAPrivateKeyComponents) throws -> Self
