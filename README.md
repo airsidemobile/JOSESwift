@@ -79,9 +79,11 @@ Then download it using `swift package resolve`. You should now be able to use JO
 JOSESwift has three functional aspects:
 
 - [JWS: Digital Signatures](#jws-digital-signatures)
-	- [Securing data for transmission](#securing-data-for-transmission)
+	- [Signing data for transmission](#securing-data-for-transmission)
 	- [Verifying data received from someone else](#verifying-received-data)
-- [JWE](#jwe-encryption-and-decry): Securing data during transmission with encryption
+- [JWE: Encryption and Decryption](#jwe-encryption-and-decry)
+	- [Encrypting data for transmission](#encrypting-data-for-transmission)
+	- [Decrypting data received from someone else](#decrypting-received-data)
 - [JWK](#jwk-representing-keys): Representing cryptographic keys for transmission
 
 ### JWS: Digital Signatures
@@ -94,7 +96,7 @@ A JWS consists of three parts:
 - Payload
 - Signature
 
-#### Securing Data for Transmission
+#### Signing Data for Transmission
 
 *In short:*
 
@@ -196,7 +198,9 @@ let message = String(data: data, encoding: .utf8)! // "Do you know the way to Sa
 
 ### JWE: Encryption and Decryption
 
-:warning: **Todo**
+#### Encrypting Data for Transmission
+
+#### Decrypting Received Data
 
 ### JWK: Representing Keys
 
