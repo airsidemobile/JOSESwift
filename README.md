@@ -229,6 +229,48 @@ let serialization = JWE(
 
 *Now for a more detailed description of what’s going on above.*
 
+First we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
+
+> Note that we need to specify two algorithms. One is the [algorithm used to encrypt the content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
+
+``` swift
+let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
+``` 
+
+Then we specify the data we want to send:
+
+``` swift
+let message = "Do you know the way to San Jose?"
+
+let data = message.data(using: .utf8)!
+
+let payload = Payload(data)
+```
+
+Finally we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
+
+``` swift
+let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
+```
+
+Now we just put these three parts together to form our JWE:
+
+``` swift
+guard let jwe = JWE(header: header, payload: payload, encrypter: encrypter) else {
+    // Something went wrong!
+}
+
+// Enjoy your fresh JWE!
+```
+
+Now, you will most probably want to transmit your message, which is now encrypted inside the JWE, to someone else. To do so, you just transmit the serialized JWE which can be obtained as follows:
+
+``` swift
+jwe.compactSerializedString ey (...) n0.cF (...) qQ.rx (...) CA.0B (...) AG.Ez (...) eY
+```
+
+The JWE compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
+
 #### Decrypting Received Data
 
 ### JWK: Representing Keys
