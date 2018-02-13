@@ -81,7 +81,7 @@ JOSESwift has three functional aspects:
 - [JWS: Digital Signatures](#jws-digital-signatures)
 	- [Signing data for transmission](#securing-data-for-transmission)
 	- [Verifying data received from someone else](#verifying-received-data)
-- [JWE: Encryption and Decryption](#jwe-encryption-and-decry)
+- [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
 	- [Encrypting data for transmission](#encrypting-data-for-transmission)
 	- [Decrypting data received from someone else](#decrypting-received-data)
 - [JWK](#jwk-representing-keys): Representing cryptographic keys for transmission
