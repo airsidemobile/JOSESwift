@@ -94,7 +94,18 @@ JOSESwift has three functional aspects:
 
 ## Contributing
 
+Contributions to the project are encouraged and always welcome. 🤓
+
+If you want to contribute, please submit a pull request. 
+For feature requests, feature discussions or bug reports, just open an issue.
+
+Checkout our [contributing guidelines](CONTRIBUTING.md) for a little more information.
+
 ## Credits
+
+JOSESwift is developed and maintained by [Airside Mobile](https://www.airsidemobile.com).
+
+⚠️ **Todo:** Add main authors? Add contact addresses.
 
 ## License
 
