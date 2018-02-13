@@ -105,7 +105,7 @@ Contributions to the project are encouraged and always welcome. :nerd_face:
 If you want to contribute, please submit a pull request. 
 For feature requests, discussions or bug reports, just open an issue.
 
-Checkout our [contributing guidelines](CONTRIBUTING.md) for a little more information.
+Checkout our [contributing guidelines](.github/CONTRIBUTING.md) for a little more information.
 
 ## Credits
 

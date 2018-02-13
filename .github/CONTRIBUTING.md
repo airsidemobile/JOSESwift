@@ -6,7 +6,7 @@ Thanks for taking the time to contribute to the project.
 
 ## Code of Conduct
 
-Everyone who participates in this project sticks to the [Code of Conduct](https://github.com/mohemian/jose-ios/blob/master/CODE_OF_CONDUCT.md). 
+Everyone who participates in this project sticks to the [Code of Conduct](CODE_OF_CONDUCT.md). 
 
 ## I want to contribute, but how? 
 
@@ -14,7 +14,7 @@ For feature contributions or bug fixes, please submit a pull request. For featur
 
 ### Pull Request Process
 
-1. Please don’t forget to update the [README.md](README.md) with relevant details of changes.
+1. Please don’t forget to update the [README.md](../README.md) with relevant details of changes.
 2. Submit your pull request to `master`.
 3. Pull requests will need to be approved before being merged.
 4. Once approved, the pull request can be merged and we’re done. :tada:
