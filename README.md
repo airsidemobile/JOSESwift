@@ -140,6 +140,16 @@ jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 
 The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
 
+Again, in shorter form:
+
+``` swift
+let serialization = JWS(
+    header: JWSHeader(algorithm: .RS512),
+    payload: Payload("Do you knwo the way to San Jose?".data(using: .utf8)!),
+    signer: Signer(signingAlgorithm: .RS512, privateKey: key)
+)!.compactSerializedString
+```  
+
 ### JWE: Encryption and Decryption
 
 :warning: **Todo**
