@@ -86,6 +86,8 @@ Then build it by running `carthage update` and drag the built framework into you
 
 To integrate JOSESwift in your Swift project, add it as dependency in your project’s `Package.swift` file:
 
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
 :warning: **Todo:** Test if this actually works and mention that non iOS crypto implementation is still to do.
 
 ``` Swift
