@@ -156,6 +156,8 @@ jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 Click here for a more detailed description of what’s going on above.
 </summary>
 
+<br>
+
 First, we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
 ``` swift
