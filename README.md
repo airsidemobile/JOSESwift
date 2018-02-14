@@ -153,7 +153,7 @@ jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 <details>
 
 <summary>
-Click here for a more detailed description of what’s going on above.
+Click here for a more detailed description of creating a JWS to sign data.
 </summary>
 
 <br>
