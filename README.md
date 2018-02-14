@@ -181,7 +181,7 @@ Finally, we pass our private key to a signer that will handle all the cryptograp
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let signer = Signer(signingAlgorithm: .RS512, privateKey: key)
+let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)
 ```
 
 Now we just put these three parts together to form our JWS:
