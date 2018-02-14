@@ -143,7 +143,7 @@ let serialization = JWS(
 
 *Now for a more detailed description of what’s going on above.*
 
-First we create a header which specifies the algorithm we are going to use  later on to sign our data:
+First, we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
 ``` swift
 let header = JWSHeader(algorithm: .RS512)
@@ -159,7 +159,7 @@ let data = message.data(using: .utf8)!
 let payload = Payload(data)
 ```
 
-Finally we pass our private key to a signer that will handle all the cryptographic magic for us:
+Finally, we pass our private key to a signer that will handle all the cryptographic magic for us:
 
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
@@ -213,7 +213,7 @@ let serialization = /* ... */
 let jws = try! JWS(compactSerialization: serialization)
 ```
 
-You can then check it’s signature using the public key of the sender:
+You can then check its signature using the public key of the sender:
 
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
@@ -268,7 +268,7 @@ let serialization = JWE(
 
 *Now for a more detailed description of what’s going on above.*
 
-First we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
+First, we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
 
 > Note that we need to specify two algorithms. One is the [algorithm used to encrypt the content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
 
@@ -286,7 +286,7 @@ let data = message.data(using: .utf8)!
 let payload = Payload(data)
 ```
 
-Finally we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
+Finally, we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
 
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
@@ -364,7 +364,7 @@ let message = String(data: data, encoding: .utf8)! // Do you know the way to San
 
 ### JWK: Representing Keys
 
-JWK is a JSON data structure that represents a cryptographic key. For instance, you could use it as payload of a JWS or a JWE to transmit your public key to a server.
+JWK is a JSON data structure that represents a cryptographic key. For instance, you could use it as the payload of a JWS or a JWE to transmit your public key to a server.
 
 #### Encoding RSA Public Keys
 
@@ -425,7 +425,7 @@ let key = try! RSAPublicKey(data: json).converted(to: SecKey.self)
 
 If you receive an RSA public key from someone else, you can construct a `Data` object or a `SecKey` object from it in order to subsequently store the key in an iOS device’s keychain for example.
 
-First we construct a JWK from the JSON we received:
+First, we construct a JWK from the JSON we received:
 
 ``` swift
 let serverKeyJSON: Data = /* ... */ 
@@ -439,7 +439,7 @@ Then we create a `SecKey` from it which we could then store in the device’s ke
 let key: SecKey = try! jwk.converted(to: SecKey.self)
 ```
 
-Similarly you can get a key’s DER encoded data in PKCS#1 format:
+Similarly, you can get a key’s DER encoded data in PKCS#1 format:
 
 ``` swift
 let key: Data = try! jwk.converted(to: Data.self)
