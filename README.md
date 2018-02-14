@@ -139,14 +139,20 @@ A JWS consists of three parts:
 *In short:*
 
 ``` swift
-let serialization = JWS(
+let jws = JWS(
     header: JWSHeader(algorithm: .RS512),
     payload: Payload("Do you knwo the way to San Jose?".data(using: .utf8)!),
     signer: Signer(signingAlgorithm: .RS512, privateKey: key)
-)!.compactSerializedString
+)!
+
+jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 ```  
 
-*Now for a more detailed description of what’s going on above.*
+<details>
+
+<summary>
+*Click here for a more detailed description of what’s going on above.*
+<summary>
 
 First, we create a header which specifies the algorithm we are going to use  later on to sign our data:
 
@@ -191,6 +197,8 @@ jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
 ```
 
 The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
+
+</details>
 
 #### Verifying Received Data
 
