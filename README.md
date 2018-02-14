@@ -1,4 +1,4 @@
-![JOSESwift](JOSESwift.png)
+![JOSESwift](JOSESwift.svg)
 
 <br>
 
