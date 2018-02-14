@@ -17,7 +17,7 @@ For feature contributions or bug fixes, please submit a pull request. For featur
 1. Please don’t forget to update the [README.md](../README.md) with relevant details of changes.
 2. Submit your pull request to `master`.
 3. Pull requests will need to be approved before being merged.
-4. Once approved, the pull request can be merged and we’re done. :tada:
+4. Once approved, the pull request can be squash merged into master and we’re done. :tada:
 
 Please make sure to stick to general coding best practices and Swift code style as good as possible. You can find more info on that in GitHub’s [Swift Style Guide](https://github.com/github/swift-style-guide), the official Swift [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). 
 
