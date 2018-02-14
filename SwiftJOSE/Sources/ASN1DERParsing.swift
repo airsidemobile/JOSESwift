@@ -87,7 +87,7 @@ internal extension Array where Element == UInt8 {
             throw ASN1DERParsingError.incorrectTypeTag(actualTag: triplet.tag, expectedTag: type.tag)
         }
 
-        // TLV triplet = 1 tag byte + some length length + some value bytes
+        // TLV triplet = 1 tag byte + some length bytes + some value bytes
         let skippedTripletLength = (1 + triplet.length.count + triplet.value.count)
 
         return Array(self.dropFirst(skippedTripletLength))
