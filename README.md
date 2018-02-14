@@ -22,6 +22,7 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 	- [JWK: Representing Keys](#jwk-representing-keys)
 - [Security](#security)
 - [Contributing](#contributing)
+- [Resources](#resources)
 - [Credits](#credits)
 - [License](#license)
 
@@ -544,11 +545,25 @@ For feature requests, discussions or bug reports, just open an issue.
 
 Checkout our [contributing guidelines](.github/CONTRIBUTING.md) for a little more information.
 
+## Resources
+
+You can find detailed information about the relevant JOSE standards in the respective RFCs:
+
+- [RFC-7515:](https://tools.ietf.org/html/rfc7515) JSON Web Signature (JWS)
+- [RFC-7516:](https://tools.ietf.org/html/rfc7516) JSON Web Encryption (JWE)
+- [RFC-7517:](https://tools.ietf.org/html/rfc7517) JSON Web Key (JWK)
+- [RFC-7518:](https://tools.ietf.org/html/rfc7518) JSON Web Algorithms (JWA)
+
 ## Credits
 
 JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 
 :warning: **Todo:** Add main authors? Add contact addresses.
+
+During implementation, we relied upon the following projects as reference and inspiration:
+
+- [Heimdall](https://github.com/henrinormak/Heimdall)
+- [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt)
 
 ## License
 
