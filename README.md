@@ -421,8 +421,7 @@ A JWK is a JSON data structure that represents a cryptographic key. You could us
 In short:
 
 ``` swift
-let publicKey: SecKey = /* ...  */
-// or: let publicKey: Data 
+let publicKey: SecKey = /* also works for plain Data keys */
 
 try! RSAPublicKey(publicKey: publicKey).jsonString()! // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
 ```
