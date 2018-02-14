@@ -421,7 +421,11 @@ A JWK is a JSON data structure that represents a cryptographic key. You could us
 In short:
 
 ``` swift
-let publicKey: SecKey = /* also works for plain Data keys */
+let publicKey: SecKey = /* ... */
+
+// or
+
+let publicKey: Data = /* ... */
 
 try! RSAPublicKey(publicKey: publicKey).jsonString()! // {"kty":"RSA","n":"MHZ4Li4uS2d3","e":"QVFBQg"}
 ```
@@ -477,35 +481,49 @@ jwk.jsonString()! // {"kty": "RSA", "kid": "123!", n": "MHZ4Li4uS2d3", "e": "QVF
 
 #### Decoding RSA Public Keys
 
-*In short:*
+In short:
 
 ``` swift
-let key = try! RSAPublicKey(data: json).converted(to: SecKey.self)
+let json: Data = /* ... */
+
+let publicKey: SecKey = try! RSAPublicKey(data: json).converted(to: SecKey.self)
+
+// or
+
+let publicKey: Data = try! RSAPublicKey(data: json).converted(to: Data.self)
 ```
 
-*Now for a more detailed description of what’s going on above.*
+<details>
 
-If you receive an RSA public key from someone else, you can construct a `Data` object or a `SecKey` object from it in order to subsequently store the key in an iOS device’s keychain for example.
+<summary>
+Click here for a more detailed description of decoding a JWK JSON into another key format.
+</summary>
+
+<br>
+
+If you receive an RSA public key from someone else, you can construct a `SecKey` object or a `Data` object from it. For example to subsequently store the key in an iOS device’s keychain.
 
 First, we construct a JWK from the JSON we received:
 
 ``` swift
-let serverKeyJSON: Data = /* ... */ 
+let json: Data = /* ... */ 
 
-let jwk = try! RSAPublicKey(data: serverKeyJSON)
+let jwk = try! RSAPublicKey(data: json)
 ```
 
-Then we create a `SecKey` from it which we could then store in the device’s keychain using [`SecItemAdd`](https://developer.apple.com/documentation/security/1401659-secitemadd) for example:
+Then we create a `SecKey` from it which we could then store in the device’s keychain using [`SecItemAdd`](https://developer.apple.com/documentation/security/1401659-secitemadd):
 
 ``` swift
-let key: SecKey = try! jwk.converted(to: SecKey.self)
+let publicKey: SecKey = try! jwk.converted(to: SecKey.self)
 ```
 
 Similarly, you can get a key’s DER encoded data in PKCS#1 format:
 
 ``` swift
-let key: Data = try! jwk.converted(to: Data.self)
+let publicKey: Data = try! jwk.converted(to: Data.self)
 ```
+
+</details>
 
 ## Security
 
