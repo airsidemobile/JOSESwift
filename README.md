@@ -144,7 +144,7 @@ In short:
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let message = "Do you knwo the way to San Jose?"
+let message = "Do you know the way to San Jose?"
 
 let jws = JWS(
     header: JWSHeader(algorithm: .RS512),
