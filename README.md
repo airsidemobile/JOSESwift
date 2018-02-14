@@ -1,4 +1,4 @@
-![](JOSESwift.png)
+![JOSESwift](JOSESwift.png)
 
 <br>
 
@@ -26,7 +26,7 @@ It is designed with usage on iOS and pure Swift environments in mind.
 
 If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
 
-### JWS
+### JWS :pencil:
 
 Digitally signing and verifying arbitrary data using the JWS standard.
 
@@ -34,7 +34,7 @@ Supported algorithms:
 
 - [RS512](https://tools.ietf.org/html/rfc7518#section-3.1)
 
-### JWE
+### JWE :lock:
 
 Encrypting and decrypting arbitrary data using the JWE standard.
 
@@ -46,7 +46,7 @@ Supported content encryption algorithms:
 
 - [AES256CBC-HS512](https://tools.ietf.org/html/rfc7518#section-5.1)
 
-### JWK
+### JWK :key:
 
 Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
 
@@ -110,7 +110,7 @@ Then download it using `swift package resolve`. You should now be able to use JO
 JOSESwift has three functional aspects:
 
 - [JWS: Digital Signatures](#jws-digital-signatures)
-	- [Signing data for transmission](#securing-data-for-transmission)
+	- [Signing data for transmission](#signing-data-for-transmission)
 	- [Verifying data received from someone else](#verifying-received-data)
 - [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
 	- [Encrypting data for transmission](#encrypting-data-for-transmission)
