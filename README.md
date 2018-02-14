@@ -231,7 +231,7 @@ message // Do you know the way to San Jose?
 <details>
 
 <summary>
-Click here for a more detailed description of verifying a serialized JWS and retrieving its message.
+Click here for a more detailed description of verifying a serialized JWS and retrieving its payload.
 </summary>
 
 <br>
@@ -354,9 +354,13 @@ The JWE compact serialization is a URL safe string that can easily be transmitte
 
 #### Decrypting Received Data
 
-*In short:* 
+In short:
 
 ``` swift
+let privateKey: SecKey = /* ... */
+
+let serialization = /* ... */
+
 guard 
     let jwe = try? JWE(compactSerialization: serialization),
     let payload = jwe.decrypt(with: privateKey)
@@ -368,7 +372,13 @@ else {
 message // Do you know the way to San Jose?
 ```
 
-*Now for a more detailed description of what’s going on above.*
+<details>
+
+<summary>
+Click here for a more detailed description of decrypting a JWE and retrieving its payload.
+</summary>
+
+<br>
 
 If you receive a JWE serialization from someone else, you can easily construct a JWE from it:
 
@@ -399,6 +409,8 @@ let data = payload.data()
 
 let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
 ```
+
+</details>
 
 ### JWK: Representing Keys
 
