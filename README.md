@@ -206,9 +206,11 @@ The JWS compact serialization is a URL safe string that can easily be transmitte
 
 #### Verifying Received Data
 
-*In short:* 
+In short:
 
 ``` swift
+let serialization = /* ... */
+
 guard 
     let jws = try? JWS(compactSerialization: serialization),
     jws.isValid(for: publicKey),
@@ -220,7 +222,13 @@ else {
 message // Do you know the way to San Jose?
 ```
 
-*Now for a more detailed description of what’s going on above.*
+<details>
+
+<summary>
+Click here for a more detailed description of verifying a serialized JWS and retrieving its message.
+</summary>
+
+<br>
 
 If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
 
@@ -235,7 +243,7 @@ You can then check its signature using the public key of the sender:
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ``` swift
-let piublicKey: SecKey = /* ... */
+let publicKey: SecKey = /* ... */
 
 guard jws.isValid(for: publicKey) else {
     // Signature is invalid!
@@ -251,6 +259,8 @@ let data = jws.payload.data()
 
 let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
 ```
+
+</details>
 
 ### JWE: Encryption and Decryption
 
