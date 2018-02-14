@@ -266,16 +266,7 @@ let message = String(data: data, encoding: .utf8)! // Do you know the way to San
 
 A JWE encapsulates and secures data by encrypting it. It can be decrypted by the receiver of the JWE.
 
-A JWE consists of five parts:
-
-- Header
-- Encrypted Key
-- Initialization Vector
-- Additional Authenticated Data
-- Ciphertext
-- Authentication Tag
-
-In order to construct a JWE we will only need to provide the following parts, though:
+In order to construct a JWE we need to provide the following parts:
 
 - Header
 - Plaintext
@@ -283,17 +274,25 @@ In order to construct a JWE we will only need to provide the following parts, th
 
 #### Encrypting Data for Transmission
 
-*In short:*
+In short:
 
 ``` swift
-let serialization = JWE(
+let message = "Do you know the way to San Jose?"
+
+let jwe = JWE(
     header: JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512),
-    payload: Payload("Do you know the way to San Jose?".data(using: .utf8)!),
+    payload: Payload(message.data(using: .utf8)!),
     encrypter: Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
-)!.compactSerializedString
+)!
+
+jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...)
 ```  
 
-*Now for a more detailed description of what’s going on above.*
+<details>
+
+<summary>
+Click here for a more detailed description of creating a JWE to encrypt data.
+</summary>
 
 First, we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
 
@@ -340,6 +339,8 @@ jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...) AG.E
 ```
 
 The JWE compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
+
+</details>
 
 #### Decrypting Received Data
 
