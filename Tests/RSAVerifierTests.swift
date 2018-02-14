@@ -35,13 +35,13 @@ class RSAVerifierTests: CryptoTestCase {
     }
 
     func testVerifying() {
-        guard publicKey != nil else {
+        guard publicKey2048 != nil else {
             XCTFail()
             return
         }
 
         let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
-        let verifier = RSAVerifier(algorithm: .RS512, publicKey: publicKey!)
+        let verifier = RSAVerifier(algorithm: .RS512, publicKey: publicKey2048!)
 
         guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
             XCTFail()

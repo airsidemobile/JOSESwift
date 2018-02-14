@@ -25,13 +25,39 @@ import Foundation
 
 // MARK: Convertibles
 
+/// The components of an RSA public key.
+/// See [RFC-3447, Section 3.1](https://tools.ietf.org/html/rfc3447#section-3.1).
+///
+/// - Note:
+/// To ensure proper JWK JSON encoding, the component data must refer to the unsigned big-endian octet representation
+/// of the component's values, encoded using the minimum amount of octets needed to represent the value.
+public typealias RSAPublicKeyComponents = (
+    modulus: Data,
+    exponent: Data
+)
+
+/// The components of an RSA private key.
+/// See [RFC-3447, Section 3.2](https://tools.ietf.org/html/rfc3447#section-3.2).
+///
+/// - Note:
+/// To ensure proper JWK JSON encoding, the component data must refer to the unsigned big-endian octet representation
+/// of the component's values, encoded using the minimum amount of octets needed to represent the value.
+public typealias RSAPrivateKeyComponents = (
+    modulus: Data,
+    exponent: Data,
+    privateExponent: Data
+)
+
+/// A type that can be converted to an `RSAPublicKey` JWK through
+/// its RSA public key components.
 public protocol RSAPublicKeyConvertible {
-    var modulus: Data? { get }
-    var exponent: Data? { get }
+    func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
-public protocol RSAPrivateKeyConvertible: RSAPublicKeyConvertible {
-    var privateExponent: Data? { get }
+/// A type that can be converted to an `RSAPrivateKey` JWK through
+/// its RSA private key components.
+public protocol RSAPrivateKeyConvertible {
+    func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
 // MARK: Public Key
@@ -74,18 +100,16 @@ public struct RSAPublicKey: JWK {
     }
 
     public init(publicKey: RSAPublicKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let modulus = publicKey.modulus else {
-            throw JWKError.cannotExtractRSAModulus
+        guard let components = try? publicKey.rsaPublicKeyComponents() else {
+            throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
-        guard let exponent = publicKey.exponent else {
-            throw JWKError.cannotExtractRSAPublicExponent
-        }
-
-        // Todo: Base64urlUInt?
+        // The components are unsigned big-endian integers encoded using the minimum number of octets needed
+        // to represent their value as required by `RSAPublicKeyConvertible`.
+        // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
-            modulus: modulus.base64URLEncodedString(),
-            exponent: exponent.base64URLEncodedString(),
+            modulus: components.modulus.base64URLEncodedString(),
+            exponent: components.exponent.base64URLEncodedString(),
             additionalParameters: parameters
         )
     }
@@ -117,9 +141,12 @@ public struct RSAPrivateKey: JWK {
     /// Initializes a JWK containing an RSA private key.
     ///
     /// - Parameters:
-    ///   - modulus: The modulus value for the RSA private key.
-    ///   - exponent: The exponent value for the RSA private key.
-    //    - privateExponent: The private exponent value for the RSA private key.
+    ///   - modulus: The modulus value for the RSA private key in `base64urlUInt` encoding
+    ///              as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
+    ///   - exponent: The exponent value for the RSA private key in `base64urlUInt` encoding
+    ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
+    //    - privateExponent: The private exponent value for the RSA private key in `base64urlUInt` encoding
+    ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
     public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: String] = [:]) {
         self.keyType = .RSA
@@ -139,19 +166,13 @@ public struct RSAPrivateKey: JWK {
     }
 
     public init(privateKey: RSAPrivateKeyConvertible, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let modulus = privateKey.modulus else {
-            throw JWKError.cannotExtractRSAModulus
+        guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
+            throw JWKError.cannotExtractRSAPrivateKeyComponents
         }
 
-        guard let exponent = privateKey.exponent else {
-            throw JWKError.cannotExtractRSAPublicExponent
-        }
-
-        guard let privateExponent = privateKey.privateExponent else {
-            throw JWKError.cannotExtractRSAPrivateExponent
-        }
-
-        // Todo: Base64urlUInt?
+        // The components are unsigned big-endian integers encoded using the minimum number of octets needed
+        // to represent their value as required by `RSAPrivateKeyConvertible`.
+        // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
             modulus: modulus.base64URLEncodedString(),
             exponent: exponent.base64URLEncodedString(),

@@ -27,12 +27,10 @@ import XCTest
 class JWKtoJSONTests: CryptoTestCase {
 
     func testJSONString() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29"
+        ])
 
         let jsonString = jwk.jsonString()
         XCTAssertNotNil(jsonString)
@@ -45,18 +43,15 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulus2048Base64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 
     func testJSONData() {
-        let jwk = JWKBuilder<SecKey>()
-            .set(publicKey: publicKey!)
-            .set("alg", to: "RS256")
-            .set("kid", to: "2011-04-29")
-            .set(keyType: .RSA)
-            .build()!
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+            "alg": "RS256",
+            "kid": "2011-04-29"
+        ])
 
         let jsonData = jwk.jsonData()
         XCTAssertNotNil(jsonData!)
@@ -68,8 +63,7 @@ class JWKtoJSONTests: CryptoTestCase {
         XCTAssertEqual(dict!["alg"] as? String ?? "", "RS256")
         XCTAssertEqual(dict!["kid"] as? String ?? "", "2011-04-29")
 
-        // Todo: Update with real values. See https://mohemian.atlassian.net/browse/JOSE-93.
-        XCTAssertEqual(dict!["n"] as? String ?? "", "MHZ4Li4uS2d3")
-        XCTAssertEqual(dict!["e"] as? String ?? "", "QVFBQg")
+        XCTAssertEqual(dict!["n"] as? String ?? "", expectedModulus2048Base64)
+        XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 }

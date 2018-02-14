@@ -1,8 +1,8 @@
 //
-//  JWKErrors.swift
+//  DataRSAKeyConvertible.swift
 //  SwiftJOSE
 //
-//  Created by Daniel Egger on 05.02.18.
+//  Created by Daniel Egger on 06.02.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -23,9 +23,23 @@
 
 import Foundation
 
-/// JWK related errors
-public enum JWKError: Error {
-    case cannotExtractRSAPublicKeyComponents
-    case cannotExtractRSAPrivateKeyComponents
-    case notAPublicKey
+extension Data: RSAPublicKeyConvertible {
+    public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
+        let publicKeyBytes = [UInt8](self)
+
+        let sequence = try publicKeyBytes.read(.sequence)
+        var modulus = try sequence.read(.integer)
+        let exponent = try sequence.skip(.integer).read(.integer)
+
+        // Remove potential leading zero byte.
+        // See https://tools.ietf.org/html/rfc7518#section-6.3.1.1.
+        if modulus.first == 0x00 {
+            modulus = Array(modulus.dropFirst())
+        }
+
+        return (
+            Data(bytes: modulus),
+            Data(bytes: exponent)
+        )
+    }
 }

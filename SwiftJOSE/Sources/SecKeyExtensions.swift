@@ -24,22 +24,6 @@
 import Foundation
 import Security
 
-extension SecKey: RSAPublicKeyConvertible {
-    public var modulus: Data? {
-        return "0vx...Kgw".data(using: .utf8)
-    }
-
-    public var exponent: Data? {
-        return "AQAB".data(using: .utf8)
-    }
-}
-
-extension SecKey: RSAPrivateKeyConvertible {
-    public var privateExponent: Data? {
-        return "X4c...C8Q".data(using: .utf8)
-    }
-}
-
 extension JWK {
     static func secKeyRepresentation() throws -> SecKey {
         // Todo: Do conversion from JWK modulus/exponent representation to SecKey.

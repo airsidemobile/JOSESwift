@@ -36,24 +36,24 @@ class RSADecrypterTests: CryptoTestCase {
     }
 
     func testDecrypting() {
-        guard privateKey != nil else {
+        guard privateKey2048 != nil else {
             XCTFail()
             return
         }
 
-        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey!)
+        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey2048!)
         let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!)
 
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
 
     func testCipherTextLengthTooLong() {
-        guard privateKey != nil else {
+        guard privateKey2048 != nil else {
             XCTFail()
             return
         }
 
-        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey!)
+        let decrypter = RSADecrypter(algorithm: .RSAPKCS, privateKey: privateKey2048!)
         XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
             XCTAssertEqual(error as? EncryptionError, EncryptionError.cipherTextLenghtNotSatisfied)
         }

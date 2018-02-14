@@ -35,19 +35,19 @@ class RSAEncrypterTests: CryptoTestCase {
     }
 
     func testEncrypting() {
-        guard publicKey != nil, privateKey != nil else {
+        guard publicKey2048 != nil, privateKey2048 != nil else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSAPKCS, publicKey: publicKey!)
+        let encrypter = RSAEncrypter(algorithm: .RSAPKCS, publicKey: publicKey2048!)
         guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
             XCTFail()
             return
         }
 
         var decryptionError: Unmanaged<CFError>?
-        guard let plainTextData = SecKeyCreateDecryptedData(privateKey!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
+        guard let plainTextData = SecKeyCreateDecryptedData(privateKey2048!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
             XCTFail()
             return
         }
@@ -56,12 +56,12 @@ class RSAEncrypterTests: CryptoTestCase {
     }
 
     func testPlainTextTooLong() {
-        guard publicKey != nil else {
+        guard publicKey2048 != nil else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSAPKCS, publicKey: publicKey!)
+        let encrypter = RSAEncrypter(algorithm: .RSAPKCS, publicKey: publicKey2048!)
         XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
             XCTAssertEqual(error as? EncryptionError, EncryptionError.plainTextLengthNotSatisfied)
         }

@@ -27,18 +27,22 @@ import XCTest
 class JWKRSAKeysTests: CryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
             "kty": "wrongKty"
         ])
 
-        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
+        XCTAssertEqual(jwk["kty"] ?? "", "RSA")
     }
 
     func testMergingDuplicateAdditionalParametersInPrivateKey() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(privateKey: privateKey!).set("kty", to: "wrongKty").set(keyType: .RSA).build()!
+        let jwk = RSAPrivateKey(
+            modulus: "MHZ4Li4uS2d3",
+            exponent: "QVFBQg",
+            privateExponent: "MHZ4Li4uS2d3",
+            additionalParameters: [ "kty": "wrongKty" ]
+        )
 
-        XCTAssertNotEqual(jwk["kty"] ?? "", "wrongKty")
+        XCTAssertEqual(jwk["kty"] ?? "", "RSA")
     }
 
     func testInitPublicKeyDirectlyWithoutAdditionalParameters() {
@@ -76,20 +80,45 @@ class JWKRSAKeysTests: CryptoTestCase {
         XCTAssertEqual(key.parameters.count, 4)
     }
 
-    func testBuiltPrivateKeyParametersArePresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(privateKey: privateKey!).set(keyType: .RSA).build() as! RSAPrivateKey
+    func testPublicKeyKeyTypeIsPresent() {
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!)
 
-        XCTAssertFalse(jwk.modulus.isEmpty)
-        XCTAssertFalse(jwk.exponent.isEmpty)
-        XCTAssertFalse(jwk.privateExponent.isEmpty)
+        XCTAssertEqual(jwk.keyType, .RSA)
+        XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
     }
 
-    func testBuiltPublicKeyParametersArePresent() {
-        let builder = JWKBuilder<SecKey>()
-        let jwk = builder.set(publicKey: publicKey!).set(keyType: .RSA).build() as! RSAPublicKey
+    func testPrivateKeyKeyTypeIsPresent() {
+        let jwk = RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C")
 
-        XCTAssertFalse(jwk.modulus.isEmpty)
-        XCTAssertFalse(jwk.exponent.isEmpty)
+        XCTAssertEqual(jwk.keyType, .RSA)
+        XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
+        XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
+    }
+
+    func testSettingAndGettingAdditionalParameter() {
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+            "kid": "new on the block"
+            ])
+
+        XCTAssertEqual(jwk["kid"] ?? "", "new on the block")
+    }
+
+    func testPublicKeyAllParametersArePresentInDict() {
+        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+            "kid": "new on the block",
+            "use": "test"
+        ])
+
+        XCTAssertEqual(jwk.parameters.count, 5)
+    }
+
+    func testPrivateKeyAllParametersArePresentInDict() {
+        let jwk = RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C", additionalParameters: [
+            "kid": "new on the block",
+            "use": "test"
+            ])
+
+        XCTAssertEqual(jwk.parameters.count, 6)
     }
 }
