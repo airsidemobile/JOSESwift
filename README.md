@@ -142,6 +142,7 @@ In short:
 
 ``` swift
 let privateKey: SecKey = /* ... */
+
 let message = "Do you knwo the way to San Jose?"
 
 let jws = JWS(
@@ -213,6 +214,7 @@ In short:
 
 ``` swift
 let publicKey: SecKey = /* ... */
+
 let serialization = /* ... */
 
 guard 
@@ -282,6 +284,7 @@ In short:
 
 ``` swift
 let publicKey: SecKey = /* ... */
+
 let message = "Do you know the way to San Jose?"
 
 let jwe = JWE(
@@ -301,7 +304,7 @@ Click here for a more detailed description of creating a JWE to encrypt data.
 
 First, we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
 
-> Note that we need to specify two algorithms. One is the [algorithm used to encrypt the content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
+> Note that we need to specify two algorithms. One is the [algorithm used to encrypt the randomly generated content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
 
 ``` swift
 let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
