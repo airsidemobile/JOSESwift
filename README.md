@@ -302,6 +302,8 @@ jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...)
 Click here for a more detailed description of creating a JWE to encrypt data.
 </summary>
 
+<br>
+
 First, we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
 
 > Note that we need to specify two algorithms. One is the [algorithm used to encrypt the randomly generated content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
