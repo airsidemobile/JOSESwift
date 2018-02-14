@@ -124,6 +124,8 @@ JOSESwift has three functional aspects:
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
 
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
 ### JWS: Digital Signatures
 
 A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
@@ -139,6 +141,7 @@ A JWS consists of three parts:
 In short:
 
 ``` swift
+let privateKey: SecKey = /* ... */
 let message = "Do you knwo the way to San Jose?"
 
 let jws = JWS(
@@ -209,6 +212,7 @@ The JWS compact serialization is a URL safe string that can easily be transmitte
 In short:
 
 ``` swift
+let publicKey: SecKey = /* ... */
 let serialization = /* ... */
 
 guard 
@@ -277,6 +281,7 @@ In order to construct a JWE we need to provide the following parts:
 In short:
 
 ``` swift
+let publicKey: SecKey = /* ... */
 let message = "Do you know the way to San Jose?"
 
 let jwe = JWE(
