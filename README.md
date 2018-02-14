@@ -5,6 +5,8 @@
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 It is designed with usage on iOS and pure Swift environments in mind.
 
+As of now, usage is limited to iOS. See [Security](#security) for details.
+
 > :bulb: Please note that some details of the JOSE standards are not completely implemented (yet). For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
 
 ## Contents
@@ -18,6 +20,7 @@ It is designed with usage on iOS and pure Swift environments in mind.
 	- [JWS: Digital Signatures](#jws-digital-signatures)
 	- [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
 	- [JWK: Representing Keys](#jwk-representing-keys)
+- [Security](#security)
 - [Contributing](#contributing)
 - [Credits](#credits)
 - [License](#license)
@@ -49,6 +52,8 @@ Supported content encryption algorithms:
 ### JWK :key:
 
 Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
+
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ## Installation
 
@@ -445,6 +450,16 @@ Similarly, you can get a key’s DER encoded data in PKCS#1 format:
 let key: Data = try! jwk.converted(to: Data.self)
 ```
 
+## Security
+
+JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
+
+JOSESwift is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
+
+> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
+
+For security disclosures or related matters, please contact :warning: **Todo:** Add security contact address.
+
 ## Contributing
 
 Contributions to the project are encouraged and always welcome. :nerd_face:
@@ -456,7 +471,7 @@ Checkout our [contributing guidelines](.github/CONTRIBUTING.md) for a little mor
 
 ## Credits
 
-JOSESwift is developed and maintained by [Airside Mobile](https://www.airsidemobile.com).
+JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 
 :warning: **Todo:** Add main authors? Add contact addresses.
 
