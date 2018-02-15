@@ -115,13 +115,13 @@ Then download it using `swift package resolve`. You should now be able to use JO
 
 JOSESwift covers three functional aspects:
 
-- [JWS: Digital Signatures](#jws-digital-signatures)
+1. [JWS: Digital Signatures](#jws-digital-signatures)
 	- [Signing data for transmission](#signing-data-for-transmission)
 	- [Verifying data received from someone else](#verifying-received-data)
-- [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
+2. [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
 	- [Encrypting data for transmission](#encrypting-data-for-transmission)
 	- [Decrypting data received from someone else](#decrypting-received-data)
-- [JWK: Representing Keys](#jwk-representing-keys)
+3. [JWK: Representing Keys](#jwk-representing-keys)
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
 
