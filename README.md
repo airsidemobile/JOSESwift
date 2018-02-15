@@ -113,7 +113,7 @@ Then download it using `swift package resolve`. You should now be able to use JO
 
 ## Usage
 
-JOSESwift has three functional aspects:
+JOSESwift covers three functional aspects:
 
 - [JWS: Digital Signatures](#jws-digital-signatures)
 	- [Signing data for transmission](#signing-data-for-transmission)
