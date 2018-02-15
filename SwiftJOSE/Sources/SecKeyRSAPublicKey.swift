@@ -44,15 +44,15 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
         ]
 
         var error: Unmanaged<CFError>?
-        guard let key = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
+        guard let keyReference = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
             throw error!.takeRetainedValue() as Error
         }
 
-        guard let ret = key as? T else {
+        guard let key = keyReference as? T else {
             throw JWKError.cannotConvertToSecKeyChildClasses
         }
 
-        return ret
+        return key
     }
 
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
