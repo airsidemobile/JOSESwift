@@ -133,9 +133,9 @@ A JWS encapsulates and secures data using a digital signature which can be verif
 
 A JWS consists of three parts:
 
-- Header
-- Payload
-- Signature
+1. Header
+2. Payload
+3. Signature
 
 #### Signing Data for Transmission
 
@@ -275,9 +275,9 @@ A JWE encapsulates and secures data by encrypting it. It can be decrypted by the
 
 In order to construct a JWE we need to provide the following parts:
 
-- Header
-- Plaintext
-- Encrypter
+1. Header
+2. Plaintext
+3. Encrypter
 
 #### Encrypting Data for Transmission
 
