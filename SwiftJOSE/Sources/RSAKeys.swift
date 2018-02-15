@@ -117,7 +117,7 @@ public struct RSAPublicKey: JWK {
             throw JWKError.cannotExtractRSAPublicKeyComponents
         }
 
-        // The components are unsigned big-enidan integers encoded using the minimum number of octets needed
+        // The components are unsigned big-endian integers encoded using the minimum number of octets needed
         // to represent their value as required.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
@@ -210,7 +210,7 @@ public struct RSAPrivateKey: JWK {
             throw JWKError.cannotExtractRSAPrivateKeyComponents
         }
 
-        // The components are unsigned big-enidan integers encoded using the minimum number of octets needed
+        // The components are unsigned big-endian integers encoded using the minimum number of octets needed
         // to represent their value as required.
         // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(

@@ -88,13 +88,13 @@ internal extension Array where Element == UInt8 {
             throw ASN1DERParsingError.incorrectTypeTag(actualTag: triplet.tag, expectedTag: type.tag)
         }
 
-        // TLV triplet = 1 tag byte + some length length + some value bytes
+        // TLV triplet = 1 tag byte + some length bytes + some value bytes
         let skippedTripletLength = (1 + triplet.length.count + triplet.value.count)
 
         return Array(self.dropFirst(skippedTripletLength))
     }
 
-    /// Reads a TLV (type, length value) triplet of a DER encoded ASN.1 type from the bytes array.
+    /// Reads a TLV (tag, length, value) triplet of a DER encoded ASN.1 type from the bytes array.
     /// More information on the DER Transfer Syntax encoding ASN.1 types can be found
     /// [here](https://msdn.microsoft.com/en-us/library/windows/desktop/bb540801(v=vs.85).aspx).
     ///
