@@ -14,15 +14,18 @@ For feature contributions or bug fixes, please submit a pull request. For featur
 
 ### Pull Request Process
 
-1. Please don’t forget to update the [README.md](../README.md) with relevant details of changes.
-2. Submit your pull request to `master`.
-3. Provide a detailed description of your changes. Reference any resolved issues or previous discussions in other pull requests.
-4. Pull requests will need to be approved before being merged. The better the pull request description, the easier and quicker a pull request will be.
-5. Once approved, the pull request can be squash merged into master and we’re done. :tada:
+1. Please don’t forget to update the [README.md](../README.md) and other documentation with relevant details of changes.
+2. If applicable, make sure your pull request includes tests that thoroughly cover newly added lines.
+3. Submit your pull request to `master`.
+4. Provide a detailed description of your changes. Reference any resolved issues or previous discussions in other pull requests.
+5. Pull requests will need to be approved before being merged. The better the pull request description, the easier and quicker a pull request will be to review.
+6. Once approved, the pull request can be squash merged into master and we’re done. :tada:
+
+### General
 
 Please make sure to stick to general coding best practices and Swift code style as good as possible. You can find more info on that in GitHub’s [Swift Style Guide](https://github.com/github/swift-style-guide), the official Swift [API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). 
 
-Please also make sure that relevant code is documented. :page_with_curl:
+Please also make sure that relevant code is documented and tested. :page_with_curl:
 
 More information on how to create a pull request can be found in [this tutorial](https://help.github.com/articles/creating-a-pull-request-from-a-fork/). :mortar_board:
 
