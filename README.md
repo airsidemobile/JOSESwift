@@ -223,7 +223,7 @@ guard
     jws.isValid(for: publicKey),
     let message = String(data: jws.payload.data(), encoding: .utf8)
 else {
-    // Signature is invalid!
+    // Something went wrong!
 }
 
 message // Do you know the way to San Jose?
@@ -367,7 +367,7 @@ guard
     let payload = jwe.decrypt(with: privateKey)
     let message = String(data: payload.data(), encoding: .utf8)
 else {
-    // Decryption failed!
+    // Something went wrong!
 }
 
 message // Do you know the way to San Jose?
