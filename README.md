@@ -34,9 +34,17 @@ If you are missing a specific feature, algorithm or serialization, feel free to 
 
 Digitally signing and verifying arbitrary data using the JWS standard.
 
-Supported algorithms:
+*Supported algorithms:*
 
-- [RS512](https://tools.ietf.org/html/rfc7518#section-3.1)
+| HS256  | HS384  | HS512  | RS256  | RS384  | RS512              | ES256  | ES384  | ES512  | PS256  | PS384  | PS512  |
+| :--------: | :----: | :----: | :----: | :----: | :----: | :----------------: | :----: | :----: | :----: | :----: | :----: | :----: |
+|           |        |        |        |        |        | :white_check_mark: |        |        |        |        |        |        |
+
+*Supported serializations:*
+
+| Compact Serialization | JSON Serialization |
+| :-------------------: | :----------------: |
+| :white_check_mark:    |                    |
 
 ### JWE :lock:
 
