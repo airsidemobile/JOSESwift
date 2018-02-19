@@ -28,7 +28,43 @@ import Foundation
 public struct JWKSet {
 
     /// The `keys` member is an array of JWKs.
-    let keys: [JWK]
+    public let keys: [JWK]
+
+    /// Initializes a `JWKSet` containing the given keys.
+    ///
+    /// - Parameter keys: The keys that the JWK Set should contain.
+    public init(keys: [JWK]) {
+        self.keys = keys
+    }
+
+    /// Initializes a `JWKSet` from given JSON data.
+    ///
+    /// - Parameter data: The data containing the JWK Set.
+    /// - Throws: A `DecodingError` with relevant information.
+    public init(data: Data) throws {
+        self = try JSONDecoder().decode(JWKSet.self, from: data)
+    }
+
+
+    /// Computes the JSON representation of the JWK Set.
+    ///
+    /// - Returns: The JSON representation of the JWK Set as `String` or
+    ///            `nil` if the encoding failed.
+    public func jsonString() -> String? {
+        guard let json = try? JSONEncoder().encode(self) else {
+            return nil
+        }
+
+        return String(data: json, encoding: .utf8)
+    }
+
+    /// Computes the JSON representation of the JWK Set.
+    ///
+    /// - Returns: The JSON representation of the JWK Set as `Data` or
+    ///            `nil` if the encoding failed.
+    public func jsonData() -> Data? {
+        return try? JSONEncoder().encode(self)
+    }
 }
 
 extension JWKSet: Collection {

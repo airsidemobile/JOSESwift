@@ -214,4 +214,48 @@ class JWKSetCodingTests: XCTestCase {
         XCTAssertEqual(rsaPrivateKey["kid"], additionalParameters["kid"])
         XCTAssertEqual(rsaPrivateKey["alg"], additionalParameters["alg"])
     }
+
+    // - MARK: Convenience Helpers Test
+
+    func testInitWithData() {
+        let jwkSet = try! JWKSet(data: testDataTwoRSAPublicKeys)
+
+        XCTAssertEqual(jwkSet.keys.count, 2)
+
+        XCTAssert(jwkSet[0] is RSAPublicKey)
+
+        var rsaKey = jwkSet[0] as! RSAPublicKey
+
+        XCTAssertEqual(rsaKey.modulus, modulus)
+        XCTAssertEqual(rsaKey.exponent, exponent)
+        XCTAssertEqual(rsaKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaKey["alg"], additionalParameters["alg"])
+
+        XCTAssert(jwkSet[1] is RSAPublicKey)
+
+        rsaKey = jwkSet[1] as! RSAPublicKey
+
+        XCTAssertEqual(rsaKey.modulus, modulus)
+        XCTAssertEqual(rsaKey.exponent, exponent)
+        XCTAssertEqual(rsaKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaKey["alg"], additionalParameters["alg"])
+    }
+
+    func testToJsonData() {
+        let jwkSet = try! JWKSet(data: testDataTwoRSAPublicKeys)
+
+        // Only test count because the ordering of the keys might be different.
+        // The actual encoding is tested above with an ordered keys encoder.
+        XCTAssertEqual(jwkSet.jsonData()!.count, testDataTwoRSAPublicKeys.count)
+    }
+
+    func testToJsonString() {
+        let jwkSet = try! JWKSet(data: testDataTwoRSAPublicKeys)
+
+        // Only test count because the ordering of the keys might be different.
+        // The actual encoding is tested above with an ordered keys encoder.
+        XCTAssertEqual(jwkSet.jsonString()!.count, String(data: testDataTwoRSAPublicKeys, encoding: .utf8)!.count)
+    }
 }
