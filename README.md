@@ -30,6 +30,14 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 
 If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
 
+### General
+
+*Supported serializations:*
+
+| Compact Serialization | JSON Serialization |
+| :-------------------: | :----------------: |
+| :white_check_mark:    |                    |
+
 ### JWS :pencil:
 
 Digitally signing and verifying arbitrary data using the JWS standard.
@@ -40,19 +48,15 @@ Digitally signing and verifying arbitrary data using the JWS standard.
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 |  | |  | | | | :white_check_mark: | | | | | |
 
-*Supported serializations:*
-
-| Compact Serialization | JSON Serialization |
-| :-------------------: | :----------------: |
-| :white_check_mark:    |                    |
-
 ### JWE :lock:
 
 Encrypting and decrypting arbitrary data using the JWE standard.
 
-Supported key encryption algorithms:
+*Supported key encryption algorithms:*
 
-- [RSA1_5](https://tools.ietf.org/html/rfc7518#section-4.1)
+| RSA1_5 | RSA-OAEP | RSA-OAEP-256 | A128KW | A192KW | A256KW | dir | ECDH-ES | ECDH-ES+A128KW | ECDH-ES+A192KW | ECDH-ES+A256KW | A128GCMKW | A192GCMKW | A256GCMKW | PBES2-HS256+A128KW | PBES2-HS384+A192KW | PBES2-HS512+A256KW |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
+| :white_check_mark: | | | | | | | | | | | | | | | | |
 
 Supported content encryption algorithms: 
 
