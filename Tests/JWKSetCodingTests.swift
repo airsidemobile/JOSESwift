@@ -26,7 +26,7 @@ import XCTest
 
 class JWKSetCodingTests: XCTestCase {
 
-    // Test data from the JWK RFC: https://tools.ietf.org/html/rfc7517#appendix-A.
+    // - MARK: Test data from the JWK RFC: https://tools.ietf.org/html/rfc7517#appendix-A.
 
     let modulus = """
         0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhD\
@@ -54,7 +54,7 @@ class JWKSetCodingTests: XCTestCase {
         "kid": "2011-04-29"
     ]
 
-    let expectedJSONOneRSAPublicKey = """
+    let testDataOneRSAPublicKey = """
         {"keys":[{"alg":"RS256","e":"AQAB","kid":"2011-04-29","kty":"RSA","n":"0vx7agoe\
         bGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_\
         BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-\
@@ -63,7 +63,7 @@ class JWKSetCodingTests: XCTestCase {
         kEgU8awapJzKnqDKgw"}]}
         """.data(using: .utf8)!
 
-    let expectedJSONTwoRSAPublicKeys = """
+    let testDataTwoRSAPublicKeys = """
         {"keys":[{"alg":"RS256","e":"AQAB","kid":"2011-04-29","kty":"RSA","n":"0vx7agoe\
         bGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_\
         BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-\
@@ -77,7 +77,7 @@ class JWKSetCodingTests: XCTestCase {
         jF44-csFCur-kEgU8awapJzKnqDKgw"}]}
         """.data(using: .utf8)!
 
-    let expectedJSONRSAPublicAndPrivateKey = """
+    let testDataRSAPublicAndPrivateKey = """
         {"keys":[{"alg":"RS256","e":"AQAB","kid":"2011-04-29","kty":"RSA","n":"0vx7agoe\
         bGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_\
         BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-\
@@ -95,6 +95,8 @@ class JWKSetCodingTests: XCTestCase {
         Fd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw"}]}
         """.data(using: .utf8)!
 
+    // - MARK: Encoding Tests
+
     func testEncodingOneRSAPublicKey() {
         let set: JWKSet = [
             RSAPublicKey(modulus: modulus, exponent: exponent, additionalParameters: additionalParameters)
@@ -107,7 +109,7 @@ class JWKSetCodingTests: XCTestCase {
             XCTFail()
         }
 
-        XCTAssertEqual(try! encoder.encode(set), expectedJSONOneRSAPublicKey)
+        XCTAssertEqual(try! encoder.encode(set), testDataOneRSAPublicKey)
     }
 
     func testEncodingTwoRSAPublicKeys() {
@@ -123,7 +125,7 @@ class JWKSetCodingTests: XCTestCase {
             XCTFail()
         }
 
-        XCTAssertEqual(try! encoder.encode(set), expectedJSONTwoRSAPublicKeys)
+        XCTAssertEqual(try! encoder.encode(set), testDataTwoRSAPublicKeys)
     }
 
     func testEncodingRSAPublicAndPrivateKey() {
@@ -139,7 +141,77 @@ class JWKSetCodingTests: XCTestCase {
             XCTFail()
         }
 
-        XCTAssertEqual(try! encoder.encode(set), expectedJSONRSAPublicAndPrivateKey)
+        XCTAssertEqual(try! encoder.encode(set), testDataRSAPublicAndPrivateKey)
     }
-    
+
+    // - MARK: Decoding Tests
+
+    func testDecodingOneRSAPublicKey() {
+        let jwkSet = try! JSONDecoder().decode(JWKSet.self, from: testDataOneRSAPublicKey)
+
+        XCTAssertEqual(jwkSet.keys.count, 1)
+
+        XCTAssert(jwkSet[0] is RSAPublicKey)
+
+        let rsaKey = jwkSet[0] as! RSAPublicKey
+
+        XCTAssertEqual(rsaKey.modulus, modulus)
+        XCTAssertEqual(rsaKey.exponent, exponent)
+        XCTAssertEqual(rsaKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaKey["alg"], additionalParameters["alg"])
+    }
+
+    func testDecodingTwoRSAPublicKeys() {
+        let jwkSet = try! JSONDecoder().decode(JWKSet.self, from: testDataTwoRSAPublicKeys)
+
+        XCTAssertEqual(jwkSet.keys.count, 2)
+
+        XCTAssert(jwkSet[0] is RSAPublicKey)
+
+        var rsaKey = jwkSet[0] as! RSAPublicKey
+
+        XCTAssertEqual(rsaKey.modulus, modulus)
+        XCTAssertEqual(rsaKey.exponent, exponent)
+        XCTAssertEqual(rsaKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaKey["alg"], additionalParameters["alg"])
+
+        XCTAssert(jwkSet[1] is RSAPublicKey)
+
+        rsaKey = jwkSet[1] as! RSAPublicKey
+
+        XCTAssertEqual(rsaKey.modulus, modulus)
+        XCTAssertEqual(rsaKey.exponent, exponent)
+        XCTAssertEqual(rsaKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaKey["alg"], additionalParameters["alg"])
+    }
+
+    func testDecodingRSAPublicAndPrivateKey() {
+        let jwkSet = try! JSONDecoder().decode(JWKSet.self, from: testDataRSAPublicAndPrivateKey)
+
+        XCTAssertEqual(jwkSet.keys.count, 2)
+
+        XCTAssert(jwkSet[0] is RSAPublicKey)
+
+        let rsaPublicKey = jwkSet[0] as! RSAPublicKey
+
+        XCTAssertEqual(rsaPublicKey.modulus, modulus)
+        XCTAssertEqual(rsaPublicKey.exponent, exponent)
+        XCTAssertEqual(rsaPublicKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaPublicKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaPublicKey["alg"], additionalParameters["alg"])
+
+        XCTAssert(jwkSet[1] is RSAPrivateKey)
+
+        let rsaPrivateKey = jwkSet[1] as! RSAPrivateKey
+
+        XCTAssertEqual(rsaPrivateKey.modulus, modulus)
+        XCTAssertEqual(rsaPrivateKey.exponent, exponent)
+        XCTAssertEqual(rsaPrivateKey.privateExponent, privateExponent)
+        XCTAssertEqual(rsaPrivateKey["kty"], additionalParameters["kty"])
+        XCTAssertEqual(rsaPrivateKey["kid"], additionalParameters["kid"])
+        XCTAssertEqual(rsaPrivateKey["alg"], additionalParameters["alg"])
+    }
 }

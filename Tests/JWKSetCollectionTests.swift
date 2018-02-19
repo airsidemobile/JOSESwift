@@ -70,4 +70,16 @@ class JWKSetCollectionTests: XCTestCase {
         XCTAssertEqual(set.index(after: 1), rsaKeys.index(after: 1))
     }
 
+    func testCount() {
+        var set = JWKSet(keys: rsaKeys)
+
+        XCTAssertEqual(set.count, 3)
+        XCTAssertFalse(set.isEmpty)
+
+        set = JWKSet(keys: [])
+
+        XCTAssertEqual(set.count, 0)
+        XCTAssertTrue(set.isEmpty)
+    }
+
 }

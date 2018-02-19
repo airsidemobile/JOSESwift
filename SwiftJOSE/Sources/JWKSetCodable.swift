@@ -29,8 +29,8 @@ enum JWKSetParameter: String, CodingKey {
 
 extension JWKSet: Encodable {
     public func encode(to encoder: Encoder) throws {
-        var keys = encoder.container(keyedBy: JWKSetParameter.self)
-        var keyContainer = keys.nestedUnkeyedContainer(forKey: .keys)
+        var container = encoder.container(keyedBy: JWKSetParameter.self)
+        var keyContainer = container.nestedUnkeyedContainer(forKey: .keys)
 
         for key in self.keys {
             switch key {
@@ -42,5 +42,34 @@ extension JWKSet: Encodable {
                 break
             }
         }
+    }
+}
+
+extension JWKSet: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: JWKSetParameter.self)
+        var keyContainer = try container.nestedUnkeyedContainer(forKey: .keys)
+
+        var keys: [JWK] = []
+        while !keyContainer.isAtEnd {
+            var key: JWK?
+
+            do {
+                key = try keyContainer.decode(RSAPrivateKey.self)
+            } catch DecodingError.keyNotFound(RSAParameter.privateExponent, _) {
+                key = try keyContainer.decode(RSAPublicKey.self)
+            }
+
+            guard let rsaKey = key else {
+                throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
+                    No RSAPublicKey or RSAPrivateKey found to decode.
+                    """
+                )
+            }
+
+            keys.append(rsaKey)
+        }
+
+        self.init(keys: keys)
     }
 }
