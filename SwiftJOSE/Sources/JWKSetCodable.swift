@@ -35,8 +35,10 @@ extension JWKSet: Encodable {
         for key in self.keys {
             switch key {
             case is RSAPublicKey:
+                // swiftlint:disable:next force_cast
                 try keyContainer.encode(key as! RSAPublicKey)
             case is RSAPrivateKey:
+                // swiftlint:disable:next force_cast
                 try keyContainer.encode(key as! RSAPrivateKey)
             default:
                 break
