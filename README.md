@@ -68,6 +68,12 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 
 Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
 
+*Supported key types:*
+
+| EC | RSA | oct |
+| :--: | :--: | :--: |
+| | :white_check_mark: | |
+
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ## Installation
