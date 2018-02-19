@@ -23,7 +23,6 @@
 
 import Foundation
 
-
 /// A JWKSet represents a set of JWKs.
 public struct JWKSet {
 
@@ -44,7 +43,7 @@ public struct JWKSet {
     public init(data: Data) throws {
         self = try JSONDecoder().decode(JWKSet.self, from: data)
     }
-    
+
     /// Computes the JSON representation of the JWK Set.
     ///
     /// - Returns: The JSON representation of the JWK Set as `String` or
