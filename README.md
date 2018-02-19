@@ -58,9 +58,11 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
 | :white_check_mark: | | | | | | | | | | | | | | | | |
 
-Supported content encryption algorithms: 
+*Supported content encryption algorithms:*
 
-- [AES256CBC-HS512](https://tools.ietf.org/html/rfc7518#section-5.1)
+| A128CBC-HS256 | A192CBC-HS384 | A256CBC-HS512 | A128GCM | A192GCM | A256GCM |
+| :--: | :--: | :--: | :--: | :--: | :--: |
+| | | :white_check_mark: | | | |
 
 ### JWK :key:
 
