@@ -48,7 +48,10 @@ public struct Verifier {
     let verifier: VerifierProtocol
 
     public init(verifyingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
-        self.verifier = CryptoFactory.verifyer(for: verifyingAlgorithm, with: publicKey)
+        switch verifyingAlgorithm {
+        case .RS512:
+            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey)
+        }
     }
 
     func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
