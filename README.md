@@ -37,8 +37,8 @@ Digitally signing and verifying arbitrary data using the JWS standard.
 *Supported algorithms:*
 
 | HS256 | HS384 | HS512 | RS256 | RS384 | RS512 | ES256 | ES384 | ES512 | PS256  | PS384 | PS512 |
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-|  | |  | | | | :white_check_mark: | | | | | | |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+|  | |  | | | | :white_check_mark: | | | | | |
 
 *Supported serializations:*
 
