@@ -23,7 +23,11 @@
 
 import Foundation
 
+
+/// A JWKSet represents a set of JWKs.
 public struct JWKSet {
+
+    /// The `keys` member is an array of JWKs.
     let keys: [JWK]
 }
 
