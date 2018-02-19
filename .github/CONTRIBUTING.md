@@ -14,10 +14,10 @@ For feature contributions or bug fixes, please submit a pull request. For featur
 
 ### Pull Request Process
 
-1. Please don’t forget to update the [README.md](../README.md) and other documentation with relevant details of changes.
-2. If applicable, make sure your pull request includes tests that thoroughly cover newly added lines.
+1. If applicable, make sure your pull request includes tests that thoroughly cover newly added lines.
+2. Please don’t forget to update the [README.md](../README.md) and other documentation with relevant details of changes.
 3. Submit your pull request to `master`.
-4. Provide a detailed description of your changes. Reference any resolved issues or previous discussions in other pull requests.
+4. Provide a detailed description of your changes in the pull request description. Reference any resolved issues or previous discussions in other pull requests.
 5. Pull requests will need to be approved before being merged. The better the pull request description, the easier and quicker a pull request will be to review.
 6. Once approved, the pull request can be squash merged into master and we’re done. :tada:
 
