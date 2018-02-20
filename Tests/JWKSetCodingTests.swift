@@ -103,10 +103,14 @@ class JWKSetCodingTests: XCTestCase {
         ]
 
         let encoder = JSONEncoder()
+
+        // Sorting keys is needed to compare the encoding outcome with the already sorted test data.
+        // Otherwise the encoding is correct but because the order of keys is not defined, the encoding outcome and
+        // the test data can differ.
         if #available(iOS 11.0, *) {
             encoder.outputFormatting = .sortedKeys
         } else {
-            XCTFail()
+            XCTFail("Tests need to be executed on iOS11 or above to obatin sorted JSON keys for comparison.")
         }
 
         XCTAssertEqual(try! encoder.encode(set), testDataOneRSAPublicKey)
@@ -119,10 +123,14 @@ class JWKSetCodingTests: XCTestCase {
         ]
 
         let encoder = JSONEncoder()
+
+        // Sorting keys is needed to compare the encoding outcome with the already sorted test data.
+        // Otherwise the encoding is correct but because the order of keys is not defined, the encoding outcome and
+        // the test data can differ.
         if #available(iOS 11.0, *) {
             encoder.outputFormatting = .sortedKeys
         } else {
-            XCTFail()
+            XCTFail("Tests need to be executed on iOS11 or above to obatin sorted JSON keys for comparison.")
         }
 
         XCTAssertEqual(try! encoder.encode(set), testDataTwoRSAPublicKeys)
@@ -135,10 +143,14 @@ class JWKSetCodingTests: XCTestCase {
         ]
 
         let encoder = JSONEncoder()
+
+        // Sorting keys is needed to compare the encoding outcome with the already sorted test data.
+        // Otherwise the encoding is correct but because the order of keys is not defined, the encoding outcome and
+        // the test data can differ.
         if #available(iOS 11.0, *) {
             encoder.outputFormatting = .sortedKeys
         } else {
-            XCTFail()
+            XCTFail("Tests need to be executed on iOS11 or above to obatin sorted JSON keys for comparison.")
         }
 
         XCTAssertEqual(try! encoder.encode(set), testDataRSAPublicAndPrivateKey)
