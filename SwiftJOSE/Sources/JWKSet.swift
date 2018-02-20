@@ -23,7 +23,7 @@
 
 import Foundation
 
-/// A JWKSet represents a set of JWKs.
+/// A JWK set is a structure that represents a set of JWKs.
 public struct JWKSet {
 
     /// The `keys` member is an array of JWKs.
@@ -31,22 +31,22 @@ public struct JWKSet {
 
     /// Initializes a `JWKSet` containing the given keys.
     ///
-    /// - Parameter keys: The keys that the JWK Set should contain.
+    /// - Parameter keys: The keys that the JWK set should contain.
     public init(keys: [JWK]) {
         self.keys = keys
     }
 
     /// Initializes a `JWKSet` from given JSON data.
     ///
-    /// - Parameter data: The data containing the JWK Set.
+    /// - Parameter data: The data containing the JWK set.
     /// - Throws: A `DecodingError` with relevant information.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(JWKSet.self, from: data)
     }
 
-    /// Computes the JSON representation of the JWK Set.
+    /// Computes the JSON representation of the `JWKSet`.
     ///
-    /// - Returns: The JSON representation of the JWK Set as `String` or
+    /// - Returns: The JSON representation of the JWK set as `String` or
     ///            `nil` if the encoding failed.
     public func jsonString() -> String? {
         guard let json = try? JSONEncoder().encode(self) else {
@@ -56,9 +56,9 @@ public struct JWKSet {
         return String(data: json, encoding: .utf8)
     }
 
-    /// Computes the JSON representation of the JWK Set.
+    /// Computes the JSON representation of the `JWKSet`.
     ///
-    /// - Returns: The JSON representation of the JWK Set as `Data` or
+    /// - Returns: The JSON representation of the JWK set as `Data` or
     ///            `nil` if the encoding failed.
     public func jsonData() -> Data? {
         return try? JSONEncoder().encode(self)
