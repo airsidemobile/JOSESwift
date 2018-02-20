@@ -1,8 +1,8 @@
 //
-//  SecKeyExtensions.swift
-//  SwiftJOSE
+//  RSAPublicKeyToDataTests.swift
+//  Tests
 //
-//  Created by Daniel Egger on 14.12.17.
+//  Created by Daniel Egger on 12.02.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -21,19 +21,23 @@
 //  ---------------------------------------------------------------------------
 //
 
-import Foundation
-import Security
+import XCTest
+@testable import SwiftJOSE
 
-extension JWK {
-    static func secKeyRepresentation() throws -> SecKey {
-        // Todo: Do conversion from JWK modulus/exponent representation to SecKey.
-        // Todo: Decide on exact control flow.
-        // See https://airside.atlassian.net/browse/JOSE-92.
-        // See https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift.
+class RSAPublicKeyToDataTests: CryptoTestCase {
+    
+    func testPublicKey2048ToData() {
+        let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)
+        let data = try! jwk.converted(to: Data.self)
 
-        var item: CFTypeRef?
-        // This is just a mock will be deleted in the implementation story.
-        // swiftlint:disable:next force_cast
-        return item as! SecKey
+        XCTAssertEqual(data, publicKey2048Data)
     }
+
+    func testPublicKey4096ToData() {
+        let jwk = RSAPublicKey(modulus: expectedModulus4096Base64, exponent: expectedExponentBase64)
+        let data = try! jwk.converted(to: Data.self)
+
+        XCTAssertEqual(data, publicKey4096Data)
+    }
+    
 }
