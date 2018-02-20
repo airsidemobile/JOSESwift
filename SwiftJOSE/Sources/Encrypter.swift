@@ -111,8 +111,11 @@ public struct Encrypter {
     let symmetric: SymmetricEncrypter
 
     public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.asymmetric = CryptoFactory.encrypter(for: keyEncryptionAlgorithm, with: kek)
-        self.symmetric = CryptoFactory.encrypter(for: contentEncyptionAlgorithm)
+        switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
+        case (.RSAPKCS, .AES256CBCHS512) :
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek)
+            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
+        }
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
