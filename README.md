@@ -578,9 +578,19 @@ You can find detailed information about the relevant JOSE standards in the respe
 
 JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 
-:warning: **Todo:** Add main authors? Add contact addresses.
+### Project Authors and Maintainers
 
-During implementation, we relied upon the following projects as reference and inspiration:
+[@carol-mohemian](https://github.com/carol-mohemian),
+[@daniel-mohemian](https://github.com/daniel-mohemian),
+[@gigi-mohemian](https://github.com/gigi-mohemian)
+
+### Reviewers
+
+[@haeser](https://github.com/haeser), [@michael-mohemian](https://github.com/michael-mohemian)
+
+### Thanks
+
+To the following projects, which served us as reference and inspiration during development:
 
 - [Heimdall](https://github.com/henrinormak/Heimdall)
 - [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt)
