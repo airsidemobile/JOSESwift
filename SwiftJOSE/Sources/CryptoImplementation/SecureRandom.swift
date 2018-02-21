@@ -23,7 +23,7 @@
 
 import Foundation
 
-internal enum SecureRandomGenerationError: Error {
+internal enum SecureRandomError: Error {
     case failed(status: OSStatus)
 }
 
@@ -41,7 +41,7 @@ internal struct SecureRandom {
         }
 
         guard randomGenerationStatus == errSecSuccess else {
-            throw SecureRandomGenerationError.failed(status: randomGenerationStatus)
+            throw SecureRandomError.failed(status: randomGenerationStatus)
         }
 
         return generatedRandom
