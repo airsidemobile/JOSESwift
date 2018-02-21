@@ -292,12 +292,12 @@
 		65A9D3E21F45CDF1004E0B61 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				C86B876B203D84D300208387 /* CryptoImplementation */,
 				6582C0BB1F4B09DC00B153D5 /* Common */,
 				65FABAEB1F4AD8FA006D7679 /* JWS */,
 				653355281F8F6B4A00A660C6 /* JWE */,
 				65E9CE201FE2AB06005DF679 /* JWK */,
 				65FABAE81F4ABF61006D7679 /* CryptoInterface */,
+				C86B876B203D84D300208387 /* CryptoImplementation */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -341,7 +341,6 @@
 				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
 				65826AB12028696000AFFC46 /* RSAKeyCodable.swift */,
 				65826AAF2028659B00AFFC46 /* JWKErrors.swift */,
-				6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */,
 				6582614E2029F2D100B594ED /* ASN1DERParsing.swift */,
 				6514ADC82031DD15008A4DD3 /* ASN1DEREncoding.swift */,
 			);
@@ -423,6 +422,7 @@
 		C86B876B203D84D300208387 /* CryptoImplementation */ = {
 			isa = PBXGroup;
 			children = (
+				6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */,
 				6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */,
 				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
 				C81DD9271FD7096100026024 /* HMAC.swift */,
