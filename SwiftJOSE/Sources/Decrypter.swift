@@ -29,19 +29,11 @@ internal protocol AsymmetricDecrypter {
 
     var algorithm: AsymmetricKeyAlgorithm { get }
 
-    /**
-     Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
-     - Parameters:
-        - ciphertext: The encrypted cipher text to decrypt.
-        - algorithm: The algorithm used to decrypt the cipher text.
-     
-     - Throws:
-        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for decryption.
-        - `EncryptionError.cipherTextLenghtNotSatisfied`: If the cipher text length exceeds the allowed maximum.
-        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
-     
-     - Returns: The plain text (decrypted cipher text).
-     */
+    /// Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
+    ///
+    /// - Parameter ciphertext: The encrypted cipher text to decrypt.
+    /// - Returns: The plain text (decrypted cipher text).
+    /// - Throws: `EncryptionError` if any error occured during decryption.
     func decrypt(_ ciphertext: Data) throws -> Data
 }
 
@@ -50,17 +42,13 @@ internal protocol SymmetricDecrypter {
 
     var algorithm: SymmetricKeyAlgorithm { get }
 
-    /**
-     Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
-     - Parameters:
-        - context: The `SymmetricDecryptionContext` containing the ciphertext, the initialization vector, additional authenticated data and the authentication tag.
-        - symmetricKey: The key which contains the HMAC and encryption key.
-     
-     - Throws:
-        - `EncryptionError.decryptingFailed(descritpion: String)`: If the decryption failed with a specific error.
-     
-     - Returns: The plain text (decrypted cipher text).
-     */
+    /// Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
+    ///
+    /// - Parameters:
+    ///   - context: The `SymmetricDecryptionContext` containing the ciphertext, the initialization vector, additional authenticated data and the authentication tag.
+    ///   - symmetricKey: The key which contains the HMAC and encryption key.
+    /// - Returns: The plain text (decrypted cipher text).
+    /// - Throws: `EncryptionError` if any error occurs during decryption.
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data
 }
 

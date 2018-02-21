@@ -37,22 +37,15 @@ class HMACTests: CryptoTestCase {
         super.tearDown()
     }
 
-    /**
-     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
-     
-     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
-     */
+    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
     func testHMACCalculation() {
         let hmacOutput = HMAC.calculate(from: testData, with: testKey, using: .SHA512)
 
         XCTAssertEqual(hmacOutput, hmacTestOutput)
     }
 
-    /**
-     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
-     
-     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
-     */
+
+    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
     func testHMACCalculationWithFalseKey() {
         let falseKey = "abcdefg".hexadecimalToData()!
 
@@ -61,11 +54,7 @@ class HMACTests: CryptoTestCase {
         XCTAssertNotEqual(hmacOutput, hmacTestOutput)
     }
 
-    /**
-     [RFC-4231]: https://tools.ietf.org/html/rfc4231 "HMAC Test data"
-     
-     Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231].
-     */
+    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
     func testHMACCalculationWithFalseData() {
         let falseData = "abcdefg".hexadecimalToData()!
 

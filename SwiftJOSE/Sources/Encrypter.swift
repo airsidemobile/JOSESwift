@@ -54,19 +54,11 @@ internal protocol AsymmetricEncrypter {
     /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
     init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
-    /**
-     Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
-     - Parameters:
-        - plaintext: The plain text to encrypt.
-        - algorithm: The algorithm used to encrypt the plain text.
-     
-     - Throws:
-        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for encryption.
-        - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the allowed maximum.
-        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-     
-     - Returns: The cipher text (encrypted plain text).
-     */
+    /// Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
+    ///
+    /// - Parameter plaintext: The plain text to encrypt.
+    /// - Returns: The cipher text (encrypted plain text).
+    /// - Throws: `EncryptionError` if any error occured during encryption.
     func encrypt(_ plaintext: Data) throws -> Data
 }
 
@@ -77,19 +69,14 @@ internal protocol SymmetricEncrypter {
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
     init(algorithm: SymmetricKeyAlgorithm)
 
-    /**
-     Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
-     - Parameters:
-        - plaintext: The plain text to encrypt.
-        - symmetricKey: The key which contains the HMAC and encryption key.
-        - additionalAuthenticatedData: The data used for integrity protection. 
-     
-     - Throws:
-        - `EncryptionError.keyLengthNotSatisfied`: If the provided key is not long enough to contain the HMAC and the actual encryption key.
-        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-     
-     - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
-     */
+    /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
+    ///
+    /// - Parameters:
+    ///   - plaintext: The plain text to encrypt.
+    ///   - symmetricKey: The key which contains the HMAC and encryption key.
+    ///   - additionalAuthenticatedData: The data used for integrity protection.
+    /// - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
+    /// - Throws: `EncryptioError` if any error occured during encryption.
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
