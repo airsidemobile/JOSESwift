@@ -75,7 +75,7 @@ public enum SymmetricKeyAlgorithm: String {
         switch self {
         case .A256CBCHS512:
             guard checkKeyLength(for: inputKey) else {
-                throw EncryptionError.keyLengthNotSatisfied
+                throw JWEError.keyLengthNotSatisfied
             }
 
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))

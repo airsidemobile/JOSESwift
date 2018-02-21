@@ -30,7 +30,7 @@ internal struct AESDecrypter: SymmetricDecrypter {
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data {
         // Check if the key length contains both HMAC key and the actual symmetric key.
         guard algorithm.checkKeyLength(for: symmetricKey) else {
-            throw EncryptionError.keyLengthNotSatisfied
+            throw JWEError.keyLengthNotSatisfied
         }
 
         // Get the two keys for the HMAC and the symmetric encryption.
@@ -48,7 +48,7 @@ internal struct AESDecrypter: SymmetricDecrypter {
         let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.hmacAlgorithm)
 
         guard context.authenticationTag == algorithm.authenticationTag(for: hmacOutput) else {
-            throw EncryptionError.hmacNotAuthenticated
+            throw JWEError.hmacNotAuthenticated
         }
 
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector, return the plaintext if no error occured.

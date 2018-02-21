@@ -81,11 +81,11 @@ public struct Decrypter {
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
         guard let alg = context.header.algorithm, alg == asymmetric.algorithm else {
-            throw EncryptionError.keyEncryptionAlgorithmMismatch
+            throw JWEError.keyEncryptionAlgorithmMismatch
         }
 
         guard let enc = context.header.encryptionAlgorithm, enc == symmetric.algorithm else {
-            throw EncryptionError.contentEncryptionAlgorithmMismatch
+            throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
         var cek: Data

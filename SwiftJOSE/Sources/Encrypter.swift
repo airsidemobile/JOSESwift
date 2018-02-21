@@ -24,18 +24,6 @@
 import Foundation
 import SJCommonCrypto
 
-public enum EncryptionError: Error {
-    case encryptionAlgorithmNotSupported
-    case keyEncryptionAlgorithmMismatch
-    case contentEncryptionAlgorithmMismatch
-    case plainTextLengthNotSatisfied
-    case cipherTextLenghtNotSatisfied
-    case keyLengthNotSatisfied
-    case hmacNotAuthenticated
-    case encryptingFailed(description: String)
-    case decryptingFailed(description: String)
-}
-
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricKeyAlgorithm { get }
@@ -47,7 +35,7 @@ internal protocol AsymmetricEncrypter {
     ///
     /// - Parameter plaintext: The plain text to encrypt.
     /// - Returns: The cipher text (encrypted plain text).
-    /// - Throws: `EncryptionError` if any error occured during encryption.
+    /// - Throws: `JWEError` if any error occured during encryption.
     func encrypt(_ plaintext: Data) throws -> Data
 }
 
@@ -65,7 +53,7 @@ internal protocol SymmetricEncrypter {
     ///   - symmetricKey: The key which contains the HMAC and encryption key.
     ///   - additionalAuthenticatedData: The data used for integrity protection.
     /// - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
-    /// - Throws: `EncryptioError` if any error occured during encryption.
+    /// - Throws: `JWEError` if any error occured during encryption.
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
@@ -96,10 +84,10 @@ public struct Encrypter {
 
     internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         guard let alg = header.algorithm, alg == asymmetric.algorithm else {
-            throw EncryptionError.keyEncryptionAlgorithmMismatch
+            throw JWEError.keyEncryptionAlgorithmMismatch
         }
         guard let enc = header.encryptionAlgorithm, enc == symmetric.algorithm else {
-            throw EncryptionError.contentEncryptionAlgorithmMismatch
+            throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
         let cek = try SecureRandom.generate(count: enc.keyLength)

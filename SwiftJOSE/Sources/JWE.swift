@@ -23,6 +23,13 @@
 
 import Foundation
 
+internal enum JWEError: Error {
+    case keyEncryptionAlgorithmMismatch
+    case contentEncryptionAlgorithmMismatch
+    case keyLengthNotSatisfied
+    case hmacNotAuthenticated
+}
+
 /// A JWE consisting of five parameters as specified in [RFC-7516](https://tools.ietf.org/html/rfc7516).
 /// The JWE is fully initialized with those five (immutable) parameters.
 /// All representations of the JWE or it's parts like it's compact serialization or the plaintext can be derived from those five parameters.
