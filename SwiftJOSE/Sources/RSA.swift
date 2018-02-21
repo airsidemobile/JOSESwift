@@ -23,6 +23,16 @@
 
 import Foundation
 
+internal enum RSAError: Error {
+    case algorithmNotSupported
+    case signingFailed(description: String)
+    case verifyingFailed(description: String)
+    case plainTextLengthNotSatisfied
+    case cipherTextLenghtNotSatisfied
+    case encryptingFailed(description: String)
+    case decryptingFailed(description: String)
+}
+
 fileprivate extension SignatureAlgorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
@@ -72,13 +82,13 @@ internal struct RSA {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to sign with a given private key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
-            throw SigningError.algorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Sign the input with a given `SecKeyAlgorithm` and a private key.
         var signingError: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
-            throw SigningError.signingFailed(
+            throw RSAError.signingFailed(
                 description: signingError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }
@@ -101,7 +111,7 @@ internal struct RSA {
         guard
             let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm)
         else {
-            throw SigningError.algorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Verify the signature against an input with a given `SecKeyAlgorithm` and a public key.
@@ -112,7 +122,7 @@ internal struct RSA {
             )
         else {
             if let description = verificationError?.takeRetainedValue().localizedDescription {
-                throw SigningError.verificationFailed(descritpion: description)
+                throw RSAError.verifyingFailed(description: description)
             }
 
             return false
@@ -136,13 +146,13 @@ internal struct RSA {
             let secKeyAlgorithm = algorithm.secKeyAlgorithm,
             SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm)
         else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Check if the plain text length does not exceed the maximum.
         // e.g. for RSA1_5 the plaintext must be 11 bytes smaller than the public key's modulus.
         guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
-            throw EncryptionError.plainTextLengthNotSatisfied
+            throw RSAError.plainTextLengthNotSatisfied
         }
 
         // Encrypt the plain text with a given `SecKeyAlgorithm` and a public key.
@@ -150,7 +160,7 @@ internal struct RSA {
         guard
             let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError)
         else {
-            throw EncryptionError.encryptingFailed(
+            throw RSAError.encryptingFailed(
                 description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }
@@ -173,13 +183,13 @@ internal struct RSA {
             let secKeyAlgorithm = algorithm.secKeyAlgorithm,
             SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm)
         else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Check if the cipher text length does not exceed the maximum.
         // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
         guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
-            throw EncryptionError.cipherTextLenghtNotSatisfied
+            throw RSAError.cipherTextLenghtNotSatisfied
         }
 
         // Decrypt the cipher text with a given `SecKeyAlgorithm` and a private key.
@@ -187,7 +197,7 @@ internal struct RSA {
         guard
             let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError)
         else {
-            throw EncryptionError.decryptingFailed(
+            throw RSAError.decryptingFailed(
                 description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }

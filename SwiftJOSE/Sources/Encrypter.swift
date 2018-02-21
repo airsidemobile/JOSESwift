@@ -24,7 +24,7 @@
 import Foundation
 import SJCommonCrypto
 
-public enum EncryptionError: Error, Equatable {
+public enum EncryptionError: Error {
     case encryptionAlgorithmNotSupported
     case keyEncryptionAlgorithmMismatch
     case contentEncryptionAlgorithmMismatch
@@ -34,17 +34,6 @@ public enum EncryptionError: Error, Equatable {
     case hmacNotAuthenticated
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
-
-    public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
-        switch (lhs, rhs) {
-        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
-            return true
-        case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
-            return true
-        default:
-            return false
-        }
-    }
 }
 
 internal protocol AsymmetricEncrypter {

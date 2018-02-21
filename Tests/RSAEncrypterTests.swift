@@ -24,6 +24,19 @@
 import XCTest
 @testable import SwiftJOSE
 
+extension RSAError: Equatable {
+    public static func ==(lhs: RSAError, rhs: RSAError) -> Bool {
+        switch (lhs, rhs) {
+        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
+            return true
+        case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 class RSAEncrypterTests: CryptoTestCase {
 
     override func setUp() {
@@ -63,7 +76,7 @@ class RSAEncrypterTests: CryptoTestCase {
 
         let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKey2048!)
         XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
-            XCTAssertEqual(error as? EncryptionError, EncryptionError.plainTextLengthNotSatisfied)
+            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
         }
     }
 

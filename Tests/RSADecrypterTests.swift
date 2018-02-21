@@ -55,7 +55,7 @@ class RSADecrypterTests: CryptoTestCase {
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
         XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
-            XCTAssertEqual(error as? EncryptionError, EncryptionError.cipherTextLenghtNotSatisfied)
+            XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
         }
     }
 
