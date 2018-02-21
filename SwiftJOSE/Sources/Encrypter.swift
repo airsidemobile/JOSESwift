@@ -99,7 +99,7 @@ public struct Encrypter {
 
     public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSAPKCS, .AES256CBCHS512) :
+        case (.RSAPKCS, .A256CBCHS512) :
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         }

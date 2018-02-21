@@ -39,41 +39,41 @@ public enum AsymmetricKeyAlgorithm: String {
 
 /// An algorithm for symmetric encryption and decryption.
 ///
-/// - AES256CBCHS512
+/// - A256CBC-HS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
 public enum SymmetricKeyAlgorithm: String {
-    case AES256CBCHS512 = "A256CBC-HS512"
+    case A256CBCHS512 = "A256CBC-HS512"
 
     var hmacAlgorithm: HMACAlgorithm {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return .SHA512
         }
     }
 
     var keyLength: Int {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return 64
         }
     }
 
     var initializationVectorLength: Int {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return 16
         }
     }
 
     func checkKeyLength(for key: Data) -> Bool {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return key.count == 64
         }
     }
 
     func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             guard checkKeyLength(for: inputKey) else {
                 throw EncryptionError.keyLengthNotSatisfied
             }
@@ -84,7 +84,7 @@ public enum SymmetricKeyAlgorithm: String {
 
     func authenticationTag(for hmac: Data) -> Data {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return hmac.subdata(in: 0..<32)
         }
     }

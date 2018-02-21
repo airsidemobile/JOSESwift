@@ -51,7 +51,7 @@ class AESDecrypterTests: CryptoTestCase {
             authenticationTag: authenticationTag!
         )
 
-        let decrypter = AESDecrypter(algorithm: .AES256CBCHS512)
+        let decrypter = AESDecrypter(algorithm: .A256CBCHS512)
         let plaintext = try! decrypter.decrypt(context, with: keyData!)
 
         XCTAssertEqual(plaintext, testPlaintext!)

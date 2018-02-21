@@ -27,14 +27,14 @@ import SJCommonCrypto
 fileprivate extension SymmetricKeyAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return CCAlgorithm(kCCAlgorithmAES128)
         }
     }
 
     func checkAESKeyLength(for key: Data) -> Bool {
         switch self {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             return key.count == kCCKeySizeAES256
         }
     }
@@ -54,7 +54,7 @@ internal struct AES {
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
     static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
                 throw EncryptionError.keyLengthNotSatisfied
             }
@@ -82,7 +82,7 @@ internal struct AES {
     ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
     static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
-        case .AES256CBCHS512:
+        case .A256CBCHS512:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
                 throw EncryptionError.keyLengthNotSatisfied
             }

@@ -35,9 +35,9 @@ class JWETests: CryptoTestCase {
     }
 
     func testJWERoundtrip() {
-        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
+        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey2048!, contentEncyptionAlgorithm: .AES256CBCHS512)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
         let jweEnc = JWE(header: header, payload: payload, encrypter: encrypter)!
 
         let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
@@ -55,9 +55,9 @@ class JWETests: CryptoTestCase {
     }
 
     func testDecryptFails() {
-        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
+        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey2048!, contentEncyptionAlgorithm: .AES256CBCHS512)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
         let jweEnc = JWE(header: header, payload: payload, encrypter: encrypter)!
 
         let attributes: [String: Any] = [

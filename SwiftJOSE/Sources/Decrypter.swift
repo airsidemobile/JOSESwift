@@ -73,7 +73,7 @@ public struct Decrypter {
 
     public init(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSAPKCS, .AES256CBCHS512):
+        case (.RSAPKCS, .A256CBCHS512):
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         }
