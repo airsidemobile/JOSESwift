@@ -141,7 +141,7 @@ internal struct RSA {
         }
 
         // Check if the plain text length does not exceed the maximum.
-        // e.g. for RSAPKCS the plaintext must be 11 bytes smaller than the public key's modulus.
+        // e.g. for RSA1_5 the plaintext must be 11 bytes smaller than the public key's modulus.
         guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
             throw EncryptionError.plainTextLengthNotSatisfied
         }
@@ -178,7 +178,7 @@ internal struct RSA {
         }
 
         // Check if the cipher text length does not exceed the maximum.
-        // e.g. for RSAPKCS the cipher text has the same length as the private key's modulus.
+        // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
         guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
             throw EncryptionError.cipherTextLenghtNotSatisfied
         }

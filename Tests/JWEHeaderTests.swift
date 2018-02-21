@@ -54,15 +54,15 @@ class JWEHeaderTests: XCTestCase {
     }
 
     func testInitWithAlgAndEnc() {
-        let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .A256CBCHS512)
+        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
 
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
 
         XCTAssertNotNil(header.algorithm)
         XCTAssertNotNil(header.encryptionAlgorithm)
-        XCTAssertEqual(header.algorithm!, .RSAPKCS)
+        XCTAssertEqual(header.algorithm!, .RSA1_5)
         XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
     }
 
