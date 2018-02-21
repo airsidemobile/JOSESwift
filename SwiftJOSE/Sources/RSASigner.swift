@@ -24,11 +24,11 @@
 import Foundation
 
 /// A `Signer` to sign an input with an `RSA` algorithm.
-public struct RSASigner: SignerProtocol {
+internal struct RSASigner: SignerProtocol {
     let algorithm: SignatureAlgorithm
     let privateKey: SecKey
 
-    public func sign(_ signingInput: Data) throws -> Data {
+    func sign(_ signingInput: Data) throws -> Data {
         return try RSA.sign(signingInput, with: privateKey, and: algorithm)
     }
 }

@@ -55,7 +55,7 @@ public struct Signer {
         }
     }
 
-    func sign(header: JWSHeader, payload: Payload) throws -> Data {
+    internal func sign(header: JWSHeader, payload: Payload) throws -> Data {
         guard let alg = header.algorithm, alg == signer.algorithm else {
             throw SigningError.algorithmMismatch
         }

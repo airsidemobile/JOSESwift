@@ -105,7 +105,7 @@ public struct Encrypter {
         }
     }
 
-    func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
+    internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         guard let alg = header.algorithm, alg == asymmetric.algorithm else {
             throw EncryptionError.keyEncryptionAlgorithmMismatch
         }

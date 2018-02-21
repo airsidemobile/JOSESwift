@@ -79,7 +79,7 @@ public struct Decrypter {
         }
     }
 
-    func decrypt(_ context: DecryptionContext) throws -> Data {
+    internal func decrypt(_ context: DecryptionContext) throws -> Data {
         guard let alg = context.header.algorithm, alg == asymmetric.algorithm else {
             throw EncryptionError.keyEncryptionAlgorithmMismatch
         }

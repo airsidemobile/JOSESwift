@@ -49,7 +49,7 @@ public struct Verifier {
         }
     }
 
-    func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
+    internal func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
         guard let alg = header.algorithm, alg == verifier.algorithm else {
             throw SigningError.algorithmMismatch
         }

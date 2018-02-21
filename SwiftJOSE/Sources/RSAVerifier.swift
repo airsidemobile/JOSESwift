@@ -24,11 +24,11 @@
 import Foundation
 
 /// A `Verifier` to verify a signature created with a `RSA` algorithm. 
-public struct RSAVerifier: VerifierProtocol {
+internal struct RSAVerifier: VerifierProtocol {
     let algorithm: SignatureAlgorithm
     let publicKey: SecKey
 
-    public func verify(_ verifyingInput: Data, against signature: Data) throws -> Bool {
+    func verify(_ verifyingInput: Data, against signature: Data) throws -> Bool {
         return try RSA.verify(verifyingInput, against: signature, with: publicKey, and: algorithm)
     }
 }

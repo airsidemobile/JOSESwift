@@ -60,7 +60,6 @@ fileprivate extension AsymmetricKeyAlgorithm {
 }
 
 internal struct RSA {
-
     ///  Signs input data with a given `RSA` algorithm and the corresponding private key.
     ///
     /// - Parameters:
