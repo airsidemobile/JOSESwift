@@ -24,6 +24,12 @@
 import Foundation
 import SJCommonCrypto
 
+internal enum AESError: Error {
+    case keyLengthNotSatisfied
+    case encryptingFailed(description: String)
+    case decryptingFailed(description: String)
+}
+
 fileprivate extension SymmetricKeyAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
@@ -49,20 +55,18 @@ internal struct AES {
     ///   - algorithm: The algorithm used to encrypt the plain text.
     ///   - initializationVector: The initial block.
     /// - Returns: The cipher text (encrypted plain text).
-    /// - Throws:
-    ///   - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-    ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
+    /// - Throws: `AESError` if any error occurs during encryption.
     static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
-                throw EncryptionError.keyLengthNotSatisfied
+                throw AESError.keyLengthNotSatisfied
             }
 
             let encrypted = aes(operation: CCOperation(kCCEncrypt), data: plaintext, key: encryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard encrypted.status == UInt32(kCCSuccess) else {
-                throw EncryptionError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
+                throw AESError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
             }
 
             return encrypted.data
@@ -77,20 +81,18 @@ internal struct AES {
     ///   - algorithm: The algorithm used to decrypt the cipher text.
     ///   - initializationVector: The initial block.
     /// - Returns: The plain text (decrypted cipher text).
-    /// - Throws:
-    ///   - `EncryptionError.decryptingFailed(description: String)`: If the encryption failed with a specific error.
-    ///   - `EncryptionError.keyLengthNotSatisfied`: If the encryption key length does not match the standards.
+    /// - Throws: `AESError` if any error occurs during decryption.
     static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
-                throw EncryptionError.keyLengthNotSatisfied
+                throw AESError.keyLengthNotSatisfied
             }
 
             let decrypted = aes(operation: CCOperation(kCCDecrypt), data: cipherText, key: decryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard decrypted.status == UInt32(kCCSuccess) else {
-                throw EncryptionError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
+                throw AESError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
             }
 
             return decrypted.data
