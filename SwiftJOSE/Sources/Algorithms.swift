@@ -32,9 +32,9 @@ public enum SignatureAlgorithm: String {
 
 /// An algorithm for asymmetric encryption and decryption.
 ///
-/// - RSAPKCS
+/// - RSA1_5: RSAES-PKCS1-v1_5
 public enum AsymmetricKeyAlgorithm: String {
-    case RSAPKCS = "RSA1_5"
+    case RSA1_5 = "RSA1_5"
 }
 
 /// An algorithm for symmetric encryption and decryption.

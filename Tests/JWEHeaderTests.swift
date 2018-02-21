@@ -40,7 +40,7 @@ class JWEHeaderTests: XCTestCase {
         let header = try! JWEHeader(parameters: parameterDict, headerData: parameterData)
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
     }
 
@@ -49,7 +49,7 @@ class JWEHeaderTests: XCTestCase {
         let header = JWEHeader(data)!
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
-        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAPKCS.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.data(), data)
     }
 
