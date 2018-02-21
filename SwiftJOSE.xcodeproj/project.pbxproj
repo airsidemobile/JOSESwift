@@ -33,7 +33,6 @@
 		65826AB02028659B00AFFC46 /* JWKErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AAF2028659B00AFFC46 /* JWKErrors.swift */; };
 		65826AB22028696000AFFC46 /* RSAKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB12028696000AFFC46 /* RSAKeyCodable.swift */; };
 		65826AB420286B3A00AFFC46 /* JWKRSAEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */; };
-		65826AB6202883BA00AFFC46 /* JWKRSADecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */; };
 		65A103A1202B03BB00D22BF5 /* ASN1DERParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */; };
 		65A103A3202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
@@ -121,7 +120,6 @@
 		65826AAF2028659B00AFFC46 /* JWKErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKErrors.swift; sourceTree = "<group>"; };
 		65826AB12028696000AFFC46 /* RSAKeyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeyCodable.swift; sourceTree = "<group>"; };
 		65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWKRSAEncodingTests.swift; sourceTree = "<group>"; };
-		65826AB5202883BA00AFFC46 /* JWKRSADecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JWKRSADecodingTests.swift; path = ../JWKRSADecodingTests.swift; sourceTree = "<group>"; };
 		65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DERParsingTests.swift; sourceTree = "<group>"; };
 		65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRSAPublicKeyTests.swift; sourceTree = "<group>"; };
 		65A77E931F7285A900A66DDE /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
@@ -287,7 +285,8 @@
 				65FABAEB1F4AD8FA006D7679 /* JWS */,
 				653355281F8F6B4A00A660C6 /* JWE */,
 				65E9CE201FE2AB06005DF679 /* JWK */,
-				65FABAE81F4ABF61006D7679 /* Crypto */,
+				C8151A82203D64C400A5FB93 /* Crypto Implementation */,
+				65FABAE81F4ABF61006D7679 /* Crypto Interface */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -334,15 +333,9 @@
 			name = JWK;
 			sourceTree = "<group>";
 		};
-		65FABAE81F4ABF61006D7679 /* Crypto */ = {
+		65FABAE81F4ABF61006D7679 /* Crypto Interface */ = {
 			isa = PBXGroup;
 			children = (
-				65F44EB61FE2E35D000C5EA0 /* SecKeyExtensions.swift */,
-				6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */,
-				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
-				C81DD9271FD7096100026024 /* HMAC.swift */,
-				C81DBD571FFE66E700ECF69E /* AES.swift */,
-				C8610F0A2029D21800859FCC /* RSA.swift */,
 				65FABAE91F4AC2D3006D7679 /* RSASigner.swift */,
 				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
 				65617FCC1F90FB7600D8C743 /* RSAEncrypter.swift */,
@@ -350,7 +343,7 @@
 				6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */,
 				6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */,
 			);
-			name = Crypto;
+			name = "Crypto Interface";
 			sourceTree = "<group>";
 		};
 		65FABAEB1F4AD8FA006D7679 /* JWS */ = {
@@ -392,6 +385,18 @@
 				65A9D3E21F45CDF1004E0B61 /* Sources */,
 			);
 			path = SwiftJOSE;
+			sourceTree = "<group>";
+		};
+		C8151A82203D64C400A5FB93 /* Crypto Implementation */ = {
+			isa = PBXGroup;
+			children = (
+				6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */,
+				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
+				C8610F0A2029D21800859FCC /* RSA.swift */,
+				C81DD9271FD7096100026024 /* HMAC.swift */,
+				C81DBD571FFE66E700ECF69E /* AES.swift */,
+			);
+			name = "Crypto Implementation";
 			sourceTree = "<group>";
 		};
 		C8610F54202DD93600859FCC /* Frameworks */ = {
