@@ -32,7 +32,7 @@ public enum SignatureAlgorithm: String {
 
 /// An algorithm for asymmetric encryption and decryption.
 ///
-/// - RSA1_5: RSAES-PKCS1-v1_5
+/// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
 public enum AsymmetricKeyAlgorithm: String {
     case RSA1_5 = "RSA1_5"
 }
