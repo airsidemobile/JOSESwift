@@ -31,11 +31,6 @@ internal struct AESEncrypter: SymmetricEncrypter {
         // Generate random intitialization vector.
         let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength)
 
-        // Check if the key length contains both HMAC key and the actual symmetric key.
-        guard algorithm.checkKeyLength(for: symmetricKey) else {
-            throw EncryptionError.keyLengthNotSatisfied
-        }
-
         // Get the two keys for the HMAC and the symmetric encryption.
         let keys = try algorithm.retrieveKeys(from: symmetricKey)
         let hmacKey = keys.hmacKey
