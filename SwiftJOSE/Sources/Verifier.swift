@@ -35,7 +35,7 @@ protocol VerifierProtocol {
     ///   - signingInput: The input to verify against.
     ///   - signature: The signature to verify.
     /// - Returns: True if the signature is verified, false if it is not verified.
-    /// - Throws: `SigningError` if any error occurs during verifying.
+    /// - Throws: `JWSError` if any error occurs during verifying.
     func verify(_ signingInput: Data, against signature: Data) throws -> Bool
 }
 
@@ -51,11 +51,11 @@ public struct Verifier {
 
     internal func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
         guard let alg = header.algorithm, alg == verifier.algorithm else {
-            throw SigningError.algorithmMismatch
+            throw JWSError.algorithmMismatch
         }
 
         guard let signingInput = [header, payload].asJOSESigningInput() else {
-            throw SigningError.cannotComputeSigningInput
+            throw JWSError.cannotComputeSigningInput
         }
 
         return try verifier.verify(signingInput, against: signature)

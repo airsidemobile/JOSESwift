@@ -23,6 +23,11 @@
 
 import Foundation
 
+internal enum JWSError: Error {
+    case algorithmMismatch
+    case cannotComputeSigningInput
+}
+
 /// A JWS object consisting of a header, payload and signature. The three components of a JWS object
 /// cannot be changed once the object is initialized.
 public struct JWS {

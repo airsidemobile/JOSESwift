@@ -23,14 +23,6 @@
 
 import Foundation
 
-public enum SigningError: Error {
-    case algorithmNotSupported
-    case signingFailed(description: String)
-    case verificationFailed(descritpion: String)
-    case algorithmMismatch
-    case cannotComputeSigningInput
-}
-
 protocol SignerProtocol {
     var algorithm: SignatureAlgorithm { get }
 
@@ -41,7 +33,7 @@ protocol SignerProtocol {
     ///
     /// - Parameter signingInput: The input to sign.
     /// - Returns: The signature.
-    /// - Throws: `SigningError` if any error occurs while signing.
+    /// - Throws: `JWSError` if any error occurs while signing.
     func sign(_ signingInput: Data) throws -> Data
 }
 
@@ -57,11 +49,11 @@ public struct Signer {
 
     internal func sign(header: JWSHeader, payload: Payload) throws -> Data {
         guard let alg = header.algorithm, alg == signer.algorithm else {
-            throw SigningError.algorithmMismatch
+            throw JWSError.algorithmMismatch
         }
 
         guard let signingInput = [header, payload].asJOSESigningInput() else {
-            throw SigningError.cannotComputeSigningInput
+            throw JWSError.cannotComputeSigningInput
         }
 
         return try signer.sign(signingInput)
