@@ -67,11 +67,14 @@ public struct JWE {
     /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
     /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
     /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public init?(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
+    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
         self.header = header
 
-        guard let encryptionContext = try? encrypter.encrypt(header: header, payload: payload) else {
-            return nil
+        var encryptionContext: EncryptionContext
+        do {
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload)
+        } catch {
+            throw SwiftJOSEError.encryptingFailed(description: error.localizedDescription)
         }
 
         self.encryptedKey = encryptionContext.encryptedKey
@@ -85,11 +88,11 @@ public struct JWE {
     /// - Parameters:
     ///     - compactSerialization: A compact serialized JWS object as string as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///         If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///     - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///         If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
@@ -100,17 +103,17 @@ public struct JWE {
     /// - Parameters:
     ///     - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///     - `SwiftJOSEError.wrongDataEncoding(data: Data)`:
     ///         If the compact serialization data object is not convertible to string.
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///         If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///     - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///         If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: Data) throws {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
-            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+            throw SwiftJOSEError.wrongDataEncoding(data: compactSerialization)
         }
 
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
@@ -129,7 +132,7 @@ public struct JWE {
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
     /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public func decrypt(with kdk: SecKey) -> Payload? {
+    public func decrypt(with kdk: SecKey) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
@@ -139,13 +142,16 @@ public struct JWE {
         )
 
         guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
-            return nil
+            throw SwiftJOSEError.decryptingFailed(description: "Invalid header parameter.")
         }
 
         let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
 
-        guard let plaintext = try? decrypter.decrypt(context) else {
-            return nil
+        var plaintext: Data
+        do {
+            plaintext = try decrypter.decrypt(context)
+        } catch {
+            throw SwiftJOSEError.decryptingFailed(description: error.localizedDescription)
         }
 
         return Payload(plaintext)

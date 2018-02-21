@@ -53,14 +53,14 @@ public struct JWS {
     ///   - header: A fully initialized `JWSHeader`.
     ///   - payload: A fully initialized `JWSPayload`.
     ///   - signer: The `Signer` used to compute the JWS signature from the header and payload.
-    public init?(header: JWSHeader, payload: Payload, signer: Signer) {
+    public init(header: JWSHeader, payload: Payload, signer: Signer) throws {
         self.header = header
         self.payload = payload
 
-        if let signature = try? signer.sign(header: header, payload: payload) {
-            self.signature = signature
-        } else {
-            return nil
+        do {
+            self.signature = try signer.sign(header: header, payload: payload)
+        } catch {
+            throw SwiftJOSEError.signingFailed(description: error.localizedDescription)
         }
     }
 
@@ -69,11 +69,11 @@ public struct JWS {
     /// - Parameters:
     ///   - compactSerialization: A compact serialized JWS object in string format as received e.g. from the server.
     /// - Throws:
-    ///   - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///   - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///     If the component count of the compact serialization is wrong.
-    ///   - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///   - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///     If the component is not a valid base64URL string.
-    ///   - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///   - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///     If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
@@ -84,17 +84,17 @@ public struct JWS {
     /// - Parameters:
     ///   - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
     /// - Throws:
-    ///   - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///   - `SwiftJOSEError.wrongDataEncoding(data: Data)`:
     ///     If the compact serialization data object is not convertible to string.
-    ///   - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///   - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///     If the component count of the compact serialization is wrong.
-    ///   - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///   - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///     If the component is not a valid base64URL string.
-    ///   - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///   - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///     If a component cannot be initialized from its data object.
     public init(compactSerialization: Data) throws {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
-            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+            throw SwiftJOSEError.wrongDataEncoding(data: compactSerialization)
         }
 
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerializationString)
@@ -110,14 +110,18 @@ public struct JWS {
     ///
     /// - Parameter publicKey: The public key used to verify the JWS object's header and payload.
     /// - Returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
-    public func isValid(for publicKey: SecKey) -> Bool {
+    public func isValid(for publicKey: SecKey) throws -> Bool {
         guard let alg = header.algorithm else {
-            return false
+            throw SwiftJOSEError.verifyingFailed(description: "Invalid header parameter.")
         }
 
         let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey)
-        guard let result = try? verifier.verify(header: header, and: payload, against: signature) else {
-            return false
+
+        var result: Bool = false
+        do {
+            result = try verifier.verify(header: header, and: payload, against: signature)
+        } catch {
+            throw SwiftJOSEError.verifyingFailed(description: error.localizedDescription)
         }
 
         return result

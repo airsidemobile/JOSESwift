@@ -42,14 +42,14 @@ class JWSTests: CryptoTestCase {
         let header = JWSHeader(algorithm: .RS512)
         let payload = Payload(message.data(using: .utf8)!)
         let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey2048!)
-        let jws = JWS(header: header, payload: payload, signer: signer)!
+        let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
         XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
-        XCTAssertTrue(secondJWS.isValid(for: publicKey2048!))
+        XCTAssertTrue(try! secondJWS.isValid(for: publicKey2048!))
     }
 
     func testDeserializeFromCompactSerialization() {
