@@ -117,14 +117,11 @@ public struct JWS {
 
         let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey)
 
-        var result: Bool = false
         do {
-            result = try verifier.verify(header: header, and: payload, against: signature)
+            return try verifier.verify(header: header, and: payload, against: signature)
         } catch {
             throw SwiftJOSEError.verifyingFailed(description: error.localizedDescription)
         }
-
-        return result
     }
 }
 

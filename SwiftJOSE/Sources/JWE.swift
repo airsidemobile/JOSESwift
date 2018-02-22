@@ -147,14 +147,11 @@ public struct JWE {
 
         let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
 
-        var plaintext: Data
         do {
-            plaintext = try decrypter.decrypt(context)
+            return Payload(try decrypter.decrypt(context))
         } catch {
             throw SwiftJOSEError.decryptingFailed(description: error.localizedDescription)
         }
-
-        return Payload(plaintext)
     }
 }
 
