@@ -10,6 +10,7 @@ import Foundation
 public enum SwiftJOSEError: Error {
     case signingFailed(description: String)
     case verifyingFailed(description: String)
+    case signatureInvalid
 
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
