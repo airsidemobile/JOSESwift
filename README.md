@@ -164,15 +164,15 @@ In short:
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let message = "Do you know the way to San Jose?"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 
-let jws = JWS(
+let jws = try! JWS(
     header: JWSHeader(algorithm: .RS512),
     payload: Payload(message.data(using: .utf8)!),
-    signer: Signer(signingAlgorithm: .RS512, privateKey: key)
-)!
+    signer: Signer(signingAlgorithm: .RS512, privateKey: privateKey)
+)
 
-jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
+print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 ```  
 
 <details>
@@ -192,7 +192,7 @@ let header = JWSHeader(algorithm: .RS512)
 Then we specify the data we want to send:
 
 ``` swift
-let message = "Do you know the way to San Jose?"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 
 let data = message.data(using: .utf8)!
 
@@ -212,7 +212,7 @@ let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)
 Now we just put these three parts together to form our JWS:
 
 ``` swift
-guard let jws = JWS(header: header, payload: payload, signer: signer) else {
+guard let jws = try? JWS(header: header, payload: payload, signer: signer) else {
     // Something went wrong!
 }
 
@@ -222,7 +222,7 @@ guard let jws = JWS(header: header, payload: payload, signer: signer) else {
 Now, you will most probably want to transmit your message, which is now digitally signed inside the JWS, to someone else. To do so, you just transmit the serialized JWS which can be obtained as follows:
 
 ``` swift
-jws.compactSerializedString // ey (...) J9.RG (...) T8.T1 (...) aQ
+print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 ```
 
 The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
