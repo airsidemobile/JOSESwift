@@ -63,10 +63,13 @@ public struct JWE {
         return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
-    /// Initializes a JWE with a given header, payload and encrypter.
-    /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
-    /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
-    /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
+    /// Constructs a JWS object from a given header, payload, and signer.
+    ///
+    /// - Parameters:
+    ///   - header: A fully initialized `JWEHeader`.
+    ///   - payload: A fully initialized `Payload`.
+    ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
+    /// - Throws: `SwiftJOSEError` if any error occurs while encrypting.
     public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
         self.header = header
 
