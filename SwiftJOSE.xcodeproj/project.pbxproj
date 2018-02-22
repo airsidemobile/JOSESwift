@@ -261,7 +261,6 @@
 		6582C0BB1F4B09DC00B153D5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				C86B876C203D857B00208387 /* SwiftJOSEError.swift */,
 				65A77E931F7285A900A66DDE /* JOSEHeader.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				65353F5C1F750A6A003E099B /* DataExtensions.swift */,
@@ -269,6 +268,7 @@
 				652F6DE81F73E6780002DEE0 /* Serializer.swift */,
 				65D1D0661F7A878D006377CD /* Deserializer.swift */,
 				C8610F082029B15600859FCC /* Algorithms.swift */,
+				C86B876C203D857B00208387 /* SwiftJOSEError.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
