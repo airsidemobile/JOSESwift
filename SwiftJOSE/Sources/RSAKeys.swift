@@ -204,7 +204,7 @@ public struct RSAPrivateKey: JWK {
     /// - Parameters:
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw SwiftJOSEError.couldNotConstructJWK
@@ -233,7 +233,7 @@ public struct RSAPrivateKey: JWK {
     ///
     /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPrivateKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
             throw SwiftJOSEError.modulusNotBase64URLUIntEncoded
