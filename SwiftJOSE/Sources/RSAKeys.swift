@@ -142,11 +142,11 @@ public struct RSAPublicKey: JWK {
     /// - Throws: A `SwiftJOSEError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPublicKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
-            throw SwiftJOSEError.wrongEncoding
+            throw SwiftJOSEError.modulusNotBase64URLUIntEncoded
         }
 
         guard let exponentData = Data(base64URLEncoded: self.exponent) else {
-            throw SwiftJOSEError.wrongEncoding
+            throw SwiftJOSEError.exponentNotBase64URLUIntEncoded
         }
 
         return try T.representing(rsaPublicKeyComponents: (modulusData, exponentData))
@@ -207,7 +207,7 @@ public struct RSAPrivateKey: JWK {
     /// - Throws: A `JWKError` indicating any errors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
-            throw JWKError.cannotExtractRSAPrivateKeyComponents
+            throw SwiftJOSEError.couldNotConstructJWK
         }
 
         // The components are unsigned big-endian integers encoded using the minimum number of octets needed
@@ -236,15 +236,15 @@ public struct RSAPrivateKey: JWK {
     /// - Throws: A `JWKError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPrivateKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
-            throw JWKError.modulusNotBase64URLUIntEncoded
+            throw SwiftJOSEError.modulusNotBase64URLUIntEncoded
         }
 
         guard let exponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.exponentNotBase64URLUIntEncoded
+            throw SwiftJOSEError.exponentNotBase64URLUIntEncoded
         }
 
         guard let privateExponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.privateExponentNotBase64URLUIntEncoded
+            throw SwiftJOSEError.privateExponentNotBase64URLUIntEncoded
         }
 
         return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData))

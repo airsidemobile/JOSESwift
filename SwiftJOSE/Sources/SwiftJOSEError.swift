@@ -20,5 +20,7 @@ public enum SwiftJOSEError: Error {
     case componentCouldNotBeInitializedFromData(data: Data)
 
     case couldNotConstructJWK
-    case wrongEncoding
+    case modulusNotBase64URLUIntEncoded
+    case exponentNotBase64URLUIntEncoded
+    case privateExponentNotBase64URLUIntEncoded
 }
