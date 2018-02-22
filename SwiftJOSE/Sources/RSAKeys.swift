@@ -52,7 +52,19 @@ public typealias RSAPrivateKeyComponents = (
 /// It can be expressed through `RSAPublicKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
+
+    /// Creates an object that contains the supplied components in the format specified by PKCS#1.
+    ///
+    /// - Parameter components: The public key components.
+    /// - Returns: An object containing the supplied components.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self
+
+
+    /// Extracts the public key components specified by PKCS#1.
+    ///
+    /// - Returns: The components of the public key.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
@@ -60,7 +72,18 @@ public protocol ExpressibleAsRSAPublicKeyComponents {
 /// It can be expressed through `RSAPrivateKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPrivateKeyComponents {
+
+    /// Creates an object that contains the supplied components in the format specified by PKCS#1.
+    ///
+    /// - Parameter components: The private key components.
+    /// - Returns: An object containing the supplied components.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     static func representing(rsaPrivateKeyComponents components: RSAPrivateKeyComponents) throws -> Self
+
+    /// Extracts the private key components specified by PKCS#1.
+    ///
+    /// - Returns: The components of the private key.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
