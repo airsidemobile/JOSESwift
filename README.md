@@ -238,15 +238,13 @@ let publicKey: SecKey = /* ... */
 
 let serialization = /* ... */
 
-guard 
-    let jws = try? JWS(compactSerialization: serialization),
-    jws.isValid(for: publicKey),
-    let message = String(data: jws.payload.data(), encoding: .utf8)
-else {
-    // Something went wrong!
-}
+do {
+    let jws = try JWS(compactSerialization: serialization)
+    let payload = try jws.validate(with: publicKey).payload
+    let message = String(data: payload.data(), encoding: .utf8)!
 
-message // Do you know the way to San Jose?
+    print(message) // Summer ⛱, Sun ☀️, Cactus 🌵
+}
 ```
 
 <details>
@@ -273,10 +271,18 @@ You can then check its signature using the public key of the sender:
 let publicKey: SecKey = /* ... */
 
 guard jws.isValid(for: publicKey) else {
-    // Signature is invalid!
+    // Something went wrong!
 }
 
-// Signature is valid!
+// or
+
+do {
+    _ = try jws.validate(with: publicKey)
+} catch {
+    // Something went wrong
+}
+
+// Everything ok!
 ```
 
 Now we can trust the message, which we get from the JWS as follows:
@@ -284,7 +290,7 @@ Now we can trust the message, which we get from the JWS as follows:
 ``` swift
 let data = jws.payload.data()
 
-let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
+let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
 ```
 
 </details>
