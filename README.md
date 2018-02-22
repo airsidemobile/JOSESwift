@@ -312,15 +312,15 @@ In short:
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let message = "Do you know the way to San Jose?"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 
-let jwe = JWE(
-    header: JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512),
+let jwe = try! JWE(
+    header: JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512),
     payload: Payload(message.data(using: .utf8)!),
-    encrypter: Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
-)!
+    encrypter: Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)
+)
 
-jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...)
+print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
 ```  
 
 <details>
@@ -342,7 +342,7 @@ let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512
 Then we specify the data we want to send:
 
 ``` swift
-let message = "Do you know the way to San Jose?"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 
 let data = message.data(using: .utf8)!
 
@@ -362,7 +362,7 @@ let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: pu
 Now we just put these three parts together to form our JWE:
 
 ``` swift
-guard let jwe = JWE(header: header, payload: payload, encrypter: encrypter) else {
+guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else {
     // Something went wrong!
 }
 
@@ -372,7 +372,7 @@ guard let jwe = JWE(header: header, payload: payload, encrypter: encrypter) else
 Now, you will most probably want to transmit your message, which is now encrypted inside the JWE, to someone else. To do so, you just transmit the serialized JWE which can be obtained as follows:
 
 ``` swift
-jwe.compactSerializedString // ey (...) n0.cF (...) qQ.rx (...) CA.0B (...) AG.Ez (...) eY
+jwe.compactSerializedString // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
 ```
 
 The JWE compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
