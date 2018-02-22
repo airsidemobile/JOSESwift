@@ -60,7 +60,6 @@ public protocol ExpressibleAsRSAPublicKeyComponents {
     /// - Throws: A `SwiftJOSEError` indicating any errors.
     static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self
 
-
     /// Extracts the public key components specified by PKCS#1.
     ///
     /// - Returns: The components of the public key.
