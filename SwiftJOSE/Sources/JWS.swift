@@ -110,7 +110,8 @@ public struct JWS {
     /// Verifies a JWS using a given public key.
     ///
     /// - Parameter publicKey: The public key used to verify the JWS object's header and payload.
-    /// - Returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
+    /// - Returns: `true` if the JWS object's signature could be verified against it's header and payload.
+    ///            `false` otherwise.
     public func isValid(for publicKey: SecKey) throws -> Bool {
         guard let alg = header.algorithm else {
             throw SwiftJOSEError.verifyingFailed(description: "Invalid header parameter.")
