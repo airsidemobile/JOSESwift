@@ -260,7 +260,11 @@ If you receive a JWS serialization from someone else, you can easily construct a
 ``` swift
 let serialization = /* ... */
 
-let jws = try! JWS(compactSerialization: serialization)
+do {
+    let jws = try JWS(compactSerialization: serialization)
+} catch {
+    // Deserialization failed!
+}
 ```
 
 You can then check its signature using the public key of the sender:
@@ -388,15 +392,13 @@ let privateKey: SecKey = /* ... */
 
 let serialization = /* ... */
 
-guard 
-    let jwe = try? JWE(compactSerialization: serialization),
-    let payload = jwe.decrypt(with: privateKey)
-    let message = String(data: payload.data(), encoding: .utf8)
-else {
-    // Something went wrong!
-}
+do {
+    let jwe = try JWE(compactSerialization: serialization)
+    let payload = try jwe.decrypt(with: privateKey)
+    let message = String(data: payload.data(), encoding: .utf8)!
 
-message // Do you know the way to San Jose?
+    print(message) // Summer ⛱, Sun ☀️, Cactus 🌵
+}
 ```
 
 <details>
@@ -412,7 +414,11 @@ If you receive a JWE serialization from someone else, you can easily construct a
 ``` swift
 let serialization = /* ... */
 
-let jwe = try! JWE(compactSerialization: serialization)
+do {
+	let jwe = try JWE(compactSerialization: serialization)
+} catch {
+    // Deserialization failed!
+}
 ```
 
 You can then decrypt the JWE using your private key:
@@ -422,7 +428,7 @@ You can then decrypt the JWE using your private key:
 ``` swift
 let privateKey: SecKey = /* ... */
 
-guard let payload = jwe.decrypt(with: privateKey) else {
+guard let payload = try? jwe.decrypt(with: privateKey) else {
     // Decryption failed!
 }
 
@@ -434,7 +440,7 @@ Now we can read the plain message:
 ``` swift
 let data = payload.data()
 
-let message = String(data: data, encoding: .utf8)! // Do you know the way to San Jose?
+let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
 ```
 
 </details>
