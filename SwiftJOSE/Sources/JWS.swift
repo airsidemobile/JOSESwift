@@ -107,7 +107,6 @@ public struct JWS {
         self.signature = signature
     }
 
-
     /// Checks whether the JWS's signature is valid using a given public key.
     ///
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
@@ -126,7 +125,6 @@ public struct JWS {
             return false
         }
     }
-
 
     /// /// Checks whether the JWS's signature is valid using a given public key.
     ///
