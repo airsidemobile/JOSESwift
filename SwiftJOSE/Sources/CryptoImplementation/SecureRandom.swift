@@ -23,18 +23,17 @@
 
 import Foundation
 
-public enum SecureRandomGenerationError: Error {
+internal enum SecureRandomError: Error {
     case failed(status: OSStatus)
 }
 
-public struct SecureRandom {
-
+internal struct SecureRandom {
     /// Generates secure random data with a given count.
     ///
     /// - Parameter count: The count of the random generated data.
     /// - Returns: The random generated data.
-    /// - Throws: `SecureRandomGenerationError` if any error occurs during generation of secure random bytes. 
-    public static func generate(count: Int) throws -> Data {
+    /// - Throws: `SecureRandomError` if any error occurs during generation of secure random bytes. 
+    internal static func generate(count: Int) throws -> Data {
         var generatedRandom = Data(count: count)
 
         let randomGenerationStatus = generatedRandom.withUnsafeMutableBytes { mutableRandomBytes in
@@ -42,7 +41,7 @@ public struct SecureRandom {
         }
 
         guard randomGenerationStatus == errSecSuccess else {
-            throw SecureRandomGenerationError.failed(status: randomGenerationStatus)
+            throw SecureRandomError.failed(status: randomGenerationStatus)
         }
 
         return generatedRandom

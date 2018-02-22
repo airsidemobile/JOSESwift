@@ -50,7 +50,7 @@ class JWEDeserializationTests: XCTestCase {
 
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
-        } catch DeserializationError.invalidCompactSerializationComponentCount(let count) {
+        } catch SwiftJOSEError.invalidCompactSerializationComponentCount(let count) {
             XCTAssertEqual(count, 10)
             return
         } catch {
@@ -66,7 +66,7 @@ class JWEDeserializationTests: XCTestCase {
 
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
-        } catch DeserializationError.componentNotValidBase64URL(let component) {
+        } catch SwiftJOSEError.componentNotValidBase64URL(let component) {
             XCTAssertEqual(component, "XFBoMYUZodetZdvTiFvSkQXXX")
             return
         } catch {
@@ -82,7 +82,7 @@ class JWEDeserializationTests: XCTestCase {
 
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
-        } catch DeserializationError.componentCouldNotBeInitializedFromData(let data) {
+        } catch SwiftJOSEError.componentCouldNotBeInitializedFromData(let data) {
             XCTAssertEqual(data, Data(base64URLEncoded:"e2FsZzpSU0EtT0FFUCwK")!)
             return
         } catch {
@@ -98,7 +98,7 @@ class JWEDeserializationTests: XCTestCase {
 
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
-        } catch DeserializationError.componentCouldNotBeInitializedFromData(let data) {
+        } catch SwiftJOSEError.componentCouldNotBeInitializedFromData(let data) {
             XCTAssertEqual(data, Data(base64URLEncoded:"eyJ0eXAiOiJKV0UiLDE6IlJTQS1PQUVQIn0")!)
             return
         } catch {

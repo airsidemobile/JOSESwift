@@ -34,7 +34,6 @@ fileprivate extension HMACAlgorithm {
 }
 
 internal struct HMAC {
-
     /// Calculates a HMAC of an input with a specific HMAC algorithm and the corresponding HMAC key.
     ///
     /// - Parameters:

@@ -29,18 +29,13 @@ protocol VerifierProtocol {
     /// Initializes a `Verifier` with a specified key and signing algorithm.
     init(algorithm: SignatureAlgorithm, publicKey: SecKey)
 
-    /**
-     Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
-     - Parameters:
-        - signature: The signature to verify.
-        - signingInput: The input to verify against.
-        - algorithm: The algorithm with which the signature was created.
-     
-     - Throws:
-     - `SigningError.verificationFailed(description: String)`: If verifying failed with a specific error description.
-     
-     - Returns: True if the signature is verified, false if it is not verified.
-     */
+    /// Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
+    ///
+    /// - Parameters:
+    ///   - signingInput: The input to verify against.
+    ///   - signature: The signature to verify.
+    /// - Returns: True if the signature is verified, false if it is not verified.
+    /// - Throws: `JWSError` if any error occurs during verifying.
     func verify(_ signingInput: Data, against signature: Data) throws -> Bool
 }
 
@@ -54,13 +49,13 @@ public struct Verifier {
         }
     }
 
-    func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
+    internal func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
         guard let alg = header.algorithm, alg == verifier.algorithm else {
-            throw SigningError.algorithmMismatch
+            throw JWSError.algorithmMismatch
         }
 
         guard let signingInput = [header, payload].asJOSESigningInput() else {
-            throw SigningError.cannotComputeSigningInput
+            throw JWSError.cannotComputeSigningInput
         }
 
         return try verifier.verify(signingInput, against: signature)

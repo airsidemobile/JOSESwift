@@ -63,7 +63,7 @@ extension JOSEHeader {
 /// Those header parameters may have a different meaning depending on whether they are part of a JWE or JWS.
 public protocol CommonHeaderParameterSpace {
     var jku: URL? { get }
-    var jwk: String? { get } //TODO: Use JWK class
+    var jwk: String? { get }
     var kid: String? { get }
     var x5u: URL? { get }
     var x5c: [String: Any]? { get }

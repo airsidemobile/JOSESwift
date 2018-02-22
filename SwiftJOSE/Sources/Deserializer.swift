@@ -23,13 +23,6 @@
 
 import Foundation
 
-enum DeserializationError: Error {
-    case wrongDataEncoding(data: Data)
-    case invalidCompactSerializationComponentCount(count: Int)
-    case componentNotValidBase64URL(component: String)
-    case componentCouldNotBeInitializedFromData(data: Data)
-}
-
 public protocol CompactDeserializable {
     static var componentCount: Int { get }
     init(from deserializer: CompactDeserializer) throws
@@ -46,12 +39,12 @@ public struct JOSEDeserializer {
         let encodedComponents = compactSerialization.components(separatedBy: ".")
 
         guard encodedComponents.count == type.componentCount else {
-            throw DeserializationError.invalidCompactSerializationComponentCount(count: encodedComponents.count)
+            throw SwiftJOSEError.invalidCompactSerializationComponentCount(count: encodedComponents.count)
         }
 
         let decodedComponents = try encodedComponents.map { (component: String) throws -> Data in
             guard let data = Data(base64URLEncoded: component) else {
-                throw DeserializationError.componentNotValidBase64URL(component: component)
+                throw SwiftJOSEError.componentNotValidBase64URL(component: component)
             }
             return data
         }
@@ -68,7 +61,7 @@ private struct _CompactDeserializer: CompactDeserializer {
     func deserialize<T: DataConvertible>(_ type: T.Type, at index: Int) throws -> T {
         let componentData = components[index]
         guard let component = T(componentData) else {
-            throw DeserializationError.componentCouldNotBeInitializedFromData(data: componentData)
+            throw SwiftJOSEError.componentCouldNotBeInitializedFromData(data: componentData)
         }
 
         return component

@@ -23,6 +23,16 @@
 
 import Foundation
 
+internal enum RSAError: Error {
+    case algorithmNotSupported
+    case signingFailed(description: String)
+    case verifyingFailed(description: String)
+    case plainTextLengthNotSatisfied
+    case cipherTextLenghtNotSatisfied
+    case encryptingFailed(description: String)
+    case decryptingFailed(description: String)
+}
+
 fileprivate extension SignatureAlgorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
@@ -35,7 +45,7 @@ fileprivate extension SignatureAlgorithm {
 fileprivate extension AsymmetricKeyAlgorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
-        case .RSAPKCS:
+        case .RSA1_5:
             return .rsaEncryptionPKCS1
         }
     }
@@ -44,7 +54,7 @@ fileprivate extension AsymmetricKeyAlgorithm {
     /// for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         switch self {
-        case .RSAPKCS:
+        case .RSA1_5:
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
             return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
@@ -53,14 +63,13 @@ fileprivate extension AsymmetricKeyAlgorithm {
 
     func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
         switch self {
-        case .RSAPKCS:
+        case .RSA1_5:
             return cipherText.count == SecKeyGetBlockSize(privateKey)
         }
     }
 }
 
 internal struct RSA {
-
     ///  Signs input data with a given `RSA` algorithm and the corresponding private key.
     ///
     /// - Parameters:
@@ -68,18 +77,18 @@ internal struct RSA {
     ///   - privateKey: The private key used by the `SignatureAlgorithm`.
     ///   - algorithm: The algorithm to sign the input data.
     /// - Returns: The signature.
-    /// - Throws: `SigningError` if any errors occur while signing the input data.
+    /// - Throws: `RSAError` if any errors occur while signing the input data.
     static func sign(_ signingInput: Data, with privateKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Data {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to sign with a given private key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
-            throw SigningError.algorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Sign the input with a given `SecKeyAlgorithm` and a private key.
         var signingError: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
-            throw SigningError.signingFailed(
+            throw RSAError.signingFailed(
                 description: signingError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }
@@ -95,14 +104,14 @@ internal struct RSA {
     ///   - publicKey: The public key used by the `SignatureAlgorithm`.
     ///   - algorithm: The algorithm to verify the input data.
     /// - Returns: True if the signature is verified, false if it is not verified.
-    /// - Throws: `SigningError` if any errors occur while verifying the input data against the signature.
+    /// - Throws: `RSAError` if any errors occur while verifying the input data against the signature.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to verify with a given public key.
         guard
             let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm)
         else {
-            throw SigningError.algorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Verify the signature against an input with a given `SecKeyAlgorithm` and a public key.
@@ -113,7 +122,7 @@ internal struct RSA {
             )
         else {
             if let description = verificationError?.takeRetainedValue().localizedDescription {
-                throw SigningError.verificationFailed(descritpion: description)
+                throw RSAError.verifyingFailed(description: description)
             }
 
             return false
@@ -137,13 +146,13 @@ internal struct RSA {
             let secKeyAlgorithm = algorithm.secKeyAlgorithm,
             SecKeyIsAlgorithmSupported(publicKey, .encrypt, secKeyAlgorithm)
         else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Check if the plain text length does not exceed the maximum.
-        // e.g. for RSAPKCS the plaintext must be 11 bytes smaller than the public key's modulus.
+        // e.g. for RSA1_5 the plaintext must be 11 bytes smaller than the public key's modulus.
         guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
-            throw EncryptionError.plainTextLengthNotSatisfied
+            throw RSAError.plainTextLengthNotSatisfied
         }
 
         // Encrypt the plain text with a given `SecKeyAlgorithm` and a public key.
@@ -151,7 +160,7 @@ internal struct RSA {
         guard
             let cipherText = SecKeyCreateEncryptedData(publicKey, secKeyAlgorithm, plaintext as CFData, &encryptionError)
         else {
-            throw EncryptionError.encryptingFailed(
+            throw RSAError.encryptingFailed(
                 description: encryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }
@@ -174,13 +183,13 @@ internal struct RSA {
             let secKeyAlgorithm = algorithm.secKeyAlgorithm,
             SecKeyIsAlgorithmSupported(privateKey, .decrypt, secKeyAlgorithm)
         else {
-            throw EncryptionError.encryptionAlgorithmNotSupported
+            throw RSAError.algorithmNotSupported
         }
 
         // Check if the cipher text length does not exceed the maximum.
-        // e.g. for RSAPKCS the cipher text has the same length as the private key's modulus.
+        // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
         guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
-            throw EncryptionError.cipherTextLenghtNotSatisfied
+            throw RSAError.cipherTextLenghtNotSatisfied
         }
 
         // Decrypt the cipher text with a given `SecKeyAlgorithm` and a private key.
@@ -188,7 +197,7 @@ internal struct RSA {
         guard
             let plainText = SecKeyCreateDecryptedData(privateKey, secKeyAlgorithm, ciphertext as CFData, &decryptionError)
         else {
-            throw EncryptionError.decryptingFailed(
+            throw RSAError.decryptingFailed(
                 description: decryptionError?.takeRetainedValue().localizedDescription ?? "No description available."
             )
         }

@@ -24,29 +24,6 @@
 import Foundation
 import SJCommonCrypto
 
-public enum EncryptionError: Error, Equatable {
-    case encryptionAlgorithmNotSupported
-    case keyEncryptionAlgorithmMismatch
-    case contentEncryptionAlgorithmMismatch
-    case plainTextLengthNotSatisfied
-    case cipherTextLenghtNotSatisfied
-    case keyLengthNotSatisfied
-    case hmacNotAuthenticated
-    case encryptingFailed(description: String)
-    case decryptingFailed(description: String)
-
-    public static func ==(lhs: EncryptionError, rhs: EncryptionError) -> Bool {
-        switch (lhs, rhs) {
-        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
-            return true
-        case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
-            return true
-        default:
-            return false
-        }
-    }
-}
-
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricKeyAlgorithm { get }
@@ -54,19 +31,11 @@ internal protocol AsymmetricEncrypter {
     /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
     init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
-    /**
-     Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
-     - Parameters:
-        - plaintext: The plain text to encrypt.
-        - algorithm: The algorithm used to encrypt the plain text.
-     
-     - Throws:
-        - `EncryptionError.encryptionAlgorithmNotSupported`: If the provided algorithm is not supported for encryption.
-        - `EncryptionError.plainTextLengthNotSatisfied`: If the plain text length exceeds the allowed maximum.
-        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-     
-     - Returns: The cipher text (encrypted plain text).
-     */
+    /// Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
+    ///
+    /// - Parameter plaintext: The plain text to encrypt.
+    /// - Returns: The cipher text (encrypted plain text).
+    /// - Throws: `JWEError` if any error occured during encryption.
     func encrypt(_ plaintext: Data) throws -> Data
 }
 
@@ -77,19 +46,14 @@ internal protocol SymmetricEncrypter {
     /// Initializes a `SymmetricEncrypter` with a specified algorithm.
     init(algorithm: SymmetricKeyAlgorithm)
 
-    /**
-     Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
-     - Parameters:
-        - plaintext: The plain text to encrypt.
-        - symmetricKey: The key which contains the HMAC and encryption key.
-        - additionalAuthenticatedData: The data used for integrity protection. 
-     
-     - Throws:
-        - `EncryptionError.keyLengthNotSatisfied`: If the provided key is not long enough to contain the HMAC and the actual encryption key.
-        - `EncryptionError.encryptingFailed(description: String)`: If the encryption failed with a specific error.
-     
-     - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
-     */
+    /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
+    ///
+    /// - Parameters:
+    ///   - plaintext: The plain text to encrypt.
+    ///   - symmetricKey: The key which contains the HMAC and encryption key.
+    ///   - additionalAuthenticatedData: The data used for integrity protection.
+    /// - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
+    /// - Throws: `JWEError` if any error occured during encryption.
     func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
 }
 
@@ -112,18 +76,18 @@ public struct Encrypter {
 
     public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSAPKCS, .AES256CBCHS512) :
+        case (.RSA1_5, .A256CBCHS512) :
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         }
     }
 
-    func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
+    internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         guard let alg = header.algorithm, alg == asymmetric.algorithm else {
-            throw EncryptionError.keyEncryptionAlgorithmMismatch
+            throw JWEError.keyEncryptionAlgorithmMismatch
         }
         guard let enc = header.encryptionAlgorithm, enc == symmetric.algorithm else {
-            throw EncryptionError.contentEncryptionAlgorithmMismatch
+            throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
         let cek = try SecureRandom.generate(count: enc.keyLength)

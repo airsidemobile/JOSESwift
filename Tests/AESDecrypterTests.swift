@@ -35,11 +35,7 @@ class AESDecrypterTests: CryptoTestCase {
         super.tearDown()
     }
 
-    /**
-     [RFC-7518]: https://tools.ietf.org/html/rfc7518#appendix-B.3 "AES_256_CBC_HMAC_SHA_512 Test data"
-     
-     Tests the `AES` decryption implementation for AES_256_CBC_HMAC_SHA_512 with the test data provided in the [RFC-7518].
-     */
+    /// Tests the `AES` decryption implementation for AES_256_CBC_HMAC_SHA_512 with the test data provided in the [RFC-7518](https://tools.ietf.org/html/rfc7518#appendix-B.3).
     func testDecrypting() {
         let keyData = "00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f".hexadecimalToData()
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()
@@ -55,7 +51,7 @@ class AESDecrypterTests: CryptoTestCase {
             authenticationTag: authenticationTag!
         )
 
-        let decrypter = AESDecrypter(algorithm: .AES256CBCHS512)
+        let decrypter = AESDecrypter(algorithm: .A256CBCHS512)
         let plaintext = try! decrypter.decrypt(context, with: keyData!)
 
         XCTAssertEqual(plaintext, testPlaintext!)

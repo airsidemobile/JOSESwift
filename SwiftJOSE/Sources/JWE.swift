@@ -23,6 +23,13 @@
 
 import Foundation
 
+internal enum JWEError: Error {
+    case keyEncryptionAlgorithmMismatch
+    case contentEncryptionAlgorithmMismatch
+    case keyLengthNotSatisfied
+    case hmacNotAuthenticated
+}
+
 /// A JWE consisting of five parameters as specified in [RFC-7516](https://tools.ietf.org/html/rfc7516).
 /// The JWE is fully initialized with those five (immutable) parameters.
 /// All representations of the JWE or it's parts like it's compact serialization or the plaintext can be derived from those five parameters.
@@ -56,15 +63,21 @@ public struct JWE {
         return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
-    /// Initializes a JWE with a given header, payload and encrypter.
-    /// Note that we could also provide default headers and encrypters for some usecases to make the usage of the framework even easier.
-    /// Note that we can infer the header `alg` and `enc` fields from the encrypter.
-    /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public init?(header: JWEHeader, payload: Payload, encrypter: Encrypter) {
+    /// Constructs a JWS object from a given header, payload, and signer.
+    ///
+    /// - Parameters:
+    ///   - header: A fully initialized `JWEHeader`.
+    ///   - payload: A fully initialized `Payload`.
+    ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
+    /// - Throws: `SwiftJOSEError` if any error occurs while encrypting.
+    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
         self.header = header
 
-        guard let encryptionContext = try? encrypter.encrypt(header: header, payload: payload) else {
-            return nil
+        var encryptionContext: EncryptionContext
+        do {
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload)
+        } catch {
+            throw SwiftJOSEError.encryptingFailed(description: error.localizedDescription)
         }
 
         self.encryptedKey = encryptionContext.encryptedKey
@@ -78,11 +91,11 @@ public struct JWE {
     /// - Parameters:
     ///     - compactSerialization: A compact serialized JWS object as string as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///         If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///     - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///         If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: String) throws {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerialization)
@@ -93,17 +106,17 @@ public struct JWE {
     /// - Parameters:
     ///     - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
     /// - Throws:
-    ///     - `DeserializationError.wrongDataEncoding(data: Data)`:
+    ///     - `SwiftJOSEError.wrongDataEncoding(data: Data)`:
     ///         If the compact serialization data object is not convertible to string.
-    ///     - `DeserializationError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     - `SwiftJOSEError.invalidCompactSerializationComponentCount(count: Int)`:
     ///         If the component count of the compact serialization is wrong.
-    ///     - `DeserializationError.componentNotValidBase64URL(component: String)`:
+    ///     - `SwiftJOSEError.componentNotValidBase64URL(component: String)`:
     ///         If the component is not a valid base64URL string.
-    ///     - `DeserializationError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     - `SwiftJOSEError.componentCouldNotBeInitializedFromData(data: Data)`:
     ///         If a component cannot be initialized from its data object.
     public init(compactSerialization: Data) throws {
         guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
-            throw DeserializationError.wrongDataEncoding(data: compactSerialization)
+            throw SwiftJOSEError.wrongDataEncoding(data: compactSerialization)
         }
 
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
@@ -122,7 +135,7 @@ public struct JWE {
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
     /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public func decrypt(with kdk: SecKey) -> Payload? {
+    public func decrypt(with kdk: SecKey) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
@@ -132,16 +145,16 @@ public struct JWE {
         )
 
         guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
-            return nil
+            throw SwiftJOSEError.decryptingFailed(description: "Invalid header parameter.")
         }
 
         let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
 
-        guard let plaintext = try? decrypter.decrypt(context) else {
-            return nil
+        do {
+            return Payload(try decrypter.decrypt(context))
+        } catch {
+            throw SwiftJOSEError.decryptingFailed(description: error.localizedDescription)
         }
-
-        return Payload(plaintext)
     }
 }
 
@@ -169,17 +182,5 @@ extension JWE: CompactDeserializable {
         let ciphertext = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweCiphertextIndex)
         let authenticationTag = try deserializer.deserialize(Data.self, at: ComponentCompactSerializedIndex.jweAuthenticationTagIndex)
         self.init(header: header, encryptedKey: encryptedKey, initializationVector: initializationVector, ciphertext: ciphertext, authenticationTag: authenticationTag)
-    }
-}
-
-/// For testing only.
-extension JWE: CustomStringConvertible {
-    public var description: String {
-        let header = self.header.parameters.description
-        let encryptedKey = String(data: self.encryptedKey, encoding: .utf8) ?? "encryptedKey"
-        let initializationVector = String(data: self.initializationVector, encoding: .utf8) ?? "iv"
-        let ciphertext = String(data: self.ciphertext, encoding: .utf8) ?? "ciphertext"
-        let authenticationTag = String(data: self.authenticationTag, encoding: .utf8) ?? "authTag"
-        return "\(header) . \(encryptedKey) . \(initializationVector) . \(ciphertext) . \(authenticationTag)"
     }
 }
