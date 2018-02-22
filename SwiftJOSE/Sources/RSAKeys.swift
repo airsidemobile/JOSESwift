@@ -111,10 +111,10 @@ public struct RSAPublicKey: JWK {
     /// - Parameters:
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let components = try? publicKey.rsaPublicKeyComponents() else {
-            throw JWKError.cannotExtractRSAPublicKeyComponents
+            throw SwiftJOSEError.couldNotConstructJWK
         }
 
         // The components are unsigned big-endian integers encoded using the minimum number of octets needed
@@ -139,14 +139,14 @@ public struct RSAPublicKey: JWK {
     ///
     /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPublicKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
-            throw JWKError.modulusNotBase64URLUIntEncoded
+            throw SwiftJOSEError.wrongEncoding
         }
 
-        guard let exponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.exponentNotBase64URLUIntEncoded
+        guard let exponentData = Data(base64URLEncoded: self.exponent) else {
+            throw SwiftJOSEError.wrongEncoding
         }
 
         return try T.representing(rsaPublicKeyComponents: (modulusData, exponentData))
