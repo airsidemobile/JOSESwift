@@ -586,6 +586,8 @@ You can find detailed information about the relevant JOSE standards in the respe
 - [RFC-7517:](https://tools.ietf.org/html/rfc7517) JSON Web Key (JWK)
 - [RFC-7518:](https://tools.ietf.org/html/rfc7518) JSON Web Algorithms (JWA)
 
+Don’t forget to check our [our wiki](https://github.com/mohemian/jose-ios/wiki) for more detailed documentation.
+
 ## Credits
 
 JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
