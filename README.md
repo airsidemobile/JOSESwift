@@ -149,9 +149,7 @@ JOSESwift covers three functional aspects:
 
 ### JWS: Digital Signatures
 
-A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS.
-
-A JWS consists of three parts:
+A JWS encapsulates and secures data using a digital signature which can be verified by the receiver of the JWS. It consists of three parts:
 
 1. Header
 2. Payload
