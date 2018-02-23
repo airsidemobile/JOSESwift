@@ -26,9 +26,6 @@ import Foundation
 protocol VerifierProtocol {
     var algorithm: SignatureAlgorithm { get }
 
-    /// Initializes a `Verifier` with a specified key and signing algorithm.
-    init(algorithm: SignatureAlgorithm, publicKey: SecKey)
-
     /// Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
     ///
     /// - Parameters:
@@ -39,13 +36,18 @@ protocol VerifierProtocol {
     func verify(_ signingInput: Data, against signature: Data) throws -> Bool
 }
 
-public struct Verifier {
+public struct Verifier<KeyType> {
     let verifier: VerifierProtocol
 
-    public init(verifyingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
+    public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
         case .RS512:
-            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey)
+            if type(of: publicKey) is RSAVerifier.KeyType.Type {
+                let key = publicKey as! RSAVerifier.KeyType
+                self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: key)
+            } else {
+                return nil
+            }
         }
     }
 

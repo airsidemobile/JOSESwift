@@ -107,7 +107,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm to verify the input data.
     /// - Returns: True if the signature is verified, false if it is not verified.
     /// - Throws: `RSAError` if any errors occur while verifying the input data against the signature.
-    static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
+    static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Bool {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to verify with a given public key.
         guard
