@@ -41,7 +41,7 @@ public struct Signer<KeyType> {
     ///
     /// - Parameters:
     ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
-    ///   - privateKey: The private key used to sign the JWS.
+    ///   - privateKey: The private key used to sign the JWS. Currently supported key types are: `SecKey`.
     /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
     public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {

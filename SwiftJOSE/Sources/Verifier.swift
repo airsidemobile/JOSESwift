@@ -43,7 +43,7 @@ public struct Verifier<KeyType> {
     ///
     /// - Parameters:
     ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
-    ///   - privateKey: The public key used to verify the JWS's signature.
+    ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey`.
     /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
     public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {

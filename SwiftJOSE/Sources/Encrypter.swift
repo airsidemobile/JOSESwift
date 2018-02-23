@@ -72,6 +72,7 @@ public struct Encrypter<KeyType> {
     /// - Parameters:
     ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
     ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {

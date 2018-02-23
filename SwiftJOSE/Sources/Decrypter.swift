@@ -71,6 +71,7 @@ public struct Decrypter {
     /// - Parameters:
     ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.
     ///   - kdk: The private key used to decrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
