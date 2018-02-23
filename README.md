@@ -357,7 +357,7 @@ let publicKey: SecKey = /* ... */
 let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)!
 ```
 
-Now we just put these three parts together to form our JWE:
+With header, payload, and encrypter defined we can form our JWE:
 
 ``` swift
 guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else {
