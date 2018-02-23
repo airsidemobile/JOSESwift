@@ -573,7 +573,7 @@ For security disclosures or related matters, please contact :warning: **Todo:** 
 Contributions to the project are encouraged and always welcome. :nerd_face:
 
 If you want to contribute, please submit a pull request. 
-For feature requests, discussions or bug reports, just open an issue.
+For feature requests, discussions, or bug reports, just open an issue.
 
 See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
 
