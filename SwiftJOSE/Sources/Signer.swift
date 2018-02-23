@@ -46,12 +46,11 @@ public struct Signer<KeyType> {
     public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {
         case .RS512:
-            if type(of: privateKey) is RSASigner.KeyType.Type {
-                let key = privateKey as! RSASigner.KeyType
-                self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: key)
-            } else {
+            guard type(of: privateKey) is RSASigner.KeyType.Type else {
                 return nil
             }
+            // swiftlint:disable:next force_cast
+            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey as! RSASigner.KeyType)
         }
     }
 

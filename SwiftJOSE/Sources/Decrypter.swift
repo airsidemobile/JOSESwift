@@ -76,12 +76,11 @@ public struct Decrypter {
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):
-            if type(of: kdk) is RSADecrypter.KeyType.Type {
-                let key = kdk as! RSADecrypter.KeyType
-                self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: key)
-            } else {
+            guard type(of: kdk) is RSADecrypter.KeyType.Type else {
                 return nil
             }
+            // swiftlint:disable:next force_cast
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         }
     }

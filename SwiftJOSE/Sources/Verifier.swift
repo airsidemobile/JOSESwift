@@ -48,12 +48,11 @@ public struct Verifier<KeyType> {
     public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
         case .RS512:
-            if type(of: publicKey) is RSAVerifier.KeyType.Type {
-                let key = publicKey as! RSAVerifier.KeyType
-                self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: key)
-            } else {
+            guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
                 return nil
             }
+            // swiftlint:disable:next force_cast
+            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey as! RSAVerifier.KeyType)
         }
     }
 

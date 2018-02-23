@@ -77,12 +77,11 @@ public struct Encrypter<KeyType> {
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512) :
-            if type(of: kek) is RSAEncrypter.KeyType.Type {
-                let key = kek as! RSAEncrypter.KeyType
-                self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: key)
-            } else {
+            guard type(of: kek) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
+            // swiftlint:disable:next force_cast
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek as! RSAEncrypter.KeyType)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         }
     }
