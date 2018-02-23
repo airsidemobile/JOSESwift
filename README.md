@@ -7,7 +7,7 @@ It is designed with usage on iOS and pure Swift environments in mind.
 
 As of now, usage is limited to iOS. See [Security](#security) for details.
 
-> :bulb: Please note that some details of the JOSE standards are not completely implemented (yet). For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
+> :bulb: Please note that this implementation of the JOSE standards is not fully complete yet. For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
 
 ## Contents
 
