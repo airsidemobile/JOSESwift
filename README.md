@@ -479,7 +479,7 @@ jwk.jsonString()! // {"kty": "RSA", "n": "MHZ4Li4uS2d3", "e": "QVFBQg"}
 
 `RSAPublicKey` also implements `Encodable`, so you can use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
 
-Alternatively, you can also simply use DER encoded data in PKCS#1 format to initialize a JWK:
+Alternatively, you can use DER encoded data in PKCS#1 format to initialize a JWK:
 
 ``` swift
 let publicKey: Data = /* ... */
