@@ -136,11 +136,11 @@ Then download it using `swift package resolve`. You should now be able to use JO
 JOSESwift covers three functional aspects:
 
 1. [JWS: Digital Signatures](#jws-digital-signatures)
-	- [Signing data for transmission](#signing-data-for-transmission)
-	- [Verifying received data](#verifying-received-data)
+	- [Signing data](#signing-data)
+	- [Verifying data](#verifying-data)
 2. [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
-	- [Encrypting data for transmission](#encrypting-data-for-transmission)
-	- [Decrypting received data](#decrypting-received-data)
+	- [Encrypting data](#encrypting-data)
+	- [Decrypting data](#decrypting-data)
 3. [JWK: Representing Keys](#jwk-representing-keys)
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
@@ -155,7 +155,7 @@ A JWS encapsulates and secures data using a digital signature which can be verif
 2. Payload
 3. Signature
 
-#### Signing Data for Transmission
+#### Signing Data
 
 ``` swift
 let privateKey: SecKey = /* ... */
@@ -227,7 +227,7 @@ The JWS compact serialization is a URL safe string that can easily be transmitte
 
 </details>
 
-#### Verifying Received Data
+#### Verifying Data
 
 ``` swift
 let publicKey: SecKey = /* ... */
@@ -305,7 +305,7 @@ In order to construct a JWE we need to provide the following parts:
 2. Plaintext
 3. Encrypter
 
-#### Encrypting Data for Transmission
+#### Encrypting Data
 
 ``` swift
 let publicKey: SecKey = /* ... */
@@ -377,7 +377,7 @@ The JWE compact serialization is a URL safe string that can easily be transmitte
 
 </details>
 
-#### Decrypting Received Data
+#### Decrypting Data
 
 ``` swift
 let privateKey: SecKey = /* ... */
