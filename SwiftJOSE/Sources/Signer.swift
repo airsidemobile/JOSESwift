@@ -26,9 +26,6 @@ import Foundation
 protocol SignerProtocol {
     var algorithm: SignatureAlgorithm { get }
 
-    /// Initializes a `Signer` with a specified key.
-    init(algorithm: SignatureAlgorithm, privateKey: SecKey)
-
     /// Signs input data.
     ///
     /// - Parameter signingInput: The input to sign.
@@ -37,13 +34,18 @@ protocol SignerProtocol {
     func sign(_ signingInput: Data) throws -> Data
 }
 
-public struct Signer {
+public struct Signer<KeyType> {
     let signer: SignerProtocol
 
-    public init(signingAlgorithm: SignatureAlgorithm, privateKey: SecKey) {
+    public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {
         case .RS512:
-            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey)
+            if type(of: privateKey) is RSASigner.KeyType.Type {
+                let key = privateKey as! RSASigner.KeyType
+                self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: key)
+            } else {
+                return nil
+            }
         }
     }
 

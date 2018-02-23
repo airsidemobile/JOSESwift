@@ -54,7 +54,7 @@ public struct JWS {
     ///   - payload: A fully initialized `Payload`.
     ///   - signer: The `Signer` used to compute the JWS signature from the header and payload.
     /// - Throws: `SwiftJOSEError` if any error occurs while signing. 
-    public init(header: JWSHeader, payload: Payload, signer: Signer) throws {
+    public init<KeyType>(header: JWSHeader, payload: Payload, signer: Signer<KeyType>) throws {
         self.header = header
         self.payload = payload
 
