@@ -28,7 +28,7 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 
 ## Features
 
-If you are missing a specific feature, algorithm or serialization, feel free to [submit a pull request](#contributing).
+If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
 
 ### General
 
