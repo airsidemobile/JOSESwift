@@ -169,7 +169,7 @@ let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 let jws = try! JWS(
     header: JWSHeader(algorithm: .RS512),
     payload: Payload(message.data(using: .utf8)!),
-    signer: Signer(signingAlgorithm: .RS512, privateKey: privateKey)
+    signer: Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 )
 
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
@@ -206,7 +206,7 @@ Finally, we pass our private key to a signer that will handle all the cryptograp
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)
+let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 ```
 
 Now we just put these three parts together to form our JWS:
@@ -321,7 +321,7 @@ let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
 let jwe = try! JWE(
     header: JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512),
     payload: Payload(message.data(using: .utf8)!),
-    encrypter: Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)
+    encrypter: Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
 )
 
 print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
@@ -360,7 +360,7 @@ Finally, we pass the receiver’s public key to an encrypter that will handle al
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)
+let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)!
 ```
 
 Now we just put these three parts together to form our JWE:
