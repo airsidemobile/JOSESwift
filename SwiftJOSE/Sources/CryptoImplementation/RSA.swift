@@ -22,6 +22,7 @@
 //
 
 import Foundation
+import Security
 
 internal enum RSAError: Error {
     case algorithmNotSupported

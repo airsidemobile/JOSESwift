@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import SJCommonCrypto
 
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
