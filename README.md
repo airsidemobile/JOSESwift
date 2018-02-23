@@ -461,8 +461,7 @@ Click here for a more detailed description of creating a JWK from an RSA public 
 
 <br>
 
-We currently support creating a JWK from the DER encoding of an RSA public key as specified by [PKCS#1](https://tools.ietf.org/html/rfc3447#appendix-A.1.1). 
-This is the format that the [`SecKeyCopyExternalRepresentation`](https://developer.apple.com/documentation/security/1643698-seckeycopyexternalrepresentation) function of iOS’s `Security` framework returns for a `SecKey`.
+We currently support creating a JWK from the DER encoding of an RSA public key as specified by [PKCS#1](https://tools.ietf.org/html/rfc3447#appendix-A.1.1), which is the format used by iOS's [`SecKeyCopyExternalRepresentation`](https://developer.apple.com/documentation/security/1643698-seckeycopyexternalrepresentation).
 
 You can create a JWK directly from such a `SecKey` if it represents an RSA public key:
 
@@ -472,13 +471,13 @@ let publicKey: SecKey = /* ... */
 let jwk = try! RSAPublicKey(publicKey: publicKey)
 ```
 
-You can then obtain the JSON for this JWK like this:
+You can then obtain the JSON for this JWK:
 
 ``` swift
 jwk.jsonString()! // {"kty": "RSA", "n": "MHZ4Li4uS2d3", "e": "QVFBQg"}
 ```
 
-`RSAPublicKey` also implements `Encodable`, so you can also use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
+`RSAPublicKey` also implements `Encodable`, so you can use Swift’s [`JSONEncoder`](https://developer.apple.com/documentation/foundation/jsonencoder) to encode it.
 
 Alternatively, you can also simply use DER encoded data in PKCS#1 format to initialize a JWK:
 
