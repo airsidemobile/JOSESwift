@@ -207,7 +207,7 @@ let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 
 Note that the specified signing algorithm has to match the algorithm in the header.
 
-Now we just put these three parts together to form our JWS:
+With header, payload, and signer defined we can form our JWS:
 
 ``` swift
 guard let jws = try? JWS(header: header, payload: payload, signer: signer) else {
