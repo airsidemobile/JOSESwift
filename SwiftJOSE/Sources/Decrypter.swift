@@ -24,9 +24,6 @@
 import Foundation
 
 internal protocol AsymmetricDecrypter {
-    /// Initializes an `AsymmetricDecrypter` with a specified private key.
-    init(algorithm: AsymmetricKeyAlgorithm, privateKey: SecKey)
-
     var algorithm: AsymmetricKeyAlgorithm { get }
 
     /// Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
@@ -38,8 +35,6 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
-    init(algorithm: SymmetricKeyAlgorithm)
-
     var algorithm: SymmetricKeyAlgorithm { get }
 
     /// Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
@@ -71,10 +66,15 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
-    public init(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):
-            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk)
+            if type(of: kdk) is RSADecrypter.KeyType.Type {
+                let key = kdk as! RSADecrypter.KeyType
+                self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: key)
+            } else {
+                return nil
+            }
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         }
     }

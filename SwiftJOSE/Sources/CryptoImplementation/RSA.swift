@@ -178,7 +178,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to decrypt the cipher text.
     /// - Returns: The plain text.
     /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
-    static func decrypt(_ ciphertext: Data, with privateKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func decrypt(_ ciphertext: Data, with privateKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to decrypt with a given private key.
         guard

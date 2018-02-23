@@ -148,7 +148,9 @@ public struct JWE {
             throw SwiftJOSEError.decryptingFailed(description: "Invalid header parameter.")
         }
 
-        let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
+        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc) else {
+            throw SwiftJOSEError.decryptingFailed(description: "Wrong key type.")
+        }
 
         do {
             return Payload(try decrypter.decrypt(context))
