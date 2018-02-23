@@ -70,7 +70,7 @@ public struct JWE {
     ///   - payload: A fully initialized `Payload`.
     ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
     /// - Throws: `SwiftJOSEError` if any error occurs while encrypting.
-    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
+    public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
         self.header = header
 
         var encryptionContext: EncryptionContext

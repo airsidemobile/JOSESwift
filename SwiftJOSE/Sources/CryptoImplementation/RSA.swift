@@ -141,7 +141,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to encrypt the plain text.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
-    static func encrypt(_ plaintext: Data, with publicKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func encrypt(_ plaintext: Data, with publicKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to encrypt with a given public key.
         guard

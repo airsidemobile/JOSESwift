@@ -28,9 +28,6 @@ internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricKeyAlgorithm { get }
 
-    /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
-    init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
-
     /// Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
     ///
     /// - Parameter plaintext: The plain text to encrypt.
@@ -42,9 +39,6 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: SymmetricKeyAlgorithm { get }
-
-    /// Initializes a `SymmetricEncrypter` with a specified algorithm.
-    init(algorithm: SymmetricKeyAlgorithm)
 
     /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
     ///
@@ -70,14 +64,19 @@ public struct SymmetricEncryptionContext {
     let initializationVector: Data
 }
 
-public struct Encrypter {
+public struct Encrypter<KeyType> {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
-    public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512) :
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek)
+            if type(of: kek) is RSAEncrypter.KeyType.Type {
+                let key = kek as! RSAEncrypter.KeyType
+                self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: key)
+            } else {
+                return nil
+            }
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         }
     }
