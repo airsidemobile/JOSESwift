@@ -562,7 +562,7 @@ let publicKey: Data = try! jwk.converted(to: Data.self)
 
 JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
 
-JOSESwift is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
+It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
 
 > Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
