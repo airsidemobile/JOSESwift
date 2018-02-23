@@ -153,7 +153,7 @@ A JWS encapsulates and secures data using a digital signature which can be verif
 
 1. Header
 2. Payload
-3. Signature
+3. Signer
 
 #### Signing Data
 
