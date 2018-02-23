@@ -135,7 +135,7 @@ public struct JWE {
     /// As mentioned it is the responsibility of the user to chache this plaintext.
     /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
     /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public func decrypt(with kdk: SecKey) throws -> Payload {
+    public func decrypt<KeyType>(with kdk: KeyType) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
