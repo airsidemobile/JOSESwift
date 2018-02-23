@@ -521,7 +521,7 @@ Click here for a more detailed description of decoding a JWK JSON into another k
 
 <br>
 
-If you receive an RSA public key from someone else, you can construct a `SecKey` object or a `Data` object from it. For example to subsequently store the key in an iOS device’s keychain.
+If you receive an RSA public key from someone else, you can construct a `SecKey` object or a `Data` object from it, to e.g. store the key in the iOS keychain.
 
 First, we construct a JWK from the JSON we received:
 
@@ -557,7 +557,7 @@ For security disclosures or related matters, please contact :warning: **Todo:** 
 
 ## Contributing
 
-Contributions to the project are encouraged and always welcome. :nerd_face:
+Contributions to the project are encouraged and more than welcome. :nerd_face:
 
 If you want to contribute, please submit a pull request. 
 For feature requests, discussions, or bug reports, just open an issue.
