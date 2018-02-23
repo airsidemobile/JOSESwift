@@ -66,6 +66,13 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
+    /// Constructs an decrypter used to decrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.
+    ///   - kdk: The private key used to decrypt the shared content encryption key.
+    ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
+    /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):

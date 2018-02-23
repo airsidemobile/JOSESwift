@@ -37,6 +37,12 @@ protocol SignerProtocol {
 public struct Signer<KeyType> {
     let signer: SignerProtocol
 
+    /// Constructs a signer used to sign a JWS.
+    ///
+    /// - Parameters:
+    ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
+    ///   - privateKey: The private key used to sign the JWS.
+    /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
     public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {
         case .RS512:

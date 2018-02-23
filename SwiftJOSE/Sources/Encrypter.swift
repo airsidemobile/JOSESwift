@@ -67,6 +67,13 @@ public struct Encrypter<KeyType> {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
+    /// Constructs an encrypter used to encrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
+    ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
+    ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
+    /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512) :
