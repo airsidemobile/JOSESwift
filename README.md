@@ -179,7 +179,7 @@ Click here for a more detailed description of creating a JWS to sign data.
 
 <br>
 
-First, we create a header which specifies the algorithm we are going to use  later on to sign our data:
+First, we create a header which specifies the algorithm we are going to use to sign our data:
 
 ``` swift
 let header = JWSHeader(algorithm: .RS512)
@@ -204,6 +204,8 @@ let privateKey: SecKey = /* ... */
 
 let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 ```
+
+Note that the specified signing algorithm has to match the algorithm in the header.
 
 Now we just put these three parts together to form our JWS:
 
