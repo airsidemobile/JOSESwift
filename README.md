@@ -223,7 +223,7 @@ Now, you will most probably want to transmit your message, which is now digitall
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 ```
 
-The JWS compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
+The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 </details>
 
@@ -373,7 +373,7 @@ Now, you will most probably want to transmit your message, which now is encrypte
 jwe.compactSerializedString // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
 ```
 
-The JWE compact serialization is a URL safe string that can easily be transmitted to a third party using a method of your choice.
+The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 </details>
 
