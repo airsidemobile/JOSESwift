@@ -157,8 +157,6 @@ A JWS encapsulates and secures data using a digital signature which can be verif
 
 #### Signing Data for Transmission
 
-In short:
-
 ``` swift
 let privateKey: SecKey = /* ... */
 
@@ -228,8 +226,6 @@ The JWS compact serialization is a URL safe string that can easily be transmitte
 </details>
 
 #### Verifying Received Data
-
-In short:
 
 ``` swift
 let publicKey: SecKey = /* ... */
@@ -309,8 +305,6 @@ In order to construct a JWE we need to provide the following parts:
 
 #### Encrypting Data for Transmission
 
-In short:
-
 ``` swift
 let publicKey: SecKey = /* ... */
 
@@ -383,8 +377,6 @@ The JWE compact serialization is a URL safe string that can easily be transmitte
 
 #### Decrypting Received Data
 
-In short:
-
 ``` swift
 let privateKey: SecKey = /* ... */
 
@@ -449,8 +441,6 @@ A JWK is a JSON data structure that represents a cryptographic key. You could us
 
 #### Encoding RSA Public Keys
 
-In short:
-
 ``` swift
 let publicKey: SecKey = /* ... */
 
@@ -511,8 +501,6 @@ jwk.jsonString()! // {"kty": "RSA", "kid": "123!", n": "MHZ4Li4uS2d3", "e": "QVF
 </details>
 
 #### Decoding RSA Public Keys
-
-In short:
 
 ``` swift
 let json: Data = /* ... */
