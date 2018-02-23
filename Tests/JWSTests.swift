@@ -49,7 +49,7 @@ class JWSTests: CryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
-        XCTAssertTrue(try! secondJWS.isValid(for: publicKey2048!))
+        XCTAssertTrue(secondJWS.isValid(for: publicKey2048!))
     }
 
     func testDeserializeFromCompactSerialization() {
