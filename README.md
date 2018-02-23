@@ -367,7 +367,7 @@ guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter)
 // Enjoy your fresh JWE!
 ```
 
-Now, you will most probably want to transmit your message, which is now encrypted inside the JWE, to someone else. To do so, you just transmit the serialized JWE which can be obtained as follows:
+Now, you will most probably want to transmit your message, which now is encrypted inside the JWE, to someone else. To do so, you simply transmit the serialized JWE which can be obtained as follows:
 
 ``` swift
 jwe.compactSerializedString // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
