@@ -111,7 +111,7 @@ public struct JWS {
     ///
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
     /// - Returns: `true` if the JWS's signature is valid for the given key and the JWS's header and payload.
-    ///            `false` if the signature is not valid or if the singature could not be verified.
+    ///            `false` if the signature is not valid or if the signature could not be verified.
     public func isValid(for publicKey: SecKey) -> Bool {
         guard let alg = header.algorithm else {
             return false
