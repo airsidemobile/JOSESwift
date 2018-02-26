@@ -130,7 +130,7 @@ public struct JWS {
     ///
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
     /// - Returns: The JWS on which this function was called if the signature is valid.
-    /// - Throws: A `SwiftJOSEError` if the signature is invalid or if errors occured during signature validation
+    /// - Throws: A `SwiftJOSEError` if the signature is invalid or if errors occured during signature validation.
     public func validate(with publicKey: SecKey) throws -> JWS {
         guard let alg = header.algorithm else {
             throw SwiftJOSEError.verifyingFailed(description: "Invalid header parameter.")
