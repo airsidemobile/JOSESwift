@@ -147,31 +147,33 @@ JOSESwift covers three functional aspects:
 
 ### JWS: Digital Signatures
 
-A `JWS` encapsulates and secures data using a digital signature which can be verified by the receiver of the `JWS`. It consists of three parts:
+A `JWS` encapsulates and secures data using a digital signature which can be verified by the receiver of the `JWS`.
+
+#### Signing Data
+
+In order to construct a JWS we need to provide the following parts:
 
 1. Header
 2. Payload
 3. Signature
 
-#### Signing Data
-
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
+```
 
+``` swift
 let header = JWSHeader(algorithm: .RS512)
 
-let payload = Payload(message.data(using: .utf8)!)
+let payload = Payload(message)
 
 // Signer algorithm must match header algorithm.
-guard let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey) else {
-    // Something went wrong.
-}
+let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
+```
 
-guard let jws = try JWS(header: header, payload: payload, signer: signer) else {
-    // Something went wrong.
-}
+``` swift
+guard let jws = try? JWS(header: header, payload: payload, signer: signer) else { ... }
 
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 ```  
@@ -185,8 +187,10 @@ More details about constructing a JWS can be found [in the wiki](../../wiki/jws)
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let serialization = /* ... */
+let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
+```
 
+``` swift
 do {
     let jws = try JWS(compactSerialization: serialization)
     let payload = try jws.validate(with: publicKey).payload
@@ -196,61 +200,13 @@ do {
 }
 ```
 
-<details>
-
-<summary>
-Click here for a more detailed description of verifying a serialized JWS and retrieving its payload.
-</summary>
-
-<br>
-
-If you receive a JWS serialization from someone else, you can easily construct a JWS from it:
-
-``` swift
-let serialization = /* ... */
-
-do {
-    let jws = try JWS(compactSerialization: serialization)
-} catch {
-    // Deserialization failed!
-}
-```
-
-You can then check its signature using the public key of the sender:
-
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
-
-``` swift
-let publicKey: SecKey = /* ... */
-
-guard jws.isValid(for: publicKey) else {
-    // Something went wrong!
-}
-
-// or
-
-do {
-    _ = try jws.validate(with: publicKey)
-} catch {
-    // Something went wrong
-}
-
-// Everything ok!
-```
-
-Now we can trust the message, which we get from the JWS as follows:
-
-``` swift
-let data = jws.payload.data()
-
-let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
-```
-
-</details>
+More details about verifying an existing, serialized JWS can be found [in the wiki](../../wiki/jws).
 
 ### JWE: Encryption and Decryption
 
 A JWE encapsulates and secures data by encrypting it. It can be decrypted by the receiver of the JWE.
+
+#### Encrypting Data
 
 In order to construct a JWE we need to provide the following parts:
 
@@ -258,85 +214,40 @@ In order to construct a JWE we need to provide the following parts:
 2. Plaintext
 3. Encrypter
 
-#### Encrypting Data
-
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
+```
 
-let jwe = try! JWE(
-    header: JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512),
-    payload: Payload(message.data(using: .utf8)!),
-    encrypter: Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
-)
+``` swift
+let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+
+let payload = Payload(message)
+
+// Encrypter algorithms must match header algorithms.
+let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+```
+
+``` swift
+guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else { ... }
 
 print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
 ```  
 
-<details>
-
-<summary>
-Click here for a more detailed description of creating a JWE to encrypt data.
-</summary>
-
-<br>
-
-First, we create a header which specifies the algorithms we are going to use  later on to encrypt our data:
-
-> Note that we need to specify two algorithms. One is the [algorithm used to encrypt the randomly generated content encryption key](https://tools.ietf.org/html/rfc7516#section-4.1.1), the other is the actual [content encryption algorithm](https://tools.ietf.org/html/rfc7516#section-4.1.2).
-
-``` swift
-let header = JWEHeader(algorithm: .RSAPKCS, encryptionAlgorithm: .AES256CBCHS512)
-``` 
-
-Then we specify the data we want to send:
-
-``` swift
-let message = "Summer ⛱, Sun ☀️, Cactus 🌵"
-
-let data = message.data(using: .utf8)!
-
-let payload = Payload(data)
-```
-
-Finally, we pass the receiver’s public key to an encrypter that will handle all the cryptographic magic for us:
-
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
-
-``` swift
-let publicKey: SecKey = /* ... */
-
-let encrypter = Encrypter(keyEncryptionAlgorithm: .RSAPKCS, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .AES256CBCHS512)!
-```
-
-With header, payload, and encrypter defined we can form our JWE:
-
-``` swift
-guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else {
-    // Something went wrong!
-}
-
-// Enjoy your fresh JWE!
-```
-
-Now, you will most probably want to transmit your message, which now is encrypted inside the JWE, to someone else. To do so, you simply transmit the serialized JWE which can be obtained as follows:
-
-``` swift
-jwe.compactSerializedString // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
-```
-
 The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
-</details>
+More details about constructing a JWE can be found [in the wiki](../../wiki/jwe).
 
 #### Decrypting Data
 
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let serialization = /* ... */
+let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
+```
 
+``` swift
 do {
     let jwe = try JWE(compactSerialization: serialization)
     let payload = try jwe.decrypt(with: privateKey)
@@ -346,49 +257,7 @@ do {
 }
 ```
 
-<details>
-
-<summary>
-Click here for a more detailed description of decrypting a JWE and retrieving its payload.
-</summary>
-
-<br>
-
-If you receive a JWE serialization from someone else, you can easily construct a JWE from it:
-
-``` swift
-let serialization = /* ... */
-
-do {
-	let jwe = try JWE(compactSerialization: serialization)
-} catch {
-    // Deserialization failed!
-}
-```
-
-You can then decrypt the JWE using your private key:
-
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
-
-``` swift
-let privateKey: SecKey = /* ... */
-
-guard let payload = try? jwe.decrypt(with: privateKey) else {
-    // Decryption failed!
-}
-
-// Decryption successful!
-```
-
-Now we can read the plain message:
-
-``` swift
-let data = payload.data()
-
-let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
-```
-
-</details>
+More details about decrypting an existing, serialized JWE can be found [in the wiki](../../wiki/jwe).
 
 ### JWK: Representing Keys
 
