@@ -180,8 +180,6 @@ The JWS compact serialization is a URL-safe string that can easily be transmitte
 
 More details about constructing a JWS can be found [in the wiki](../../wiki/jws).
 
-****
-
 #### Verifying Data
 
 ``` swift
@@ -240,8 +238,6 @@ print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) J
 The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 More details about constructing a JWE can be found [in the wiki](../../wiki/jwe).
-
-****
 
 #### Decrypting Data
 
@@ -328,8 +324,6 @@ jwk.jsonString()! // {"kty": "RSA", "kid": "123!", n": "MHZ4Li4uS2d3", "e": "QVF
 ```
 
 </details>
-
-****
 
 #### Decoding RSA Public Keys
 
