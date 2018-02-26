@@ -147,8 +147,6 @@ JOSESwift covers three functional aspects:
 
 A `JWS` encapsulates and secures data using a digital signature which can be verified by the receiver of the `JWS`.
 
-****
-
 #### Signing Data
 
 In order to construct a JWS we need to provide the following parts:
@@ -210,8 +208,6 @@ More details about verifying an existing, serialized JWS can be found [in the wi
 
 A JWE encapsulates and secures data by encrypting it. It can be decrypted by the receiver of the JWE.
 
-****
-
 #### Encrypting Data
 
 In order to construct a JWE we need to provide the following parts:
@@ -266,6 +262,8 @@ do {
 ```
 
 More details about decrypting an existing, serialized JWE can be found [in the wiki](../../wiki/jwe).
+
+****
 
 ### JWK: Representing Keys
 
@@ -330,6 +328,8 @@ jwk.jsonString()! // {"kty": "RSA", "kid": "123!", n": "MHZ4Li4uS2d3", "e": "QVF
 ```
 
 </details>
+
+****
 
 #### Decoding RSA Public Keys
 
