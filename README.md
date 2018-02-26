@@ -178,7 +178,7 @@ print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 
 The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
-More details about constructing a JWS can be found [in the wiki](wiki/jws).
+More details about constructing a JWS can be found [in the wiki](../../wiki/jws).
 
 #### Verifying Data
 
