@@ -284,7 +284,7 @@ let json: Data = /* ... */
 
 let jwk = try! RSAPublicKey(data: json)
 
-let publicKey: SecKey = jwk.converted(to: SecKey.self)
+let publicKey: SecKey = try! jwk.converted(to: SecKey.self)
 ```
 
 More details about decoding RSA public keys can be found [in the wiki](../../wiki/jwk).
