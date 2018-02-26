@@ -126,7 +126,7 @@ public struct JWS {
         }
     }
 
-    /// /// Checks whether the JWS's signature is valid using a given public key.
+    /// Checks whether the JWS's signature is valid using a given public key.
     ///
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
     /// - Returns: The JWS on which this function was called if the signature is valid.
