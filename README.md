@@ -255,48 +255,6 @@ do {
 
 More details about decrypting an existing, serialized JWE can be found [in the wiki](../../wiki/jwe).
 
-<details>
-
-<summary>
-Click here for a more detailed description of decrypting a JWE and retrieving its payload.
-</summary>
-
-<br>
-
-If you receive a JWE serialization from someone else, you can easily construct a JWE from it:
-
-``` swift
-let serialization = /* ... */
-
-do {
-	let jwe = try JWE(compactSerialization: serialization)
-} catch {
-    // Deserialization failed!
-}
-```
-
-You can then decrypt the JWE using your private key:
-
-``` swift
-let privateKey: SecKey = /* ... */
-
-guard let payload = try? jwe.decrypt(with: privateKey) else {
-    // Decryption failed!
-}
-
-// Decryption successful!
-```
-
-Now we can read the plain message:
-
-``` swift
-let data = payload.data()
-
-let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
-```
-
-</details>
-
 ### JWK: Representing Keys
 
 A JWK is a JSON data structure that represents a cryptographic key. You could use it, for instance, as the payload of a JWS or a JWE to transmit your public key to a server.
