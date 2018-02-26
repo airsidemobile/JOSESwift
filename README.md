@@ -141,9 +141,13 @@ JOSESwift covers three functional aspects:
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
 
+****
+
 ### JWS: Digital Signatures
 
 A `JWS` encapsulates and secures data using a digital signature which can be verified by the receiver of the `JWS`.
+
+****
 
 #### Signing Data
 
@@ -178,6 +182,8 @@ The JWS compact serialization is a URL-safe string that can easily be transmitte
 
 More details about constructing a JWS can be found [in the wiki](../../wiki/jws).
 
+****
+
 #### Verifying Data
 
 ``` swift
@@ -198,9 +204,13 @@ do {
 
 More details about verifying an existing, serialized JWS can be found [in the wiki](../../wiki/jws).
 
+****
+
 ### JWE: Encryption and Decryption
 
 A JWE encapsulates and secures data by encrypting it. It can be decrypted by the receiver of the JWE.
+
+****
 
 #### Encrypting Data
 
@@ -234,6 +244,8 @@ print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) J
 The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 More details about constructing a JWE can be found [in the wiki](../../wiki/jwe).
+
+****
 
 #### Decrypting Data
 
