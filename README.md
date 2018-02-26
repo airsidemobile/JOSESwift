@@ -74,8 +74,6 @@ Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKe
 | :--: | :--: | :--: |
 | | :white_check_mark: | |
 
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
-
 ## Installation
 
 ### CocoaPods
@@ -142,8 +140,6 @@ JOSESwift covers three functional aspects:
 3. [JWK: Representing Keys](#jwk-representing-keys)
 	- [Encoding RSA Public Keys](#encoding-rsa-public-keys)
 	- [Decoding RSA Public Keys](#decoding-rsa-public-keys)
-
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 ### JWS: Digital Signatures
 
@@ -259,6 +255,48 @@ do {
 
 More details about decrypting an existing, serialized JWE can be found [in the wiki](../../wiki/jwe).
 
+<details>
+
+<summary>
+Click here for a more detailed description of decrypting a JWE and retrieving its payload.
+</summary>
+
+<br>
+
+If you receive a JWE serialization from someone else, you can easily construct a JWE from it:
+
+``` swift
+let serialization = /* ... */
+
+do {
+	let jwe = try JWE(compactSerialization: serialization)
+} catch {
+    // Deserialization failed!
+}
+```
+
+You can then decrypt the JWE using your private key:
+
+``` swift
+let privateKey: SecKey = /* ... */
+
+guard let payload = try? jwe.decrypt(with: privateKey) else {
+    // Decryption failed!
+}
+
+// Decryption successful!
+```
+
+Now we can read the plain message:
+
+``` swift
+let data = payload.data()
+
+let message = String(data: data, encoding: .utf8)! // Summer ⛱, Sun ☀️, Cactus 🌵
+```
+
+</details>
+
 ### JWK: Representing Keys
 
 A JWK is a JSON data structure that represents a cryptographic key. You could use it, for instance, as the payload of a JWS or a JWE to transmit your public key to a server.
@@ -372,8 +410,6 @@ let publicKey: Data = try! jwk.converted(to: Data.self)
 JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
 
 It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
-
-> Please note that as of now we use the `SecKey` class from the iOS `Security` framework to represent our keys. We are working on replacing this with something platform independent so non-iOS users can use the framework with ease.
 
 For security disclosures or related matters, please contact :warning: **Todo:** Add security contact address.
 
