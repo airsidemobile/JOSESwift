@@ -66,7 +66,7 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
-    /// Constructs an decrypter used to decrypt a JWE.
+    /// Constructs a decrypter used to decrypt a JWE.
     ///
     /// - Parameters:
     ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.

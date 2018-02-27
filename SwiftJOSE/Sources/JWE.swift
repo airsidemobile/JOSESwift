@@ -132,7 +132,7 @@ public struct JWE {
     }
 
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
-    /// As mentioned it is the responsibility of the user to chache this plaintext.
+    /// As mentioned it is the responsibility of the user to cache this plaintext.
     ///
     /// - Parameter kdk: The private key to decrypt the JWE with.
     /// - Returns: The decrypted payload of the JWE.
