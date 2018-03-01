@@ -31,6 +31,7 @@
 		65684A4F2031971A00E56C68 /* RSAPublicKeyToSecKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65684A4E2031971A00E56C68 /* RSAPublicKeyToSecKeyTests.swift */; };
 		6571F6231F7BF786004D53C5 /* JWSHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6571F6221F7BF786004D53C5 /* JWSHeader.swift */; };
 		6572C2F21F96428800D4186D /* Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6572C2F11F96428800D4186D /* Decrypter.swift */; };
+		6575696D203EF9CE004A0EFD /* JWSValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6575696C203EF9CE004A0EFD /* JWSValidationTests.swift */; };
 		658261492029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658261482029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift */; };
 		6582614D2029E98A00B594ED /* DataRSAPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */; };
 		6582614F2029F2D100B594ED /* ASN1DERParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582614E2029F2D100B594ED /* ASN1DERParsing.swift */; };
@@ -122,6 +123,7 @@
 		65684A4E2031971A00E56C68 /* RSAPublicKeyToSecKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAPublicKeyToSecKeyTests.swift; sourceTree = "<group>"; };
 		6571F6221F7BF786004D53C5 /* JWSHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeader.swift; sourceTree = "<group>"; };
 		6572C2F11F96428800D4186D /* Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decrypter.swift; sourceTree = "<group>"; };
+		6575696C203EF9CE004A0EFD /* JWSValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSValidationTests.swift; sourceTree = "<group>"; };
 		658261482029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyRSAPublicKeyTests.swift; sourceTree = "<group>"; };
 		6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRSAPublicKey.swift; sourceTree = "<group>"; };
 		6582614E2029F2D100B594ED /* ASN1DERParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASN1DERParsing.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		65125A2C1FBF6B79007CF3AE /* JWS */ = {
 			isa = PBXGroup;
 			children = (
+				6575696C203EF9CE004A0EFD /* JWSValidationTests.swift */,
 				652C61391FD99A3300578E2A /* JWSSigningInputTest.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
 				C803EFE41FA77E3000B71335 /* JWSTests.swift */,
@@ -261,7 +264,6 @@
 		6582C0BB1F4B09DC00B153D5 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				C86B876C203D857B00208387 /* SwiftJOSEError.swift */,
 				65A77E931F7285A900A66DDE /* JOSEHeader.swift */,
 				65A7A1981F7295F5009449E7 /* Payload.swift */,
 				65353F5C1F750A6A003E099B /* DataExtensions.swift */,
@@ -269,6 +271,7 @@
 				652F6DE81F73E6780002DEE0 /* Serializer.swift */,
 				65D1D0661F7A878D006377CD /* Deserializer.swift */,
 				C8610F082029B15600859FCC /* Algorithms.swift */,
+				C86B876C203D857B00208387 /* SwiftJOSEError.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -512,7 +515,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					65A9D3D61F45CDD7004E0B61 = {
@@ -593,6 +596,7 @@
 				65676D8B1FC220C70031B26D /* JWEDeserializationTests.swift in Sources */,
 				6546D606203580C6007217FB /* JWKRSADecodingTests.swift in Sources */,
 				65684A4D2031935200E56C68 /* RSAPublicKeyToDataTests.swift in Sources */,
+				6575696D203EF9CE004A0EFD /* JWSValidationTests.swift in Sources */,
 				65A103A1202B03BB00D22BF5 /* ASN1DERParsingTests.swift in Sources */,
 				C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */,
 				C81DD92A1FD7096B00026024 /* HMACTests.swift in Sources */,
@@ -719,7 +723,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -727,7 +733,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -775,7 +785,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -783,7 +795,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -831,7 +847,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -853,7 +869,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.SwiftJOSE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -871,6 +887,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 4857DE3DAC;
@@ -903,6 +920,7 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 4857DE3DAC;

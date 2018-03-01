@@ -54,7 +54,7 @@ public struct JWS {
     ///   - payload: A fully initialized `Payload`.
     ///   - signer: The `Signer` used to compute the JWS signature from the header and payload.
     /// - Throws: `SwiftJOSEError` if any error occurs while signing. 
-    public init(header: JWSHeader, payload: Payload, signer: Signer) throws {
+    public init<KeyType>(header: JWSHeader, payload: Payload, signer: Signer<KeyType>) throws {
         self.header = header
         self.payload = payload
 
@@ -107,22 +107,50 @@ public struct JWS {
         self.signature = signature
     }
 
-    /// Verifies a JWS using a given public key.
+    /// Checks whether the JWS's signature is valid using a given public key.
     ///
-    /// - Parameter publicKey: The public key used to verify the JWS object's header and payload.
-    /// - Returns: `true` if the JWS object's signature could be verified against it's header and payload. `false` otherwise.
-    public func isValid(for publicKey: SecKey) throws -> Bool {
+    /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
+    /// - Returns: `true` if the JWS's signature is valid for the given key and the JWS's header and payload.
+    ///            `false` if the signature is not valid or if the singature could not be verified.
+    public func isValid<KeyType>(for publicKey: KeyType) -> Bool {
         guard let alg = header.algorithm else {
-            throw SwiftJOSEError.verifyingFailed(description: "Invalid header parameter.")
+            return false
         }
 
-        let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey)
+        guard let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey) else {
+            return false
+        }
 
         do {
             return try verifier.verify(header: header, and: payload, against: signature)
         } catch {
+            return false
+        }
+    }
+
+    /// Checks whether the JWS's signature is valid using a given public key.
+    ///
+    /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
+    /// - Returns: The JWS on which this function was called if the signature is valid.
+    /// - Throws: A `SwiftJOSEError` if the signature is invalid or if errors occured during signature validation.
+    public func validate<KeyType>(with publicKey: KeyType) throws -> JWS {
+        guard let alg = header.algorithm else {
+            throw SwiftJOSEError.verifyingFailed(description: "Invalid header parameter.")
+        }
+
+        guard let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey) else {
+            throw SwiftJOSEError.verifyingFailed(description: "Wrong key type.")
+        }
+
+        do {
+            guard try verifier.verify(header: header, and: payload, against: signature) else {
+                throw SwiftJOSEError.signatureInvalid
+            }
+        } catch {
             throw SwiftJOSEError.verifyingFailed(description: error.localizedDescription)
         }
+
+        return self
     }
 }
 

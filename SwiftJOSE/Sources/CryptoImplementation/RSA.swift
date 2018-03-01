@@ -22,6 +22,7 @@
 //
 
 import Foundation
+import Security
 
 internal enum RSAError: Error {
     case algorithmNotSupported
@@ -70,6 +71,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
 }
 
 internal struct RSA {
+    typealias KeyType = SecKey
+
     ///  Signs input data with a given `RSA` algorithm and the corresponding private key.
     ///
     /// - Parameters:
@@ -78,7 +81,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm to sign the input data.
     /// - Returns: The signature.
     /// - Throws: `RSAError` if any errors occur while signing the input data.
-    static func sign(_ signingInput: Data, with privateKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Data {
+    static func sign(_ signingInput: Data, with privateKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Data {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to sign with a given private key.
         guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
@@ -105,7 +108,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm to verify the input data.
     /// - Returns: True if the signature is verified, false if it is not verified.
     /// - Throws: `RSAError` if any errors occur while verifying the input data against the signature.
-    static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: SecKey, and algorithm: SignatureAlgorithm) throws -> Bool {
+    static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Bool {
         // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to verify with a given public key.
         guard
@@ -139,7 +142,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to encrypt the plain text.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
-    static func encrypt(_ plaintext: Data, with publicKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func encrypt(_ plaintext: Data, with publicKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to encrypt with a given public key.
         guard
@@ -176,7 +179,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to decrypt the cipher text.
     /// - Returns: The plain text.
     /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
-    static func decrypt(_ ciphertext: Data, with privateKey: SecKey, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func decrypt(_ ciphertext: Data, with privateKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to decrypt with a given private key.
         guard

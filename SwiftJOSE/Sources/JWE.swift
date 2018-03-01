@@ -70,7 +70,7 @@ public struct JWE {
     ///   - payload: A fully initialized `Payload`.
     ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
     /// - Throws: `SwiftJOSEError` if any error occurs while encrypting.
-    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
+    public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
         self.header = header
 
         var encryptionContext: EncryptionContext
@@ -132,10 +132,12 @@ public struct JWE {
     }
 
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
-    /// As mentioned it is the responsibility of the user to chache this plaintext.
-    /// Note that we can infer the algorithms and the shared key from the JWE. Ultimately the user only needs to provide a private key here.
-    /// See [JOSE-43](https://airside.atlassian.net/browse/JOSE-43).
-    public func decrypt(with kdk: SecKey) throws -> Payload {
+    /// As mentioned it is the responsibility of the user to cache this plaintext.
+    ///
+    /// - Parameter kdk: The private key to decrypt the JWE with.
+    /// - Returns: The decrypted payload of the JWE.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
+    public func decrypt<KeyType>(with kdk: KeyType) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
@@ -148,7 +150,9 @@ public struct JWE {
             throw SwiftJOSEError.decryptingFailed(description: "Invalid header parameter.")
         }
 
-        let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc)
+        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc) else {
+            throw SwiftJOSEError.decryptingFailed(description: "Wrong key type.")
+        }
 
         do {
             return Payload(try decrypter.decrypt(context))

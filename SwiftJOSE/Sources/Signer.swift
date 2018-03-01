@@ -26,9 +26,6 @@ import Foundation
 protocol SignerProtocol {
     var algorithm: SignatureAlgorithm { get }
 
-    /// Initializes a `Signer` with a specified key.
-    init(algorithm: SignatureAlgorithm, privateKey: SecKey)
-
     /// Signs input data.
     ///
     /// - Parameter signingInput: The input to sign.
@@ -37,13 +34,23 @@ protocol SignerProtocol {
     func sign(_ signingInput: Data) throws -> Data
 }
 
-public struct Signer {
+public struct Signer<KeyType> {
     let signer: SignerProtocol
 
-    public init(signingAlgorithm: SignatureAlgorithm, privateKey: SecKey) {
+    /// Constructs a signer used to sign a JWS.
+    ///
+    /// - Parameters:
+    ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
+    ///   - privateKey: The private key used to sign the JWS. Currently supported key types are: `SecKey`.
+    /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
+    public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {
         case .RS512:
-            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey)
+            guard type(of: privateKey) is RSASigner.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey as! RSASigner.KeyType)
         }
     }
 

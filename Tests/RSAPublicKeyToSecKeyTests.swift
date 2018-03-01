@@ -26,18 +26,30 @@ import XCTest
 
 class RSAPublicKeyToSecKeyTests: CryptoTestCase {
 
-    func testPublicKey2048ToData() {
+    func testPublicKey2048ToSecKey() {
         let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)
         let key = try! jwk.converted(to: SecKey.self)
 
         XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, publicKey2048Data)
     }
 
-    func testPublicKey4096ToData() {
+    func testPublicKey4096ToSecKey() {
         let jwk = RSAPublicKey(modulus: expectedModulus4096Base64, exponent: expectedExponentBase64)
         let key = try! jwk.converted(to: SecKey.self)
 
         XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, publicKey4096Data)
+    }
+
+    func testMalformedModulusConversionFails() {
+        let jwk = RSAPublicKey(modulus: "+++++", exponent: expectedExponentBase64)
+
+        XCTAssertThrowsError(try jwk.converted(to: SecKey.self))
+    }
+
+    func testMalformedExponentConversionFails() {
+        let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: "+++++")
+
+        XCTAssertThrowsError(try jwk.converted(to: SecKey.self))
     }
 
 }

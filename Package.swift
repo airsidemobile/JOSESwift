@@ -2,7 +2,4 @@
 
 import PackageDescription
 
-let package = Package(
-    name: "SwiftJOSE",
-    exclude: [ "Tests" ]
-)
+// WIP!

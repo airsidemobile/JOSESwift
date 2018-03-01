@@ -41,7 +41,7 @@ class JWSTests: CryptoTestCase {
 
         let header = JWSHeader(algorithm: .RS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey2048!)
+        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
@@ -49,7 +49,7 @@ class JWSTests: CryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
-        XCTAssertTrue(try! secondJWS.isValid(for: publicKey2048!))
+        XCTAssertTrue(secondJWS.isValid(for: publicKey2048!))
     }
 
     func testDeserializeFromCompactSerialization() {
@@ -62,7 +62,7 @@ class JWSTests: CryptoTestCase {
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"RS512\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
-        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey2048!)
+        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey2048!)!
         let signature = try! signer.sign(header: JWSHeader(algorithm: .RS512), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }

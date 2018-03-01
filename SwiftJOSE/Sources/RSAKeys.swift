@@ -52,7 +52,18 @@ public typealias RSAPrivateKeyComponents = (
 /// It can be expressed through `RSAPublicKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPublicKeyComponents {
+
+    /// Creates an object that contains the supplied components in the format specified by PKCS#1.
+    ///
+    /// - Parameter components: The public key components.
+    /// - Returns: An object containing the supplied components.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     static func representing(rsaPublicKeyComponents components: RSAPublicKeyComponents) throws -> Self
+
+    /// Extracts the public key components specified by PKCS#1.
+    ///
+    /// - Returns: The components of the public key.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents
 }
 
@@ -60,7 +71,18 @@ public protocol ExpressibleAsRSAPublicKeyComponents {
 /// It can be expressed through `RSAPrivateKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsRSAPrivateKeyComponents {
+
+    /// Creates an object that contains the supplied components in the format specified by PKCS#1.
+    ///
+    /// - Parameter components: The private key components.
+    /// - Returns: An object containing the supplied components.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     static func representing(rsaPrivateKeyComponents components: RSAPrivateKeyComponents) throws -> Self
+
+    /// Extracts the private key components specified by PKCS#1.
+    ///
+    /// - Returns: The components of the private key.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     func rsaPrivateKeyComponents() throws -> RSAPrivateKeyComponents
 }
 
@@ -111,10 +133,10 @@ public struct RSAPublicKey: JWK {
     /// - Parameters:
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let components = try? publicKey.rsaPublicKeyComponents() else {
-            throw JWKError.cannotExtractRSAPublicKeyComponents
+            throw SwiftJOSEError.couldNotConstructJWK
         }
 
         // The components are unsigned big-endian integers encoded using the minimum number of octets needed
@@ -139,14 +161,14 @@ public struct RSAPublicKey: JWK {
     ///
     /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPublicKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
-            throw JWKError.modulusNotBase64URLUIntEncoded
+            throw SwiftJOSEError.modulusNotBase64URLUIntEncoded
         }
 
-        guard let exponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.exponentNotBase64URLUIntEncoded
+        guard let exponentData = Data(base64URLEncoded: self.exponent) else {
+            throw SwiftJOSEError.exponentNotBase64URLUIntEncoded
         }
 
         return try T.representing(rsaPublicKeyComponents: (modulusData, exponentData))
@@ -204,10 +226,10 @@ public struct RSAPrivateKey: JWK {
     /// - Parameters:
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
-            throw JWKError.cannotExtractRSAPrivateKeyComponents
+            throw SwiftJOSEError.couldNotConstructJWK
         }
 
         // The components are unsigned big-endian integers encoded using the minimum number of octets needed
@@ -233,18 +255,18 @@ public struct RSAPrivateKey: JWK {
     ///
     /// - Parameter type: The type to convert the JWK to.
     /// - Returns: The type initialized with the key data.
-    /// - Throws: A `JWKError` indicating any errors.
+    /// - Throws: A `SwiftJOSEError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsRSAPrivateKeyComponents {
         guard let modulusData = Data(base64URLEncoded: self.modulus) else {
-            throw JWKError.modulusNotBase64URLUIntEncoded
+            throw SwiftJOSEError.modulusNotBase64URLUIntEncoded
         }
 
         guard let exponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.exponentNotBase64URLUIntEncoded
+            throw SwiftJOSEError.exponentNotBase64URLUIntEncoded
         }
 
         guard let privateExponentData = Data(base64Encoded: self.exponent) else {
-            throw JWKError.privateExponentNotBase64URLUIntEncoded
+            throw SwiftJOSEError.privateExponentNotBase64URLUIntEncoded
         }
 
         return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData))

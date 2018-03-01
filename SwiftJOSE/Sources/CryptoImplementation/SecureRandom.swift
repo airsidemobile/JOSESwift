@@ -22,6 +22,7 @@
 //
 
 import Foundation
+import Security
 
 internal enum SecureRandomError: Error {
     case failed(status: OSStatus)

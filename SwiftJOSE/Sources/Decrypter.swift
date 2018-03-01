@@ -24,9 +24,6 @@
 import Foundation
 
 internal protocol AsymmetricDecrypter {
-    /// Initializes an `AsymmetricDecrypter` with a specified private key.
-    init(algorithm: AsymmetricKeyAlgorithm, privateKey: SecKey)
-
     var algorithm: AsymmetricKeyAlgorithm { get }
 
     /// Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
@@ -38,8 +35,6 @@ internal protocol AsymmetricDecrypter {
 }
 
 internal protocol SymmetricDecrypter {
-    init(algorithm: SymmetricKeyAlgorithm)
-
     var algorithm: SymmetricKeyAlgorithm { get }
 
     /// Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
@@ -71,10 +66,22 @@ public struct Decrypter {
     let asymmetric: AsymmetricDecrypter
     let symmetric: SymmetricDecrypter
 
-    public init(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: SecKey, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+    /// Constructs a decrypter used to decrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.
+    ///   - kdk: The private key used to decrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
+    ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
+    /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):
-            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk)
+            guard type(of: kdk) is RSADecrypter.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         }
     }
