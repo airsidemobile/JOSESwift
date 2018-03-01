@@ -22,14 +22,10 @@
 //
 
 import Foundation
-import SJCommonCrypto
 
 internal protocol AsymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: AsymmetricKeyAlgorithm { get }
-
-    /// Initializes an `AsymmetricEncrypter` with a specified algorithm and public key.
-    init(algorithm: AsymmetricKeyAlgorithm, publicKey: SecKey)
 
     /// Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
     ///
@@ -42,9 +38,6 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: SymmetricKeyAlgorithm { get }
-
-    /// Initializes a `SymmetricEncrypter` with a specified algorithm.
-    init(algorithm: SymmetricKeyAlgorithm)
 
     /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
     ///
@@ -70,14 +63,26 @@ public struct SymmetricEncryptionContext {
     let initializationVector: Data
 }
 
-public struct Encrypter {
+public struct Encrypter<KeyType> {
     let asymmetric: AsymmetricEncrypter
     let symmetric: SymmetricEncrypter
 
-    public init(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: SecKey, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    /// Constructs an encrypter used to encrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
+    ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
+    ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
+    /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512) :
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek)
+            guard type(of: kek) is RSAEncrypter.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek as! RSAEncrypter.KeyType)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         }
     }

@@ -26,9 +26,6 @@ import Foundation
 protocol VerifierProtocol {
     var algorithm: SignatureAlgorithm { get }
 
-    /// Initializes a `Verifier` with a specified key and signing algorithm.
-    init(algorithm: SignatureAlgorithm, publicKey: SecKey)
-
     /// Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
     ///
     /// - Parameters:
@@ -39,13 +36,23 @@ protocol VerifierProtocol {
     func verify(_ signingInput: Data, against signature: Data) throws -> Bool
 }
 
-public struct Verifier {
+public struct Verifier<KeyType> {
     let verifier: VerifierProtocol
 
-    public init(verifyingAlgorithm: SignatureAlgorithm, publicKey: SecKey) {
+    /// Constructs a verifyer used to verify a JWS.
+    ///
+    /// - Parameters:
+    ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
+    ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey`.
+    /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
+    public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
         case .RS512:
-            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey)
+            guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey as! RSAVerifier.KeyType)
         }
     }
 
