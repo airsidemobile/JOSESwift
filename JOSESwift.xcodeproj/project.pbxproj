@@ -41,7 +41,7 @@
 		65A103A3202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift */; };
 		65A77E941F7285A900A66DDE /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A77E931F7285A900A66DDE /* JOSEHeader.swift */; };
 		65A7A1991F7295F5009449E7 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A1981F7295F5009449E7 /* Payload.swift */; };
-		65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */; };
+		65A9D3DC1F45CDD7004E0B61 /* JOSESwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */; };
 		65C7D92B1F472ACD000CCDB2 /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92A1F472ACD000CCDB2 /* JWS.swift */; };
 		65C7D92D1F472B4D000CCDB2 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C7D92C1F472B4D000CCDB2 /* Signer.swift */; };
 		65D1D0651F7A4DB3006377CD /* DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D1D0641F7A4DB3006377CD /* DataConvertible.swift */; };
@@ -148,7 +148,7 @@
 		65F44EB01FE2D941000C5EA0 /* JWK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWK.swift; sourceTree = "<group>"; };
 		65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAKeys.swift; sourceTree = "<group>"; };
 		65FABAE91F4AC2D3006D7679 /* RSASigner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RSASigner.swift; path = SwiftJOSE/Sources/RSASigner.swift; sourceTree = SOURCE_ROOT; };
-		65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftJOSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JOSESwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FBFDE51F45CC7C005C7D68 /* SwiftJOSE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftJOSE.h; sourceTree = "<group>"; };
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C803EFE41FA77E3000B71335 /* JWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSTests.swift; sourceTree = "<group>"; };
@@ -183,7 +183,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65A9D3DC1F45CDD7004E0B61 /* SwiftJOSE.framework in Frameworks */,
+				65A9D3DC1F45CDD7004E0B61 /* JOSESwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +385,7 @@
 		65FBFDE31F45CC7C005C7D68 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */,
+				65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */,
 				65A9D3D71F45CDD7004E0B61 /* Tests.xctest */,
 				C8610F602031A4C700859FCC /* SJCommonCrypto.framework */,
 			);
@@ -471,9 +471,9 @@
 			productReference = 65A9D3D71F45CDD7004E0B61 /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		65FBFDE11F45CC7C005C7D68 /* SwiftJOSE */ = {
+		65FBFDE11F45CC7C005C7D68 /* JOSESwift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 65FBFDEA1F45CC7C005C7D68 /* Build configuration list for PBXNativeTarget "SwiftJOSE" */;
+			buildConfigurationList = 65FBFDEA1F45CC7C005C7D68 /* Build configuration list for PBXNativeTarget "JOSESwift" */;
 			buildPhases = (
 				65FBFDDD1F45CC7C005C7D68 /* Sources */,
 				65FBFDDE1F45CC7C005C7D68 /* Frameworks */,
@@ -485,9 +485,9 @@
 			dependencies = (
 				C8610F6B2031A51000859FCC /* PBXTargetDependency */,
 			);
-			name = SwiftJOSE;
+			name = JOSESwift;
 			productName = SwiftJOSE;
-			productReference = 65FBFDE21F45CC7C005C7D68 /* SwiftJOSE.framework */;
+			productReference = 65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C8610F5F2031A4C700859FCC /* SJCommonCrypto */ = {
@@ -536,7 +536,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 65FBFDDC1F45CC7C005C7D68 /* Build configuration list for PBXProject "SwiftJOSE" */;
+			buildConfigurationList = 65FBFDDC1F45CC7C005C7D68 /* Build configuration list for PBXProject "JOSESwift" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -548,7 +548,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				65FBFDE11F45CC7C005C7D68 /* SwiftJOSE */,
+				65FBFDE11F45CC7C005C7D68 /* JOSESwift */,
 				65A9D3D61F45CDD7004E0B61 /* Tests */,
 				C8610F5F2031A4C700859FCC /* SJCommonCrypto */,
 			);
@@ -675,7 +675,7 @@
 /* Begin PBXTargetDependency section */
 		65A9D3DE1F45CDD7004E0B61 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 65FBFDE11F45CC7C005C7D68 /* SwiftJOSE */;
+			target = 65FBFDE11F45CC7C005C7D68 /* JOSESwift */;
 			targetProxy = 65A9D3DD1F45CDD7004E0B61 /* PBXContainerItemProxy */;
 		};
 		C8610F6B2031A51000859FCC /* PBXTargetDependency */ = {
@@ -952,7 +952,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		65FBFDDC1F45CC7C005C7D68 /* Build configuration list for PBXProject "SwiftJOSE" */ = {
+		65FBFDDC1F45CC7C005C7D68 /* Build configuration list for PBXProject "JOSESwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				65FBFDE81F45CC7C005C7D68 /* Debug */,
@@ -961,7 +961,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		65FBFDEA1F45CC7C005C7D68 /* Build configuration list for PBXNativeTarget "SwiftJOSE" */ = {
+		65FBFDEA1F45CC7C005C7D68 /* Build configuration list for PBXNativeTarget "JOSESwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				65FBFDEB1F45CC7C005C7D68 /* Debug */,
