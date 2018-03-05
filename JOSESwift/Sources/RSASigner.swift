@@ -1,6 +1,6 @@
 //
 //  RSASigner.swift
-//  SwiftJOSE
+//  JOSESwift
 //
 //  Created by Daniel Egger on 21/08/2017.
 //

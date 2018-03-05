@@ -1,6 +1,6 @@
 //
 //  Signer.swift
-//  SwiftJOSE
+//  JOSESwift
 //
 //  Created by Daniel Egger on 18/08/2017.
 //
