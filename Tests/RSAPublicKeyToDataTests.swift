@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 
 class RSAPublicKeyToDataTests: CryptoTestCase {
     

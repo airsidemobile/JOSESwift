@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 
 extension RSAError: Equatable {
     public static func ==(lhs: RSAError, rhs: RSAError) -> Bool {
