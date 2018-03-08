@@ -75,16 +75,18 @@ public struct JWEHeader: JOSEHeader {
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
     public var algorithm: AsymmetricKeyAlgorithm? {
-        // Forced unwrap is ok here since we checked both that "alg" exists
+        // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
+        // swiftlint:disable:next force_cast
         return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
     }
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
     public var encryptionAlgorithm: SymmetricKeyAlgorithm? {
-        // Forced unwrap is ok here since we checked both that "enc" exists
+        // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
+        // swiftlint:disable:next force_cast
         return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
     }
 }

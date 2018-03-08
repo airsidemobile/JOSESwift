@@ -69,8 +69,9 @@ public struct JWSHeader: JOSEHeader {
 extension JWSHeader {
     /// The algorithm used to sign the payload.
     public var algorithm: SignatureAlgorithm? {
-        // Forced unwrap is ok here since we checked both that "alg" exists
+        // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`
+        // swiftlint:disable:next force_cast
         return SignatureAlgorithm(rawValue: parameters["alg"] as! String)
     }
 }
