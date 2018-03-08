@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 
 class DataExtensionTests: XCTestCase {
     let validBase64URLTestString = "VGhpcyBpcyBhIHRlc3Qgc3RyaW5nIHdoZXJlIHRoZSBiYXNlNjQgcmVwcmVzZW50YXRpb24gY29udGFpbnMgYSA9IGFzIHBhZGRpbmc"

@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 
 class JWEHeaderTests: XCTestCase {
     let parameterDict = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]

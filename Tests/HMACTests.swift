@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 
 class HMACTests: CryptoTestCase {
     let testKey = "0102030405060708090a0b0c0d0e0f10111213141516171819".hexadecimalToData()!

@@ -22,7 +22,7 @@
 //
 
 import XCTest
-@testable import SwiftJOSE
+@testable import JOSESwift
 import SJCommonCrypto
 
 class AESDecrypterTests: CryptoTestCase {
