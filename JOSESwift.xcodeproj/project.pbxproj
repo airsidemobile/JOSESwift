@@ -87,7 +87,7 @@
 			containerPortal = 65FBFDD91F45CC7C005C7D68 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 65FBFDE11F45CC7C005C7D68;
-			remoteInfo = SwiftJOSE;
+			remoteInfo = JOSESwift;
 		};
 		C8610F6A2031A51000859FCC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -486,7 +486,7 @@
 				C8610F6B2031A51000859FCC /* PBXTargetDependency */,
 			);
 			name = JOSESwift;
-			productName = SwiftJOSE;
+			productName = JOSESwift;
 			productReference = 65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */;
 			productType = "com.apple.product-type.framework";
 		};
