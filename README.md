@@ -1,9 +1,11 @@
 ![JOSESwift](logo/JOSESwift-full.svg)
-[![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
+
 <br>
 
 **JOSESwift** (WIP) is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 It is designed with usage on iOS and pure Swift environments in mind.
+
+[![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
 
 As of now, usage is limited to iOS. See [Security](#security) for details.
 
