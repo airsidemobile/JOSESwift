@@ -1,0 +1,4 @@
+language: swift
+os: osx
+xcode_workspace: JOSESwift.xcworkspace
+xcode_scheme: JOSESwift
