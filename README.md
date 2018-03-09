@@ -23,6 +23,7 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 - [Security](#security)
 - [Contributing](#contributing)
 - [Resources](#resources)
+- [Contact](#contact)
 - [Credits](#credits)
 - [License](#license)
 
