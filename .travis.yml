@@ -1,4 +1,5 @@
 language: swift
 os: osx
+xcode_project: JOSESwift.xcodeproj
 xcode_workspace: JOSESwift.xcworkspace
 xcode_scheme: JOSESwift
