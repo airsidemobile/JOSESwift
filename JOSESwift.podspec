@@ -1,14 +1,15 @@
 Pod::Spec.new do |s|
   s.name              = "JOSESwift"
-  s.version           = "0.0.1"
+  s.version           = "1.0.0"
   s.license           = "Apache License, Version 2.0"
   s.summary           = "JOSE framework for Swift"
-  s.authors           = { "Daniel Egger" => "daniel.egger@mohemian.com", "Carol Capek" => "carol.capek@mohemian.com", "Christoph Gigi Fuchs" => "christoph@mohemian.com" }
-  s.homepage          = "https://mohemian.com"
-  s.social_media_url  = "https://twitter.com/mohemian_mobile"
+  s.authors           = { "Daniel Egger" => "daniel.egger@airsidemobile.com", "Carol Capek" => "carol.capek@airsidemobile.com", "Christoph Gigi Fuchs" => "christoph.fuchs@airsidemobile.com" }
+  s.homepage          = "https://www.airsidemobile.com  "
+  s.social_media_url  = "https://twitter.com/airsideout"
+
 
   s.platform          = :ios, "10.0"
-  s.source            = { :git => "https://github.com/mohemian/jose-ios.git", :tag => "#{s.version}-rc1" }
+  s.source            = { :git => "https://github.com/airsidemobile/JOSESwift", :tag => "#{s.version}" }
   s.source_files      = "JOSESwift/**/*.{h,swift}"
   s.preserve_paths    = "SJCommonCrypto/*"
 
