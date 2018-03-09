@@ -106,27 +106,6 @@ github "airsidemobile/JOSESwift"
 
 Then build it by running `carthage update` and drag the built framework into your Xcode project. More documentation on using Carthage can be found [here](https://github.com/Carthage/Carthage).
 
-### Swift Package Manager
-
-To integrate JOSESwift in your Swift project, add it as dependency in your `Package.swift` file:
-
-:warning: **Todo:** Test if this actually works and mention that non iOS crypto implementation is still to do.
-
-``` Swift
-import PackageDescription
-
-let package = Package(
-
-    /* other configuration */
-    
-    dependencies: [
-        .package(url: "https://github.com/airsidemobile/JOSESwift.git")
-    ]
-)
-```
-
-Then download it using `swift package resolve`. You should now be able to use JOSESwift in your project. More documentation on using the Swift Package Manager can be found [here](https://swift.org/package-manager/).
-
 ## Usage
 
 JOSESwift covers three functional aspects:
