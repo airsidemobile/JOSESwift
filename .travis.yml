@@ -1,5 +1,6 @@
 language: swift
 os: osx
+osx_image: xcode9.2
 xcode_project: JOSESwift.xcodeproj
 xcode_workspace: JOSESwift.xcworkspace
-xcode_scheme: JOSESwift
+xcode_scheme: Tests
