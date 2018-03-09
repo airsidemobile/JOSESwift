@@ -274,7 +274,7 @@ JOSESwift uses the [iOS Security framework](https://developer.apple.com/document
 
 It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
 
-For security disclosures or related matters, please contact :warning: **Todo:** Add security contact address.
+For security disclosures or related matters, please contact <joseswift@airsidemobile.com>.
 
 ## Contributing
 
@@ -296,6 +296,10 @@ You can find detailed information about the relevant JOSE standards in the respe
 
 Don’t forget to check our [our wiki](https://github.com/mohemian/jose-ios/wiki) for more detailed documentation.
 
+## Contact
+
+Feel free to contact the project maintainers at <joseswift@airsidemobile.com>.
+
 ## Credits
 
 JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
@@ -309,6 +313,10 @@ JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 ### Reviewers
 
 [@haeser](https://github.com/haeser), [@michael-mohemian](https://github.com/michael-mohemian)
+
+### Logo
+
+The logo was designed by Ivan Leuzzi.
 
 ### Thanks
 
