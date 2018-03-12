@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWETests: CryptoTestCase {
+class JWETests: CryptoTestCasea {
 
     override func setUp() {
         super.setUp()
