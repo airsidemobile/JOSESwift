@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
 
   s.platform          = :ios, "10.0"
-  s.source            = { :git => "https://github.com/airsidemobile/JOSESwift", :tag => "#{s.version}" }
+  s.source            = { :git => "https://github.com/airsidemobile/JOSESwift.git", :tag => "#{s.version}" }
   s.source_files      = "JOSESwift/**/*.{h,swift}"
   s.preserve_paths    = "SJCommonCrypto/*"
 
