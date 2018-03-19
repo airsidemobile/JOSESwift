@@ -4,9 +4,9 @@ Pod::Spec.new do |s|
   s.license           = "Apache License, Version 2.0"
   s.summary           = "JOSE framework for Swift"
   s.authors           = { "Daniel Egger" => "daniel.egger@airsidemobile.com", "Carol Capek" => "carol.capek@airsidemobile.com", "Christoph Gigi Fuchs" => "christoph.fuchs@airsidemobile.com" }
-  s.homepage          = "https://www.airsidemobile.com  "
+  s.homepage          = "https://github.com/airsidemobile/JOSESwift"
+  s.documentation_url = "https://github.com/airsidemobile/JOSESwift/wiki"
   s.social_media_url  = "https://twitter.com/airsideout"
-
 
   s.platform          = :ios, "10.0"
   s.source            = { :git => "https://github.com/airsidemobile/JOSESwift.git", :tag => "#{s.version}" }
