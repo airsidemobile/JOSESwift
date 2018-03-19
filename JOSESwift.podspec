@@ -5,6 +5,7 @@ Pod::Spec.new do |s|
   s.summary           = "JOSE framework for Swift"
   s.authors           = { "Daniel Egger" => "daniel.egger@airsidemobile.com", "Carol Capek" => "carol.capek@airsidemobile.com", "Christoph Gigi Fuchs" => "christoph.fuchs@airsidemobile.com" }
   s.homepage          = "https://github.com/airsidemobile/JOSESwift"
+  s.documentation_url = "https://github.com/airsidemobile/JOSESwift/wiki"
   s.social_media_url  = "https://twitter.com/airsideout"
 
   s.platform          = :ios, "10.0"
