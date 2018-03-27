@@ -2,7 +2,7 @@
 
 <br>
 
-**JOSESwift** (WIP) is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
+**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 It is designed with usage on iOS and pure Swift environments in mind.
 
 [![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
@@ -83,15 +83,13 @@ Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKe
 
 To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
 
-:warning: **Todo:** Publish framework on CocoaPods and update Podfile example.
-
 ``` ruby
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'JOSESwift', git: 'git@github.com:airsidemobile/JOSESwift.git'
+    pod 'JOSESwift'
 end
 ```
 
@@ -100,8 +98,6 @@ Then install it by running `pod install`. More documentation on using CocoaPods 
 ### Carthage
 
 To integrate JOSESwift in your Xcode project, include it in your `Cartfile`:
-
-:warning: **Todo:** Test if this actually works.
 
 ```
 github "airsidemobile/JOSESwift"
@@ -275,7 +271,7 @@ More details about decoding RSA public keys can be found [in the wiki](../../wik
 
 JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
 
-It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can easily add their own platform independent crypto implementation instead of the ones mentioned above.
+It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can add their own platform independent crypto implementation instead of the ones mentioned above.
 
 For security disclosures or related matters, please contact <joseswift@airsidemobile.com>.
 
