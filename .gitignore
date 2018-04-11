@@ -101,3 +101,4 @@ fastlane/test_output
 
 .idea/
 sonar-reports/
+/JOSESwift.xcworkspace/xcshareddata
