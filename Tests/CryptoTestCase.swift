@@ -131,13 +131,14 @@ class CryptoTestCase: XCTestCase {
         if
             let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"),
             let keyDict = NSDictionary(contentsOfFile: path),
-            let keyData2048 = Data(base64Encoded: keyDict[privateKeyAlice2048Tag] as! String),
+            let keyDataAlice2048 = Data(base64Encoded: keyDict[privateKeyAlice2048Tag] as! String),
+            let keyDataBob2048 = Data(base64Encoded: keyDict[privateKeyBob2048Tag] as! String),
             let keyData4096 = Data(base64Encoded: keyDict[privateKey4096Tag] as! String)
         {
 
             // 2048 - Alice
 
-            let keyPairAlice2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKeyAlice2048Tag)!
+            let keyPairAlice2048 = setupSecKeyPair(size: 2048, data: keyDataAlice2048, tag: privateKeyAlice2048Tag)!
 
             privateKeyAlice2048 = keyPairAlice2048.privateKey
             publicKeyAlice2048 = keyPairAlice2048.publicKey
@@ -145,7 +146,7 @@ class CryptoTestCase: XCTestCase {
 
             // 2048 - Bob
 
-            let keyPairBob2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKeyBob2048Tag)!
+            let keyPairBob2048 = setupSecKeyPair(size: 2048, data: keyDataBob2048, tag: privateKeyBob2048Tag)!
 
             privateKeyBob2048 = keyPairBob2048.privateKey
             publicKeyBob2048 = keyPairBob2048.publicKey
