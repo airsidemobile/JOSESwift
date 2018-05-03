@@ -26,10 +26,13 @@ import XCTest
 class CryptoTestCase: XCTestCase {
     let message = "The true sign of intelligence is not knowledge but imagination."
     let privateKeyAlice2048Tag = "com.airsidemobile.JOSESwift.testprivateKeyAlice2048"
+    let privateKeyBob2048Tag = "com.airsidemobile.JOSESwift.testprivateKeyBob2048"
     let privateKey4096Tag = "com.airsidemobile.JOSESwift.testPrivateKey4096"
 
     var privateKeyAlice2048: SecKey?
+    var privateKeyBob2048: SecKey?
     var publicKeyAlice2048: SecKey?
+    var publicKeyBob2048: SecKey?
 
     var privateKey4096: SecKey?
     var publicKey4096: SecKey?
