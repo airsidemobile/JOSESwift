@@ -67,7 +67,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
     }
 
     func testPrivateKeyToPublicComponents() {
-        XCTAssertThrowsError(try privateKey2048!.rsaPublicKeyComponents()) { error in
+        XCTAssertThrowsError(try privateKeyAlice2048!.rsaPublicKeyComponents()) { error in
             XCTAssertEqual(error as? JWKError, JWKError.notAPublicKey)
         }
     }

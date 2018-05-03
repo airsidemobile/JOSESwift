@@ -41,7 +41,7 @@ class JWETests: CryptoTestCase {
         let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
 
         let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-        let decryptedPayload = try! jweDec.decrypt(with: privateKey2048!)
+        let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
 
         XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
     }
@@ -49,7 +49,7 @@ class JWETests: CryptoTestCase {
     func testDecrypt() {
         let compactSerializedJWE = "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.Od5AMgOHu6rcEYWkX7w_x_wnMlM5JfZaszCC4xtLGYU9d0BnPm95UWUrgShStGH6LHMxpGdru6gXpdxfhhrji12vUIzmkbyNW5M9wjx2t0e4pzzBSYxgOzFoa3jT9a0PcZfyqHIeTrcrTHtpSJ_CIDiZ3MIeqA7hjuRqu2YcTAE0v5TPLhHDVRBptkOggA5SL2-gRuUuYoWdanMw_JTHK4utXQZoSY1LTdub_Fh5ez1RqOouc3an5Hx6ImzyJS_cbO_l9xHpHjE7in6SeV9bAZTaYEaGnjGKEVaGQ7JiwtTA5rDfVQ5RHSn6blB2Hh5Am7mKzssYu9JjUmr3T-ez_g.M6QnlRxQQ5YS2rF4-wwT3g.4GAtq6fJWJt249SEuK5P_3xJGNYP_e_rhz0PVg9QnJXiRl030ggI9GGs3E_0pEPBs9_WJ3E60qQVoXTIMbJXSQ.bQc-W1Ph_0_3kX570pT8gjDlGyiK3kF8PlHiT7GWfMo"
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
-        let payloadString = String(data: (try! jwe.decrypt(with: privateKey2048!)).data(), encoding: .utf8)!
+        let payloadString = String(data: (try! jwe.decrypt(with: privateKeyAlice2048!)).data(), encoding: .utf8)!
 
         XCTAssertEqual(payloadString, "The true sign of intelligence is not knowledge but imagination.")
     }
@@ -66,7 +66,7 @@ class JWETests: CryptoTestCase {
             kSecAttrKeySizeInBits as String: 2048,
             kSecPrivateKeyAttrs as String: [
                 kSecAttrIsPermanent as String: false,
-                kSecAttrApplicationTag as String: privateKey2048Tag
+                kSecAttrApplicationTag as String: privateKeyAlice2048Tag
             ]
         ]
 

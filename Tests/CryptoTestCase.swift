@@ -25,10 +25,10 @@ import XCTest
 
 class CryptoTestCase: XCTestCase {
     let message = "The true sign of intelligence is not knowledge but imagination."
-    let privateKey2048Tag = "com.airsidemobile.JOSESwift.testPrivateKey2048"
+    let privateKeyAlice2048Tag = "com.airsidemobile.JOSESwift.testprivateKeyAlice2048"
     let privateKey4096Tag = "com.airsidemobile.JOSESwift.testPrivateKey4096"
 
-    var privateKey2048: SecKey?
+    var privateKeyAlice2048: SecKey?
     var publicKey2048: SecKey?
 
     var privateKey4096: SecKey?
@@ -127,15 +127,15 @@ class CryptoTestCase: XCTestCase {
         if
             let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"),
             let keyDict = NSDictionary(contentsOfFile: path),
-            let keyData2048 = Data(base64Encoded: keyDict[privateKey2048Tag] as! String),
+            let keyData2048 = Data(base64Encoded: keyDict[privateKeyAlice2048Tag] as! String),
             let keyData4096 = Data(base64Encoded: keyDict[privateKey4096Tag] as! String)
         {
 
             // 2048
 
-            let keyPair2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKey2048Tag)!
+            let keyPair2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKeyAlice2048Tag)!
 
-            privateKey2048 = keyPair2048.privateKey
+            privateKeyAlice2048 = keyPair2048.privateKey
             publicKey2048 = keyPair2048.publicKey
             publicKey2048Data = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
 

@@ -37,36 +37,36 @@ class RSADecrypterTests: CryptoTestCase {
     }
 
     func testDecrypting() {
-        guard privateKey2048 != nil else {
+        guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
         let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextBase64URL)!)
 
         XCTAssertEqual(plainText, message.data(using: .utf8))
     }
 
     func testCipherTextLengthTooLong() {
-        guard privateKey2048 != nil else {
+        guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
         XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
             XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
         }
     }
 
     func testDecryptingEmptyStringShouldFail() {
-        guard privateKey2048 != nil else {
+        guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
 
         XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextEmptyStringBase64URL)!)) { (error: Error) in
             XCTAssertNotNil(error)
