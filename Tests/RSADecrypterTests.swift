@@ -26,6 +26,7 @@ import XCTest
 
 class RSADecrypterTests: CryptoTestCase {
     let cipherTextBase64URL = "YkzUN55RBG1igsrL-7ofPPWruTjxNMS3Bl1_a3i-dVKBjiN6kH88j8G3iB3eLWFxbiKZvx0LmkP7J65-frpOgF41SlltjJ62LEZOICm4q21Q4MNqL_Vf7kIjh8DziEJkElEz5W4flhI6YQ-9wW_PQ-coBIPIZiFlw6peKAolz8xcevbUmnqIH6A3hOFLK23J2cWDSWgxHEBIYtZ6whQCJYL4vq5lAFNaEoDaE_cgL6LItY4t-vR1exTJSOlCGAv4uM1Kelk6uitaFk2c0h79u3UpFN_wa02m_PPdgTguRdxwRsCpsQhOKmEakl8LR6NTbIrdB13UoL2tdybltVeUCw"
+    let cipherTextEmptyStringBase64URL = "hyOA/tmOclFkj31UPrRb1EnaRMhR5VZg5TrUyfLMtCUlh3grAva0+sSjqt6zSlWK06A6zUieV69aLRbJ0ZactTTqX2CFrhiZ5nUXhzuUya83VKBI0xrGkpQ8u1y2Iqgb+gbWsFJdJ41cSpZXRpc16Hhd3klTp7YydYZQUG//PLM5bn359kqpT8meJdGqTceehVxmdqTpVwukh/uqLOE8CBCrT7D/2t18mzApGpm/Su4bVbZggJ5g9MRPSnwgq1GjKNcMa1PKd+/OWB/rIeDmorT8dLrusGeLbwFCj1HEz4z5izamiBiyPh96G0m4ZhPtVhR4Fo3ARj9C037GroDQ2w=="
 
     override func setUp() {
         super.setUp()
@@ -57,6 +58,17 @@ class RSADecrypterTests: CryptoTestCase {
         XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
             XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
         }
+    }
+
+    func testDecryptingEmptyStringShouldFail() {
+        guard privateKey2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
+
+        XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextEmptyStringBase64URL)!))
     }
 
 }
