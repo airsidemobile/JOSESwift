@@ -38,7 +38,7 @@ internal struct SecureRandom {
         var generatedRandom = Data(count: count)
 
         let randomGenerationStatus = generatedRandom.withUnsafeMutableBytes { mutableRandomBytes in
-            SecRandomCopyBytes(kSecRandomDefault, generatedRandom.count, mutableRandomBytes)
+            SecRandomCopyBytes(kSecRandomDefault, count, mutableRandomBytes)
         }
 
         guard randomGenerationStatus == errSecSuccess else {
