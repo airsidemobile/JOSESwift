@@ -68,6 +68,27 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
     }
 
+    func testEncryptingTwiceWithAliceKey() {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        guard let cipherText2 = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        // Cipher texts differ because of random padding, see https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding_schemes
+        XCTAssertNotEqual(cipherText, cipherText2)
+    }
+
     func testEncryptingWithBobKey() {
         guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
             XCTFail()
