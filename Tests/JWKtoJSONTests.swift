@@ -27,7 +27,7 @@ import XCTest
 class JWKtoJSONTests: CryptoTestCase {
 
     func testJSONString() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [
             "alg": "RS256",
             "kid": "2011-04-29"
         ])
@@ -48,7 +48,7 @@ class JWKtoJSONTests: CryptoTestCase {
     }
 
     func testJSONData() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [
             "alg": "RS256",
             "kid": "2011-04-29"
         ])

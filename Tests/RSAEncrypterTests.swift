@@ -48,12 +48,12 @@ class RSAEncrypterTests: CryptoTestCase {
     }
 
     func testEncrypting() {
-        guard publicKey2048 != nil, privateKeyAlice2048 != nil else {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKey2048!)
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
         guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
             XCTFail()
             return
@@ -69,12 +69,12 @@ class RSAEncrypterTests: CryptoTestCase {
     }
 
     func testPlainTextTooLong() {
-        guard publicKey2048 != nil else {
+        guard publicKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKey2048!)
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
         XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
             XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
         }

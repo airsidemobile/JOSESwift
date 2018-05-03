@@ -34,7 +34,7 @@ class JWSTests: CryptoTestCase {
     }
 
     func testSignAndSerialize() {
-        guard publicKey2048 != nil, privateKeyAlice2048 != nil else {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
@@ -49,7 +49,7 @@ class JWSTests: CryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
-        XCTAssertTrue(secondJWS.isValid(for: publicKey2048!))
+        XCTAssertTrue(secondJWS.isValid(for: publicKeyAlice2048!))
     }
 
     func testDeserializeFromCompactSerialization() {

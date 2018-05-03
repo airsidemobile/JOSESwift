@@ -26,8 +26,8 @@ import XCTest
 
 class SecKeyRSAPublicKeyTests: CryptoTestCase {
 
-    func testPublicKey2048Modulus() {
-        let components = try? publicKey2048!.rsaPublicKeyComponents()
+    func testpublicKeyAlice2048Modulus() {
+        let components = try? publicKeyAlice2048!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -36,8 +36,8 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         XCTAssertEqual(modulus, expectedModulus2048Data)
     }
 
-    func testPublicKey2048Exponent() {
-        let components = try? publicKey2048!.rsaPublicKeyComponents()
+    func testpublicKeyAlice2048Exponent() {
+        let components = try? publicKeyAlice2048!.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -72,8 +72,8 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         }
     }
 
-    func testJWKFromPublicKey2048() {
-        let jwk = try? RSAPublicKey(publicKey: publicKey2048!)
+    func testJWKFrompublicKeyAlice2048() {
+        let jwk = try? RSAPublicKey(publicKey: publicKeyAlice2048!)
 
         XCTAssertNotNil(jwk)
 
@@ -90,7 +90,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         XCTAssertEqual(jwk!.exponent, expectedExponentBase64)
     }
 
-    func testPublicKey2048FromPublicComponents() {
+    func testpublicKeyAlice2048FromPublicComponents() {
         let components = (expectedModulus2048Data, expectedExponentData)
         guard let secKey = try? SecKey.representing(rsaPublicKeyComponents: components) else {
             XCTFail()
@@ -98,7 +98,7 @@ class SecKeyRSAPublicKeyTests: CryptoTestCase {
         }
 
         let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
-        let dataExpected = SecKeyCopyExternalRepresentation(publicKey2048!, nil)! as Data
+        let dataExpected = SecKeyCopyExternalRepresentation(publicKeyAlice2048!, nil)! as Data
 
         XCTAssertEqual(data, dataExpected)
     }
