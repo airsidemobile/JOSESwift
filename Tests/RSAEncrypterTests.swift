@@ -47,7 +47,7 @@ class RSAEncrypterTests: CryptoTestCase {
         super.tearDown()
     }
 
-    func testEncrypting() {
+    func testEncryptingWithAliceKey() {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -61,6 +61,27 @@ class RSAEncrypterTests: CryptoTestCase {
 
         var decryptionError: Unmanaged<CFError>?
         guard let plainTextData = SecKeyCreateDecryptedData(privateKeyAlice2048!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+    }
+
+    func testEncryptingWithBobKey() {
+        guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyBob2048!)
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        var decryptionError: Unmanaged<CFError>?
+        guard let plainTextData = SecKeyCreateDecryptedData(privateKeyBob2048!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
             XCTFail()
             return
         }
