@@ -89,6 +89,28 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertNotEqual(cipherText, cipherText2)
     }
 
+    func testEncryptingWithAliceAndBobKey() {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil, publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypterAlice = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
+        let encrypterBob = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyBob2048!)
+
+        guard let cipherTextAlice = try? encrypterAlice.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+        guard let cipherTextBob = try? encrypterBob.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        // Cipher texts have to differ (different keys)
+        XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
+    }
+
     func testEncryptingWithBobKey() {
         guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
             XCTFail()
