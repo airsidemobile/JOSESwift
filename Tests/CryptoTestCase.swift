@@ -136,10 +136,10 @@ class CryptoTestCase: XCTestCase {
 
             // 2048
 
-            let keyPair2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKeyAlice2048Tag)!
+            let keyPairAlice2048 = setupSecKeyPair(size: 2048, data: keyData2048, tag: privateKeyAlice2048Tag)!
 
-            privateKeyAlice2048 = keyPair2048.privateKey
-            publicKeyAlice2048 = keyPair2048.publicKey
+            privateKeyAlice2048 = keyPairAlice2048.privateKey
+            publicKeyAlice2048 = keyPairAlice2048.publicKey
             publicKeyAlice2048Data = SecKeyCopyExternalRepresentation(publicKeyAlice2048!, nil)! as Data
 
             // 4096
