@@ -31,6 +31,8 @@ extension RSAError: Equatable {
             return true
         case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
             return true
+        case (.decryptingFailed(let a), .decryptingFailed(let b)):
+            return a == b
         default:
             return false
         }
