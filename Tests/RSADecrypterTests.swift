@@ -68,7 +68,10 @@ class RSADecrypterTests: CryptoTestCase {
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKey2048!)
 
-        XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextEmptyStringBase64URL)!))
+        XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextEmptyStringBase64URL)!)) { (error: Error) in
+            XCTAssertNotNil(error)
+            XCTAssertTrue("\(error)".contains("RSAdecrypt wrong input (err -1)"))
+        }
     }
 
 }
