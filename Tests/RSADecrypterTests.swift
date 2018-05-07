@@ -70,6 +70,8 @@ class RSADecrypterTests: CryptoTestCase {
         }
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyBob2048!)
+
+        // Decrypting with the wrong key should throw an error
         XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextWithAliceKeyBase64URL)!)) { (error: Error) in
             XCTAssertEqual(error as! RSAError, defaultDecryptionError)
         }
@@ -82,9 +84,11 @@ class RSADecrypterTests: CryptoTestCase {
         }
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
-        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextWithBobKeyBase64URL)!)
 
-        XCTAssertEqual(plainText, message.data(using: .utf8))
+        // Decrypting with the wrong key should throw an error
+        XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextWithBobKeyBase64URL)!)) { (error: Error) in
+            XCTAssertEqual(error as! RSAError, defaultDecryptionError)
+        }
     }
 
     func testCipherTextLengthTooLong() {
