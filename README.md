@@ -2,7 +2,7 @@
 
 <br>
 
-**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
+**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift.
 It is designed with usage on iOS and pure Swift environments in mind.
 
 [![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
@@ -49,7 +49,7 @@ Digitally signing and verifying arbitrary data using the JWS standard.
 
 | HS256 | HS384 | HS512 | RS256 | RS384 | RS512 | ES256 | ES384 | ES512 | PS256  | PS384 | PS512 |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| | | | | | :white_check_mark: | | | | | | |
+| | | | :white_check_mark: | | :white_check_mark: | | | | | | |
 
 ### JWE :lock:
 
@@ -58,7 +58,7 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 *Supported key encryption algorithms:*
 
 | RSA1_5 | RSA-OAEP | RSA-OAEP-256 | A128KW | A192KW | A256KW | dir | ECDH-ES | ECDH-ES+A128KW | ECDH-ES+A192KW | ECDH-ES+A256KW | A128GCMKW | A192GCMKW | A256GCMKW | PBES2-HS256+A128KW | PBES2-HS384+A192KW | PBES2-HS512+A256KW |
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 | :white_check_mark: | | | | | | | | | | | | | | | | |
 
 *Supported content encryption algorithms:*
@@ -152,7 +152,7 @@ let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 guard let jws = try? JWS(header: header, payload: payload, signer: signer) else { ... }
 
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
-```  
+```
 
 The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
@@ -211,7 +211,7 @@ let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: pub
 guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else { ... }
 
 print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
-```  
+```
 
 The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
@@ -279,7 +279,7 @@ For security disclosures or related matters, please contact <joseswift@airsidemo
 
 Contributions to the project are encouraged and more than welcome. :nerd_face:
 
-If you want to contribute, please submit a pull request. 
+If you want to contribute, please submit a pull request.
 For feature requests, discussions, or bug reports, just open an issue.
 
 See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
