@@ -37,6 +37,8 @@ internal enum RSAError: Error {
 fileprivate extension SignatureAlgorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
+        case .RS256:
+            return .rsaSignatureMessagePKCS1v15SHA256
         case .RS512:
             return .rsaSignatureMessagePKCS1v15SHA512
         }

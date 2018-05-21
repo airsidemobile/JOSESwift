@@ -40,7 +40,7 @@ class RSAVerifierTests: CryptoTestCase {
             return
         }
 
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
         let verifier = RSAVerifier(algorithm: .RS512, publicKey: publicKey2048!)
 
         guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {

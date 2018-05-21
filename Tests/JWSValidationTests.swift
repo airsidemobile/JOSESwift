@@ -27,14 +27,14 @@ import XCTest
 class JWSValidationTests: CryptoTestCase {
 
     func testIsValid() {
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
         XCTAssertTrue(jws.isValid(for: publicKey2048!))
     }
 
     func testIsValidIsFalseForInvalidAlg() {
         // Replaces alg "RS512" with alg "FOOBAR" in header
-        let malformedSerialization = compactSerializedJWSConst.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJGT09CQVIifQ")
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJGT09CQVIifQ")
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
@@ -43,7 +43,7 @@ class JWSValidationTests: CryptoTestCase {
 
     func testIsValidIsFalseForWrongSignature() {
         // Replaces part of the signature, making it invalid
-        let malformedSerialization = compactSerializedJWSConst.replacingOccurrences(of: "dar", with: "foo")
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "dar", with: "foo")
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
@@ -51,28 +51,28 @@ class JWSValidationTests: CryptoTestCase {
     }
 
     func testIsValidIsFalseForWrongKey() {
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
         XCTAssertFalse(jws.isValid(for: publicKey4096!))
     }
 
     func testValidatesDoesNotThrowForValidSignature() {
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
         XCTAssertNoThrow(try jws.validate(with: publicKey2048!))
     }
 
     func testValidatesReturnsJWS() {
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
         let validatedJWS = try! jws.validate(with: publicKey2048!)
 
-        XCTAssertEqual(validatedJWS.compactSerializedString, compactSerializedJWSConst)
+        XCTAssertEqual(validatedJWS.compactSerializedString, compactSerializedJWSRS512Const)
     }
 
     func testValidatesThrowsForInvalidAlg() {
         // Replaces alg "RS512" with alg "FOOBAR" in header
-        let malformedSerialization = compactSerializedJWSConst.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJGT09CQVIifQ")
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJGT09CQVIifQ")
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
@@ -81,7 +81,7 @@ class JWSValidationTests: CryptoTestCase {
 
     func testValidatesThrowsForWrongSignature() {
         // Replaces part of the signature, making it invalid
-        let malformedSerialization = compactSerializedJWSConst.replacingOccurrences(of: "dar", with: "foo")
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "dar", with: "foo")
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
@@ -89,7 +89,7 @@ class JWSValidationTests: CryptoTestCase {
     }
 
     func testValidatesThrowsForWrongKey() {
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
         XCTAssertThrowsError(try jws.validate(with: publicKey4096!))
     }
