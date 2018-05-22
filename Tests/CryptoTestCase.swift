@@ -34,12 +34,20 @@ class CryptoTestCase: XCTestCase {
     var privateKey4096: SecKey?
     var publicKey4096: SecKey?
 
-    let compactSerializedJWSConst = """
+    let compactSerializedJWSRS512Const = """
         eyJhbGciOiJSUzUxMiJ9.VGhlIHRydWUgc2lnbiBvZiBpbnRlbGxpZ2VuY2UgaXMgbm90IGtub3dsZWRnZSBidXQgaW1hZ2luYXRpb24u.dar4u\
         Qfhg7HpAXDrFJEP3T6cPePUIstu3tCLiz-HBEx1yAQXxLweQrKOYvIWOlt_HfxjjhxfGDoSXjnQMVHZTJaAYFNtK382pfOKpJAxE6UvkhLtvS-A\
         6BKLWMS_aUVgqizOIXH0IeuVz1COpSLlsQ5KICUaqsxYyPfD28vbbQ9IfJ4RyJmSqEEx-M8BY2r4v_HHL-kyvjqGbSoF7o9Z6Cg1CetPJ5OHPBM\
         XZa_Aj3LkNWn1GSw5B4WQueb8E0uJVAzLSNbxA-ZNowlOgDtKHOEkwbZu6zj7WvLEm8xovgmAha_y7HssoXnH26Nu-8RMUYw-LXUJz6Fny1F_xc\
         v_TA
+        """
+
+    let compactSerializedJWSRS256Const = """
+        eyJhbGciOiJSUzI1NiJ9.VGhlIHRydWUgc2lnbiBvZiBpbnRlbGxpZ2VuY2UgaXMgbm90IGtub3dsZWRnZSBidXQgaW1hZ2luYXRpb24u.Cx2UI\
+        OKzA8O2PJXn4JJLnPTky0lI43hfXyZsRYpVSj_qR36aYEyuofoLH_RlF2IDiU_-ih7wdu83w45-iP_vneADXKHBA3yChB3DSjEWj7ocjgTp5xzB\
+        ZrWKXH3tTleuaWr2jKkAXyGtosvDgd828fxEnH-lVpzMfyoqMyOw1YJFi-2GuPzslKZ5OsP09zBydxQ5jjggQVnEJQGb4JTzhnI9Z10CBBJt5rz\
+        RyZSHUzf3nVq4HY36GWUPMQPNEFtaCcK_qgBB3KilffHFMNGBIgds6qkbT53Bml9AqB1xdJMBOtF2hdccQjRpZIT5aDUlHIwILXWG91ytpDrBpX\
+        ky8g
         """
 
     var publicKey2048Data: Data!

@@ -27,6 +27,7 @@ import Foundation
 ///
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
 public enum SignatureAlgorithm: String {
+    case RS256 = "RS256"
     case RS512 = "RS512"
 }
 
