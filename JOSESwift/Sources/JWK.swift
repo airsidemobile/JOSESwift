@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 14.12.17.
+//  Modified by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -32,15 +33,15 @@ internal enum JWKError: Error {
     case modulusNotBase64URLUIntEncoded
     case exponentNotBase64URLUIntEncoded
     case privateExponentNotBase64URLUIntEncoded
+    case invalidECCurveType
 }
 
 /// The key type parameter of a JWK identifies the cryptographic algorithm
 /// family used with the key(s) represented by a JWK.
 /// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
-///
-/// - RSA
 public enum JWKKeyType: String, Codable {
     case RSA = "RSA"
+    case EC = "EC"
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.

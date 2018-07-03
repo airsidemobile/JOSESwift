@@ -41,6 +41,8 @@ fileprivate extension SignatureAlgorithm {
             return .rsaSignatureMessagePKCS1v15SHA256
         case .RS512:
             return .rsaSignatureMessagePKCS1v15SHA512
+        default:
+            return nil
         }
     }
 }

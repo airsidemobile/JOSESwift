@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 21.12.17.
+//  Modified by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -43,4 +44,13 @@ public enum RSAParameter: String, CodingKey {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
+}
+
+/// EC specific JWK parameters.
+/// See [RFC-7518, Section 6.2](https://tools.ietf.org/html/rfc7518#section-6.2) for details.
+public enum ECParameter: String, CodingKey {
+    case curve = "crv"
+    case x = "x"
+    case y = "y"
+    case privateKey = "d"
 }
