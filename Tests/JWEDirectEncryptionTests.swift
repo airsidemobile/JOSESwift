@@ -17,7 +17,7 @@ class JWEDirectEncryptionTests: XCTestCase {
 
         let payload = Payload("So Secret! 🔥🌵".data(using: .utf8)!)
 
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, keyEncryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
 

@@ -76,7 +76,7 @@ public struct Encrypter<KeyType> {
     ///          Currently supported key types are: `SecKey`.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):
             guard type(of: key) is RSAEncrypter.KeyType.Type else {
