@@ -38,6 +38,7 @@ internal protocol AsymmetricEncrypter {
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
     var algorithm: SymmetricKeyAlgorithm { get }
+    var symmetricKey: Data? { get }
 
     /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
     ///
@@ -75,15 +76,22 @@ public struct Encrypter<KeyType> {
     ///          Currently supported key types are: `SecKey`.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512) :
-            guard type(of: kek) is RSAEncrypter.KeyType.Type else {
+        case (.RSA1_5, .A256CBCHS512):
+            guard type(of: key) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek as! RSAEncrypter.KeyType)
-            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: (key as! RSAEncrypter.KeyType))
+            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: nil)
+        case (.direct, .A256CBCHS512):
+            guard type(of: key) is AESEncrypter.KeyType.Type else {
+                return nil
+            }
+
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: nil)
+            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
         }
     }
 
@@ -95,9 +103,14 @@ public struct Encrypter<KeyType> {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        let cek = try SecureRandom.generate(count: enc.keyLength)
-        let encryptedKey = try asymmetric.encrypt(cek)
-        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek, additionalAuthenticatedData: header.data().base64URLEncodedData())
+        var cek: Data?
+        cek = symmetric.symmetricKey
+        if cek == nil {
+            cek = try SecureRandom.generate(count: enc.keyLength)
+        }
+
+        let encryptedKey = try asymmetric.encrypt(cek!)
+        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek!, additionalAuthenticatedData: header.data().base64URLEncodedData())
 
         return EncryptionContext(
             encryptedKey: encryptedKey,

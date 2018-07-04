@@ -83,6 +83,11 @@ public struct Decrypter {
             // swiftlint:disable:next force_cast
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
+        case (.direct, .A256CBCHS512):
+            print("im so direct")
+            // this is false
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
+            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         }
     }
 
