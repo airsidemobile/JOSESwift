@@ -36,6 +36,7 @@ internal protocol AsymmetricDecrypter {
 
 internal protocol SymmetricDecrypter {
     var algorithm: SymmetricKeyAlgorithm { get }
+    var symmetricKey: Data? { get }
 
     /// Decrypts a cipher text contained in the `SymmetricDecryptionContext` using a given symmetric key.
     ///
@@ -74,20 +75,22 @@ public struct Decrypter {
     ///          Currently supported key types are: `SecKey`.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512):
-            guard type(of: kdk) is RSADecrypter.KeyType.Type else {
+            guard type(of: key) is RSADecrypter.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
-            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: (key as! RSADecrypter.KeyType))
+            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm, symmetricKey: nil)
         case (.direct, .A256CBCHS512):
-            print("im so direct")
-            // this is false
-            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
-            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
+            guard type(of: key) is AESDecrypter.KeyType.Type else {
+                return nil
+            }
+
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: nil)
+            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm, symmetricKey: (key as! AESDecrypter.KeyType))
         }
     }
 
@@ -101,15 +104,23 @@ public struct Decrypter {
         }
 
         var cek: Data
-        // Generate random CEK to prevent MMA (Million Message Attack).
-        // For detailed information, please refer to this RFC(https://tools.ietf.org/html/rfc3218#section-2.3.2)
-        // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html
-        let randomCEK = try SecureRandom.generate(count: enc.keyLength)
+        if (alg == .direct) {
+            guard context.encryptedKey == Data(), let symmetricKey = symmetric.symmetricKey else {
+                throw JOSESwiftError.decryptingFailed(description: "stupid")
+            }
 
-        if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
-            cek = decryptedCEK
+            cek = symmetricKey
         } else {
-            cek = randomCEK
+            // Generate random CEK to prevent MMA (Million Message Attack).
+            // For detailed information, please refer to this RFC(https://tools.ietf.org/html/rfc3218#section-2.3.2)
+            // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html
+            let randomCEK = try SecureRandom.generate(count: enc.keyLength)
+
+            if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
+                cek = decryptedCEK
+            } else {
+                cek = randomCEK
+            }
         }
 
         let symmetricContext = SymmetricDecryptionContext(

@@ -28,9 +28,18 @@ internal struct RSADecrypter: AsymmetricDecrypter {
     typealias KeyType = RSA.KeyType
 
     let algorithm: AsymmetricKeyAlgorithm
-    let privateKey: KeyType
+    let privateKey: KeyType?
+
+    init(algorithm: AsymmetricKeyAlgorithm, privateKey: KeyType? = nil) {
+        self.algorithm = algorithm
+        self.privateKey = privateKey
+    }
 
     func decrypt(_ ciphertext: Data) throws -> Data {
+        guard let privateKey = privateKey else {
+            return Data()
+        }
+
         return try RSA.decrypt(ciphertext, with: privateKey, and: algorithm)
     }
 }
