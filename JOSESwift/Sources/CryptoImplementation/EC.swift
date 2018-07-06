@@ -23,6 +23,7 @@
 
 import Foundation
 import Security
+import SJCommonCrypto
 
 internal enum ECError: Error {
     case algorithmNotSupported
@@ -30,6 +31,7 @@ internal enum ECError: Error {
     case verifyingFailed(description: String)
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
+    case invalidCurveDigestAlgorithm
 }
 
 /// Identifies the curve type parameter of a JWK representing an elliptic curve key
@@ -39,7 +41,7 @@ public enum ECCurveType: String, Codable {
     case P384 = "P-384"
     case P521 = "P-521"
 
-    var keySize: Int {
+    var keyBitLength: Int {
         switch self {
         case .P256:
             return 256
@@ -50,8 +52,23 @@ public enum ECCurveType: String, Codable {
         }
     }
 
-    static func fromKeySize(_ size: Int) -> ECCurveType? {
-        switch size {
+    var coordinateOctetLength: Int {
+        switch self {
+        case .P256:
+            return 32
+        case .P384:
+            return 48
+        case .P521:
+            return 66
+        }
+    }
+
+    var signatureOctetLength: Int {
+        return self.coordinateOctetLength * 2
+    }
+
+    static func fromKeyBitLength(_ length: Int) -> ECCurveType? {
+        switch length {
         case 256:
             return .P256
         case 384:
@@ -63,8 +80,8 @@ public enum ECCurveType: String, Codable {
         }
     }
 
-    static func fromOctetSize(_ size: Int) -> ECCurveType? {
-        switch size {
+    static func fromCoordinateOctetLength(_ length: Int) -> ECCurveType? {
+        switch length {
         case 32:
             return .P256
         case 48:
@@ -78,14 +95,58 @@ public enum ECCurveType: String, Codable {
 }
 
 fileprivate extension SignatureAlgorithm {
-    var secKeyAlgorithm: SecKeyAlgorithm? {
+    func createDigest(input: Data) throws -> [UInt8] {
+        guard
+                let computedDigestLength = digestLength,
+                let computedDigestFunction = digestFunction
+                else {
+            throw ECError.invalidCurveDigestAlgorithm
+        }
+        var digest = [UInt8](repeating: 0, count: computedDigestLength)
+        _ = computedDigestFunction(Array(input), UInt32(input.count), &digest)
+        return digest
+    }
+
+    var digestLength: Int? {
         switch self {
         case .ES256:
-            return .ecdsaSignatureMessageX962SHA256
+            return Int(CC_SHA256_DIGEST_LENGTH)
         case .ES384:
-            return .ecdsaSignatureMessageX962SHA384
-        case .ES512:
-            return .ecdsaSignatureMessageX962SHA512
+            return Int(CC_SHA384_DIGEST_LENGTH)
+        case .ES521:
+            return Int(CC_SHA512_DIGEST_LENGTH)
+        default:
+            return nil
+        }
+    }
+
+    var curveType: ECCurveType? {
+        switch self {
+        case .ES256:
+            return ECCurveType.P256
+        case .ES384:
+            return ECCurveType.P384
+        case .ES521:
+            return ECCurveType.P521
+        default:
+            return nil
+        }
+    }
+
+    typealias DigestFunction = (
+            ImplicitlyUnwrappedOptional<UnsafeRawPointer>,
+            UInt32,
+            ImplicitlyUnwrappedOptional<UnsafeMutablePointer<UInt8>>
+    )-> ImplicitlyUnwrappedOptional<UnsafeMutablePointer<UInt8>>
+
+    var digestFunction: DigestFunction? {
+        switch self {
+        case .ES256:
+            return CC_SHA256
+        case .ES384:
+            return CC_SHA384
+        case .ES521:
+            return CC_SHA512
         default:
             return nil
         }
@@ -104,18 +165,17 @@ internal struct EC {
     /// - Returns: The signature.
     /// - Throws: `ECError` if any errors occur while signing the input data.
     static func sign(_ signingInput: Data, with privateKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Data {
-        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
-        // if the algorithm is supported to sign with a given private key.
-        guard let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(privateKey, .sign, algorithm) else {
-            throw ECError.algorithmNotSupported
+        // Sign the input as raw elliptic curve coordinates using a hashing algorithm and a private key.
+        guard let curveType = algorithm.curveType else {
+            throw ECError.invalidCurveDigestAlgorithm
         }
-
-        // Sign the input with a given `SecKeyAlgorithm` and a private key.
-        var signingError: Unmanaged<CFError>?
-        guard let signature = SecKeyCreateSignature(privateKey, algorithm, signingInput as CFData, &signingError) else {
-            throw ECError.signingFailed(
-                description: signingError?.takeRetainedValue().localizedDescription ?? "No description available."
-            )
+        let digest = try algorithm.createDigest(input: signingInput)
+        var signatureLength = curveType.signatureOctetLength
+        let signature = NSMutableData(length: signatureLength)!
+        let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
+        let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)
+        if status != 0 {
+            throw ECError.signingFailed(description: "Error validating signature. (OSStatus: \(status))")
         }
 
         return signature as Data
@@ -131,26 +191,18 @@ internal struct EC {
     /// - Returns: True if the signature is verified, false if it is not verified.
     /// - Throws: `ECError` if any errors occur while verifying the input data against the signature.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Bool {
-        // Check if `SignatureAlgorithm` supports a `SecKeyAlgorithm` and
-        // if the algorithm is supported to verify with a given public key.
-        guard
-            let algorithm = algorithm.secKeyAlgorithm, SecKeyIsAlgorithmSupported(publicKey, .verify, algorithm)
-        else {
-            throw ECError.algorithmNotSupported
+
+        // Verify the raw signature against an input with a hashing algorithm and public key.
+        guard let curveType = algorithm.curveType else {
+            throw ECError.invalidCurveDigestAlgorithm
         }
-
-        // Verify the signature against an input with a given `SecKeyAlgorithm` and a public key.
-        var verificationError: Unmanaged<CFError>?
-        guard
-            SecKeyVerifySignature(
-                publicKey, algorithm, verifyingInput as CFData, signature as CFData, &verificationError
+        let digest = try algorithm.createDigest(input: verifyingInput)
+        let signatureBytes: [UInt8] = Array(signature)
+        let status = SecKeyRawVerify(publicKey, .sigRaw, digest, digest.count, signatureBytes, curveType.signatureOctetLength)
+        if status != 0 {
+            throw ECError.verifyingFailed(
+                    description: "Error validating signature. (OSStatus: \(status))"
             )
-        else {
-            if let description = verificationError?.takeRetainedValue().localizedDescription {
-                throw ECError.verifyingFailed(description: description)
-            }
-
-            return false
         }
 
         return true

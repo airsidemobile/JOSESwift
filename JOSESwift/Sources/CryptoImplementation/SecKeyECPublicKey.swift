@@ -34,7 +34,7 @@ extension SecKey: ExpressibleAsECPublicKeyComponents {
         let keyData = try Data.representing(ecPublicKeyComponents: components)
 
         guard
-                let keySize = ECCurveType(rawValue: components.crv)?.keySize
+                let keySize = ECCurveType(rawValue: components.crv)?.keyBitLength
                 else {
             throw JWKError.invalidECCurveType
         }

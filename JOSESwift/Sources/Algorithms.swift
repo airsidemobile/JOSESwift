@@ -33,7 +33,7 @@ public enum SignatureAlgorithm: String {
     case RS512 = "RS512"
     case ES256 = "ES256"
     case ES384 = "ES384"
-    case ES512 = "ES512"
+    case ES521 = "ES521"
 }
 
 /// An algorithm for asymmetric encryption and decryption.

@@ -10,10 +10,9 @@ extension Data: ExpressibleAsECPublicKeyComponents {
         let yBytes = [UInt8](components.y)
         let uncompressedIndication: [UInt8] = [0x04]
 
-        let bitLength = xBytes.count * 8
         guard
                 xBytes.count == yBytes.count,
-                ECCurveType.fromKeySize(bitLength) != nil else {
+                ECCurveType.fromCoordinateOctetLength(xBytes.count) != nil else {
             throw JOSESwiftError.unsupportedCurvePointSize
         }
 
@@ -28,8 +27,7 @@ extension Data: ExpressibleAsECPublicKeyComponents {
         }
 
         let pointSize = publicKeyBytes.count / 2
-        let bitLength = pointSize * 8
-        guard let curve = ECCurveType.fromKeySize(bitLength) else {
+        guard let curve = ECCurveType.fromCoordinateOctetLength(pointSize) else {
             throw JOSESwiftError.unsupportedCurvePointSize
         }
 
