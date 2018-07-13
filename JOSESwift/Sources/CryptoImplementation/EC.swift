@@ -69,11 +69,11 @@ public enum ECCurveType: String, Codable {
 
     static func fromKeyBitLength(_ length: Int) -> ECCurveType? {
         switch length {
-        case 256:
+        case ECCurveType.P256.keyBitLength:
             return .P256
-        case 384:
+        case ECCurveType.P384.keyBitLength:
             return .P384
-        case 521:
+        case ECCurveType.P521.keyBitLength:
             return .P521
         default:
             return nil
@@ -82,11 +82,11 @@ public enum ECCurveType: String, Codable {
 
     static func fromCoordinateOctetLength(_ length: Int) -> ECCurveType? {
         switch length {
-        case 32:
+        case ECCurveType.P256.coordinateOctetLength:
             return .P256
-        case 48:
+        case ECCurveType.P384.coordinateOctetLength:
             return .P384
-        case 66:
+        case ECCurveType.P521.coordinateOctetLength:
             return .P521
         default:
             return nil
