@@ -42,7 +42,7 @@ extension Data: ExpressibleAsECPublicKeyComponents {
         var publicKeyBytes = [UInt8](self)
 
         guard publicKeyBytes.removeFirst() == 0x04 else {
-            throw JOSESwiftError.compressedCurvePointsUnsuported
+            throw JOSESwiftError.compressedCurvePointsUnsupported
         }
 
         let pointSize = publicKeyBytes.count / 2
