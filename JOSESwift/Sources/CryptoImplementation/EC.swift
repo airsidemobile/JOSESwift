@@ -5,7 +5,7 @@
 //  Created by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
-//  Copyright 2018 Jarrod Moldrich
+//  Copyright 2018 Airside Mobile Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -95,6 +95,12 @@ public enum ECCurveType: String, Codable {
 }
 
 fileprivate extension SignatureAlgorithm {
+    typealias DigestFunction = (
+            Optional<UnsafeRawPointer>,
+            UInt32,
+            Optional<UnsafeMutablePointer<UInt8>>
+    ) -> Optional<UnsafeMutablePointer<UInt8>>
+
     func createDigest(input: Data) throws -> [UInt8] {
         guard
                 let computedDigestLength = digestLength,
@@ -113,7 +119,7 @@ fileprivate extension SignatureAlgorithm {
             return Int(CC_SHA256_DIGEST_LENGTH)
         case .ES384:
             return Int(CC_SHA384_DIGEST_LENGTH)
-        case .ES521:
+        case .ES512:
             return Int(CC_SHA512_DIGEST_LENGTH)
         default:
             return nil
@@ -126,18 +132,12 @@ fileprivate extension SignatureAlgorithm {
             return ECCurveType.P256
         case .ES384:
             return ECCurveType.P384
-        case .ES521:
+        case .ES512:
             return ECCurveType.P521
         default:
             return nil
         }
     }
-
-    typealias DigestFunction = (
-            ImplicitlyUnwrappedOptional<UnsafeRawPointer>,
-            UInt32,
-            ImplicitlyUnwrappedOptional<UnsafeMutablePointer<UInt8>>
-    )-> ImplicitlyUnwrappedOptional<UnsafeMutablePointer<UInt8>>
 
     var digestFunction: DigestFunction? {
         switch self {
@@ -145,7 +145,7 @@ fileprivate extension SignatureAlgorithm {
             return CC_SHA256
         case .ES384:
             return CC_SHA384
-        case .ES521:
+        case .ES512:
             return CC_SHA512
         default:
             return nil
@@ -175,7 +175,7 @@ internal struct EC {
         let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
         let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)
         if status != 0 {
-            throw ECError.signingFailed(description: "Error validating signature. (OSStatus: \(status))")
+            throw ECError.signingFailed(description: "Error creating signature. (OSStatus: \(status))")
         }
 
         return signature as Data
@@ -191,7 +191,6 @@ internal struct EC {
     /// - Returns: True if the signature is verified, false if it is not verified.
     /// - Throws: `ECError` if any errors occur while verifying the input data against the signature.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Bool {
-
         // Verify the raw signature against an input with a hashing algorithm and public key.
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
@@ -200,9 +199,7 @@ internal struct EC {
         let signatureBytes: [UInt8] = Array(signature)
         let status = SecKeyRawVerify(publicKey, .sigRaw, digest, digest.count, signatureBytes, curveType.signatureOctetLength)
         if status != 0 {
-            throw ECError.verifyingFailed(
-                    description: "Error validating signature. (OSStatus: \(status))"
-            )
+            throw ECError.verifyingFailed(description: "Error validating signature. (OSStatus: \(status))")
         }
 
         return true

@@ -34,5 +34,5 @@ public enum JOSESwiftError: Error {
     case privateKeyNotBase64URLUIntEncoded
     case invalidCurveType
     case compressedCurvePointsUnsuported
-    case unsupportedCurvePointSize
+    case invalidCurvePointOctetLength
 }

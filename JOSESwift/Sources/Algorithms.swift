@@ -27,13 +27,13 @@ import Foundation
 /// An algorithm for signing and verifying.
 ///
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
-/// - ES512: [ECDSA P-512 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
+/// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
 public enum SignatureAlgorithm: String {
     case RS256 = "RS256"
     case RS512 = "RS512"
     case ES256 = "ES256"
     case ES384 = "ES384"
-    case ES521 = "ES521"
+    case ES512 = "ES512"
 }
 
 /// An algorithm for asymmetric encryption and decryption.

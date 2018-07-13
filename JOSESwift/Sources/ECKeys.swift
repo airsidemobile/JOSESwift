@@ -5,7 +5,7 @@
 //  Created by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
-//  Copyright 2018 Jarrod Moldrich
+//  Copyright 2018 Airside Mobile Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import Foundation
 
 // MARK: Protocols
 
-/// The components of an EC  public key.
+/// The components of an EC public key.
 /// See [RFC-7518, Section 6.2.1](https://tools.ietf.org/html/rfc7518#section-6.2.1)
 ///
 /// - Note:
@@ -230,7 +230,7 @@ public struct ECPrivateKey: JWK {
         self.keyType = .EC
 
         guard let curve = ECCurveType(rawValue: crv) else {
-            throw JOSESwiftError.unsupportedCurvePointSize
+            throw JOSESwiftError.invalidCurvePointOctetLength
         }
 
         self.crv = curve

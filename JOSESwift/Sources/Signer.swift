@@ -52,8 +52,12 @@ public struct Signer<KeyType> {
             }
             // swiftlint:disable:next force_cast
             self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey as! RSASigner.KeyType)
-        default:
-            return nil
+        case .ES256, .ES384, .ES512:
+            guard type(of: privateKey) is ECSigner.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: privateKey as! ECSigner.KeyType)
         }
     }
 

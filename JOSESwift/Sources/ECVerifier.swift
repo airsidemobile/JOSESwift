@@ -5,7 +5,7 @@
 //  Created by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
-//  Copyright 2018 Jarrod Moldrich
+//  Copyright 2018 Airside Mobile Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 
 import Foundation
 
-/// A `Verifier` to verify a signature created with a elliptic curve algorithm.
+/// A `Verifier` to verify a signature created with an elliptic curve algorithm.
 internal struct ECVerifier: VerifierProtocol {
     typealias KeyType = EC.KeyType
 
