@@ -57,12 +57,40 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
     }
 
-    func testDecryptWithWrongKeyType() {
-        let symmetricKey = privateKey2048!
+    func testDecryptWithCorrectAlgWrongKeyType() {
+        let privateKey = privateKey2048!
 
         let jwe = try! JWE(compactSerialization: serializationFromNimbus)
 
+        XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
+    }
+
+    func testDecryptWithWrongAlgCorrectKeyType() {
+        // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
+        let serialization = serializationFromNimbus.replacingOccurrences(
+            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0",
+            with: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBMV81In0"
+        )
+
+        let symmetricKey = keyFromNimbus
+
+        let jwe = try! JWE(compactSerialization: serialization)
+
         XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
+    }
+
+    func testDecryptWithWrongAlgWrongKeyType() {
+        // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
+        let serialization = serializationFromNimbus.replacingOccurrences(
+            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0",
+            with: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBMV81In0"
+        )
+
+        let privateKey = privateKey2048!
+
+        let jwe = try! JWE(compactSerialization: serialization)
+
+        XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
     }
     
 }
