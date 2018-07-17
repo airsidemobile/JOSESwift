@@ -30,7 +30,7 @@ public typealias SymmetricKeyComponents = (
     Data
 )
 
-/// A type that represents a symmetric public key.
+/// A type that represents a symmetric key.
 /// It can be expressed through `SymmetricKeyComponents` meaning it can be converted to such components
 /// and it can be created from such components.
 public protocol ExpressibleAsSymmetricKeyComponents {
@@ -49,9 +49,9 @@ public protocol ExpressibleAsSymmetricKeyComponents {
     func symmetricKeyComponents() throws -> SymmetricKeyComponents
 }
 
-// MARK: Public Key
+// MARK: Key
 
-/// A JWK holding an RSA pubkic key.
+/// A JWK holding an symmetric key.
 public struct SymmetricKey: JWK {
     /// The JWK key type.
     public let keyType: JWKKeyType
@@ -59,13 +59,15 @@ public struct SymmetricKey: JWK {
     /// The JWK parameters.
     public let parameters: [String: String]
 
-    /// The key value for the symmetric public key represented as
-    /// base64url encoding of the octet sequence containing the key value.
+    /// The symmetric key represented as
+    /// base64url encoding of the octet sequence containing the key data.
     public let key: String
 
     /// Initializes a JWK containing a symmetric key.
     ///
-    /// - Todo: Parameter documentation
+    /// - Parameters:
+    ///   - key: The octet sequence containing the key data.
+    ///   - parameters: Additional JWK parameters.
     public init(key: Data, additionalParameters parameters: [String: String] = [:]) {
         self.keyType = .SYM
         self.key = key.base64URLEncodedString()
@@ -81,15 +83,15 @@ public struct SymmetricKey: JWK {
 
     /// Creates a `SymmetricKey` JWK with the specified symmetric key and optional additional JWK parameters.
     ///
-    /// - Todo: Parameter documentation
+    /// - Parameters:
+    ///   - key: The symmetirc key that the resulting JWK should represent.
+    ///   - parameters: Any additional parameters to be contained in the JWK.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
     public init(key: ExpressibleAsSymmetricKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
         guard let components = try? key.symmetricKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
 
-        // The components are unsigned big-endian integers encoded using the minimum number of octets needed
-        // to represent their value as required.
-        // Therefore Base64url(component) == Base64urlUInt(component).
         self.init(
             key: components,
             additionalParameters: parameters
