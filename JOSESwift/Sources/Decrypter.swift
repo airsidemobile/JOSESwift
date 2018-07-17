@@ -71,8 +71,10 @@ public struct Decrypter {
     ///
     /// - Parameters:
     ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.
-    ///   - kdk: The private key used to decrypt the shared content encryption key.
-    ///          Currently supported key types are: `SecKey`.
+    ///   - key: The key used to perform the decryption. If the `keyDecryptionAlgorithm` is `.direct`, the
+    ///          `decryptionKey` is the shared symmetric content encryption key. Otherwise the `decryptionKey` is the
+    ///           private key of the receiver. See [RFC-7516](https://tools.ietf.org/html/rfc7516#section-5.2) for
+    ///           details.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
@@ -93,6 +95,19 @@ public struct Decrypter {
             // swiftlint:disable:next force_cast
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm, symmetricKey: (key as! AESDecrypter.KeyType))
         }
+    }
+
+    /// Constructs a decrypter used to decrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyDecryptionAlgorithm: The algorithm used to decrypt the shared content encryption key.
+    ///   - kdk: The private key used to decrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
+    ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
+    /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
+    @available(*, deprecated, message: "Use `init?(keyDecryptionAlgorithm:decryptionKey:contentDecyptionAlgorithm:)` instead")
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+        self.init(keyDecryptionAlgorithm: keyDecryptionAlgorithm, decryptionKey: kdk, contentDecryptionAlgorithm: contentDecryptionAlgorithm)
     }
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
