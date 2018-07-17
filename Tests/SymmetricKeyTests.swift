@@ -27,25 +27,104 @@ import XCTest
 
 class SymmetricKeyTests: XCTestCase {
     
-    func testCreatingAndParsingSymetricKey() {
+    func testCreatingSymetricKeyFromData() {
 
         // Example key data from https://tools.ietf.org/html/rfc7517#appendix-A.3 but with different "alg" parameter
         // because we don't (yet) support "A128KW".
 
-        let key = Data(bytes: [ 0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52 ])
+        let key = Data(bytes: [
+            0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
+        ])
 
-        let createdJWK = SymmetricKey(key: key, additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ])
+        let jwk = SymmetricKey(
+            key: key,
+            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+        )
 
-        XCTAssertEqual("{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}", createdJWK.jsonString()!)
+        XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
+        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
 
-        let json = createdJWK.jsonData()!
+        XCTAssertEqual(
+            "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",
+            jwk.jsonString()!
+        )
+    }
 
-        let parsedJWK = try! SymmetricKey(data: json)
+    func testParsingSymmetricKeyFromJSONData() {
+        let key = Data(bytes: [
+            0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
+            ])
 
-        let keyData = try! parsedJWK.converted(to: Data.self)
+        let json = SymmetricKey(
+            key: key,
+            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+        ).jsonData()!
+
+
+        let jwk = try! SymmetricKey(data: json)
+
+        XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
+        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
+
+        XCTAssertEqual(
+            "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",
+            jwk.jsonString()!
+        )
+    }
+
+    func testParsingSymmetricKeyFromOtherKeyRepresentation() {
+        let key: ExpressibleAsSymmetricKeyComponents = Data(bytes: [
+            0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
+            ])
+
+        let json = try! SymmetricKey(
+            key: key,
+            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+            ).jsonData()!
+
+
+        let jwk = try! SymmetricKey(data: json)
+
+        XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
+        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
+
+        XCTAssertEqual(
+            "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",
+            jwk.jsonString()!
+        )
+    }
+
+    func testSymmetricKeyToData() {
+        let key = Data(bytes: [
+            0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
+            ])
+
+        let jwk = SymmetricKey(key: key)
+
+        let keyData = try! jwk.converted(to: Data.self)
 
         XCTAssertEqual(keyData, key)
+    }
 
+    func testMalformedSymmetricKeyToData() {
+        let json = "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"+++==notbase64url==---\"}".data(using: .utf8)!
+
+        XCTAssertThrowsError(try SymmetricKey(data: json))
+    }
+
+    func testDecodingFromJSONWithMissingKeyType() {
+        let json = "{\"alg\":\"A256CBC-HS512\",\"k\":\"+++==notbase64url==---\"}".data(using: .utf8)!
+
+        XCTAssertThrowsError(try SymmetricKey(data: json))
+    }
+
+    func testDecodingFromJSONWithWrongKeyType() {
+        let json = "{\"kty\":\"RSA\",\"alg\":\"A256CBC-HS512\",\"k\":\"+++==notbase64url==---\"}".data(using: .utf8)!
+
+        XCTAssertThrowsError(try SymmetricKey(data: json))
     }
     
 }
