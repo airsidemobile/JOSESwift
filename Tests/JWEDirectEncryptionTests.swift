@@ -108,5 +108,27 @@ class JWEDirectEncryptionTests: CryptoTestCase {
 
         XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
     }
-    
+
+    func testDecryptWithEncryptedKeyPresent() {
+        let encryptedKey = """
+            c3HOjtBLx3xt3RYMx2WexgbYpcszeqiWXZmeBaLIUb8BXsETRxHDFUyyAt6Q8dIYX22kQs9Kte7AL1CcVxS0C2sx_yu7xDZ4s67cHW1AMbf\
+            qqqhyaUSS5BkyTIhLgEbo34ohxP0bYq-enlu8hlOYWhwh-yLSj1mRCSYufv8ik6QhoJ14P981M_O8Fl0XMGe7Ki3jdui_MKj8NKN-96McS4\
+            0zhtxZRuq1ZYzmmu1fAh3MA5LZkUBInnW5GpNfar3Lap1UnIt1yTJf9U9zk48qU9ymPnbD8oYm8ec15lsmCuuMcB1uG3SgFYAGTZStgX1My\
+            KjyAlDGiZrKo6p0Hn8piw
+            """
+
+        var serialization = serializationFromNimbus
+        var parts = serialization.split(separator: ".").map {
+            String($0)
+        }
+        parts.insert(encryptedKey, at: 1)
+        serialization = parts.joined(separator: ".")
+
+        let symmetricKey = keyFromNimbus
+
+        let jwe = try! JWE(compactSerialization: serialization)
+
+        XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
+    }
+
 }

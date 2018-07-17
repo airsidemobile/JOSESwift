@@ -24,36 +24,67 @@
 import XCTest
 @testable import JOSESwift
 
-class EncrypterInitializationTests: CryptoTestCase {
+class EncrypterDecrypterInitializationTests: CryptoTestCase {
 
     @available(*, deprecated)
-    func testDeprecatedRSAInitialization() {
+    func testEncrypterDeprecatedRSAInitialization() {
         XCTAssertNotNil(
             Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
         )
     }
 
-    func testNewRSAInitialization() {
+    func testEncrypterNewRSAInitialization() {
         XCTAssertNotNil(
             Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
         )
     }
 
-    func tesItnitializationWrongAlgorithm() {
+    func testEncrypterRSAInitializationWrongAlgorithm() {
         XCTAssertNil(
             Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
         )
     }
 
-    func testRSAInitializationWrongKeyType() {
+    func testEncrypterRSAInitializationWrongKeyType() {
         XCTAssertNil(
             Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: Data(), contentEncyptionAlgorithm: .A256CBCHS512)
         )
     }
 
-    func testDirectInitializationWrongKeyType() {
+    func testEncrypterDirectInitializationWrongKeyType() {
         XCTAssertNil(
             Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)
+        )
+    }
+
+    @available(*, deprecated)
+    func testDecrypterDeprecatedRSAInitialization() {
+        XCTAssertNotNil(
+            Decrypter(keyDecryptionAlgorithm: .RSA1_5, keyDecryptionKey: privateKey2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+        )
+    }
+
+    func testDecrypterNewRSAInitialization() {
+        XCTAssertNotNil(
+            Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKey2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+        )
+    }
+
+    func testDecrypterRSAInitializationWrongAlgorithm() {
+        XCTAssertNil(
+            Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: privateKey2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+        )
+    }
+
+    func testDecrypterRSAInitializationWrongKeyType() {
+        XCTAssertNil(
+            Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: Data(), contentDecryptionAlgorithm: .A256CBCHS512)
+        )
+    }
+
+    func testDecrypterDirectInitializationWrongKeyType() {
+        XCTAssertNil(
+            Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: privateKey2048!, contentDecryptionAlgorithm: .A256CBCHS512)
         )
     }
     
