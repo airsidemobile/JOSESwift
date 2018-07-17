@@ -105,9 +105,17 @@ public struct Decrypter {
         }
 
         var cek: Data
+
         if (alg == .direct) {
-            guard context.encryptedKey == Data(), let symmetricKey = symmetric.symmetricKey else {
-                throw JOSESwiftError.decryptingFailed(description: "stupid")
+            guard context.encryptedKey == Data() else {
+                throw JOSESwiftError.decryptingFailed(
+                    description: "Direct encryption does not expect an encrypted key."
+                )
+            }
+            guard let symmetricKey = symmetric.symmetricKey else {
+                throw JOSESwiftError.decryptingFailed(
+                    description: "Did not supply a shared symmetric key for decryption."
+                )
             }
 
             cek = symmetricKey
