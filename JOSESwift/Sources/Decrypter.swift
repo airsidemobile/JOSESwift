@@ -83,13 +83,14 @@ public struct Decrypter {
             }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: (key as! RSADecrypter.KeyType))
-            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm, symmetricKey: nil)
+            self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
         case (.direct, .A256CBCHS512):
             guard type(of: key) is AESDecrypter.KeyType.Type else {
                 return nil
             }
 
-            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: nil)
+            self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm)
+            // swiftlint:disable:next force_cast
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm, symmetricKey: (key as! AESDecrypter.KeyType))
         }
     }

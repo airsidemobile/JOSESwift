@@ -91,6 +91,7 @@ public struct Encrypter<KeyType> {
             }
 
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm)
+            // swiftlint:disable:next force_cast
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
         }
     }
