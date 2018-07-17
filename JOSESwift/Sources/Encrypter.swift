@@ -72,8 +72,10 @@ public struct Encrypter<KeyType> {
     ///
     /// - Parameters:
     ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
-    ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
-    ///          Currently supported key types are: `SecKey`.
+    ///   - key: The key used to perform the encryption. If the `keyEncryptionAlgorithm` is `.direct`, the
+    ///          `encryptionKey` is the shared symmetric content encryption key. Otherwise the `encryptionKey` is the
+    ///           public key of the receiver. See [RFC-7516](https://tools.ietf.org/html/rfc7516#section-5.1) for
+    ///           details.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
@@ -94,6 +96,19 @@ public struct Encrypter<KeyType> {
             // swiftlint:disable:next force_cast
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
         }
+    }
+
+    /// Constructs an encrypter used to encrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
+    ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
+    ///          Currently supported key types are: `SecKey`.
+    ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
+    /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
+    @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+        self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
 
     internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
