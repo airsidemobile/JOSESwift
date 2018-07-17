@@ -84,13 +84,13 @@ public struct Encrypter<KeyType> {
             }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: (key as! RSAEncrypter.KeyType))
-            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: nil)
+            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
         case (.direct, .A256CBCHS512):
             guard type(of: key) is AESEncrypter.KeyType.Type else {
                 return nil
             }
 
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: nil)
+            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
         }
     }
@@ -103,14 +103,14 @@ public struct Encrypter<KeyType> {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        var cek: Data?
-        cek = symmetric.symmetricKey
-        if cek == nil {
-            cek = try SecureRandom.generate(count: enc.keyLength)
-        }
+        let cek = try symmetric.symmetricKey ?? SecureRandom.generate(count: enc.keyLength)
 
-        let encryptedKey = try asymmetric.encrypt(cek!)
-        let symmetricContext = try symmetric.encrypt(payload.data(), with: cek!, additionalAuthenticatedData: header.data().base64URLEncodedData())
+        let encryptedKey = try asymmetric.encrypt(cek)
+        let symmetricContext = try symmetric.encrypt(
+            payload.data(),
+            with: cek,
+            additionalAuthenticatedData: header.data().base64URLEncodedData()
+        )
 
         return EncryptionContext(
             encryptedKey: encryptedKey,
