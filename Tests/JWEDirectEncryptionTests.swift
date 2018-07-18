@@ -29,9 +29,9 @@ class JWEDirectEncryptionTests: CryptoTestCase {
     let data = "So secret! 🔥🌵".data(using: .utf8)!
 
     let serializationFromNimbus = """
-            eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..HUTNQ9m2Z8Q77tQJhLs5gg.DWQCCkrCPFeZ2-65L9__z83N1exh4oVIk4r\
-            OO2_v1eE.8sOW54Soupo_-TdXg5A9qXvokaHzS8cGb__ca3MvuEo
-            """
+        eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..HUTNQ9m2Z8Q77tQJhLs5gg.DWQCCkrCPFeZ2-65L9__z83N1exh4oVIk4rOO2_\
+        v1eE.8sOW54Soupo_-TdXg5A9qXvokaHzS8cGb__ca3MvuEo
+        """
 
     let keyFromNimbus = Data(bytes: [
         177, 119,  33,  13, 164,  30, 108, 121,
