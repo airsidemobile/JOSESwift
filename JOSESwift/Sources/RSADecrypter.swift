@@ -37,6 +37,7 @@ internal struct RSADecrypter: AsymmetricDecrypter {
 
     func decrypt(_ ciphertext: Data) throws -> Data {
         guard let privateKey = privateKey else {
+            // If no key is set, we're using direct encryption so the encrypted key is empty.
             return Data()
         }
 
