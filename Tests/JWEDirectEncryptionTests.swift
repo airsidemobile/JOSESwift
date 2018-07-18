@@ -26,7 +26,7 @@ import XCTest
 
 class JWEDirectEncryptionTests: CryptoTestCase {
 
-    let data = "So Secret! 🔥🌵".data(using: .utf8)!
+    let data = "So secret! 🔥🌵".data(using: .utf8)!
 
     let serializationFromNimbus = """
             eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0..HUTNQ9m2Z8Q77tQJhLs5gg.DWQCCkrCPFeZ2-65L9__z83N1exh4oVIk4r\

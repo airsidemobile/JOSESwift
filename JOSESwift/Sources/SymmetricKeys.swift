@@ -51,7 +51,7 @@ public protocol ExpressibleAsSymmetricKeyComponents {
 
 // MARK: Key
 
-/// A JWK holding an symmetric key.
+/// A JWK holding a symmetric key.
 public struct SymmetricKey: JWK {
     /// The JWK key type.
     public let keyType: JWKKeyType

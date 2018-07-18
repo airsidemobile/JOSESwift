@@ -1,5 +1,5 @@
 //
-//  EncrypterInitializationTests.swift
+//  EncrypterDecrypterInitializationTests.swift
 //  Tests
 //
 //  Created by Daniel Egger on 17.07.18.
