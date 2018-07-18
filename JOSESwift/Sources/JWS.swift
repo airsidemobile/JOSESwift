@@ -152,6 +152,27 @@ public struct JWS {
 
         return self
     }
+
+    /// Checks whether the JWS's signature is valid using a given verifier.
+    ///
+    /// - Parameter verifier: The verifier containing the public key whose corresponding private key signed the JWS.
+    /// - Returns: The JWS on which this function was called if the signature is valid.
+    /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occured during signature validation.
+    public func validate(using verifier: Verifier) throws -> JWS {
+        guard verifier.verifier.algorithm == header.algorithm else {
+            throw JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm.")
+        }
+
+        do {
+            guard try verifier.verify(header: header, and: payload, against: signature) else {
+                throw JOSESwiftError.signatureInvalid
+            }
+        } catch {
+            throw JOSESwiftError.verifyingFailed(description: error.localizedDescription)
+        }
+
+        return self
+    }
 }
 
 extension JWS: CompactSerializable {
