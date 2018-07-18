@@ -37,6 +37,8 @@ internal enum RSAError: Error {
 fileprivate extension SignatureAlgorithm {
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
+        case .RS256:
+            return .rsaSignatureMessagePKCS1v15SHA256
         case .RS512:
             return .rsaSignatureMessagePKCS1v15SHA512
         }
@@ -58,7 +60,7 @@ fileprivate extension AsymmetricKeyAlgorithm {
         case .RSA1_5:
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
-            return plainText.count < (SecKeyGetBlockSize(publicKey) - 11)
+            return plainText.count <= (SecKeyGetBlockSize(publicKey) - 11)
         }
     }
 

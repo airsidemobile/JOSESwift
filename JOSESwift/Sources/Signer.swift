@@ -45,7 +45,7 @@ public struct Signer<KeyType> {
     /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
     public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         switch signingAlgorithm {
-        case .RS512:
+        case .RS256, .RS512:
             guard type(of: privateKey) is RSASigner.KeyType.Type else {
                 return nil
             }

@@ -47,7 +47,7 @@ public struct Verifier<KeyType> {
     /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
     public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
-        case .RS512:
+        case .RS256,.RS512:
             guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
                 return nil
             }

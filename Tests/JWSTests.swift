@@ -33,37 +33,55 @@ class JWSTests: CryptoTestCase {
         super.tearDown()
     }
 
-    func testSignAndSerialize() {
+    func testSignAndSerializeRS256() {
+        self.performTestRSASign(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
+    }
+
+    func testDeserializeFromCompactSerializationRS256() {
+        self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
+    }
+
+    func testSignAndSerializeRS512() {
+        self.performTestRSASign(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
+    }
+
+    func testDeserializeFromCompactSerializationRS512() {
+        self.performTestRSADeserialization(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
+    }
+
+    // MARK: - RSA Tests
+
+    private func performTestRSASign(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let header = JWSHeader(algorithm: .RS512)
+        let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKeyAlice2048!)!
+        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
-        XCTAssertEqual(compactSerializedJWS, compactSerializedJWSConst)
+        XCTAssertEqual(compactSerializedJWS, compactSerializedJWS)
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
         XCTAssertTrue(secondJWS.isValid(for: publicKeyAlice2048!))
     }
 
-    func testDeserializeFromCompactSerialization() {
+    private func performTestRSADeserialization(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
         guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let jws = try! JWS(compactSerialization: compactSerializedJWSConst)
-        XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"RS512\"}")
+        let jws = try! JWS(compactSerialization: compactSerializedJWS)
+        XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
-        let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKeyAlice2048!)!
-        let signature = try! signer.sign(header: JWSHeader(algorithm: .RS512), payload: Payload(message.data(using: .utf8)!))
+        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
+        let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }
 }
