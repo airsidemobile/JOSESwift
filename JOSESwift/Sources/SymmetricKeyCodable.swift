@@ -1,5 +1,5 @@
 //
-//  RSAKeyCodable.swift
+//  SymmetricKeyCodable.swift
 //  JOSESwift
 //
 //  Created by Daniel Egger on 10.07.18.
