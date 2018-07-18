@@ -52,7 +52,7 @@ class SymmetricKeyTests: XCTestCase {
     func testParsingSymmetricKeyFromJSONData() {
         let key = Data(bytes: [
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
-            ])
+        ])
 
         let json = SymmetricKey(
             key: key,
@@ -74,7 +74,7 @@ class SymmetricKeyTests: XCTestCase {
     func testParsingSymmetricKeyFromOtherKeyRepresentation() {
         let key: ExpressibleAsSymmetricKeyComponents = Data(bytes: [
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
-            ])
+        ])
 
         let json = try! SymmetricKey(
             key: key,
@@ -112,13 +112,13 @@ class SymmetricKeyTests: XCTestCase {
     }
 
     func testDecodingFromJSONWithMissingKeyType() {
-        let json = "{\"alg\":\"A256CBC-HS512\",\"k\":\"+++==notbase64url==---\"}".data(using: .utf8)!
+        let json = "{\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}".data(using: .utf8)!
 
         XCTAssertThrowsError(try SymmetricKey(data: json))
     }
 
     func testDecodingFromJSONWithWrongKeyType() {
-        let json = "{\"kty\":\"RSA\",\"alg\":\"A256CBC-HS512\",\"k\":\"+++==notbase64url==---\"}".data(using: .utf8)!
+        let json = "{\"kty\":\"RSA\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}".data(using: .utf8)!
 
         XCTAssertThrowsError(try SymmetricKey(data: json))
     }
