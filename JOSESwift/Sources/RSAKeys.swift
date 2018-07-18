@@ -148,7 +148,8 @@ public struct RSAPublicKey: JWK {
             additionalParameters: parameters
         )
     }
-    
+
+    /// Creates an `RSAPublicKey` from the JSON representation of a public key JWK.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPublicKey.self, from: data)
     }
@@ -243,6 +244,7 @@ public struct RSAPrivateKey: JWK {
         )
     }
 
+    /// Creates an `RSAPrivateKey` from the JSON representation of a private key JWK.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(RSAPrivateKey.self, from: data)
     }

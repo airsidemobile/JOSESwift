@@ -98,6 +98,7 @@ public struct SymmetricKey: JWK {
         )
     }
 
+    /// Creates a `SymmetricKey` from the JSON representation of a symmetric key JWK.
     public init(data: Data) throws {
         self = try JSONDecoder().decode(SymmetricKey.self, from: data)
     }
