@@ -93,5 +93,57 @@ class JWSValidationTests: CryptoTestCase {
 
         XCTAssertThrowsError(try jws.validate(with: publicKey4096!))
     }
+
+    func testValidatesWithExplicitVerifier() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)!
+
+        XCTAssertNoThrow(try jws.validate(using: verifier))
+    }
+
+    func testValidatesWithExplicitVerifierReturnsJWS() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)!
+
+        let returnedJWS = try! jws.validate(using: verifier)
+
+        XCTAssertEqual(returnedJWS.compactSerializedString, jws.compactSerializedString)
+    }
+
+    func testValidatesWithExplicitVerifierCatchesWrongVerifierAlgorithm() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS256, publicKey: publicKey2048!)!
+
+        XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong verifier algorithm") { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
+        }
+    }
+
+    func testValidatesWithExplicitVerifierCatchesWrongHeaderAlgorithm() {
+        // Replaces alg "RS512" with alg "HS256" in header
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJIUzI1NiJ9")
+
+        let jws = try! JWS(compactSerialization: malformedSerialization)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS256, publicKey: publicKey2048!)!
+
+        XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong header algorithm") { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
+        }
+    }
     
+}
+
+extension JOSESwiftError: Equatable {
+    public static func ==(lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
+        switch (lhs, rhs) {
+        case (.verifyingFailed(let lhs), .verifyingFailed(let rhs)):
+            return lhs == rhs
+        default:
+            return false
+        }
+    }
 }
