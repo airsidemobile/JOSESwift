@@ -134,6 +134,42 @@ class JWSValidationTests: CryptoTestCase {
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
         }
     }
+
+    func testValidatesWithExplicitVerifierFailsForWrongKey() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false,
+                kSecAttrApplicationTag as String: privateKey2048Tag
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+
+        guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print(error!)
+            return
+        }
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: SecKeyCopyPublicKey(key)!)!
+
+        XCTAssertThrowsError(try jws.validate(using: verifier))
+    }
+
+    func testValidatesWithExplicitVerifierFailsForWrongSignature() {
+        // Replaces part of the signature, making it invalid
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "dar", with: "foo")
+
+        let jws = try! JWS(compactSerialization: malformedSerialization)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)!
+
+        XCTAssertThrowsError(try jws.validate(using: verifier))
+    }
     
 }
 
@@ -141,6 +177,8 @@ extension JOSESwiftError: Equatable {
     public static func ==(lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
         switch (lhs, rhs) {
         case (.verifyingFailed(let lhs), .verifyingFailed(let rhs)):
+            return lhs == rhs
+        case (.decryptingFailed(let lhs), .decryptingFailed(let rhs)):
             return lhs == rhs
         default:
             return false
