@@ -49,7 +49,7 @@ extension SymmetricKey: Decodable {
         let commonParameters = try decoder.container(keyedBy: JWKParameter.self)
 
         // The key type parameter is required.
-        guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.SYM.rawValue else {
+        guard try commonParameters.decode(String.self, forKey: .keyType) == JWKKeyType.OCT.rawValue else {
             throw DecodingError.keyNotFound(
                 JWKParameter.keyType,
                 DecodingError.Context.init(

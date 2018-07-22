@@ -40,7 +40,7 @@ class SymmetricKeyTests: XCTestCase {
         )
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
-        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk.keyType, .OCT)
         XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
 
         XCTAssertEqual(
@@ -62,7 +62,7 @@ class SymmetricKeyTests: XCTestCase {
         let jwk = try! SymmetricKey(data: json)
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
-        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk.keyType, .OCT)
         XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
 
         XCTAssertEqual(
@@ -84,7 +84,7 @@ class SymmetricKeyTests: XCTestCase {
         let jwk = try! SymmetricKey(data: json)
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
-        XCTAssertEqual(jwk.keyType, .SYM)
+        XCTAssertEqual(jwk.keyType, .OCT)
         XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
 
         XCTAssertEqual(
