@@ -69,7 +69,7 @@ public struct SymmetricKey: JWK {
     ///   - key: The octet sequence containing the key data.
     ///   - parameters: Additional JWK parameters.
     public init(key: Data, additionalParameters parameters: [String: String] = [:]) {
-        self.keyType = .SYM
+        self.keyType = .OCT
         self.key = key.base64URLEncodedString()
 
         self.parameters = parameters.merging(

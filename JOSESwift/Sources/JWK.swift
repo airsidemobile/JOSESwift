@@ -41,7 +41,7 @@ internal enum JWKError: Error {
 /// - RSA
 public enum JWKKeyType: String, Codable {
     case RSA = "RSA"
-    case SYM = "oct"
+    case OCT = "oct"
 }
 
 /// A JWK object that represents a key or a key pair of a certain type.
