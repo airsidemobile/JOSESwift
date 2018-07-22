@@ -54,7 +54,7 @@ extension SymmetricKey: Decodable {
                 JWKParameter.keyType,
                 DecodingError.Context.init(
                     codingPath: [JWKParameter.keyType],
-                    debugDescription: "Key Type parameter wrong."
+                    debugDescription: "Wrong parameter: key type"
                 )
             )
         }
