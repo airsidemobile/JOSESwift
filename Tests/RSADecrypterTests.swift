@@ -35,9 +35,9 @@ KwawQvhC/447MoBlhtE3bYolvfu5vY3uFV/Dh8Ip5zRvZuE6NwRZN2EdWyR35iphyCgcKufJn9J1oYYZ
 """
 
     let cipherTextWithBobKeyBase64 = """
-TwSS87gjm4cbFbda5klqW_Io2oCoo2zAxWJaU6L1jAeGEoL6u1Gw7vPdEzGGNvUliqsdBBCe8yQhnft9nqIZ9CD7enfVz6tFWvEJuVZbhy0eZad_LLFBFm8\
-eDEgmlw7n7nAZxeww0WloffMmK6GPUE5SjQSWjCRAYA9xwacbxM8shH6hIwpelwV3f-QJr6M_hoAVkiqZJ2tFfiEciPhVVuqNZxxudMxaNj-bWfSipwh2T1\
-1kxYQD3EdVR4MDkyxz2JTUQc20OIf_F4WwQXJlbVNLTs4miDKHmw7Ddd45D2DJs_nH-bMQK8b6iH3nke15arP23rozuagF4SHhenApPw
+TA13QruprKdRMt6JVE6dJWKF6bRUZyQLCZKA1KnJCsQx7nprXjYUFlAouhoVfcKPUTuMiyKSMFvkDOqcoJwP3zz14CFA+nI3OeAHiYvMasoJ/H6xlUj1UXh\
+KRZy3cjd581pzxsPKFplBAuUAYacgIpHW+ZuAjGD+KJzQ6N7TFuWUZxXktsIL2mOhvdRWR0Le5pbgBSgkXAOyLUGa66AEZDk42+W7MomNYaDDsxfYHg3LzW\
+sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrxk7A4T5L9+yjuxNjN16k2Rqiw==
 """
 
     let cipherTextWithAliceKeyEmptyStringBase64 = """
@@ -76,9 +76,10 @@ ZggJ5g9MRPSnwgq1GjKNcMa1PKd+/OWB/rIeDmorT8dLrusGeLbwFCj1HEz4z5izamiBiyPh96G0m4Zh
         }
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyBob2048!)
-        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextWithBobKeyBase64)!)
+        let decryptedData = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextWithBobKeyBase64)!)
+        let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
 
-        XCTAssertEqual(plainText, message.data(using: .utf8))
+        XCTAssertEqual(decryptedMessage, message)
     }
 
     func testDecryptingAliceSecretWithBobKey() {
