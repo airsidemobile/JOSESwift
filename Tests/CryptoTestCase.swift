@@ -137,7 +137,7 @@ class CryptoTestCase: XCTestCase {
 
     private func setupKeys() {
         if
-            let path = Bundle(for: type(of: self)).path(forResource: "TestKey", ofType: "plist"),
+            let path = Bundle(for: type(of: self)).path(forResource: "TestKeys", ofType: "plist"),
             let keyDict = NSDictionary(contentsOfFile: path),
             let keyDataAlice2048 = Data(base64Encoded: keyDict[privateKeyAlice2048Tag] as! String),
             let keyDataBob2048 = Data(base64Encoded: keyDict[privateKeyBob2048Tag] as! String),

@@ -66,7 +66,7 @@
 		C83070051FD1B7390068C5CB /* AESDecrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */; };
 		C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */; };
 		C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */; };
-		C84BDE1B1FAB461B0002B5D0 /* TestKey.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */; };
+		C84BDE1B1FAB461B0002B5D0 /* TestKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = C84BDE1A1FAB461B0002B5D0 /* TestKeys.plist */; };
 		C85012E31FE04E0C00EC49FA /* SecureRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85012E21FE04E0C00EC49FA /* SecureRandom.swift */; };
 		C85B1EF2204D82640026BDCB /* JWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B1EF1204D82640026BDCB /* JWS.swift */; };
 		C85B1EF4204D82860026BDCB /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85B1EF3204D82860026BDCB /* Signer.swift */; };
@@ -159,7 +159,7 @@
 		C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypterTests.swift; sourceTree = "<group>"; };
 		C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSASignerTests.swift; sourceTree = "<group>"; };
 		C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTestCase.swift; sourceTree = "<group>"; };
-		C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestKey.plist; sourceTree = "<group>"; };
+		C84BDE1A1FAB461B0002B5D0 /* TestKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = TestKeys.plist; sourceTree = "<group>"; };
 		C85012E21FE04E0C00EC49FA /* SecureRandom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureRandom.swift; sourceTree = "<group>"; };
 		C85B1EF1204D82640026BDCB /* JWS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWS.swift; sourceTree = "<group>"; };
 		C85B1EF3204D82860026BDCB /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
@@ -284,7 +284,7 @@
 				65125A2E1FBF6B9E007CF3AE /* JWE */,
 				65125A2C1FBF6B79007CF3AE /* JWS */,
 				65E733CD1FEBE9670009EAC6 /* JWK */,
-				C84BDE1A1FAB461B0002B5D0 /* TestKey.plist */,
+				C84BDE1A1FAB461B0002B5D0 /* TestKeys.plist */,
 				65A9D3DB1F45CDD7004E0B61 /* Info.plist */,
 			);
 			path = Tests;
@@ -560,7 +560,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C84BDE1B1FAB461B0002B5D0 /* TestKey.plist in Resources */,
+				C84BDE1B1FAB461B0002B5D0 /* TestKeys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
