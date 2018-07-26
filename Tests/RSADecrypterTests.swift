@@ -119,4 +119,16 @@ sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrx
         }
     }
 
+    func testCipherTextLengthTooShort() {
+        guard privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
+        XCTAssertThrowsError(try decrypter.decrypt(Data(count: 0))) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+        }
+    }
+
 }
