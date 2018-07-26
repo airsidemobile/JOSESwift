@@ -26,10 +26,12 @@ import XCTest
 
 class RSADecrypterTests: CryptoTestCase {
 
+    // Generated with `openssl rsautl`
+    // printf "The true sign of intelligence is not knowledge but imagination." | openssl rsautl -encrypt -pubin -inkey alice.pub.pem -out >(base64)
     let cipherTextWithAliceKeyBase64 = """
-RHLdaxC52ve0icBLGh9Xn_jNoV3uJlEuLRer8_7OOqY2QCGdWPb8OiuxxjEep8okfvlrw_eheEll6v8xdjpzP2zopVEBoNZ9J8BDKL1Y-tTi176jlGXBXKJ\
-dRitsp14sVHx7x-dW9FjiOHEn_CSm3bM2THAJOEtjjeF6vRvxpGxm1KruTbtZ37VTl-vM-e4STda5dCanRPKFemDPYQvjUAF_wuE-P-UeE0fpxDceuCRN3C\
--H8LL9TIrSETRV_CzPVf6Ki9zJpaZQAnqZh5ix0KhaHFMawV7TJetcKPbCzEHbxAF5ib16mxKFc5Th3QFS3eRKYxjaEdciXWVMCrGfXQ
+gurwC3C0X+Q3W1itUlq6fH4xpRMTnp19VCqSw2i9+/yBdwLriCOzG2K5bOaGbC/e1CgtV2c26uLW0zkj6Aw2F5dFttFbVi+AXEBv3L1H3iXOT6lH2Dv5luQ\
+fu/lA9mQbFoKNjp+0WHSMB3jmRdX9mC4GoIPP8vQKaCa8cNw5RxtP2M4TjMPJQYrnRn3Jsx0rSxPaBse9HyOtr43QH4B51VLyExmNHWyNSt28wFTav+EaBx\
+KwawQvhC/447MoBlhtE3bYolvfu5vY3uFV/Dh8Ip5zRvZuE6NwRZN2EdWyR35iphyCgcKufJn9J1oYYZ0b2Sgbrw1e0naWkgYm6djXFw==
 """
 
     let cipherTextWithBobKeyBase64 = """
@@ -61,9 +63,10 @@ ZggJ5g9MRPSnwgq1GjKNcMa1PKd+/OWB/rIeDmorT8dLrusGeLbwFCj1HEz4z5izamiBiyPh96G0m4Zh
         }
 
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
-        let plainText = try! decrypter.decrypt(Data(base64URLEncoded: cipherTextWithAliceKeyBase64)!)
+        let decryptedData = try! decrypter.decrypt(Data(base64Encoded: cipherTextWithAliceKeyBase64)!)
+        let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
 
-        XCTAssertEqual(plainText, message.data(using: .utf8))
+        XCTAssertEqual(decryptedMessage, message)
     }
 
     func testDecryptingWithBobKey() {
