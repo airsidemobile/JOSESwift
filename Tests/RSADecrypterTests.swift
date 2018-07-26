@@ -43,12 +43,6 @@ KRZy3cjd581pzxsPKFplBAuUAYacgIpHW+ZuAjGD+KJzQ6N7TFuWUZxXktsIL2mOhvdRWR0Le5pbgBSg
 sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrxk7A4T5L9+yjuxNjN16k2Rqiw==
 """
 
-    let cipherTextWithAliceKeyEmptyStringBase64 = """
-hyOA/tmOclFkj31UPrRb1EnaRMhR5VZg5TrUyfLMtCUlh3grAva0+sSjqt6zSlWK06A6zUieV69aLRbJ0ZactTTqX2CFrhiZ5nUXhzuUya83VKBI0xrGkpQ\
-8u1y2Iqgb+gbWsFJdJ41cSpZXRpc16Hhd3klTp7YydYZQUG//PLM5bn359kqpT8meJdGqTceehVxmdqTpVwukh/uqLOE8CBCrT7D/2t18mzApGpm/Su4bVb\
-ZggJ5g9MRPSnwgq1GjKNcMa1PKd+/OWB/rIeDmorT8dLrusGeLbwFCj1HEz4z5izamiBiyPh96G0m4ZhPtVhR4Fo3ARj9C037GroDQ2w==
-"""
-
     let defaultDecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))")
 
     override func setUp() {
@@ -122,19 +116,6 @@ ZggJ5g9MRPSnwgq1GjKNcMa1PKd+/OWB/rIeDmorT8dLrusGeLbwFCj1HEz4z5izamiBiyPh96G0m4Zh
         let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
         XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
             XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
-        }
-    }
-
-    func testDecryptingEmptyStringShouldFail() {
-        guard privateKeyAlice2048 != nil else {
-            XCTFail()
-            return
-        }
-
-        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
-
-        XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: cipherTextWithAliceKeyEmptyStringBase64)!)) { (error: Error) in
-            XCTAssertEqual(error as! RSAError, defaultDecryptionError)
         }
     }
 
