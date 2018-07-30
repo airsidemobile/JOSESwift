@@ -136,7 +136,7 @@ class JWETests: CryptoTestCase {
         }
     }
 
-    func testDecryptWithExplicitDecrypterFailsForKey() {
+    func testDecryptWithExplicitDecrypterFailsForWrongKey() {
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
 
         let attributes: [String: Any] = [
