@@ -146,4 +146,34 @@ class RSAEncrypterTests: CryptoTestCase {
         }
     }
 
+    func testMaximumPlainTextLength() {
+        guard publicKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
+        // See https://tools.ietf.org/html/rfc3447#section-7.2
+        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 11
+        let testMessage = Data(count: maxMessageLengthInBytes)
+
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
+        XCTAssertNoThrow(try encrypter.encrypt(testMessage))
+    }
+
+    func testMaximumPlainTextLengthPlusOne() {
+        guard publicKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 11
+        let testMessage = Data(count: maxMessageLengthInBytes + 1)
+
+        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
+        XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+        }
+    }
+
 }
