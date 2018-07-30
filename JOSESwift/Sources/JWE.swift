@@ -137,6 +137,7 @@ public struct JWE {
     /// - Parameter kdk: The private key to decrypt the JWE with.
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
+    @available(*, deprecated, message: "Use `decrypt(using decrypter:)` instead")
     public func decrypt<KeyType>(with key: KeyType) throws -> Payload {
         let context = DecryptionContext(
             header: header,

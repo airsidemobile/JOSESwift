@@ -112,6 +112,7 @@ public struct JWS {
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
     /// - Returns: `true` if the JWS's signature is valid for the given key and the JWS's header and payload.
     ///            `false` if the signature is not valid or if the singature could not be verified.
+    @available(*, deprecated, message: "Use `isValid(for verifier:)` instead")
     public func isValid<KeyType>(for publicKey: KeyType) -> Bool {
         guard let alg = header.algorithm else {
             return false
@@ -133,6 +134,7 @@ public struct JWS {
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
     /// - Returns: The JWS on which this function was called if the signature is valid.
     /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occured during signature validation.
+    @available(*, deprecated, message: "Use `validate(using verifier:)` instead")
     public func validate<KeyType>(with publicKey: KeyType) throws -> JWS {
         guard let alg = header.algorithm else {
             throw JOSESwiftError.verifyingFailed(description: "Invalid header parameter.")

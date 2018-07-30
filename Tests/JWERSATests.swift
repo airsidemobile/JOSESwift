@@ -38,6 +38,7 @@ class JWETests: CryptoTestCase {
         The true sign of intelligence is not knowledge but imagination.
         """.data(using: .utf8)!
 
+    @available(*, deprecated)
     func testJWERoundtrip() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
@@ -50,12 +51,14 @@ class JWETests: CryptoTestCase {
         XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
     }
 
+    @available(*, deprecated)
     func testDecryptWithInferredDecrypter() {
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
 
         XCTAssertEqual(try! jwe.decrypt(with: privateKey2048!).data(), plaintext)
     }
 
+    @available(*, deprecated)
     func testDecryptFails() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
