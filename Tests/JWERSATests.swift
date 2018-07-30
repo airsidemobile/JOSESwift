@@ -37,7 +37,7 @@ class JWETests: CryptoTestCase {
     func testJWERoundtrip() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
         let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
 
         let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
@@ -57,7 +57,7 @@ class JWETests: CryptoTestCase {
     func testDecryptFails() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
         let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
 
         let attributes: [String: Any] = [
