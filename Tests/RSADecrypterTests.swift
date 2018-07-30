@@ -131,4 +131,56 @@ sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrx
         }
     }
 
+    func testCipherTextLengthExactlyRight() {
+        guard privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        // Length checking: If the length of the ciphertext C is not k octets
+        // (or if k < 11), output "decryption error" and stop.
+        // See 7.2.2 Decryption operation RSAES-PKCS1-V1_5-DECRYPT (K, C)
+        // https://tools.ietf.org/html/rfc3447#section-7.2.2
+        let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048!)
+        let testMessage = Data(count: cipherTextLengthInBytes)
+
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
+
+        XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            // Should throw "decryption failed", but
+            // should _not_ throw cipherTextLenghtNotSatisfied
+            XCTAssertNotEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+        }
+    }
+
+    func testCipherTextLengthTooLongByOneByte() {
+        guard privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048!)
+        let testMessage = Data(count: cipherTextLengthInBytes + 1)
+
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
+        XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+        }
+    }
+
+    func testCipherTextLengthTooShortByOneByte() {
+        guard privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048!)
+        let testMessage = Data(count: cipherTextLengthInBytes - 1)
+
+        let decrypter = RSADecrypter(algorithm: .RSA1_5, privateKey: privateKeyAlice2048!)
+        XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+        }
+    }
+
 }
