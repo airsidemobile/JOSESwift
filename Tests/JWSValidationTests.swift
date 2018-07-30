@@ -29,7 +29,7 @@ class JWSValidationTests: CryptoTestCase {
     func testIsValid() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        XCTAssertTrue(jws.isValid(for: publicKey2048!))
+        XCTAssertTrue(jws.isValid(for: publicKeyAlice2048!))
     }
 
     func testIsValidIsFalseForInvalidAlg() {
@@ -38,7 +38,7 @@ class JWSValidationTests: CryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        XCTAssertFalse(jws.isValid(for: publicKey2048!))
+        XCTAssertFalse(jws.isValid(for: publicKeyAlice2048!))
     }
 
     func testIsValidIsFalseForWrongSignature() {
@@ -47,7 +47,7 @@ class JWSValidationTests: CryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        XCTAssertFalse(jws.isValid(for: publicKey2048!))
+        XCTAssertFalse(jws.isValid(for: publicKeyAlice2048!))
     }
 
     func testIsValidIsFalseForWrongKey() {
@@ -59,13 +59,13 @@ class JWSValidationTests: CryptoTestCase {
     func testValidatesDoesNotThrowForValidSignature() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        XCTAssertNoThrow(try jws.validate(with: publicKey2048!))
+        XCTAssertNoThrow(try jws.validate(with: publicKeyAlice2048!))
     }
 
     func testValidatesReturnsJWS() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let validatedJWS = try! jws.validate(with: publicKey2048!)
+        let validatedJWS = try! jws.validate(with: publicKeyAlice2048!)
 
         XCTAssertEqual(validatedJWS.compactSerializedString, compactSerializedJWSRS512Const)
     }
@@ -76,7 +76,7 @@ class JWSValidationTests: CryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        XCTAssertThrowsError(try jws.validate(with: publicKey2048!))
+        XCTAssertThrowsError(try jws.validate(with: publicKeyAlice2048!))
     }
 
     func testValidatesThrowsForWrongSignature() {
@@ -85,7 +85,7 @@ class JWSValidationTests: CryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        XCTAssertThrowsError(try jws.validate(with: publicKey2048!))
+        XCTAssertThrowsError(try jws.validate(with: publicKeyAlice2048!))
     }
 
     func testValidatesThrowsForWrongKey() {
