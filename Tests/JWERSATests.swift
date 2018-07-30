@@ -42,11 +42,11 @@ class JWETests: CryptoTestCase {
     func testJWERoundtrip() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
         let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
 
         let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-        let decryptedPayload = try! jweDec.decrypt(with: privateKey2048!)
+        let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
 
         XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
     }
@@ -54,6 +54,7 @@ class JWETests: CryptoTestCase {
     @available(*, deprecated)
     func testDecryptWithInferredDecrypter() {
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
+        let payloadString = String(data: (try! jwe.decrypt(with: privateKeyAlice2048!)).data(), encoding: .utf8)!
 
         XCTAssertEqual(try! jwe.decrypt(with: privateKey2048!).data(), plaintext)
     }
@@ -62,7 +63,7 @@ class JWETests: CryptoTestCase {
     func testDecryptFails() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
         let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
 
         let attributes: [String: Any] = [
@@ -71,7 +72,7 @@ class JWETests: CryptoTestCase {
             kSecAttrKeySizeInBits as String: 2048,
             kSecPrivateKeyAttrs as String: [
                 kSecAttrIsPermanent as String: false,
-                kSecAttrApplicationTag as String: privateKey2048Tag
+                kSecAttrApplicationTag as String: privateKeyAlice2048Tag
             ]
         ]
 

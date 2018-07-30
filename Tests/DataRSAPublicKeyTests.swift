@@ -27,14 +27,14 @@ import XCTest
 class DataRSAPublicKeyTests: CryptoTestCase {
 
     func testLeadingZeroDropped() {
-        let components = try! publicKey2048Data.rsaPublicKeyComponents()
+        let components = try! publicKeyAlice2048Data.rsaPublicKeyComponents()
 
-        XCTAssertEqual(try! [UInt8](publicKey2048Data).read(.sequence).read(.integer).first!, 0x00)
+        XCTAssertEqual(try! [UInt8](publicKeyAlice2048Data).read(.sequence).read(.integer).first!, 0x00)
         XCTAssertNotEqual([UInt8](components.modulus).first!, 0x00)
     }
 
-    func testPublicKey2048Modulus() {
-        let components = try? publicKey2048Data.rsaPublicKeyComponents()
+    func testpublicKeyAlice2048Modulus() {
+        let components = try? publicKeyAlice2048Data.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -43,8 +43,8 @@ class DataRSAPublicKeyTests: CryptoTestCase {
         XCTAssertEqual(modulus, expectedModulus2048Data)
     }
 
-    func testPublicKey2048Exponent() {
-        let components = try? publicKey2048Data.rsaPublicKeyComponents()
+    func testpublicKeyAlice2048Exponent() {
+        let components = try? publicKeyAlice2048Data.rsaPublicKeyComponents()
 
         XCTAssertNotNil(components)
 
@@ -77,7 +77,7 @@ class DataRSAPublicKeyTests: CryptoTestCase {
         let components = (expectedModulus2048Data, expectedExponentData)
         let data = try! Data.representing(rsaPublicKeyComponents: components)
 
-        let expectedData = publicKey2048Data
+        let expectedData = publicKeyAlice2048Data
 
         XCTAssertEqual(data, expectedData)
     }

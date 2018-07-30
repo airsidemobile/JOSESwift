@@ -78,7 +78,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
 
     @available(*, deprecated)
     func testDecryptWithCorrectAlgWrongKeyType() {
-        let privateKey = privateKey2048!
+        let privateKey = privateKeyAlice2048!
 
         let jwe = try! JWE(compactSerialization: serializationFromNimbus)
 
@@ -108,7 +108,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
             with: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBMV81In0"
         )
 
-        let privateKey = privateKey2048!
+        let privateKey = privateKeyAlice2048!
 
         let jwe = try! JWE(compactSerialization: serialization)
 
