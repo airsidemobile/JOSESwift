@@ -137,7 +137,7 @@ public struct JWE {
     /// - Parameter kdk: The private key to decrypt the JWE with.
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public func decrypt<KeyType>(with kdk: KeyType) throws -> Payload {
+    public func decrypt<KeyType>(with key: KeyType) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
@@ -150,7 +150,7 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "Invalid header parameter.")
         }
 
-        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc) else {
+        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, decryptionKey: key, contentDecryptionAlgorithm: enc) else {
             throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
         }
 

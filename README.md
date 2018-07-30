@@ -59,7 +59,7 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 
 | RSA1_5 | RSA-OAEP | RSA-OAEP-256 | A128KW | A192KW | A256KW | dir | ECDH-ES | ECDH-ES+A128KW | ECDH-ES+A192KW | ECDH-ES+A256KW | A128GCMKW | A192GCMKW | A256GCMKW | PBES2-HS256+A128KW | PBES2-HS384+A192KW | PBES2-HS512+A256KW |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
-| :white_check_mark: | | | | | | | | | | | | | | | | |
+| :white_check_mark: | | | | | | :white_check_mark: | | | | | | | | | | |
 
 *Supported content encryption algorithms:*
 
@@ -75,7 +75,7 @@ Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKe
 
 | EC | RSA | oct |
 | :--: | :--: | :--: |
-| | :white_check_mark: | |
+| | :white_check_mark: | :white_check_mark: |
 
 ## Installation
 
@@ -204,7 +204,7 @@ let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
 let payload = Payload(message)
 
 // Encrypter algorithms must match header algorithms.
-let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
 ```
 
 ``` swift

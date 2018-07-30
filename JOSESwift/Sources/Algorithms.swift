@@ -34,8 +34,10 @@ public enum SignatureAlgorithm: String {
 /// An algorithm for asymmetric encryption and decryption.
 ///
 /// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
+/// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum AsymmetricKeyAlgorithm: String {
     case RSA1_5 = "RSA1_5"
+    case direct = "dir"
 }
 
 /// An algorithm for symmetric encryption and decryption.

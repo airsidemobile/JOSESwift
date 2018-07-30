@@ -1,8 +1,8 @@
 //
-//  AESDecrypter.swift
+//  DataSymmetricKey.swift
 //  JOSESwift
 //
-//  Created by Daniel Egger on 19/10/2017.
+//  Created by Daniel Egger on 10.07.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -23,24 +23,12 @@
 
 import Foundation
 
-/// An `AsymmetricDecrypter` to decrypt cipher text with a `RSA` algorithm.
-internal struct RSADecrypter: AsymmetricDecrypter {
-    typealias KeyType = RSA.KeyType
-
-    let algorithm: AsymmetricKeyAlgorithm
-    let privateKey: KeyType?
-
-    init(algorithm: AsymmetricKeyAlgorithm, privateKey: KeyType? = nil) {
-        self.algorithm = algorithm
-        self.privateKey = privateKey
+extension Data: ExpressibleAsSymmetricKeyComponents {
+    public static func representing(symmetricKeyComponents components: SymmetricKeyComponents) throws -> Data {
+        return components
     }
 
-    func decrypt(_ ciphertext: Data) throws -> Data {
-        guard let privateKey = privateKey else {
-            // If no key is set, we're using direct encryption so the encrypted key is empty.
-            return Data()
-        }
-
-        return try RSA.decrypt(ciphertext, with: privateKey, and: algorithm)
+    public func symmetricKeyComponents() throws -> SymmetricKeyComponents {
+        return self
     }
 }

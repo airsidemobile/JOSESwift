@@ -50,6 +50,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
         switch self {
         case .RSA1_5:
             return .rsaEncryptionPKCS1
+        default:
+            return nil
         }
     }
 
@@ -61,6 +63,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
             return plainText.count <= (SecKeyGetBlockSize(publicKey) - 11)
+        default:
+            return false
         }
     }
 
@@ -68,6 +72,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
         switch self {
         case .RSA1_5:
             return cipherText.count == SecKeyGetBlockSize(privateKey)
+        default:
+            return false
         }
     }
 }
