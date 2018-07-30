@@ -54,9 +54,9 @@ class JWETests: CryptoTestCase {
     @available(*, deprecated)
     func testDecryptWithInferredDecrypter() {
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
-        let payloadString = String(data: (try! jwe.decrypt(with: privateKeyAlice2048!)).data(), encoding: .utf8)!
+        let payload = try! jwe.decrypt(with: privateKeyAlice2048!).data()
 
-        XCTAssertEqual(try! jwe.decrypt(with: privateKey2048!).data(), plaintext)
+        XCTAssertEqual(payload, plaintext)
     }
 
     @available(*, deprecated)
@@ -93,7 +93,7 @@ class JWETests: CryptoTestCase {
 
         let decrypter = Decrypter(
             keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKey2048!,
+            decryptionKey: privateKeyAlice2048!,
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
 
@@ -111,7 +111,7 @@ class JWETests: CryptoTestCase {
 
         let decrypter = Decrypter(
             keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKey2048!,
+            decryptionKey: privateKeyAlice2048!,
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
 
@@ -131,7 +131,7 @@ class JWETests: CryptoTestCase {
 
         let decrypter = Decrypter(
             keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKey2048!,
+            decryptionKey: privateKeyAlice2048!,
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
 
@@ -149,7 +149,6 @@ class JWETests: CryptoTestCase {
             kSecAttrKeySizeInBits as String: 2048,
             kSecPrivateKeyAttrs as String: [
                 kSecAttrIsPermanent as String: false,
-                kSecAttrApplicationTag as String: privateKey2048Tag
             ]
         ]
 
