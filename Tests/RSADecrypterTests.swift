@@ -119,7 +119,7 @@ sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrx
         }
     }
 
-    func testCipherTextLengthTooShort() {
+    func testCipherTextLengthZero() {
         guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
