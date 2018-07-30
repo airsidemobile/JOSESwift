@@ -128,7 +128,7 @@ class JWSValidationTests: CryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS256, publicKey: publicKey2048!)!
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong header algorithm") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
