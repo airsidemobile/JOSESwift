@@ -170,6 +170,64 @@ class JWSValidationTests: CryptoTestCase {
 
         XCTAssertThrowsError(try jws.validate(using: verifier))
     }
+
+    func testIsValidWithExplicitVerifier() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)
+
+        XCTAssertTrue(jws.isValid(for: verifier!))
+    }
+
+    func testIsValidWithExplicitVerifierIsFalseForInvalidAlg() {
+        // Replaces alg "RS512" with alg "FOOBAR" in header
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJGT09CQVIifQ")
+
+        let jws = try! JWS(compactSerialization: malformedSerialization)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)
+
+        XCTAssertFalse(jws.isValid(for: verifier!))
+    }
+
+    func testIsValidWithExplicitVerifierIsFalseForWrongSignature() {
+        // Replaces part of the signature, making it invalid
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "dar", with: "foo")
+
+        let jws = try! JWS(compactSerialization: malformedSerialization)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)
+
+        XCTAssertFalse(jws.isValid(for: verifier!))
+    }
+
+    func testIsValidWithExplicitVerifierIsFalseForWrongKey() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey4096!)
+
+        XCTAssertFalse(jws.isValid(for: verifier!))
+    }
+
+    func testIsValidWithExplicitVerifierCatchesWrongVerifierAlgorithm() {
+        let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS256, publicKey: publicKey2048!)!
+
+        XCTAssertFalse(jws.isValid(for: verifier))
+    }
+
+    func testIsValidWithExplicitVerifierCatchesWrongHeaderAlgorithm() {
+        // Replaces alg "RS512" with alg "HS256" in header
+        let malformedSerialization = compactSerializedJWSRS512Const.replacingOccurrences(of: "eyJhbGciOiJSUzUxMiJ9", with: "eyJhbGciOiJIUzI1NiJ9")
+
+        let jws = try! JWS(compactSerialization: malformedSerialization)
+
+        let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey2048!)!
+
+        XCTAssertFalse(jws.isValid(for: verifier))
+    }
+
     
 }
 

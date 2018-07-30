@@ -173,6 +173,23 @@ public struct JWS {
 
         return self
     }
+
+    /// Checks whether the JWS's signature is valid using a given verifier.
+    ///
+    /// - Parameter verifier: The verifier containing the public key whose corresponding private key signed the JWS.
+    /// - Returns: `true` if the JWS's signature is valid for the given verifier and the JWS's header and payload.
+    ///            `false` if the signature is not valid or if the singature could not be verified.
+    public func isValid(for verifier: Verifier) -> Bool {
+        guard verifier.verifier.algorithm == header.algorithm else {
+            return false
+        }
+
+        do {
+            return try verifier.verify(header: header, and: payload, against: signature)
+        } catch {
+            return false
+        }
+    }
 }
 
 extension JWS: CompactSerializable {
