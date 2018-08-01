@@ -121,7 +121,7 @@ class JWETests: CryptoTestCase {
     }
 
     func testDecryptWithExplicitDecrypterWrongEncInHeader() {
-        // Replaces alg "A256CBC-HS512" with alg "A128GCM" in header
+        // Replaces enc "A256CBC-HS512" with enc "A128GCM" in header
         let malformedSerialization = String(data: compactSerializedJWE, encoding: .utf8)!.replacingOccurrences(
             of: "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0",
             with: "eyJhbGciOiAiUlNBMV81IiwiZW5jIjogIkExMjhHQ00ifQ"
