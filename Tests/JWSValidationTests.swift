@@ -235,7 +235,6 @@ class JWSValidationTests: CryptoTestCase {
 
         XCTAssertFalse(jws.isValid(for: verifier))
     }
-
     
 }
 
