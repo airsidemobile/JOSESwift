@@ -135,7 +135,7 @@ class JWETests: CryptoTestCase {
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
 
-        XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong header alg") { error in
+        XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong enc in header") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
         }
     }
