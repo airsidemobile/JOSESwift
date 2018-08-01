@@ -43,7 +43,8 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         121,  25,   4,  85, 220, 144, 215, 110,
         130,  17,  68, 228, 129, 138,   7, 130
     ])
-    
+
+    @available(*, deprecated)
     func testRoundtrip() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
 
@@ -57,6 +58,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
     }
 
+    @available(*, deprecated)
     func testDecryptFromNimbus() {
         let symmetricKey = keyFromNimbus
 
@@ -65,6 +67,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         try! XCTAssertEqual(jwe.decrypt(with: symmetricKey).data(), data)
     }
 
+    @available(*, deprecated)
     func testDecryptWithWrongSymmetricKey() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
 
@@ -73,6 +76,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
     }
 
+    @available(*, deprecated)
     func testDecryptWithCorrectAlgWrongKeyType() {
         let privateKey = privateKeyAlice2048!
 
@@ -81,6 +85,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
     }
 
+    @available(*, deprecated)
     func testDecryptWithWrongAlgCorrectKeyType() {
         // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
         let serialization = serializationFromNimbus.replacingOccurrences(
@@ -95,6 +100,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
     }
 
+    @available(*, deprecated)
     func testDecryptWithWrongAlgWrongKeyType() {
         // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
         let serialization = serializationFromNimbus.replacingOccurrences(
@@ -109,6 +115,7 @@ class JWEDirectEncryptionTests: CryptoTestCase {
         XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
     }
 
+    @available(*, deprecated)
     func testDecryptWithEncryptedKeyPresent() {
         let encryptedKey = """
             c3HOjtBLx3xt3RYMx2WexgbYpcszeqiWXZmeBaLIUb8BXsETRxHDFUyyAt6Q8dIYX22kQs9Kte7AL1CcVxS0C2sx_yu7xDZ4s67cHW1AMbf\

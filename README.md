@@ -169,7 +169,8 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jws = try JWS(compactSerialization: serialization)
-    let payload = try jws.validate(with: publicKey).payload
+    let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey)!
+    let payload = try jws.validate(using: verifier).payload
     let message = String(data: payload.data(), encoding: .utf8)!
 
     print(message) // Summer ⛱, Sun ☀️, Cactus 🌵
@@ -228,7 +229,8 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jwe = try JWE(compactSerialization: serialization)
-    let payload = try jwe.decrypt(with: privateKey)
+    let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+    let payload = try jwe.decrypt(using: decrypter)
     let message = String(data: payload.data(), encoding: .utf8)!
 
     print(message) // Summer ⛱, Sun ☀️, Cactus 🌵

@@ -33,6 +33,7 @@ class JWSTests: CryptoTestCase {
         super.tearDown()
     }
 
+    @available(*, deprecated)
     func testSignAndSerializeRS256() {
         self.performTestRSASign(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
@@ -41,6 +42,7 @@ class JWSTests: CryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
 
+    @available(*, deprecated)
     func testSignAndSerializeRS512() {
         self.performTestRSASign(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
     }
@@ -51,6 +53,7 @@ class JWSTests: CryptoTestCase {
 
     // MARK: - RSA Tests
 
+    @available(*, deprecated)
     private func performTestRSASign(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
