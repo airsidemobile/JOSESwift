@@ -9,12 +9,57 @@ end
 
 desc "Lints all Swift files"
 lane :lint do
+  # Todo: Don't ignore exit status (#98)
   swiftlint(ignore_exit_status: true)
 end
 
+desc "Bumps the version number"
+lane :bump do |options|
+  bump_type = options[:type]
+  version = options[:version]
+
+  new_version_xcode = ""
+  new_version_podspec = ""
+
+  case bump_type
+  when "major", "minor", "patch"
+    new_version_xcode = increment_version_number(bump_type: bump_type)
+    new_version_podspec = version_bump_podspec(path: "JOSESwift.podspec", bump_type: bump_type)
+  else
+    if version.nil?
+      new_version_xcode = increment_version_number
+      new_version_podspec = version_bump_podspec(path: "JOSESwift.podspec")
+    else
+      new_version_xcode = increment_version_number(version_number: version)
+      new_version_podspec = version_bump_podspec(path: "JOSESwift.podspec", version_number: version)
+    end
+  end
+
+  if new_version_xcode == new_version_podspec
+    UI.success "Did bump version number to #{new_version_xcode}"
+  else
+    UI.user_error!("Xcode and .podspec version mismatch: #{new_version_xcode} != #{new_version_podspec}")
+  end
+
+  new_version_xcode
+end
+
 desc "Prepares a release"
-lane :prepare do
+lane :prepare do |options|
   ensure_git_status_clean
+
+  bump_type = options[:type]
+
+  case bump_type
+  when "major", "minor", "patch"
+    version = bump(type: bump_type)
+    commit_version_bump(message: "Bump version to #{version}")
+  else
+    UI.user_error!("No bump type specified!")
+  end
+
+  ensure_git_status_clean
+
   lint
   test
 end
