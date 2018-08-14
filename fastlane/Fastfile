@@ -51,13 +51,16 @@ end
 
 desc "Prepares a release"
 lane :prepare do |options|
+  # ensure_git_branch(branch: "master")
   ensure_git_status_clean
 
   bump_type = options[:type]
+  version = ""
 
   case bump_type
   when "major", "minor", "patch"
     version = bump(type: bump_type)
+    sh("git", "checkout", "-b", "release/#{version.gsub(/\./, '-')}" )
     commit_version_bump(message: "Bump version to #{version}")
   else
     UI.user_error!("No bump type specified!")
@@ -71,4 +74,15 @@ lane :prepare do |options|
   ensure_git_status_clean
 
   tests
+
+  promt_text = """
+    #{options[:version]} has been prepped for release.\
+    If you have any additional changes you would like to make, please do those before continuing.
+    Would you like to commit, tag, and push #{version}?
+    """
+
+  if prompt(text: promt_text.green, boolean: true, ci_input:"y")
+    git_commit(path: ".", message: "Prepare for #{version} release")
+    push_to_git_remote(remote: remote)
+  end
 end
