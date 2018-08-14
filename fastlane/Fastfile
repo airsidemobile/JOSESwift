@@ -61,7 +61,7 @@ lane :prepare do |options|
   when "major", "minor", "patch"
     version = bump(type: bump_type)
     sh("git", "checkout", "-b", "release/#{version.gsub(/\./, '-')}" )
-    commit_version_bump(message: "Bump version to #{version}")
+    commit_version_bump(message: "Bump version to #{version}", include: ["JOSESwift.podspec"])
   else
     UI.user_error!("No bump type specified!")
   end
