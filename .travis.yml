@@ -6,5 +6,8 @@ before_install:
   - brew update && brew bundle
   - bundle install
 
-script:
-  - bundle exec fastlane test
+jobs:
+  include:
+    - stage: test
+      script: bundle exec fastlane test
+      script: bundle exec fastlane lint
