@@ -1,0 +1,8 @@
+fastlane_version "2.63.0"
+
+skip_docs
+
+desc "Runs all the tests"
+lane :test do
+  scan(scheme: "JOSESwift")
+end
