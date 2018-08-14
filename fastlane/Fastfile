@@ -3,7 +3,7 @@ fastlane_version "2.63.0"
 skip_docs
 
 desc "Runs all the tests"
-lane :run_tests do
+lane :test do
   scan(scheme: "JOSESwift")
 end
 
@@ -19,7 +19,7 @@ lane :format_code do
 end
 
 desc "Bumps the version number"
-lane :bump_version do |options|
+lane :bump do |options|
   bump_type = options[:type]
   version = options[:version]
 
@@ -57,7 +57,7 @@ lane :prepare do |options|
 
   # case bump_type
   # when "major", "minor", "patch"
-  #   version = bump_version(type: bump_type)
+  #   version = bump(type: bump_type)
   #   commit_version_bump(message: "Bump version to #{version}")
   # else
   #   UI.user_error!("No bump type specified!")
@@ -70,5 +70,5 @@ lane :prepare do |options|
 
   ensure_git_status_clean
 
-  run_tests
+  test
 end
