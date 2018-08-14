@@ -1,8 +1,6 @@
 language: swift
 os: osx
-env:
-  - LC_ALL=en_US.UTF-8
-  - LANG=en_US.UTF-8
+env: LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 install:
   - bundle install
