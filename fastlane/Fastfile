@@ -3,7 +3,7 @@ fastlane_version "2.63.0"
 skip_docs
 
 desc "Runs all the tests"
-lane :test do
+lane :run_tests do
   scan(scheme: "JOSESwift")
 end
 
@@ -14,12 +14,12 @@ lane :lint do
 end
 
 desc "Format all Swift files"
-lane :format do
+lane :format_code do
   swiftlint(mode: :autocorrect)
 end
 
 desc "Bumps the version number"
-lane :bump do |options|
+lane :bump_version do |options|
   bump_type = options[:type]
   version = options[:version]
 
@@ -57,7 +57,7 @@ lane :prepare do |options|
 
   # case bump_type
   # when "major", "minor", "patch"
-  #   version = bump(type: bump_type)
+  #   version = bump_version(type: bump_type)
   #   commit_version_bump(message: "Bump version to #{version}")
   # else
   #   UI.user_error!("No bump type specified!")
@@ -65,10 +65,10 @@ lane :prepare do |options|
 
   # ensure_git_status_clean
 
-  format
+  format_code
   git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
-  
+
   ensure_git_status_clean
 
-  test
+  run_tests
 end
