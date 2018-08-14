@@ -51,19 +51,19 @@ end
 
 desc "Prepares a release"
 lane :prepare do |options|
-  # ensure_git_status_clean
+  ensure_git_status_clean
 
-  # bump_type = options[:type]
+  bump_type = options[:type]
 
-  # case bump_type
-  # when "major", "minor", "patch"
-  #   version = bump(type: bump_type)
-  #   commit_version_bump(message: "Bump version to #{version}")
-  # else
-  #   UI.user_error!("No bump type specified!")
-  # end
+  case bump_type
+  when "major", "minor", "patch"
+    version = bump(type: bump_type)
+    commit_version_bump(message: "Bump version to #{version}")
+  else
+    UI.user_error!("No bump type specified!")
+  end
 
-  # ensure_git_status_clean
+  ensure_git_status_clean
 
   format_code
   git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
