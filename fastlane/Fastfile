@@ -51,7 +51,6 @@ end
 
 desc "Prepares a release"
 lane :prepare do |options|
-  # ensure_git_branch(branch: "master")
   ensure_git_status_clean
 
   bump_type = options[:type]
@@ -70,12 +69,12 @@ lane :prepare do |options|
 
   ensure_git_status_clean
 
-  # format_code
-  # git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
+  format_code
+  git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
 
   ensure_git_status_clean
 
-  # tests
+  tests
 
   promt_text = "#{version} has been prepared for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to push #{branch_name}?"
   if prompt(text: promt_text.green, boolean: true, ci_input:"y")
