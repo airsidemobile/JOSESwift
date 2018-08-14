@@ -68,12 +68,12 @@ lane :prepare do |options|
 
   ensure_git_status_clean
 
-  format_code
-  git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
+  # format_code
+  # git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
 
   ensure_git_status_clean
 
-  tests
+  # tests
 
   promt_text = """
     #{options[:version]} has been prepped for release.\
