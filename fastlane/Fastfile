@@ -77,9 +77,9 @@ lane :prepare do |options|
 
   # tests
 
-  promt_text = "#{options[:version]} has been prepared for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to push #{branch_name}?"
+  promt_text = "#{version} has been prepared for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to push #{branch_name}?"
   if prompt(text: promt_text.green, boolean: true, ci_input:"y")
     sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
-    sh("git push --set-upstream origin #{branch_name}'")
+    sh("git push --set-upstream origin #{branch_name}")
   end
 end
