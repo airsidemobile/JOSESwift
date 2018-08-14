@@ -56,11 +56,13 @@ lane :prepare do |options|
 
   bump_type = options[:type]
   version = ""
+  branch_name = ""
 
   case bump_type
   when "major", "minor", "patch"
     version = bump(type: bump_type)
-    sh("git", "checkout", "-b", "release/#{version.gsub(/\./, '-')}" )
+    branch_name = "release/#{version.gsub(/\./, '-')}"
+    sh("git", "checkout", "-b", branch_name)
     commit_version_bump(message: "Bump version to #{version}", include: ["JOSESwift.podspec"])
   else
     UI.user_error!("No bump type specified!")
@@ -75,14 +77,9 @@ lane :prepare do |options|
 
   # tests
 
-  promt_text = """
-    #{options[:version]} has been prepped for release.\
-    If you have any additional changes you would like to make, please do those before continuing.
-    Would you like to commit, tag, and push #{version}?
-    """
-
+  promt_text = "#{options[:version]} has been prepared for release. If you have any additional changes you would like to make, please do those before continuing. Would you like to push #{branch_name}?"
   if prompt(text: promt_text.green, boolean: true, ci_input:"y")
-    git_commit(path: ".", message: "Prepare for #{version} release")
+    sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
     push_to_git_remote(remote: remote)
   end
 end
