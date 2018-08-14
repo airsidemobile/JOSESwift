@@ -15,4 +15,6 @@ end
 desc "Prepares a release"
 lane :prepare do
   ensure_git_status_clean
+  lint
+  test
 end
