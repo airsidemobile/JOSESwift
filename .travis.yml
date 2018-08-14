@@ -1,9 +1,11 @@
 language: swift
 os: osx
-osx_image: xcode9.2
-xcode_project: JOSESwift.xcodeproj
-xcode_workspace: JOSESwift.xcworkspace
-xcode_scheme: Tests
+env:
+  - LC_ALL=en_US.UTF-8
+  - LANG=en_US.UTF-8
+
+install:
+  - bundle install
 
 script:
-  - bundle exec fastlane scan -s JOSESwift
+  - bundle exec fastlane test
