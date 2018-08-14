@@ -6,3 +6,13 @@ desc "Runs all the tests"
 lane :test do
   scan(scheme: "JOSESwift")
 end
+
+desc "Lints all Swift files"
+lane :lint do
+  swiftlint(ignore_exit_status: true)
+end
+
+desc "Prepares a release"
+lane :prepare do
+  ensure_git_status_clean
+end
