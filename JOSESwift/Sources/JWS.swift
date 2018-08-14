@@ -46,7 +46,7 @@ public struct JWS {
         // swiftlint:disable:next force_unwrap
         return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
-    
+
     /// Constructs a JWS object from a given header, payload, and signer.
     ///
     /// - Parameters:
