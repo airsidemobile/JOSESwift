@@ -3,7 +3,7 @@ fastlane_version "2.63.0"
 skip_docs
 
 desc "Runs all the tests"
-lane :test do
+lane :tests do
   scan(scheme: "JOSESwift")
 end
 
@@ -70,5 +70,5 @@ lane :prepare do |options|
 
   ensure_git_status_clean
 
-  test
+  tests
 end
