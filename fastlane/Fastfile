@@ -49,7 +49,7 @@ lane :bump do |options|
   new_version_xcode
 end
 
-desc "Prepares a release"
+desc "Prepares a release by bumping the version, formattin code, running tests and setting up a release branch"
 lane :prepare do |options|
   bump_type = options[:type]
   version = ""
