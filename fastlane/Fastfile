@@ -88,12 +88,13 @@ lane :prepare do |options|
 
   # Promt for confimation
 
-  promt_text = "#{version} has been prepared for release. "\
-               "Please make any additional changes before continuing. "\
+  promt_text = "Version #{version} has been prepared for release. "\
+               "Please make any additional changes that should be included in the release before continuing. "\
                "Would you like to continue and push #{branch_name}?"
 
-  if prompt(text: promt_text.green, boolean: true, ci_input:"y")
+  if prompt(text: promt_text, boolean: true, ci_input:"y")
     sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
     sh("git push --set-upstream origin #{branch_name}")
+    UI.important "#{branch_name} has been pushed. Now, create a pull request. Once merged run the release lane"
   end
 end
