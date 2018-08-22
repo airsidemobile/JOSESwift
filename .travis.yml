@@ -1,5 +1,6 @@
 language: swift
 os: osx
+osx_image: xcode9.2
 env: LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 before_install:
@@ -9,6 +10,8 @@ before_install:
 jobs:
   include:
     - stage: test
+      name: testing
       script: bundle exec fastlane test
     - stage: test
+      name: linting
       script: bundle exec fastlane lint
