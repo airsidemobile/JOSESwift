@@ -37,7 +37,7 @@ public enum SignatureAlgorithm: String {
 /// - RSAES-OAEP: [RSAES-OAEP](https://tools.ietf.org/html/rfc7518#section-4.3)
 public enum AsymmetricKeyAlgorithm: String {
     case RSA1_5 = "RSA1_5"
-    case RSAES_OAEP = "RSAES-OAEP"
+    case RSAOAEP = "RSAES-OAEP"
 }
 
 /// An algorithm for symmetric encryption and decryption.

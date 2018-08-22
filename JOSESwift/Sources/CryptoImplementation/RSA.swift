@@ -50,7 +50,7 @@ fileprivate extension AsymmetricKeyAlgorithm {
         switch self {
         case .RSA1_5:
             return .rsaEncryptionPKCS1
-        case .RSAES_OAEP:
+        case .RSAOAEP:
             return .rsaEncryptionOAEPSHA1
         }
     }
@@ -65,8 +65,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2.1).
             return mLen <= (k - 11)
-        case .RSAES_OAEP:
-            // For detailed information about the allowed plain text length for RSAES_OAEP,
+        case .RSAOAEP:
+            // For detailed information about the allowed plain text length for RSAOAEP,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.1).
             // hLen = input limitation for the hash function (2^61 - 1 octets for SHA-1)
             let hLen = (1 << 61) - 1
@@ -80,8 +80,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // For detailed information about the allowed cipher length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2.2).
             return cipherText.count == SecKeyGetBlockSize(privateKey)
-        case .RSAES_OAEP:
-            // For detailed information about the allowed cipher length for RSAES_OAEP,
+        case .RSAOAEP:
+            // For detailed information about the allowed cipher length for RSAOAEP,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.2).
             // hLen = input limitation for the hash function (2^61 - 1 octets for SHA-1)
             let hLen = (1 << 61) - 1

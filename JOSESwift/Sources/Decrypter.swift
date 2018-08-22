@@ -79,7 +79,7 @@ public struct Decrypter {
             return nil
         }
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAES_OAEP, .A256CBCHS512) :
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512) :
             // swiftlint:disable:next force_cast
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)

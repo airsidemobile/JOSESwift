@@ -80,7 +80,7 @@ public struct Encrypter<KeyType> {
             return nil
         }
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAES_OAEP, .A256CBCHS512) :
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512) :
             // swiftlint:disable:next force_cast
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: kek as! RSAEncrypter.KeyType)
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
