@@ -49,19 +49,19 @@ lane :bump do |options|
   new_version_xcode
 end
 
-desc "Prepares a release by bumping the version, formattin code, running tests and setting up a release branch"
+desc "Prepares a release by bumping version, formatting code, running tests, setting up a release preparation branch"
 lane :prepare do |options|
   bump_type = options[:type]
   version = ""
   branch_name = ""
 
-  # Ensure we release from master
-
+  # Ensure we prepare from current master
   ensure_git_branch(branch: "master")
+  ensure_git_status_clean
+  sh("git", "pull")
   ensure_git_status_clean
 
   # Bump version
-
   case bump_type
   when "major", "minor", "patch"
     version = bump(type: bump_type)
@@ -69,32 +69,53 @@ lane :prepare do |options|
     UI.user_error!("No bump type specified!")
   end
 
-  # Commit version bump on branch release/x-x-x
-
+  # Commit version bump on release preparation branch (release/x-x-x)
   branch_name = "release/#{version.gsub(/\./, '-')}"
   sh("git", "checkout", "-b", branch_name)
   commit_version_bump(message: "Bump version to #{version}", include: ["JOSESwift.podspec"])
   ensure_git_status_clean
 
   # Format code
-
   format_code
   git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
   ensure_git_status_clean
 
   # Run tests
-
   test
 
-  # Promt for confimation
-
+  # Prompt for confimation
   promt_text = "Version #{version} has been prepared for release. "\
                "Please make any additional changes that should be included in the release before continuing. "\
                "Would you like to continue and push #{branch_name}?"
 
-  if prompt(text: promt_text, boolean: true, ci_input:"y")
-    sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
-    sh("git push --set-upstream origin #{branch_name}")
-    UI.important "#{branch_name} has been pushed. Now, create a pull request. Once merged run the release lane"
+  unless prompt(text: promt_text, boolean: true, ci_input: "y")
+    UI.user_error!("Exiting early. Release branch not pushed")
   end
+
+  # Commit changes and push release branch
+  sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
+  sh("git push --set-upstream origin #{branch_name}")
+  UI.important "#{branch_name} has been pushed and a pull request created"
+end
+
+desc "Create a release by tagging and pushing to CocoaPods trunk"
+lane :release do
+  # Ensure we release from master
+  ensure_git_branch(branch: "master")
+  ensure_git_status_clean
+
+  # Prompt for confirmation
+  version = get_version_number(target: "JOSESwift")
+  unless prompt(text: "You are about to release #{version}. Continue?", boolean: true, ci_input: "y")
+    UI.user_error!("Exiting early. Version #{version} not released")
+  end
+
+  # Tag release
+  add_git_tag(tag: version)
+  push_git_tags
+
+  # Puplish pod
+  pod_push(path: "JOSESwift.podspec")
+
+  ensure_git_status_clean
 end
