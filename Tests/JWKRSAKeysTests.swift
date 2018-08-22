@@ -27,7 +27,7 @@ import XCTest
 class JWKRSAKeysTests: CryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [
             "kty": "wrongKty"
         ])
 
@@ -81,7 +81,7 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testPublicKeyKeyTypeIsPresent() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!)
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!)
 
         XCTAssertEqual(jwk.keyType, .RSA)
         XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.RSA.rawValue)
@@ -97,7 +97,7 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testSettingAndGettingAdditionalParameter() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [
             "kid": "new on the block"
             ])
 
@@ -105,7 +105,7 @@ class JWKRSAKeysTests: CryptoTestCase {
     }
 
     func testPublicKeyAllParametersArePresentInDict() {
-        let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [
+        let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [
             "kid": "new on the block",
             "use": "test"
         ])

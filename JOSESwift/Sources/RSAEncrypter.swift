@@ -28,9 +28,19 @@ internal struct RSAEncrypter: AsymmetricEncrypter {
     typealias KeyType = RSA.KeyType
 
     let algorithm: AsymmetricKeyAlgorithm
-    let publicKey: KeyType
+    let publicKey: KeyType?
+
+    init(algorithm: AsymmetricKeyAlgorithm, publicKey: KeyType? = nil) {
+        self.algorithm = algorithm
+        self.publicKey = publicKey
+    }
 
     func encrypt(_ plaintext: Data) throws -> Data {
+        guard let publicKey = publicKey else {
+            // If no key is set, we're using direct encryption so the encrypted key is empty.
+            return Data()
+        }
+
         return try RSA.encrypt(plaintext, with: publicKey, and: algorithm)
     }
 }
