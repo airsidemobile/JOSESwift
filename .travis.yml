@@ -10,4 +10,5 @@ jobs:
   include:
     - stage: test
       script: bundle exec fastlane test
+    - stage: test
       script: bundle exec fastlane lint
