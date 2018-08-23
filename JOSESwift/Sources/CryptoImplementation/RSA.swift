@@ -67,9 +67,10 @@ fileprivate extension AsymmetricKeyAlgorithm {
             return mLen <= (k - 11)
         case .RSAOAEP:
             // For detailed information about the allowed plain text length for RSAOAEP,
-            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.1).
-            // hLen = input limitation for the hash function (2^61 - 1 octets for SHA-1)
-            let hLen = (1 << 61) - 1
+            // please refer to the RFC (https://tools.ietf.org/html/rfc3447#section-7.1.1
+            // and https://tools.ietf.org/html/rfc3174#section-1)
+            // hLen = input limitation for the hash function (20 octets for SHA-1)
+            let hLen = 20
             return mLen <= (k - 2 * hLen - 2)
         }
     }
@@ -82,10 +83,11 @@ fileprivate extension AsymmetricKeyAlgorithm {
             return cipherText.count == SecKeyGetBlockSize(privateKey)
         case .RSAOAEP:
             // For detailed information about the allowed cipher length for RSAOAEP,
-            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.2).
-            // hLen = input limitation for the hash function (2^61 - 1 octets for SHA-1)
-            let hLen = (1 << 61) - 1
-            return cipherText.count == (2 * hLen + 2)
+            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.2
+            // https://tools.ietf.org/html/rfc3174#section-1,
+            // and https://www.rfc-editor.org/errata_search.php?rfc=3447)
+            // C: ciphertext to be decrypted, an octet string of length k, where k >= 2hLen + 2
+            return cipherText.count == SecKeyGetBlockSize(privateKey)
         }
     }
 }

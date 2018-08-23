@@ -75,11 +75,11 @@ public struct Decrypter {
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
-        guard type(of: kdk) is RSADecrypter.KeyType.Type else {
-            return nil
-        }
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512) :
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512):
+            guard type(of: kdk) is RSADecrypter.KeyType.Type else {
+                return nil
+            }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: kdk as! RSADecrypter.KeyType)
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
