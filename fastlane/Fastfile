@@ -62,12 +62,7 @@ lane :prepare do |options|
   ensure_git_status_clean
 
   # Bump version
-  case bump_type
-  when "major", "minor", "patch"
-    version = bump(type: bump_type)
-  else
-    UI.user_error!("No bump type specified!")
-  end
+  version = bump(options)
 
   # Commit version bump on release preparation branch (release/x-x-x)
   branch_name = "release/#{version.gsub(/\./, '-')}"
