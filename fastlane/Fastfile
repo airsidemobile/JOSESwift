@@ -58,8 +58,6 @@ lane :prepare do |options|
   # Ensure we prepare from current master
   ensure_git_branch(branch: "master")
   ensure_git_status_clean
-  sh("git", "pull")
-  ensure_git_status_clean
 
   # Bump version
   version = bump(options)
