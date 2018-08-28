@@ -41,7 +41,7 @@ lane :bump do |options|
   end
 
   if new_version_xcode == new_version_podspec
-    UI.success "Did bump version number to #{new_version_xcode}"
+    UI.success "Bumped version number to #{new_version_xcode}"
   else
     UI.user_error!("Xcode and .podspec version mismatch: #{new_version_xcode} != #{new_version_podspec}")
   end
