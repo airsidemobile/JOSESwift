@@ -79,3 +79,9 @@ DerivedData/
 
 
 # End of https://www.gitignore.io/api/xcode,macos,carthage,cocoapods
+
+# fastlane specific
+fastlane/report.xml
+
+# scan temporary files
+fastlane/test_output

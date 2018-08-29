@@ -75,7 +75,7 @@ public struct SymmetricKey: JWK {
         self.parameters = parameters.merging(
             [
                 JWKParameter.keyType.rawValue: self.keyType.rawValue,
-                SymmetricKeyParameter.key.rawValue: self.key,
+                SymmetricKeyParameter.key.rawValue: self.key
             ],
             uniquingKeysWith: { (_, new) in new }
         )
