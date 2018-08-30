@@ -66,7 +66,8 @@ lane :prepare do |options|
 
   # Format code
   format_code
-  git_commit(path: "./**/*.swift", message: "Automatically format Swift code")
+  sh("git add ./**/*.swift")
+  sh("git diff-index --quiet HEAD || git commit -m 'Automatically format Swift code'")
   ensure_git_status_clean
 
   # Run tests
@@ -82,7 +83,7 @@ lane :prepare do |options|
   end
 
   # Commit changes and push release branch
-  sh("git diff-index --quiet HEAD || git commit -m 'Prepare #{version} for release'")
+  sh("git diff-index --quiet HEAD || git commit -am 'Prepare #{version} for release'")
   sh("git push --set-upstream origin #{branch_name}")
   UI.important "#{branch_name} has been pushed and a pull request created"
 end
