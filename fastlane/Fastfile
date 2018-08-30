@@ -23,8 +23,8 @@ lane :bump do |options|
   bump_type = options[:type]
   version = options[:version]
 
-  new_version_xcode
-  new_version_podspec
+  new_version_xcode = ""
+  new_version_podspec = ""
 
   case bump_type
   when "major", "minor", "patch"
