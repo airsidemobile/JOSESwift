@@ -66,8 +66,7 @@ lane :prepare do |options|
 
   # Format code
   format_code
-  sh("git add *.swift")
-  sh("git diff-index --quiet HEAD || git commit -m 'Automatically format Swift code'")
+  sh("git diff-index --quiet HEAD || git commit -am 'Automatically format code'")
   ensure_git_status_clean
 
   # Run tests
