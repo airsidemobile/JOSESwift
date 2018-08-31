@@ -122,7 +122,7 @@ public struct JWE {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
     }
 
-    /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
+    /// Initializes a JWE by providing all of it's five parts. Only used during deserialization.
     fileprivate init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header
         self.encryptedKey = encryptedKey
