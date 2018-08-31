@@ -123,7 +123,7 @@ public struct JWE {
     }
 
     /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
-    private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
+    fileprivate init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header
         self.encryptedKey = encryptedKey
         self.initializationVector = initializationVector
