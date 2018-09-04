@@ -33,6 +33,7 @@ class JWSTests: CryptoTestCase {
         super.tearDown()
     }
 
+    @available(*, deprecated)
     func testSignAndSerializeRS256() {
         self.performTestRSASign(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
@@ -41,6 +42,7 @@ class JWSTests: CryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
 
+    @available(*, deprecated)
     func testSignAndSerializeRS512() {
         self.performTestRSASign(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
     }
@@ -51,15 +53,16 @@ class JWSTests: CryptoTestCase {
 
     // MARK: - RSA Tests
 
+    @available(*, deprecated)
     private func performTestRSASign(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
-        guard publicKey2048 != nil, privateKey2048 != nil else {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
         let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKey2048!)!
+        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
@@ -67,11 +70,11 @@ class JWSTests: CryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
 
-        XCTAssertTrue(secondJWS.isValid(for: publicKey2048!))
+        XCTAssertTrue(secondJWS.isValid(for: publicKeyAlice2048!))
     }
 
     private func performTestRSADeserialization(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
-        guard privateKey2048 != nil else {
+        guard privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
@@ -80,7 +83,7 @@ class JWSTests: CryptoTestCase {
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKey2048!)!
+        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }

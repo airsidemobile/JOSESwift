@@ -40,6 +40,9 @@ extension JWKSet: Encodable {
             case is RSAPrivateKey:
                 // swiftlint:disable:next force_cast
                 try keyContainer.encode(key as! RSAPrivateKey)
+            case is SymmetricKey:
+                // swiftlint:disable:next force_cast
+                try keyContainer.encode(key as! SymmetricKey)
             default:
                 break
             }
@@ -54,22 +57,26 @@ extension JWKSet: Decodable {
 
         var keys: [JWK] = []
         while !keyContainer.isAtEnd {
-            var key: JWK?
 
-            do {
-                key = try keyContainer.decode(RSAPrivateKey.self)
-            } catch DecodingError.keyNotFound(RSAParameter.privateExponent, _) {
-                key = try keyContainer.decode(RSAPublicKey.self)
+            if let key = try? keyContainer.decode(RSAPrivateKey.self) {
+                keys.append(key)
+                continue
             }
 
-            guard let rsaKey = key else {
-                throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
-                    No RSAPublicKey or RSAPrivateKey found to decode.
-                    """
-                )
+            if let key = try? keyContainer.decode(RSAPublicKey.self) {
+                keys.append(key)
+                continue
             }
 
-            keys.append(rsaKey)
+            if let key = try? keyContainer.decode(SymmetricKey.self) {
+                keys.append(key)
+                continue
+            }
+
+            throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
+                No RSAPrivateKey, RSAPublicKey, or SymmetricKey found to decode.
+                """
+            )
         }
 
         self.init(keys: keys)

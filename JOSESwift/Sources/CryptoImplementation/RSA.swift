@@ -52,6 +52,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             return .rsaEncryptionPKCS1
         case .RSAOAEP:
             return .rsaEncryptionOAEPSHA1
+        case .direct:
+            return nil
         }
     }
 
@@ -72,6 +74,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // hLen = input limitation for the hash function (20 octets for SHA-1)
             let hLen = 20
             return mLen <= (k - 2 * hLen - 2)
+        case .direct:
+            return false
         }
     }
 
@@ -88,6 +92,8 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // and https://www.rfc-editor.org/errata_search.php?rfc=3447)
             // C: ciphertext to be decrypted, an octet string of length k, where k >= 2hLen + 2
             return cipherText.count == SecKeyGetBlockSize(privateKey)
+        case .direct:
+            return false
         }
     }
 }
