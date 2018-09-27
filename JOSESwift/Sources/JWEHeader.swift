@@ -55,11 +55,15 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
-        let parameters = [
+    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm, keyIdentifier: String? = nil) {
+        var parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
         ]
+
+        if let keyIdentifier = keyIdentifier {
+            parameters["kid"] = keyIdentifier
+        }
 
         // Forcing the try is ok here, since [String: String] can be converted to JSON.
         // swiftlint:disable:next force_try
