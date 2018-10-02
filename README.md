@@ -200,7 +200,7 @@ let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
 ```
 
 ``` swift
-let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512, keyIdentifier: "your_keyIdentifier")
 
 let payload = Payload(message)
 
