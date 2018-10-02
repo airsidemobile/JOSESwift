@@ -54,7 +54,8 @@ public struct JWEHeader: JOSEHeader {
         self.parameters = parameters
     }
 
-    /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
+    /// Initializes a `JWEHeader` with the specified algorithm, signing algorithm
+    /// and optionally a key identifier.
     public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm, keyIdentifier: String? = nil) {
         var parameters = [
             "alg": algorithm.rawValue,
