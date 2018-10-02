@@ -125,4 +125,18 @@ class JWEHeaderTests: XCTestCase {
         XCTFail()
     }
 
+    func testInitWithAlgAndEncAndKid() {
+        let keyIdentifier = "keyIdentifier"
+
+        //add keyIdentifier to parameterDictRSA
+        var dict = parameterDictRSA
+        dict["kid"] = keyIdentifier
+
+        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512, keyIdentifier: keyIdentifier)
+
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: dict, options: []))
+        XCTAssertEqual(header.parameters["kid"] as? String, keyIdentifier)
+        XCTAssertEqual(header.kid, keyIdentifier)
+    }
+
 }
