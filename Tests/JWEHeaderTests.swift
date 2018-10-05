@@ -125,17 +125,17 @@ class JWEHeaderTests: XCTestCase {
         XCTFail()
     }
 
-    func testSetHeaderParameters() {
+    func testSetNonRequiredHeaderParametersInJWEHeader() {
         let jku: URL? = nil
         let jwk = "jwk"
         let kid = "kid"
         let x5u: URL? = nil
-        let x5c: [String]? = ["key1", "key2"]
+        let x5c = ["key1", "key2"]
         let x5t = "x5t"
         let x5tS256 = "x5tS256"
         let typ = "typ"
         let cty = "cty"
-        let crit: [String]? = ["crit1", "crit2"]
+        let crit = ["crit1", "crit2"]
 
         var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         header.jku = jku
