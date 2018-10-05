@@ -142,12 +142,12 @@ extension JWEHeader: CommonHeaderParameterSpace {
 
     /// The X.509 certificate chain contains the X.509 public key certificate or
     /// certificate chain corresponding to the key used to encrypt the JWE.
-    public var x5c: [String: Any]? {
+    public var x5c: [String]? {
         set {
             parameters["x5c"] = newValue
         }
         get {
-            return parameters["x5c"] as? [String: Any]
+            return parameters["x5c"] as? [String]
         }
     }
 

@@ -66,7 +66,7 @@ public protocol CommonHeaderParameterSpace {
     var jwk: String? { get set }
     var kid: String? { get set }
     var x5u: URL? { get set }
-    var x5c: [String: Any]? { get set }
+    var x5c: [String]? { get set }
     var x5t: String? { get set }
     var x5tS256: String? { get set }
     var typ: String? { get set }

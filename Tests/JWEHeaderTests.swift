@@ -130,7 +130,7 @@ class JWEHeaderTests: XCTestCase {
         let jwk = "jwk"
         let kid = "kid"
         let x5u: URL? = nil
-        let x5c: [String: Any]? = ["":""]
+        let x5c: [String]? = ["key1", "key2"]
         let x5t = "x5t"
         let x5tS256 = "x5tS256"
         let typ = "typ"
@@ -163,8 +163,8 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["x5u"] as? URL, x5u)
         XCTAssertEqual(header.x5u, x5u)
 
-//        XCTAssertEqual(header.parameters["x5c"] as? [String: Any], x5c)
-//        XCTAssertEqual(header.x5c, x5c)
+        XCTAssertEqual(header.parameters["x5c"] as? [String], x5c)
+        XCTAssertEqual(header.x5c, x5c)
 
         XCTAssertEqual(header.parameters["x5t"] as? String, x5t)
         XCTAssertEqual(header.x5t, x5t)
