@@ -102,10 +102,13 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// one of which corresponds to the key used to encrypt the JWE.
     public var jku: URL? {
         set {
-            parameters["jku"] = newValue
+            parameters["jku"] = newValue?.absoluteString
         }
         get {
-            return parameters["jku"] as? URL
+            guard let parameter = parameters["jku"] as? String else {
+                return nil
+            }
+            return URL(string: parameter)
         }
     }
 
@@ -133,10 +136,13 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// or certificate chain corresponding to the key used to encrypt the JWE.
     public var x5u: URL? {
         set {
-            parameters["x5u"] = newValue
+            parameters["x5u"] = newValue?.absoluteString
         }
         get {
-            return parameters["x5u"] as? URL
+            guard let parameter = parameters["x5u"] as? String else {
+                return nil
+            }
+            return URL(string: parameter)
         }
     }
 
