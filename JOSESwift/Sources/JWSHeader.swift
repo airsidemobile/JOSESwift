@@ -85,8 +85,9 @@ extension JWSHeader {
 extension JWSHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to sign the JWS.
-    public var jku: URL? {set {
-        parameters["jku"] = newValue
+    public var jku: URL? {
+        set {
+            parameters["jku"] = newValue
         }
         get {
             return parameters["jku"] as? URL
