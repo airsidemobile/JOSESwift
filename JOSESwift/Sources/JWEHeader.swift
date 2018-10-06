@@ -28,7 +28,10 @@ public struct JWEHeader: JOSEHeader {
     var headerData: Data
     var parameters: [String: Any] {
         didSet {
-            // Forcing the try is ok here, since [String: String] can be converted to JSON.
+            guard JSONSerialization.isValidJSONObject(parameters) else {
+                return
+            }
+            // Forcing the try is ok here, because it is valid JSON.
             // swiftlint:disable:next force_try
             headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
         }
