@@ -35,16 +35,27 @@ class JWSTests: CryptoTestCase {
 
     @available(*, deprecated)
     func testSignAndSerializeRS256() {
-        self.performTestRSASign(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
+        self.performTestRSASign(algorithm: .RS256)
+    }
+
+    @available(*, deprecated)
+    func testSignAndVerifyRS256WithNonRequiredHeaderParameter() {
+        self.performTestRSASign(algorithm: .RS256, withKid: true)
     }
 
     func testDeserializeFromCompactSerializationRS256() {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
 
+
     @available(*, deprecated)
     func testSignAndSerializeRS512() {
-        self.performTestRSASign(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
+        self.performTestRSASign(algorithm: .RS512)
+    }
+
+    @available(*, deprecated)
+    func testSignAndVerifyRS512WithNonRequiredHeaderParameter() {
+        self.performTestRSASign(algorithm: .RS512, withKid: true)
     }
 
     func testDeserializeFromCompactSerializationRS512() {
@@ -54,13 +65,17 @@ class JWSTests: CryptoTestCase {
     // MARK: - RSA Tests
 
     @available(*, deprecated)
-    private func performTestRSASign(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
+    private func performTestRSASign(algorithm: SignatureAlgorithm, withKid: Bool? = false) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let header = JWSHeader(algorithm: algorithm)
+        var header = JWSHeader(algorithm: algorithm)
+        if withKid ?? false {
+            header.kid = "kid"
+        }
+
         let payload = Payload(message.data(using: .utf8)!)
         let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)

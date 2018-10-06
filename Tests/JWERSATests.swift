@@ -52,6 +52,21 @@ class JWETests: CryptoTestCase {
     }
 
     @available(*, deprecated)
+    func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
+        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        header.kid = "kid"
+
+        let payload = Payload(message.data(using: .utf8)!)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+
+        let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+        let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
+
+        XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
+    }
+
+    @available(*, deprecated)
     func testDecryptWithInferredDecrypter() {
         let jwe = try! JWE(compactSerialization: compactSerializedJWE)
         let payload = try! jwe.decrypt(with: privateKeyAlice2048!).data()
