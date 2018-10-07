@@ -37,7 +37,7 @@ extension RSAError: Equatable {
     }
 }
 
-class RSAEncrypterTests: CryptoTestCase {
+class RSAEncrypterTests: RSACryptoTestCase {
 
     override func setUp() {
         super.setUp()

@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class SecKeyRSAPublicKeyTests: CryptoTestCase {
+class SecKeyRSAPublicKeyTests: RSACryptoTestCase {
 
     func testPublicKey2048Modulus() {
         let components = try? publicKey2048!.rsaPublicKeyComponents()

@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class DataRSAPublicKeyTests: CryptoTestCase {
+class DataRSAPublicKeyTests: RSACryptoTestCase {
 
     func testLeadingZeroDropped() {
         let components = try! publicKey2048Data.rsaPublicKeyComponents()

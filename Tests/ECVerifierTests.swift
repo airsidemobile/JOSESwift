@@ -1,8 +1,8 @@
 //
-//  RSAPublicKeyToDataTests.swift
+//  ECVerifierTests.swift
 //  Tests
 //
-//  Created by Daniel Egger on 12.02.18.
+//  Created by Jarrod Moldrich on 08.10.17.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,20 +24,32 @@
 import XCTest
 @testable import JOSESwift
 
-class RSAPublicKeyToDataTests: RSACryptoTestCase {
-    
-    func testPublicKey2048ToData() {
-        let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)
-        let data = try! jwk.converted(to: Data.self)
+class ECVerifierTests: ECCryptoTestCase {
 
-        XCTAssertEqual(data, publicKey2048Data)
+    override func setUp() {
+        super.setUp()
     }
 
-    func testPublicKey4096ToData() {
-        let jwk = RSAPublicKey(modulus: expectedModulus4096Base64, exponent: expectedExponentBase64)
-        let data = try! jwk.converted(to: Data.self)
-
-        XCTAssertEqual(data, publicKey4096Data)
+    override func tearDown() {
+        super.tearDown()
     }
-    
+
+    func testVerifying() {
+        // todo: make generic, test other bit sizes
+        guard publicKey256 != nil else {
+            XCTFail()
+            return
+        }
+
+        let jws = try! JWS(compactSerialization: compactSerializedJWSEC256Const)
+        let verifier = ECVerifier(algorithm: .ES256, publicKey: publicKey256!)
+
+        guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertTrue(try! verifier.verify(signingInput, against: jws.signature))
+    }
+
 }

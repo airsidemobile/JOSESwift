@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWKRSAKeysTests: CryptoTestCase {
+class JWKRSAKeysTests: RSACryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
         let jwk = try! RSAPublicKey(publicKey: publicKey2048!, additionalParameters: [

@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWSTests: CryptoTestCase {
+class JWSTests: RSACryptoTestCase {
     override func setUp() {
         super.setUp()
     }

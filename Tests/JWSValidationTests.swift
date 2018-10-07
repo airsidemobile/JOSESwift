@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWSValidationTests: CryptoTestCase {
+class JWSValidationTests: RSACryptoTestCase {
 
     func testIsValid() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
