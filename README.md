@@ -159,7 +159,7 @@ let payload = Payload(message)
 
 The signer algorithm must match the header algorithm.
 
-```
+``` swift
 let privateKey: SecKey = /* ... */
 
 let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
