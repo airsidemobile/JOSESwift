@@ -218,7 +218,7 @@ In order to construct a JWE we need to provide the following parts:
 let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
 ```
 
-Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7515#section-4.1):
+Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7516#section-4.1):
 
 ``` swift
 header.kid = "2018-10-08"
