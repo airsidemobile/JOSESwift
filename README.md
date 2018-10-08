@@ -165,7 +165,6 @@ let privateKey: SecKey = /* ... */
 let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 ```
 
-
 ##### Serializing
 
 The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
