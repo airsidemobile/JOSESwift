@@ -62,7 +62,7 @@ extension RSAPublicKey: Decodable {
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        for key in commonParameters.allKeys where key != .X509CertificateChain {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
