@@ -39,7 +39,7 @@ class CryptoTestCase: XCTestCase {
         XCTFail("Setup keys function is missing")
     }
 
-    func setupSecKeyPair(type: String, size: Int, data: Data, tag: String) -> (privateKey: SecKey, publicKey: SecKey)? {
+    static func setupSecKeyPair(type: String, size: Int, data: Data, tag: String) -> (privateKey: SecKey, publicKey: SecKey)? {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: type,
             kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,

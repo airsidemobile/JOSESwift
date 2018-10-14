@@ -131,7 +131,7 @@ class RSACryptoTestCase: CryptoTestCase {
 
             // 2048
 
-            let keyPair2048 = setupSecKeyPair(
+            let keyPair2048 = CryptoTestCase.setupSecKeyPair(
                     type: kSecAttrKeyTypeRSA as String,
                     size: 2048,
                     data: keyData2048,
@@ -143,7 +143,7 @@ class RSACryptoTestCase: CryptoTestCase {
 
             // 4096
 
-            let keyPair4096 = setupSecKeyPair(
+            let keyPair4096 = CryptoTestCase.setupSecKeyPair(
                     type: kSecAttrKeyTypeRSA as String,
                     size: 4096,
                     data: keyData4096,

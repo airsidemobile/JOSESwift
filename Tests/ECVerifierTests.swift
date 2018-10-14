@@ -34,15 +34,14 @@ class ECVerifierTests: ECCryptoTestCase {
         super.tearDown()
     }
 
-    func testVerifying() {
-        // todo: make generic, test other bit sizes
-        guard publicKey256 != nil else {
+    func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
+        guard keyData.publicKey != nil else {
             XCTFail()
             return
         }
 
-        let jws = try! JWS(compactSerialization: compactSerializedJWSEC256Const)
-        let verifier = ECVerifier(algorithm: .ES256, publicKey: publicKey256!)
+        let jws = try! JWS(compactSerialization: keyData.compactSerializedJWSConst)
+        let verifier = ECVerifier(algorithm: algorithm, publicKey: keyData.publicKey!)
 
         guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
             XCTFail()
@@ -50,6 +49,12 @@ class ECVerifierTests: ECCryptoTestCase {
         }
 
         XCTAssertTrue(try! verifier.verify(signingInput, against: jws.signature))
+    }
+
+    func testVerifying() {
+        _testVerifying(algorithm: .ES256, keyData: p256)
+        _testVerifying(algorithm: .ES384, keyData: p384)
+        _testVerifying(algorithm: .ES512, keyData: p521)
     }
 
 }
