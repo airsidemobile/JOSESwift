@@ -307,7 +307,7 @@ let publicKey: SecKey = try! jwk.converted(to: SecKey.self)
 
 More details about decoding RSA public keys can be found [in the wiki](../../wiki/jwk).
 
-:warning: We currently ignore the key parameters [`"key_ops"`](https://tools.ietf.org/html/rfc7517#section-4.3) and [`"x5c"`](https://tools.ietf.org/html/rfc7517#section-4.7) when decoding. This is due to a bug in our decoding implementation. See #117 for details.
+:warning: We currently ignore the key parameters [`"key_ops"`](https://tools.ietf.org/html/rfc7517#section-4.3) and [`"x5c"`](https://tools.ietf.org/html/rfc7517#section-4.7) when decoding. This is due to a bug in our decoding implementation. See [#117](https://github.com/airsidemobile/JOSESwift/issues/117) for details.
 
 ## Security
 
