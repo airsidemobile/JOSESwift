@@ -35,6 +35,11 @@ public enum JWKParameter: String, CodingKey {
     case X509CertificateChain = "x5c"
     case X509CertificateSHA1Thumbprint = "x5t"
     case X509CertificateSHA256Thumbprint = "x5t#S256"
+
+    static let nonStringParameters: [JWKParameter] = [
+        .keyOperations,
+        .X509CertificateChain
+    ]
 }
 
 /// RSA specific JWK parameters.
