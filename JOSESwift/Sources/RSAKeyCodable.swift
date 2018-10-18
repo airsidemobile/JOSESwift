@@ -61,8 +61,9 @@ extension RSAPublicKey: Decodable {
         }
 
         // Other common parameters are optional.
+        let ignoredKeys: [JWKParameter] = [.X509CertificateChain, .keyOperations]
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys where key != .X509CertificateChain {
+        for key in commonParameters.allKeys where !ignoredKeys.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
@@ -118,8 +119,9 @@ extension RSAPrivateKey: Decodable {
         }
 
         // Other common parameters are optional.
+        let ignoredKeys: [JWKParameter] = [.X509CertificateChain, .keyOperations]
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys where key != .X509CertificateChain {
+        for key in commonParameters.allKeys where !ignoredKeys.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
