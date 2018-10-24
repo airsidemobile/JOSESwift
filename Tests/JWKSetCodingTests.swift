@@ -276,9 +276,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaKey.modulus, modulus)
         XCTAssertEqual(rsaKey.exponent, exponent)
-        XCTAssertEqual(rsaKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaKey["alg"] as? String, additionalParametersRSA["alg"])
     }
 
     func testDecodingOneSymmetricKey() {
@@ -291,8 +291,8 @@ class JWKSetCodingTests: XCTestCase {
         let key = jwkSet[0] as! SymmetricKey
 
         XCTAssertEqual(key.key, firstSymmetricKey.base64URLEncodedString())
-        XCTAssertEqual(key["kty"], firstAdditionalParametersOct["kty"])
-        XCTAssertEqual(key["alg"], firstAdditionalParametersOct["alg"])
+        XCTAssertEqual(key["kty"] as? String, firstAdditionalParametersOct["kty"])
+        XCTAssertEqual(key["alg"] as? String, firstAdditionalParametersOct["alg"])
     }
 
     func testDecodingTwoRSAPublicKeys() {
@@ -306,9 +306,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaKey.modulus, modulus)
         XCTAssertEqual(rsaKey.exponent, exponent)
-        XCTAssertEqual(rsaKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaKey["alg"] as? String, additionalParametersRSA["alg"])
 
         XCTAssert(jwkSet[1] is RSAPublicKey)
 
@@ -316,9 +316,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaKey.modulus, modulus)
         XCTAssertEqual(rsaKey.exponent, exponent)
-        XCTAssertEqual(rsaKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaKey["alg"] as? String, additionalParametersRSA["alg"])
     }
 
     func testDecodingRSAPublicAndPrivateKey() {
@@ -332,9 +332,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaPublicKey.modulus, modulus)
         XCTAssertEqual(rsaPublicKey.exponent, exponent)
-        XCTAssertEqual(rsaPublicKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaPublicKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaPublicKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaPublicKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaPublicKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaPublicKey["alg"] as? String, additionalParametersRSA["alg"])
 
         XCTAssert(jwkSet[1] is RSAPrivateKey)
 
@@ -343,9 +343,9 @@ class JWKSetCodingTests: XCTestCase {
         XCTAssertEqual(rsaPrivateKey.modulus, modulus)
         XCTAssertEqual(rsaPrivateKey.exponent, exponent)
         XCTAssertEqual(rsaPrivateKey.privateExponent, privateExponent)
-        XCTAssertEqual(rsaPrivateKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaPrivateKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaPrivateKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaPrivateKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaPrivateKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaPrivateKey["alg"] as? String, additionalParametersRSA["alg"])
     }
 
     func testDecodingRSAPublicAndPrivateAndSymmetricKey() {
@@ -359,9 +359,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaPublicKey.modulus, modulus)
         XCTAssertEqual(rsaPublicKey.exponent, exponent)
-        XCTAssertEqual(rsaPublicKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaPublicKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaPublicKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaPublicKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaPublicKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaPublicKey["alg"] as? String, additionalParametersRSA["alg"])
 
         XCTAssert(jwkSet[1] is RSAPrivateKey)
 
@@ -370,17 +370,17 @@ class JWKSetCodingTests: XCTestCase {
         XCTAssertEqual(rsaPrivateKey.modulus, modulus)
         XCTAssertEqual(rsaPrivateKey.exponent, exponent)
         XCTAssertEqual(rsaPrivateKey.privateExponent, privateExponent)
-        XCTAssertEqual(rsaPrivateKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaPrivateKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaPrivateKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaPrivateKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaPrivateKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaPrivateKey["alg"] as? String, additionalParametersRSA["alg"])
 
         XCTAssert(jwkSet[2] is SymmetricKey)
 
         let key = jwkSet[2] as! SymmetricKey
 
         XCTAssertEqual(key.key, firstSymmetricKey.base64URLEncodedString())
-        XCTAssertEqual(key["kty"], firstAdditionalParametersOct["kty"])
-        XCTAssertEqual(key["alg"], firstAdditionalParametersOct["alg"])
+        XCTAssertEqual(key["kty"] as? String, firstAdditionalParametersOct["kty"])
+        XCTAssertEqual(key["alg"] as? String, firstAdditionalParametersOct["alg"])
     }
 
     // - MARK: Convenience Helpers Test
@@ -396,9 +396,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaKey.modulus, modulus)
         XCTAssertEqual(rsaKey.exponent, exponent)
-        XCTAssertEqual(rsaKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaKey["alg"] as? String, additionalParametersRSA["alg"])
 
         XCTAssert(jwkSet[1] is RSAPublicKey)
 
@@ -406,9 +406,9 @@ class JWKSetCodingTests: XCTestCase {
 
         XCTAssertEqual(rsaKey.modulus, modulus)
         XCTAssertEqual(rsaKey.exponent, exponent)
-        XCTAssertEqual(rsaKey["kty"], additionalParametersRSA["kty"])
-        XCTAssertEqual(rsaKey["kid"], additionalParametersRSA["kid"])
-        XCTAssertEqual(rsaKey["alg"], additionalParametersRSA["alg"])
+        XCTAssertEqual(rsaKey["kty"] as? String, additionalParametersRSA["kty"])
+        XCTAssertEqual(rsaKey["kid"] as? String, additionalParametersRSA["kid"])
+        XCTAssertEqual(rsaKey["alg"] as? String, additionalParametersRSA["alg"])
     }
 
     func testToJsonData() {

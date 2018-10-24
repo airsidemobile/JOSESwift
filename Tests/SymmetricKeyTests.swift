@@ -41,7 +41,7 @@ class SymmetricKeyTests: XCTestCase {
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
         XCTAssertEqual(jwk.keyType, .OCT)
-        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
+        XCTAssertEqual(jwk["alg"] as! String, "A256CBC-HS512")
 
         XCTAssertEqual(
             "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",
@@ -63,7 +63,7 @@ class SymmetricKeyTests: XCTestCase {
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
         XCTAssertEqual(jwk.keyType, .OCT)
-        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
+        XCTAssertEqual(jwk["alg"] as! String, "A256CBC-HS512")
 
         XCTAssertEqual(
             "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",
@@ -85,7 +85,7 @@ class SymmetricKeyTests: XCTestCase {
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
         XCTAssertEqual(jwk.keyType, .OCT)
-        XCTAssertEqual(jwk["alg"], "A256CBC-HS512")
+        XCTAssertEqual(jwk["alg"] as! String, "A256CBC-HS512")
 
         XCTAssertEqual(
             "{\"kty\":\"oct\",\"alg\":\"A256CBC-HS512\",\"k\":\"GawgguFyGrWKav7AX4VKUg\"}",

@@ -64,7 +64,7 @@ class JWKRSADecodingTests: CryptoTestCase {
         XCTAssertNotNil(jwk)
 
         XCTAssertEqual(jwk!.keyType, .RSA)
-        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(jwk!.modulus, """
             0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
             3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
@@ -73,8 +73,8 @@ class JWKRSADecodingTests: CryptoTestCase {
             """
         )
         XCTAssertEqual(jwk!.exponent, "AQAB")
-        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
-        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+        XCTAssertEqual(jwk!["alg"] as? String ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] as? String ?? "", "2011-04-29")
     }
 
     func testDecodingPublicKey() {
@@ -83,7 +83,7 @@ class JWKRSADecodingTests: CryptoTestCase {
         XCTAssertNotNil(jwk)
 
         XCTAssertEqual(jwk!.keyType, .RSA)
-        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(jwk!.modulus, """
             0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
             3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
@@ -92,8 +92,8 @@ class JWKRSADecodingTests: CryptoTestCase {
             """
         )
         XCTAssertEqual(jwk!.exponent, "AQAB")
-        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
-        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+        XCTAssertEqual(jwk!["alg"] as? String ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] as? String ?? "", "2011-04-29")
     }
 
     func testDecodingPublicKeyMissingKeyType() {
@@ -193,7 +193,7 @@ class JWKRSADecodingTests: CryptoTestCase {
         XCTAssertNotNil(jwk)
 
         XCTAssertEqual(jwk!.keyType, .RSA)
-        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(jwk!.modulus, """
             0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
             3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
@@ -209,8 +209,8 @@ class JWKRSADecodingTests: CryptoTestCase {
             """
         )
         XCTAssertEqual(jwk!.exponent, "AQAB")
-        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
-        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+        XCTAssertEqual(jwk!["alg"] as? String ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] as? String ?? "", "2011-04-29")
     }
 
 
@@ -220,7 +220,7 @@ class JWKRSADecodingTests: CryptoTestCase {
         XCTAssertNotNil(jwk)
 
         XCTAssertEqual(jwk!.keyType, .RSA)
-        XCTAssertEqual(jwk!["kty"] ?? "", "RSA")
+        XCTAssertEqual(jwk!["kty"] as? String ?? "", "RSA")
         XCTAssertEqual(jwk!.modulus, """
             0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n\
             3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zg\
@@ -236,8 +236,8 @@ class JWKRSADecodingTests: CryptoTestCase {
             """
         )
         XCTAssertEqual(jwk!.exponent, "AQAB")
-        XCTAssertEqual(jwk!["alg"] ?? "", "RS256")
-        XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
+        XCTAssertEqual(jwk!["alg"] as? String ?? "", "RS256")
+        XCTAssertEqual(jwk!["kid"] as? String ?? "", "2011-04-29")
     }
 
     func testDecodingPrivateKeyMissingKeyType() {
