@@ -134,7 +134,8 @@ public struct RSAPublicKey: JWK {
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
+    public init(publicKey: ExpressibleAsRSAPublicKeyComponents,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let components = try? publicKey.rsaPublicKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
@@ -228,7 +229,8 @@ public struct RSAPrivateKey: JWK {
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
+    public init(privateKey: ExpressibleAsRSAPrivateKeyComponents,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
