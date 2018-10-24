@@ -25,7 +25,7 @@ class JWKParameterTypeTests: XCTestCase {
         I0o3rYDPBB07aXNswb4ECNIKG0CETTUxmXl9KUL+9gGlqCz5iWLOgWsnrcKcY0vXPG9J1r9AqBNTqNgHq2G03X09266X5CpOe1zFo+Owb1zxtp3\
         PehFdfQJ610CDLEaS9V9Rqp17hCyybEpOGVwe8fnk+fbEL2Bo3UPGrpsHzUoaGpDftmWssZkhpBJKVMJyf/RuP2SmmaIzmnw9JiSlYhzo4tpzd5\
         rFXhjRbg4zW9C+2qok+2+qDM1iJ684gPHMIY8aLWrdgQTxkumGmTqgawR+N5MDtdPTEQ0XfIBc2cJEUyMTY5MPvACWpkA6SdS4xSvdXK3IVfOWA\
-        =="], "kid": "2011-04-29"}
+        =="], "kid": "2011-04-29", "use":"sig"}
         """.data(using: .utf8)!
 
     func testDecodingStringAndStringArrayParametersDoesNotThrow() {
@@ -39,17 +39,53 @@ class JWKParameterTypeTests: XCTestCase {
         XCTAssertEqual(key.modulus.prefix(5), "0vx7a")
         XCTAssertEqual(key.modulus.suffix(5), "qDKgw")
         XCTAssertEqual(key.exponent, "AQAB")
+        XCTAssertEqual(key.keyUse, "sig")
 
-        XCTAssertEqual(key["alg"] as! String, "RS256")
-        XCTAssertEqual(key["kid"] as! String, "2011-04-29")
+        XCTAssertEqual(key.algorithm ?? "", "RS256")
+        XCTAssertEqual(key.keyIdentifier ?? "", "2011-04-29")
     }
 
-    func testDecodingStringArrayParameterKeyOps() {
+    func testDecodingStringArrayParameterKeyOpsSubscript() {
         let key = try! RSAPublicKey(data: jwk)
 
-        let keyOperations = key["key_ops"]
+        let keyOperations = key["key_ops"] as? [String]
 
         XCTAssertNotNil(keyOperations)
+        XCTAssertEqual(keyOperations!.count, 2)
+        XCTAssertEqual(keyOperations![0], "sign")
+        XCTAssertEqual(keyOperations![1], "verify")
     }
 
+    func testDecodingStringArrayParameterKeyOpsComputed() {
+        let key = try! RSAPublicKey(data: jwk)
+
+        let keyOperations = key.keyOperations
+
+        XCTAssertNotNil(keyOperations)
+        XCTAssertEqual(keyOperations!.count, 2)
+        XCTAssertEqual(keyOperations![0], "sign")
+        XCTAssertEqual(keyOperations![1], "verify")
+    }
+
+    func testDecodingStringArrayParameterCertificateChainSubscript() {
+        let key = try! RSAPublicKey(data: jwk)
+
+        let certificateChain = key["x5c"] as? [String]
+
+        XCTAssertNotNil(certificateChain)
+        XCTAssertEqual(certificateChain!.count, 1)
+        XCTAssertEqual(certificateChain![0].prefix(5), "MIIDQ")
+        XCTAssertEqual(certificateChain![0].suffix(5), "OWA==")
+    }
+
+    func testDecodingStringArrayParameterCertificateChainComputed() {
+        let key = try! RSAPublicKey(data: jwk)
+
+        let certificateChain = key.X509CertificateChain
+
+        XCTAssertNotNil(certificateChain)
+        XCTAssertEqual(certificateChain!.count, 1)
+        XCTAssertEqual(certificateChain![0].prefix(5), "MIIDQ")
+        XCTAssertEqual(certificateChain![0].suffix(5), "OWA==")
+    }
 }
