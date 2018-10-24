@@ -82,3 +82,37 @@ public protocol JWK: Codable {
     ///            `nil` if the encoding failed.
     func jsonData() -> Data?
 }
+
+extension JWK {
+    var keyUse: String? {
+        return parameters[JWKParameter.keyUse.rawValue] as? String
+    }
+
+    var keyOperations: [String]? {
+        return parameters[JWKParameter.keyOperations.rawValue] as? [String]
+    }
+
+    var algorithm: String? {
+        return parameters[JWKParameter.algorithm.rawValue] as? String
+    }
+
+    var keyIdentifier: String? {
+        return parameters[JWKParameter.keyIdentifier.rawValue] as? String
+    }
+
+    var X509URL: String? {
+        return parameters[JWKParameter.X509URL.rawValue] as? String
+    }
+
+    var X509CertificateChain: [String]? {
+        return parameters[JWKParameter.X509CertificateChain.rawValue] as? [String]
+    }
+
+    var X509CertificateSHA1Thumbprint: String? {
+        return parameters[JWKParameter.X509CertificateSHA1Thumbprint.rawValue] as? String
+    }
+
+    var X509CertificateSHA256Thumbprint: String? {
+        return parameters[JWKParameter.X509CertificateSHA256Thumbprint.rawValue] as? String
+    }
+}
