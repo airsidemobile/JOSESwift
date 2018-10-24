@@ -94,7 +94,7 @@ public struct RSAPublicKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: String]
+    public let parameters: [String: JWKParameterType]
 
     /// The modulus value for the RSA public key.
     public let modulus: String
@@ -113,7 +113,7 @@ public struct RSAPublicKey: JWK {
     ///   - exponent: The public exponent value for the RSA public key in `base64urlUInt` encoding
     ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(modulus: String, exponent: String, additionalParameters parameters: [String: String] = [:]) {
+    public init(modulus: String, exponent: String, additionalParameters parameters: [String: JWKParameterType] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -134,7 +134,7 @@ public struct RSAPublicKey: JWK {
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(publicKey: ExpressibleAsRSAPublicKeyComponents, additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let components = try? publicKey.rsaPublicKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
@@ -184,7 +184,7 @@ public struct RSAPrivateKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: String]
+    public let parameters: [String: JWKParameterType]
 
     /// The modulus value for the RSA private key.
     public let modulus: String
@@ -205,7 +205,7 @@ public struct RSAPrivateKey: JWK {
     //    - privateExponent: The private exponent value for the RSA private key in `base64urlUInt` encoding
     ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: String] = [:]) {
+    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: JWKParameterType] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
@@ -228,7 +228,7 @@ public struct RSAPrivateKey: JWK {
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }

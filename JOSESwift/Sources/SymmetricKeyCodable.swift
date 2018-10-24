@@ -33,8 +33,14 @@ extension SymmetricKey: Encodable {
         // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
-            if let key = JWKParameter(rawValue: parameter.key) {
-                try commonParameters.encode(parameter.value, forKey: key)
+            guard let key = JWKParameter(rawValue: parameter.key) else {
+                continue
+            }
+
+            if let value = parameter.value as? String {
+                try commonParameters.encode(value, forKey: key)
+            } else if let value = parameter.value as? [String] {
+                try commonParameters.encode(value, forKey: key)
             }
         }
 
@@ -60,12 +66,17 @@ extension SymmetricKey: Decodable {
         }
 
         // Other common parameters are optional.
-        var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        var parameters: [String: JWKParameterType] = [:]
+
+        for key in commonParameters.allKeys where key.type == String.self {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
-        // RSA public key specific parameters.
+        for key in commonParameters.allKeys where key.type == [String].self {
+            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
+        }
+
+        // Symmetric public key specific parameters.
         let symmetricKeyParameters = try decoder.container(keyedBy: SymmetricKeyParameter.self)
         let key = try symmetricKeyParameters.decode(String.self, forKey: .key)
 

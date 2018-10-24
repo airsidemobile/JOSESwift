@@ -57,7 +57,7 @@ public struct SymmetricKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: String]
+    public let parameters: [String: JWKParameterType]
 
     /// The symmetric key represented as
     /// base64url encoding of the octet sequence containing the key data.
@@ -68,7 +68,7 @@ public struct SymmetricKey: JWK {
     /// - Parameters:
     ///   - key: The octet sequence containing the key data.
     ///   - parameters: Additional JWK parameters.
-    public init(key: Data, additionalParameters parameters: [String: String] = [:]) {
+    public init(key: Data, additionalParameters parameters: [String: JWKParameterType] = [:]) {
         self.keyType = .OCT
         self.key = key.base64URLEncodedString()
 
@@ -87,7 +87,7 @@ public struct SymmetricKey: JWK {
     ///   - key: The symmetirc key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(key: ExpressibleAsSymmetricKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(key: ExpressibleAsSymmetricKeyComponents, additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let components = try? key.symmetricKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }

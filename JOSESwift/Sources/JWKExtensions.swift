@@ -26,7 +26,7 @@ import Foundation
 // MARK: Subscript
 
 public extension JWK {
-    subscript(parameter: String) -> String? {
+    subscript(parameter: String) -> Any? {
         return parameters[parameter]
     }
 }

@@ -23,6 +23,12 @@
 
 import Foundation
 
+// Common protocol for all types that can be used as JWK parameters.
+public protocol JWKParameterType: Encodable, Decodable { }
+
+extension String: JWKParameterType { }
+extension Array: JWKParameterType where Element == String { }
+
 /// Possible common JWK parameters.
 /// See [RFC-7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) for details.
 public enum JWKParameter: String, CodingKey {
@@ -36,10 +42,15 @@ public enum JWKParameter: String, CodingKey {
     case X509CertificateSHA1Thumbprint = "x5t"
     case X509CertificateSHA256Thumbprint = "x5t#S256"
 
-    static let nonStringParameters: [JWKParameter] = [
-        .keyOperations,
-        .X509CertificateChain
-    ]
+    var type: Codable.Type {
+        switch self {
+        case .keyType, .keyUse, .algorithm, .keyIdentifier,
+             .X509URL, .X509CertificateSHA1Thumbprint, .X509CertificateSHA256Thumbprint:
+            return String.self
+        case .keyOperations, .X509CertificateChain:
+            return [String].self
+        }
+    }
 }
 
 /// RSA specific JWK parameters.

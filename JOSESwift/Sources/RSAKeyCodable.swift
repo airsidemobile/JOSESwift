@@ -33,8 +33,14 @@ extension RSAPublicKey: Encodable {
         // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
-            if let key = JWKParameter(rawValue: parameter.key) {
-                try commonParameters.encode(parameter.value, forKey: key)
+            guard let key = JWKParameter(rawValue: parameter.key) else {
+                continue
+            }
+
+            if let value = parameter.value as? String {
+                try commonParameters.encode(value, forKey: key)
+            } else if let value = parameter.value as? [String] {
+                try commonParameters.encode(value, forKey: key)
             }
         }
 
@@ -61,9 +67,14 @@ extension RSAPublicKey: Decodable {
         }
 
         // Other common parameters are optional.
-        var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
+        var parameters: [String: JWKParameterType] = [:]
+
+        for key in commonParameters.allKeys where key.type == String.self {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
+        }
+
+        for key in commonParameters.allKeys where key.type == [String].self {
+            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
         }
 
         // RSA public key specific parameters.
@@ -89,8 +100,14 @@ extension RSAPrivateKey: Encodable {
         // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
-            if let key = JWKParameter(rawValue: parameter.key) {
-                try commonParameters.encode(parameter.value, forKey: key)
+            guard let key = JWKParameter(rawValue: parameter.key) else {
+                continue
+            }
+
+            if let value = parameter.value as? String {
+                try commonParameters.encode(value, forKey: key)
+            } else if let value = parameter.value as? [String] {
+                try commonParameters.encode(value, forKey: key)
             }
         }
 
@@ -118,9 +135,14 @@ extension RSAPrivateKey: Decodable {
         }
 
         // Other common parameters are optional.
-        var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
+        var parameters: [String: JWKParameterType] = [:]
+
+        for key in commonParameters.allKeys where key.type == String.self {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
+        }
+
+        for key in commonParameters.allKeys where key.type == [String].self {
+            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
         }
 
         // RSA private key specific parameters.
