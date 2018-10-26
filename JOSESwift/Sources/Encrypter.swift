@@ -80,14 +80,14 @@ public struct Encrypter<KeyType> {
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512):
+		case (.RSA1_5, .A256CBCHS512), (.RSA1_5, .A128CBCHS256):
             guard type(of: key) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: (key as! RSAEncrypter.KeyType))
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
-        case (.direct, .A256CBCHS512):
+		case (.direct, .A256CBCHS512), (.direct, .A128CBCHS256):
             guard type(of: key) is AESEncrypter.KeyType.Type else {
                 return nil
             }

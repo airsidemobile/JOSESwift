@@ -62,14 +62,14 @@ extension JOSEHeader {
 /// JWS and JWE share a common Header Parameter space that both JWS and JWE headers must support.
 /// Those header parameters may have a different meaning depending on whether they are part of a JWE or JWS.
 public protocol CommonHeaderParameterSpace {
-    var jku: URL? { get set }
-    var jwk: String? { get set }
-    var kid: String? { get set }
-    var x5u: URL? { get set }
-    var x5c: [String]? { get set }
-    var x5t: String? { get set }
-    var x5tS256: String? { get set }
-    var typ: String? { get set }
-    var cty: String? { get set }
-    var crit: [String]? { get set }
+    var jku: URL? { get }
+    var jwk: String? { get }
+    var kid: String? { get }
+    var x5u: URL? { get }
+    var x5c: [String: Any]? { get }
+    var x5t: String? { get }
+    var x5tS256: String? { get }
+    var typ: String? { get }
+    var cty: String? { get }
+    var crit: [String]? { get }
 }
