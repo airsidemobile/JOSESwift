@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76A41AECF99F3673C1C40 /* ECKeys.swift */; };
 		5FB762CE28963B4780B33973 /* SecKeyECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */; };
+		5FB763971FFFFDE2B2376E0A /* ECPublicKeyToSecKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76E8AD96EA19B669A5E1D /* ECPublicKeyToSecKeyTests.swift */; };
 		5FB763AFF6BE04E8A6AE4DFC /* DataECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */; };
 		5FB764055756A9190628BDDE /* ECKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */; };
 		5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB760DB390F90F91102DB74 /* EC.swift */; };
 		5FB7652B8E15046DB1C78E81 /* ECSignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76B5896AAA87ACD56D0D0 /* ECSignerTests.swift */; };
 		5FB765B31F9CC56B6E74E402 /* DataECPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7640AC5A4E021A5B6ADC0 /* DataECPublicKeyTests.swift */; };
 		5FB76902DBBBEBE867D17D94 /* RSACryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7683476B521915FDB2248 /* RSACryptoTestCase.swift */; };
+		5FB769DC2B585672F9EC125A /* ECPublicKeyToDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB765CE30E80B7C3D18FAB4 /* ECPublicKeyToDataTests.swift */; };
 		5FB76AC31C9A627FB8626CF3 /* ECVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB768A267E1A15571CC58AA /* ECVerifierTests.swift */; };
 		5FB76B8D7F1214FF01FA1A8B /* ECVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */; };
 		5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76AF2833DDD77D56D6D3F /* ECSigner.swift */; };
@@ -112,6 +114,7 @@
 		5FB760DB390F90F91102DB74 /* EC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EC.swift; sourceTree = "<group>"; };
 		5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPublicKey.swift; sourceTree = "<group>"; };
 		5FB7640AC5A4E021A5B6ADC0 /* DataECPublicKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPublicKeyTests.swift; sourceTree = "<group>"; };
+		5FB765CE30E80B7C3D18FAB4 /* ECPublicKeyToDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPublicKeyToDataTests.swift; sourceTree = "<group>"; };
 		5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECVerifier.swift; sourceTree = "<group>"; };
 		5FB7683476B521915FDB2248 /* RSACryptoTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSACryptoTestCase.swift; sourceTree = "<group>"; };
 		5FB768A267E1A15571CC58AA /* ECVerifierTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECVerifierTests.swift; sourceTree = "<group>"; };
@@ -120,6 +123,7 @@
 		5FB76B5896AAA87ACD56D0D0 /* ECSignerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECSignerTests.swift; sourceTree = "<group>"; };
 		5FB76BD4F46045BF2B182483 /* ECCryptoTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECCryptoTestCase.swift; sourceTree = "<group>"; };
 		5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyECPublicKey.swift; sourceTree = "<group>"; };
+		5FB76E8AD96EA19B669A5E1D /* ECPublicKeyToSecKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPublicKeyToSecKeyTests.swift; sourceTree = "<group>"; };
 		5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECKeyCodable.swift; sourceTree = "<group>"; };
 		6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESEncrypter.swift; sourceTree = "<group>"; };
 		6505236F1FB494BE00E0B1B1 /* AESDecrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESDecrypter.swift; sourceTree = "<group>"; };
@@ -354,6 +358,8 @@
 				653656062035D6C700A3AC3B /* JWKSetCollectionTests.swift */,
 				6536560A2035DC3900A3AC3B /* JWKSetCodingTests.swift */,
 				5FB7640AC5A4E021A5B6ADC0 /* DataECPublicKeyTests.swift */,
+				5FB765CE30E80B7C3D18FAB4 /* ECPublicKeyToDataTests.swift */,
+				5FB76E8AD96EA19B669A5E1D /* ECPublicKeyToSecKeyTests.swift */,
 			);
 			name = JWK;
 			sourceTree = "<group>";
@@ -653,6 +659,8 @@
 				5FB76AC31C9A627FB8626CF3 /* ECVerifierTests.swift in Sources */,
 				5FB7652B8E15046DB1C78E81 /* ECSignerTests.swift in Sources */,
 				5FB765B31F9CC56B6E74E402 /* DataECPublicKeyTests.swift in Sources */,
+				5FB769DC2B585672F9EC125A /* ECPublicKeyToDataTests.swift in Sources */,
+				5FB763971FFFFDE2B2376E0A /* ECPublicKeyToSecKeyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

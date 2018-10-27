@@ -33,7 +33,9 @@ struct ECTestKeyData {
     let compactSerializedJWSConst: String
     let expectedPrivateOctetString: Data
     let expectedXCoordinate: Data
+    let expectedXCoordinateBase64Url: String
     let expectedYCoordinate: Data
+    let expectedYCoordinateBase64Url: String
     let privateKey: SecKey
     let publicKey: SecKey
     let publicKeyData: Data
@@ -47,7 +49,9 @@ struct ECTestKeyData {
             compactSerializedJWSSignatureConst: String,
             expectedPrivateOctetString: Data,
             expectedXCoordinate: Data,
+            expectedXCoordinateBase64Url: String,
             expectedYCoordinate: Data,
+            expectedYCoordinateBase64Url: String,
             expectedCurveType: String) {
 
         self.privateKeyTag = privateKeyTag
@@ -61,7 +65,9 @@ struct ECTestKeyData {
                                          """
         self.expectedPrivateOctetString = expectedPrivateOctetString
         self.expectedXCoordinate = expectedXCoordinate
+        self.expectedXCoordinateBase64Url = expectedXCoordinateBase64Url
         self.expectedYCoordinate = expectedYCoordinate
+        self.expectedYCoordinateBase64Url = expectedYCoordinateBase64Url
         self.expectedCurveType = expectedCurveType
 
         var keyData: Data = Data([0x04])
@@ -93,6 +99,7 @@ class ECCryptoTestCase: CryptoTestCase {
     // public key - `openssl ec -in test.key -pubout -out testpub.key`
     // private component - `cat test.key | openssl base64 -d | openssl asn1parse -inform DER`
     // coordinates (excluding prefix 0x40) - `cat testpub.key | openssl base64 -d | openssl asn1parse -inform DER -dump`
+    // url-encoded base64 - `xxd -r -p hexbytes.txt | base64 | sed "s/\//_/g" | sed "s/\+/-/g" | sed "s/=//g" > b64url.txt`
     // signature - `cat <message file> | openssl dgst -sha<bitsize> -out test.sig -sign test.key | openssl asn1parse -inform DER`
     // n.b.: signature is in 'raw' format, and ensure <message file> has no final newline
     // n.b.: all signatures are generated with a random nonce such two signings of the same message should be distinct
@@ -115,10 +122,12 @@ class ECCryptoTestCase: CryptoTestCase {
                 0x4e, 0xf4, 0x34, 0xfe, 0x6b, 0x83, 0xca, 0xf4, 0xb8, 0x45, 0x7f, 0x5b, 0x26, 0x6f, 0x11, 0xcf, 0x2f,
                 0x57, 0x4e, 0x94, 0x86, 0xef, 0x1c, 0x28, 0xdc, 0x57, 0xe0, 0xbb, 0xc3, 0xaa, 0xec, 0xe6,
             ]),
+            expectedXCoordinateBase64Url: "TvQ0_muDyvS4RX9bJm8Rzy9XTpSG7xwo3Ffgu8Oq7OY",
             expectedYCoordinate: Data(bytes: [
                 0xb1, 0xa3, 0x6b, 0xe2, 0x13, 0x37, 0xaa, 0xba, 0x23, 0x4a, 0x86, 0x38, 0x79, 0xa3, 0xb5, 0x58, 0x65,
                 0x67, 0x6b, 0x9c, 0x96, 0xfc, 0x8e, 0x04, 0xa9, 0xd1, 0x50, 0xe1, 0x34, 0x65, 0xf2, 0x24
             ]),
+            expectedYCoordinateBase64Url: "saNr4hM3qrojSoY4eaO1WGVna5yW_I4EqdFQ4TRl8iQ",
             expectedCurveType: "P-256"
     )
 
@@ -141,11 +150,13 @@ class ECCryptoTestCase: CryptoTestCase {
                 0xee, 0x50, 0xaf, 0xf4, 0x0b, 0x53, 0x37, 0xa9, 0xff, 0xbb, 0xc4, 0x6c, 0x8a, 0x3b, 0x7e, 0x26, 0x9c, 0xfd,
                 0x24, 0x13, 0x21, 0x48, 0xfa, 0xd2, 0x12, 0x66, 0x75, 0x76, 0xf0, 0x9f
             ]),
+            expectedXCoordinateBase64Url: "m7lcNx4D36LdfX-MoDCKG05I7lCv9AtTN6n_u8Rsijt-Jpz9JBMhSPrSEmZ1dvCf",
             expectedYCoordinate: Data(bytes: [
                 0x87, 0x7c, 0xe4, 0x7f, 0xd7, 0x9a, 0x1d, 0xc2, 0x7b, 0x0f, 0x0e, 0xd2, 0x30, 0xf7, 0xca, 0xc0, 0x9d, 0x8f,
                 0x12, 0x01, 0xd8, 0x79, 0x9f, 0x8f, 0xfa, 0xf3, 0xb1, 0x94, 0x14, 0xbf, 0x3a, 0xc0, 0x71, 0xed, 0x11, 0x73,
                 0xfb, 0x23, 0x5a, 0x9f, 0x57, 0xbf, 0x3f, 0x48, 0x52, 0xf8, 0xb8, 0x0d
             ]),
+            expectedYCoordinateBase64Url: "h3zkf9eaHcJ7Dw7SMPfKwJ2PEgHYeZ-P-vOxlBS_OsBx7RFz-yNan1e_P0hS-LgN",
             expectedCurveType: "P-384"
     )
 
@@ -171,12 +182,16 @@ class ECCryptoTestCase: CryptoTestCase {
                 0xd5, 0x42, 0x75, 0x7d, 0x49, 0x05, 0xe1, 0xbc, 0x82, 0x15, 0xc2, 0x80, 0xc8, 0xca, 0xbc, 0xb2, 0xd0, 0xff,
                 0x98, 0xdd, 0x1b, 0xf3, 0xc8, 0x06, 0x9f, 0xb5, 0xbc, 0x77, 0xac, 0x83
             ]),
+            expectedXCoordinateBase64Url:
+            "AQu_5zLkErGrlNXre2NJvyydEz0e4gpIJH2jyS4tysTlwRSW1UJ1fUkF4byCFcKAyMq8stD_mN0b88gGn7W8d6yD",
             expectedYCoordinate: Data(bytes: [
                 0x01, 0x27, 0x96, 0xce, 0xf3, 0xc3, 0xfe, 0xfa, 0x20, 0x2d, 0x89, 0x13, 0xd4, 0x69, 0x32, 0x5c, 0x4a, 0x70,
                 0x47, 0x75, 0x7d, 0xe2, 0x12, 0x95, 0x0a, 0xb5, 0x86, 0x34, 0xb1, 0x6f, 0x94, 0x02, 0x7e, 0x0a, 0x98, 0x06,
                 0x3b, 0x65, 0xc0, 0xfc, 0xc9, 0xef, 0x8f, 0x0a, 0x02, 0x37, 0x35, 0x7c, 0x90, 0x49, 0x4a, 0xcf, 0x61, 0xbb,
                 0x2b, 0x7b, 0x61, 0xc7, 0x36, 0xa6, 0x7c, 0x9a, 0x2d, 0xfa, 0x56, 0x21
             ]),
+            expectedYCoordinateBase64Url:
+            "ASeWzvPD_vogLYkT1GkyXEpwR3V94hKVCrWGNLFvlAJ-CpgGO2XA_MnvjwoCNzV8kElKz2G7K3thxzamfJot-lYh",
             expectedCurveType: "P-521"
     )
 
