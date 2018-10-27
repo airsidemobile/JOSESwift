@@ -34,7 +34,7 @@ class ECSignerTests: ECCryptoTestCase {
         super.tearDown()
     }
 
-    func _testSigning(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
+    private func _testSigning(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
         let messageData = message.data(using: .utf8)!
         let signer = ECSigner(algorithm: algorithm, privateKey: keyData.privateKey)
         let signature = try! signer.sign(messageData)

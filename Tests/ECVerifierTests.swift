@@ -34,7 +34,7 @@ class ECVerifierTests: ECCryptoTestCase {
         super.tearDown()
     }
 
-    func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
+    private func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
         let jws = try! JWS(compactSerialization: keyData.compactSerializedJWSConst)
         let verifier = ECVerifier(algorithm: algorithm, publicKey: keyData.publicKey)
 
