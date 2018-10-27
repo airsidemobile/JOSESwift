@@ -35,13 +35,8 @@ class ECVerifierTests: ECCryptoTestCase {
     }
 
     func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
-        guard keyData.publicKey != nil else {
-            XCTFail()
-            return
-        }
-
         let jws = try! JWS(compactSerialization: keyData.compactSerializedJWSConst)
-        let verifier = ECVerifier(algorithm: algorithm, publicKey: keyData.publicKey!)
+        let verifier = ECVerifier(algorithm: algorithm, publicKey: keyData.publicKey)
 
         guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
             XCTFail()

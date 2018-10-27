@@ -34,9 +34,9 @@ struct ECTestKeyData {
     let expectedPrivateOctetString: Data
     let expectedXCoordinate: Data
     let expectedYCoordinate: Data
-    let privateKey: SecKey?
-    let publicKey: SecKey?
-    let publicKeyData: Data!
+    let privateKey: SecKey
+    let publicKey: SecKey
+    let publicKeyData: Data
 
     init(
             bitSize: Int,
@@ -74,7 +74,7 @@ struct ECTestKeyData {
 
         privateKey = keyPair.privateKey
         publicKey = keyPair.publicKey
-        publicKeyData = SecKeyCopyExternalRepresentation(publicKey!, nil)! as Data
+        publicKeyData = SecKeyCopyExternalRepresentation(publicKey, nil)! as Data
         XCTAssertNotNil(publicKeyData)
     }
 
@@ -90,6 +90,9 @@ class ECCryptoTestCase: CryptoTestCase {
     // public key - `openssl ec -in test.key -pubout -out testpub.key`
     // private component - `cat test.key | openssl base64 -d | openssl asn1parse -inform DER`
     // coordinates (excluding prefix 0x40) - `cat testpub.key | openssl base64 -d | openssl asn1parse -inform DER -dump`
+    // signature - `cat <message file> | openssl dgst -sha<bitsize> -out test.sig -sign test.key | openssl asn1parse -inform DER`
+    // n.b.: signature is in 'raw' format, and ensure <message file> has no final newline
+    // n.b.: all signatures are generated with a random nonce such two signings of the same message should be distinct
     //
     // Compact serialization generated at https://jwt.io
 
