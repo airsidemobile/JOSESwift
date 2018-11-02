@@ -329,18 +329,18 @@
 		65E733CD1FEBE9670009EAC6 /* JWK */ = {
 			isa = PBXGroup;
 			children = (
-				65E733D21FEBFDB30009EAC6 /* JWKtoJSONTests.swift */,
-				65E733D41FEC031B0009EAC6 /* JWKRSAKeysTests.swift */,
-				65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */,
-				65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */,
 				6514ADCA2031DD27008A4DD3 /* ASN1DEREncodingTests.swift */,
-				6546D605203580C6007217FB /* JWKRSADecodingTests.swift */,
+				65A103A0202B03BB00D22BF5 /* ASN1DERParsingTests.swift */,
 				65A103A2202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift */,
-				658261482029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift */,
+				6546D605203580C6007217FB /* JWKRSADecodingTests.swift */,
+				65826AB320286B3A00AFFC46 /* JWKRSAEncodingTests.swift */,
+				65E733D41FEC031B0009EAC6 /* JWKRSAKeysTests.swift */,
+				6536560A2035DC3900A3AC3B /* JWKSetCodingTests.swift */,
+				653656062035D6C700A3AC3B /* JWKSetCollectionTests.swift */,
+				65E733D21FEBFDB30009EAC6 /* JWKtoJSONTests.swift */,
 				65684A4C2031935200E56C68 /* RSAPublicKeyToDataTests.swift */,
 				65684A4E2031971A00E56C68 /* RSAPublicKeyToSecKeyTests.swift */,
-				653656062035D6C700A3AC3B /* JWKSetCollectionTests.swift */,
-				6536560A2035DC3900A3AC3B /* JWKSetCodingTests.swift */,
+				658261482029E2D200B594ED /* SecKeyRSAPublicKeyTests.swift */,
 				6506D9E820F4CA2000F34DD8 /* SymmetricKeyTests.swift */,
 			);
 			name = JWK;
@@ -539,12 +539,13 @@
 					65A9D3D61F45CDD7004E0B61 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 4857DE3DAC;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					65FBFDE11F45CC7C005C7D68 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 4857DE3DAC;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					C8610F5F2031A4C700859FCC = {
@@ -719,7 +720,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -732,7 +733,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -875,8 +876,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -897,8 +897,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.JOSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
