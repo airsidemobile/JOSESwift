@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.documentation_url = "https://github.com/airsidemobile/JOSESwift/wiki"
   s.social_media_url  = "https://twitter.com/airsideout"
 
-  s.swift_version     = "4.0"
+  s.swift_version     = "4.2"
   s.platform          = :ios, "10.0"
   s.source            = { :git => "https://github.com/airsidemobile/JOSESwift.git", :tag => "#{s.version}" }
   s.source_files      = "JOSESwift/**/*.{h,swift}"
