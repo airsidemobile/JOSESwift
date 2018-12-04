@@ -1,8 +1,0 @@
-//
-//  SJCommonCrypto.xcconfig
-//  JOSESwift
-//
-//  Created by Carol Capek on 09.02.18.
-//
-MODULEMAP_FILE[sdk=iphoneos*] = $(SRCROOT)/SJCommonCrypto/iphoneos/module.modulemap
-MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/SJCommonCrypto/iphonesimulator/module.modulemap
