@@ -12,7 +12,6 @@ Pod::Spec.new do |s|
   s.platform          = :ios, "10.0"
   s.source            = { :git => "https://github.com/airsidemobile/JOSESwift.git", :tag => "#{s.version}" }
   s.source_files      = "JOSESwift/**/*.{h,swift}"
-  s.preserve_paths    = "SJCommonCrypto/*"
 
   s.pod_target_xcconfig = { 'SWIFT_INCLUDE_PATHS[sdk=iphonesimulator*]' => '$(PODS_ROOT)/JOSESwift/SJCommonCrypto/iphonesimulator/',
                             'SWIFT_INCLUDE_PATHS[sdk=iphoneos*]' => '$(PODS_ROOT)/JOSESwift/SJCommonCrypto/iphoneos/' }
