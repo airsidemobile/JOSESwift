@@ -22,7 +22,7 @@
 //
 
 import Foundation
-import SJCommonCrypto
+import CommonCrypto
 
 fileprivate extension HMACAlgorithm {
     var ccAlgorithm: CCAlgorithm {
