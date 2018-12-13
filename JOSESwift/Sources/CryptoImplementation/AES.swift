@@ -22,7 +22,7 @@
 //
 
 import Foundation
-import SJCommonCrypto
+import CommonCrypto
 
 internal enum AESError: Error {
     case keyLengthNotSatisfied
