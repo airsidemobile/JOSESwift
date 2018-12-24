@@ -217,4 +217,14 @@ extension JWEHeader: CommonHeaderParameterSpace {
             return parameters["crit"] as? [String]
         }
     }
+
+    /// The zip header parameter indicates the content has been compressed before encryption
+    public var zip: String? {
+        set {
+            parameters["zip"] = newValue
+        }
+        get {
+            return parameters["zip"] as? String
+        }
+    }
 }
