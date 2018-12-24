@@ -72,10 +72,19 @@ public struct JWE {
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
     public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
         self.header = header
+        if header.zip != nil && header.zip != CompressionAlgorithm.deflate.rawValue {
+            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
+        }
+        
+        var potentiallyCompressedPayload: Payload = payload
+        // If "zip" parameter is present, compression is applied to the plaintext before encryption.
+        if header.zip == CompressionAlgorithm.deflate.rawValue {
+            potentiallyCompressedPayload = Payload(payload.data().deflate()!)
+        }
 
         var encryptionContext: EncryptionContext
         do {
-            encryptionContext = try encrypter.encrypt(header: header, payload: payload)
+            encryptionContext = try encrypter.encrypt(header: header, payload: potentiallyCompressedPayload)
         } catch {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
@@ -155,8 +164,18 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
         }
 
+        // Use of this Header Parameter is OPTIONAL. This Header Parameter MUST be understood and processed by implementations.
+        if header.zip != nil && header.zip != CompressionAlgorithm.deflate.rawValue {
+            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
+        }
+
         do {
-            return Payload(try decrypter.decrypt(context))
+            var decryptedData = try decrypter.decrypt(context)
+            // If "zip" parameter is present, decompression is applied to the plaintext after decryption.
+            if header.zip == CompressionAlgorithm.deflate.rawValue {
+                decryptedData = decryptedData.inflate()!
+            }
+            return Payload(decryptedData)
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
@@ -184,8 +203,17 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }
 
+        // Use of this Header Parameter is OPTIONAL. This Header Parameter MUST be understood and processed by implementations.
+        if header.zip != nil && header.zip != CompressionAlgorithm.deflate.rawValue {
+            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
+        }
+
         do {
-            return Payload(try decrypter.decrypt(context))
+            var decryptedData = try decrypter.decrypt(context)
+            if header.zip == CompressionAlgorithm.deflate.rawValue {
+                decryptedData = decryptedData.inflate()!
+            }
+            return Payload(decryptedData)
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
