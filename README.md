@@ -67,6 +67,8 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 | :--: | :--: | :--: | :--: | :--: | :--: |
 | | | :white_check_mark: | | | |
 
+*Supported compression algorithm:* "DEF" - Compression with the DEFLATE [RFC1951] algorithm
+
 ### JWK :key:
 
 Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
