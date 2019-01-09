@@ -61,6 +61,8 @@ class DataECPublicKeyTests: ECCryptoTestCase {
         }
     }
 
+    // TODO: Test fail conditions for unsupported curve sizes, invalid octet lengths and compressed points
+
     private func _getComponents(testData: ECTestKeyData) -> ECPublicKeyComponents? {
         guard let components = try? testData.publicKeyData.ecPublicKeyComponents() else {
             XCTFail("components = try? keyData.ecPublicKeyComponents()")

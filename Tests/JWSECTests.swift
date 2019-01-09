@@ -49,7 +49,7 @@ class JWSECTests: ECCryptoTestCase {
 
     private func performTestECSign(testData: ECTestKeyData) {
         let algorithm = SignatureAlgorithm(rawValue: testData.signatureAlgorithm)!
-        let header = try! JWSHeader(algorithm: algorithm)
+        let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(plainTextPayload.data(using: .utf8)!)
         let signer = Signer(signingAlgorithm: algorithm, privateKey: testData.privateKey)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
