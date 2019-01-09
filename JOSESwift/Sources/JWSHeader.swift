@@ -55,13 +55,16 @@ public struct JWSHeader: JOSEHeader {
     /// Initializes a `JWSHeader` with the specified algorithm.
     public init(algorithm: SignatureAlgorithm) {
         let parameters = ["alg": algorithm.rawValue]
-        // Forcing the try is ok here, since [String: String] can be converted to JSON.
-        // swiftlint:disable:next force_try
-        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
 
-        // Forcing the try is ok here, since "alg" is the only required header parameter.
+        // Forcing the try is ok here, since [String: String] can be converted to JSON and "alg" is the only required
+        // header parameter, which should pass the guard conditions in the main initializer
         // swiftlint:disable:next force_try
-        try! self.init(parameters: parameters, headerData: headerData)
+        try! self.init(parameters: parameters)
+    }
+
+    public init(parameters: [String: Any]) throws {
+        let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        try self.init(parameters: parameters, headerData: headerData)
     }
 }
 

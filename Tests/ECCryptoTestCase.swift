@@ -27,6 +27,7 @@ import Foundation
 struct ECTestKeyData {
 
     let privateKeyTag: String
+    let compactSerializedJWSSimpleHeaderConst: String
     let compactSerializedJWSHeaderConst: String
     let compactSerializedJWSPayloadConst: String
     let compactSerializedJWSSignatureConst: String
@@ -40,10 +41,12 @@ struct ECTestKeyData {
     let publicKey: SecKey
     let publicKeyData: Data
     let expectedCurveType: String
+    let signatureAlgorithm: String
 
     init(
             bitSize: Int,
             privateKeyTag: String,
+            compactSerializedJWSSimpleHeaderConst: String,
             compactSerializedJWSHeaderConst: String,
             compactSerializedJWSPayloadConst: String,
             compactSerializedJWSSignatureConst: String,
@@ -52,9 +55,11 @@ struct ECTestKeyData {
             expectedXCoordinateBase64Url: String,
             expectedYCoordinate: Data,
             expectedYCoordinateBase64Url: String,
-            expectedCurveType: String) {
+            expectedCurveType: String,
+            signatureAlgorithm: String) {
 
         self.privateKeyTag = privateKeyTag
+        self.compactSerializedJWSSimpleHeaderConst = compactSerializedJWSSimpleHeaderConst
         self.compactSerializedJWSHeaderConst = compactSerializedJWSHeaderConst
         self.compactSerializedJWSPayloadConst = compactSerializedJWSPayloadConst
         self.compactSerializedJWSSignatureConst = compactSerializedJWSSignatureConst
@@ -69,6 +74,7 @@ struct ECTestKeyData {
         self.expectedYCoordinate = expectedYCoordinate
         self.expectedYCoordinateBase64Url = expectedYCoordinateBase64Url
         self.expectedCurveType = expectedCurveType
+        self.signatureAlgorithm = signatureAlgorithm
 
         var keyData: Data = Data([0x04])
         keyData.append(expectedXCoordinate)
@@ -111,6 +117,7 @@ class ECCryptoTestCase: CryptoTestCase {
     let p256 = ECTestKeyData(
             bitSize: 256,
             privateKeyTag: "com.airsidemobile.JOSESwift.testECPrivateKey256",
+            compactSerializedJWSSimpleHeaderConst: "eyJhbGciOiJFUzI1NiJ9",
             compactSerializedJWSHeaderConst: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9",
             compactSerializedJWSPayloadConst: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRlc3QgTmFtZSIsImlhdCI6MTUxNjIzOTAyMn0",
             compactSerializedJWSSignatureConst: "hR5LbQJWDSAlUMS6MszGR8wJwR7i3pH8yeUubbz-hXr9sqMhnYNWPbb-uHuUDlbSswS9or6ORXIaNyhBBiDGXA",
@@ -128,12 +135,14 @@ class ECCryptoTestCase: CryptoTestCase {
                 0x67, 0x6b, 0x9c, 0x96, 0xfc, 0x8e, 0x04, 0xa9, 0xd1, 0x50, 0xe1, 0x34, 0x65, 0xf2, 0x24
             ]),
             expectedYCoordinateBase64Url: "saNr4hM3qrojSoY4eaO1WGVna5yW_I4EqdFQ4TRl8iQ",
-            expectedCurveType: "P-256"
+            expectedCurveType: "P-256",
+            signatureAlgorithm: "ES256"
     )
 
     let p384 = ECTestKeyData(
             bitSize: 384,
             privateKeyTag: "com.airsidemobile.JOSESwift.testECPrivateKey384",
+            compactSerializedJWSSimpleHeaderConst: "eyJhbGciOiJFUzM4NCJ9",
             compactSerializedJWSHeaderConst: "eyJhbGciOiJFUzM4NCIsInR5cCI6IkpXVCJ9",
             compactSerializedJWSPayloadConst: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRlc3QgTmFtZSIsImlhdCI6MTUxNjIzOTAyMn0",
             compactSerializedJWSSignatureConst: """
@@ -157,12 +166,14 @@ class ECCryptoTestCase: CryptoTestCase {
                 0xfb, 0x23, 0x5a, 0x9f, 0x57, 0xbf, 0x3f, 0x48, 0x52, 0xf8, 0xb8, 0x0d
             ]),
             expectedYCoordinateBase64Url: "h3zkf9eaHcJ7Dw7SMPfKwJ2PEgHYeZ-P-vOxlBS_OsBx7RFz-yNan1e_P0hS-LgN",
-            expectedCurveType: "P-384"
+            expectedCurveType: "P-384",
+            signatureAlgorithm: "ES384"
     )
 
     let p521 = ECTestKeyData(
             bitSize: 521,
             privateKeyTag: "com.airsidemobile.JOSESwift.testECPrivateKey512",
+            compactSerializedJWSSimpleHeaderConst: "eyJhbGciOiJFUzUxMiJ9",
             compactSerializedJWSHeaderConst: "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9",
             compactSerializedJWSPayloadConst: "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRlc3QgTmFtZSIsImlhdCI6MTUxNjIzOTAyMn0",
             compactSerializedJWSSignatureConst: """
@@ -192,8 +203,29 @@ class ECCryptoTestCase: CryptoTestCase {
             ]),
             expectedYCoordinateBase64Url:
             "ASeWzvPD_vogLYkT1GkyXEpwR3V94hKVCrWGNLFvlAJ-CpgGO2XA_MnvjwoCNzV8kElKz2G7K3thxzamfJot-lYh",
-            expectedCurveType: "P-521"
+            expectedCurveType: "P-521",
+            signatureAlgorithm: "ES512"
     )
+
+    let plainTextSimpleHeader = """
+                          {"alg":"<algorithm>"}
+                          """
+
+    let plainTextHeader = """
+                          {"alg":"<algorithm>","typ":"JWT"}
+                          """
+
+    let plainTextPayload = """
+                           {"sub":"1234567890","name":"Test Name","iat":1516239022}
+                           """
+
+    func getSimpleHeader(with signingAlgorithm: String) -> String {
+        return plainTextSimpleHeader.replacingOccurrences(of: "<algorithm>", with: signingAlgorithm)
+    }
+
+    func getHeader(with signingAlgorithm: String) -> String {
+        return plainTextHeader.replacingOccurrences(of: "<algorithm>", with: signingAlgorithm)
+    }
 
     override func setupKeys() {
         // do nothing: setup happens in ECTestKeyData constructor
