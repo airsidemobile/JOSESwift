@@ -23,7 +23,7 @@
 
 import Foundation
 import Security
-import SJCommonCrypto
+import CommonCrypto
 
 internal enum ECError: Error {
     case algorithmNotSupported
