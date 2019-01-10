@@ -26,17 +26,13 @@ import XCTest
 
 class SecKeyECPublicKeyTests: ECCryptoTestCase {
 
-    private func _testPublicKeyComponents(testData: ECTestKeyData) {
-        let components = try? testData.publicKey.ecPublicKeyComponents()
-        XCTAssertNotNil(components)
-        XCTAssertEqual(components?.crv, testData.expectedCurveType)
-        XCTAssertEqual(components?.x, testData.expectedXCoordinate)
-        XCTAssertEqual(components?.y, testData.expectedYCoordinate)
-    }
-
     func testPublicKeyComponents() {
         allTestData.forEach { testData in
-            _testPublicKeyComponents(testData: testData)
+            let components = try? testData.publicKey.ecPublicKeyComponents()
+            XCTAssertNotNil(components)
+            XCTAssertEqual(components?.crv, testData.expectedCurveType)
+            XCTAssertEqual(components?.x, testData.expectedXCoordinate)
+            XCTAssertEqual(components?.y, testData.expectedYCoordinate)
         }
     }
 
@@ -46,38 +42,36 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
         }
     }
 
-    private func _testJWKFromPublicKey(testData: ECTestKeyData) {
-        let jwk = try? ECPublicKey(publicKey: testData.publicKey)
-
-        XCTAssertNotNil(jwk)
-        XCTAssertEqual(jwk?.crv.rawValue, testData.expectedCurveType)
-        XCTAssertEqual(jwk?.x, testData.expectedXCoordinateBase64Url)
-        XCTAssertEqual(jwk?.y, testData.expectedYCoordinateBase64Url)
-    }
-
     func testJWKFromPublicKey() {
         allTestData.forEach { testData in
-            _testJWKFromPublicKey(testData: testData)
+            let jwk = try? ECPublicKey(publicKey: testData.publicKey)
+
+            XCTAssertNotNil(jwk)
+            XCTAssertEqual(jwk?.crv.rawValue, testData.expectedCurveType)
+            XCTAssertEqual(jwk?.x, testData.expectedXCoordinateBase64Url)
+            XCTAssertEqual(jwk?.y, testData.expectedYCoordinateBase64Url)
         }
-    }
-
-    private func _testPublicKeyFromPublicComponents(testData: ECTestKeyData) {
-        let components = (testData.expectedCurveType, testData.expectedXCoordinate, testData.expectedYCoordinate)
-        guard let secKey = try? SecKey.representing(ecPublicKeyComponents: components) else {
-            XCTFail()
-            return
-        }
-
-        let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
-        let dataExpected = SecKeyCopyExternalRepresentation(testData.publicKey, nil)! as Data
-
-        XCTAssertEqual(data, dataExpected)
     }
 
     func testPublicKeyFromPublicComponents() {
         allTestData.forEach { testData in
-            _testPublicKeyFromPublicComponents(testData: testData)
+            let components = (testData.expectedCurveType, testData.expectedXCoordinate, testData.expectedYCoordinate)
+            guard let secKey = try? SecKey.representing(ecPublicKeyComponents: components) else {
+                XCTFail()
+                return
+            }
+
+            let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
+            let dataExpected = SecKeyCopyExternalRepresentation(testData.publicKey, nil)! as Data
+
+            XCTAssertEqual(data, dataExpected)
         }
     }
 
+    func testPublicKeyFromInvalidCurveType() {
+        let components = ("P-Invalid", p256.expectedXCoordinate, p256.expectedYCoordinate)
+        XCTAssertThrowsError(try SecKey.representing(ecPublicKeyComponents: components)) { error in
+            XCTAssertEqual(error as? JWKError, JWKError.invalidECCurveType)
+        }
+    }
 }

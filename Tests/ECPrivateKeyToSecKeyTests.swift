@@ -1,8 +1,8 @@
 //
-//  ECPublicKeyToSecKeyTests.swift
+//  ECPrivateKeyToSecKeyTests.swift
 //  Tests
 //
-//  Created by Jarrod Moldrich on 27.10.18.
+//  Created by Jarrod Moldrich on 10.01.2019.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,37 +24,41 @@
 import XCTest
 @testable import JOSESwift
 
-class ECPublicKeyToSecKeyTests: ECCryptoTestCase {
+class ECPrivateKeyToSecKeyTests: ECCryptoTestCase {
 
-    func testPublicKeyToSecKey() {
+    func testPrivateKeyToSecKey() {
         allTestData.forEach { testData in
-            let jwk = ECPublicKey(
-                    crv: ECCurveType(rawValue: testData.expectedCurveType)!,
+            let jwk = try! ECPrivateKey(
+                    crv: testData.expectedCurveType,
                     x: testData.expectedXCoordinateBase64Url,
-                    y: testData.expectedYCoordinateBase64Url
+                    y: testData.expectedYCoordinateBase64Url,
+                    privateKey: testData.expectedPrivateBase64Url
             )
             let key = try! jwk.converted(to: SecKey.self)
 
-            XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, testData.publicKeyData)
+            XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, testData.privateKeyData)
         }
     }
 
-    func testInvalidPublicKeyToSecKey() {
+    func testInvalidPrivateKeyToSecKey() {
         allTestData.forEach { testData in
-            let crv = ECCurveType(rawValue: testData.expectedCurveType)!
+            let crv = testData.expectedCurveType
             let x = testData.expectedXCoordinateBase64Url
             let y = testData.expectedYCoordinateBase64Url
+            let privateKey = testData.expectedPrivateBase64Url
             let invalid = "\u{96}"
-            checkInvalidArgumentListForException(crv: crv, x: invalid, y: y)
-            checkInvalidArgumentListForException(crv: crv, x: x, y: invalid)
+            checkInvalidArgumentListForException(crv: "P-INVALID", x: x, y: y, privateKey: privateKey)
+            checkInvalidArgumentListForException(crv: crv, x: invalid, y: y, privateKey: privateKey)
+            checkInvalidArgumentListForException(crv: crv, x: x, y: invalid, privateKey: privateKey)
+            checkInvalidArgumentListForException(crv: crv, x: x, y: y, privateKey: invalid)
         }
     }
 
     // MARK: Helper functions
 
-    func checkInvalidArgumentListForException(crv: ECCurveType, x: String, y: String) {
+    func checkInvalidArgumentListForException(crv: String, x: String, y: String, privateKey: String) {
         let closure = {
-            let jwk = ECPublicKey(crv: crv, x: x, y: y)
+            let jwk = try ECPrivateKey(crv: crv, x: x, y: y, privateKey: privateKey)
             _ = try jwk.converted(to: SecKey.self)
         }
         XCTAssertThrowsError(try closure())

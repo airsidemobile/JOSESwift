@@ -9,20 +9,26 @@
 /* Begin PBXBuildFile section */
 		5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76A41AECF99F3673C1C40 /* ECKeys.swift */; };
 		5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */; };
+		5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */; };
 		5FB762CE28963B4780B33973 /* SecKeyECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */; };
+		5FB762ED79A6159B5A9EDECC /* ECPrivateKeyToSecKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB763E289522DBBAEE02BCD /* ECPrivateKeyToSecKeyTests.swift */; };
 		5FB763971FFFFDE2B2376E0A /* ECPublicKeyToSecKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76E8AD96EA19B669A5E1D /* ECPublicKeyToSecKeyTests.swift */; };
 		5FB763AFF6BE04E8A6AE4DFC /* DataECPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */; };
 		5FB764055756A9190628BDDE /* ECKeyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */; };
 		5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB760DB390F90F91102DB74 /* EC.swift */; };
 		5FB7652B8E15046DB1C78E81 /* ECSignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76B5896AAA87ACD56D0D0 /* ECSignerTests.swift */; };
+		5FB7656EDD94AE3620A8C13C /* SecKeyECPrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76649DFE31DCBE92EFB58 /* SecKeyECPrivateKeyTests.swift */; };
+		5FB7656FF300A4A3EF0F3597 /* DataECPrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB767D110E592224B621B36 /* DataECPrivateKeyTests.swift */; };
 		5FB765B20A256B93440E79E2 /* JWKECEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7680EDB5E39EA70E45F41 /* JWKECEncodingTests.swift */; };
 		5FB765B31F9CC56B6E74E402 /* DataECPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7640AC5A4E021A5B6ADC0 /* DataECPublicKeyTests.swift */; };
+		5FB7666062B4008362CC88FF /* ECPrivateKeyToDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7631E9F751B88036177DE /* ECPrivateKeyToDataTests.swift */; };
 		5FB76834DC4275C5B7D2F742 /* JWSECTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB765151D1E18BD7BFB95B8 /* JWSECTests.swift */; };
 		5FB76902DBBBEBE867D17D94 /* RSACryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7683476B521915FDB2248 /* RSACryptoTestCase.swift */; };
 		5FB7692ED087062737C589E2 /* SecKeyECPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB768D2A4CB1EC190A955A8 /* SecKeyECPublicKeyTests.swift */; };
 		5FB769DC2B585672F9EC125A /* ECPublicKeyToDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB765CE30E80B7C3D18FAB4 /* ECPublicKeyToDataTests.swift */; };
 		5FB76AC31C9A627FB8626CF3 /* ECVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB768A267E1A15571CC58AA /* ECVerifierTests.swift */; };
 		5FB76B8D7F1214FF01FA1A8B /* ECVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */; };
+		5FB76BA2D0344083B8F79D53 /* SecKeyECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */; };
 		5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76AF2833DDD77D56D6D3F /* ECSigner.swift */; };
 		5FB76E7A42B44E4F4416CB7F /* JWKECKeysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7688B4092265A9A950E9E /* JWKECKeysTests.swift */; };
 		5FB76E7BEF001684139C9E14 /* ECCryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76BD4F46045BF2B182483 /* ECCryptoTestCase.swift */; };
@@ -116,12 +122,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPrivateKey.swift; sourceTree = "<group>"; };
 		5FB760DB390F90F91102DB74 /* EC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EC.swift; sourceTree = "<group>"; };
 		5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKECDecodingTests.swift; sourceTree = "<group>"; };
+		5FB7631E9F751B88036177DE /* ECPrivateKeyToDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPrivateKeyToDataTests.swift; sourceTree = "<group>"; };
+		5FB763E289522DBBAEE02BCD /* ECPrivateKeyToSecKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPrivateKeyToSecKeyTests.swift; sourceTree = "<group>"; };
 		5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPublicKey.swift; sourceTree = "<group>"; };
 		5FB7640AC5A4E021A5B6ADC0 /* DataECPublicKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPublicKeyTests.swift; sourceTree = "<group>"; };
 		5FB765151D1E18BD7BFB95B8 /* JWSECTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWSECTests.swift; sourceTree = "<group>"; };
 		5FB765CE30E80B7C3D18FAB4 /* ECPublicKeyToDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPublicKeyToDataTests.swift; sourceTree = "<group>"; };
+		5FB76649DFE31DCBE92EFB58 /* SecKeyECPrivateKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyECPrivateKeyTests.swift; sourceTree = "<group>"; };
+		5FB767D110E592224B621B36 /* DataECPrivateKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPrivateKeyTests.swift; sourceTree = "<group>"; };
 		5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECVerifier.swift; sourceTree = "<group>"; };
 		5FB7680EDB5E39EA70E45F41 /* JWKECEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKECEncodingTests.swift; sourceTree = "<group>"; };
 		5FB7683476B521915FDB2248 /* RSACryptoTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSACryptoTestCase.swift; sourceTree = "<group>"; };
@@ -133,6 +144,7 @@
 		5FB76B5896AAA87ACD56D0D0 /* ECSignerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECSignerTests.swift; sourceTree = "<group>"; };
 		5FB76BD4F46045BF2B182483 /* ECCryptoTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECCryptoTestCase.swift; sourceTree = "<group>"; };
 		5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyECPublicKey.swift; sourceTree = "<group>"; };
+		5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecKeyECPrivateKey.swift; sourceTree = "<group>"; };
 		5FB76E8AD96EA19B669A5E1D /* ECPublicKeyToSecKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPublicKeyToSecKeyTests.swift; sourceTree = "<group>"; };
 		5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECKeyCodable.swift; sourceTree = "<group>"; };
 		6505236D1FB4940100E0B1B1 /* AESEncrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESEncrypter.swift; sourceTree = "<group>"; };
@@ -375,6 +387,10 @@
 				5FB7688B4092265A9A950E9E /* JWKECKeysTests.swift */,
 				5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */,
 				5FB7680EDB5E39EA70E45F41 /* JWKECEncodingTests.swift */,
+				5FB76649DFE31DCBE92EFB58 /* SecKeyECPrivateKeyTests.swift */,
+				5FB767D110E592224B621B36 /* DataECPrivateKeyTests.swift */,
+				5FB763E289522DBBAEE02BCD /* ECPrivateKeyToSecKeyTests.swift */,
+				5FB7631E9F751B88036177DE /* ECPrivateKeyToDataTests.swift */,
 			);
 			name = JWK;
 			sourceTree = "<group>";
@@ -483,6 +499,8 @@
 				5FB760DB390F90F91102DB74 /* EC.swift */,
 				5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */,
 				5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */,
+				5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */,
+				5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */,
 			);
 			path = CryptoImplementation;
 			sourceTree = "<group>";
@@ -681,6 +699,10 @@
 				5FB76E7A42B44E4F4416CB7F /* JWKECKeysTests.swift in Sources */,
 				5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */,
 				5FB765B20A256B93440E79E2 /* JWKECEncodingTests.swift in Sources */,
+				5FB7656EDD94AE3620A8C13C /* SecKeyECPrivateKeyTests.swift in Sources */,
+				5FB7656FF300A4A3EF0F3597 /* DataECPrivateKeyTests.swift in Sources */,
+				5FB762ED79A6159B5A9EDECC /* ECPrivateKeyToSecKeyTests.swift in Sources */,
+				5FB7666062B4008362CC88FF /* ECPrivateKeyToDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -732,6 +754,8 @@
 				5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */,
 				5FB76B8D7F1214FF01FA1A8B /* ECVerifier.swift in Sources */,
 				5FB763AFF6BE04E8A6AE4DFC /* DataECPublicKey.swift in Sources */,
+				5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */,
+				5FB76BA2D0344083B8F79D53 /* SecKeyECPrivateKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

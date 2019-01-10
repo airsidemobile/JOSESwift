@@ -29,6 +29,7 @@ internal enum JWKError: Error {
     case cannotExtractRSAPublicKeyComponents
     case cannotExtractRSAPrivateKeyComponents
     case notAPublicKey
+    case notAPrivateKey
     case cannotConvertToSecKeyChildClasses
     case modulusNotBase64URLUIntEncoded
     case exponentNotBase64URLUIntEncoded

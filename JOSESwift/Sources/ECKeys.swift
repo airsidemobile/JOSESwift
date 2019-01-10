@@ -295,7 +295,7 @@ public struct ECPrivateKey: JWK {
             throw JOSESwiftError.yNotBase64URLUIntEncoded
         }
 
-        guard let privateKey = Data(base64Encoded: self.privateKey) else {
+        guard let privateKey = Data(base64URLEncoded: self.privateKey) else {
             throw JOSESwiftError.privateKeyNotBase64URLUIntEncoded
         }
 

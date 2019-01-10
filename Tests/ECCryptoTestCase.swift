@@ -40,6 +40,7 @@ struct ECTestKeyData {
     let expectedYCoordinate: Data
     let expectedYCoordinateBase64Url: String
     let privateKey: SecKey
+    let privateKeyData: Data
     let publicKey: SecKey
     let publicKeyData: Data
     let expectedCurveType: String
@@ -97,6 +98,7 @@ struct ECTestKeyData {
         privateKey = keyPair.privateKey
         publicKey = keyPair.publicKey
         publicKeyData = SecKeyCopyExternalRepresentation(publicKey, nil)! as Data
+        privateKeyData = SecKeyCopyExternalRepresentation(privateKey, nil)! as Data
         XCTAssertNotNil(publicKeyData)
     }
 
