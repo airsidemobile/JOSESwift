@@ -37,7 +37,7 @@ protocol VerifierProtocol {
     func verify(_ signingInput: Data, against signature: Data) throws -> Bool
 }
 
-public struct Verifier<KeyType> {
+public struct Verifier {
     let verifier: VerifierProtocol
 
     /// Constructs a verifyer used to verify a JWS.
@@ -46,9 +46,9 @@ public struct Verifier<KeyType> {
     ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
     ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey`.
     /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
-    public init?(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
+    public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
-        case .RS256,.RS512:
+        case .RS256, .RS512:
             guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
                 return nil
             }

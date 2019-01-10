@@ -36,6 +36,11 @@ public enum JWKParameter: String, CodingKey {
     case X509CertificateChain = "x5c"
     case X509CertificateSHA1Thumbprint = "x5t"
     case X509CertificateSHA256Thumbprint = "x5t#S256"
+
+    static let nonStringParameters: [JWKParameter] = [
+        .keyOperations,
+        .X509CertificateChain
+    ]
 }
 
 /// RSA specific JWK parameters.
@@ -44,6 +49,12 @@ public enum RSAParameter: String, CodingKey {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
+}
+
+/// Symmetric key specific JWK parameters.
+/// See [RFC-7518, Section 6.3](https://tools.ietf.org/html/rfc7518#section-6.4) for details.
+public enum SymmetricKeyParameter: String, CodingKey {
+    case key = "k"
 }
 
 /// EC specific JWK parameters.

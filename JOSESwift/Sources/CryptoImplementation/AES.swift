@@ -22,7 +22,7 @@
 //
 
 import Foundation
-import SJCommonCrypto
+import CommonCrypto
 
 internal enum AESError: Error {
     case keyLengthNotSatisfied
@@ -47,6 +47,8 @@ fileprivate extension SymmetricKeyAlgorithm {
 }
 
 internal struct AES {
+    typealias KeyType = Data
+
     /// Encrypts a plain text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
     ///
     /// - Parameters:
@@ -56,7 +58,7 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `AESError` if any error occurs during encryption.
-    static func encrypt(plaintext: Data, with encryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+    static func encrypt(plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {

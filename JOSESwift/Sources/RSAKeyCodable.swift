@@ -62,7 +62,7 @@ extension RSAPublicKey: Decodable {
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
@@ -119,7 +119,7 @@ extension RSAPrivateKey: Decodable {
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 

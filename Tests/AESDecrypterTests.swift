@@ -23,7 +23,7 @@
 
 import XCTest
 @testable import JOSESwift
-import SJCommonCrypto
+import CommonCrypto
 
 class AESDecrypterTests: RSACryptoTestCase {
 

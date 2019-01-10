@@ -26,11 +26,11 @@ import XCTest
 
 class RSAPublicKeyToDataTests: RSACryptoTestCase {
     
-    func testPublicKey2048ToData() {
+    func testpublicKeyAlice2048ToData() {
         let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)
         let data = try! jwk.converted(to: Data.self)
 
-        XCTAssertEqual(data, publicKey2048Data)
+        XCTAssertEqual(data, publicKeyAlice2048Data)
     }
 
     func testPublicKey4096ToData() {

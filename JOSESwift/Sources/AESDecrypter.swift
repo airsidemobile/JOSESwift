@@ -25,7 +25,15 @@ import Foundation
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
 internal struct AESDecrypter: SymmetricDecrypter {
+    typealias KeyType = AES.KeyType
+
     let algorithm: SymmetricKeyAlgorithm
+    let symmetricKey: KeyType?
+
+    init(algorithm: SymmetricKeyAlgorithm, symmetricKey: KeyType? = nil) {
+        self.algorithm = algorithm
+        self.symmetricKey = symmetricKey
+    }
 
     func decrypt(_ context: SymmetricDecryptionContext, with symmetricKey: Data) throws -> Data {
         // Check if the key length contains both HMAC key and the actual symmetric key.

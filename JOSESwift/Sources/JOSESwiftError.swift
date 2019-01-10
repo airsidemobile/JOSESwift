@@ -27,6 +27,7 @@ public enum JOSESwiftError: Error {
     case modulusNotBase64URLUIntEncoded
     case exponentNotBase64URLUIntEncoded
     case privateExponentNotBase64URLUIntEncoded
+    case symmetricKeyNotBase64URLEncoded
 
     // EC coding errors
     case xNotBase64URLUIntEncoded

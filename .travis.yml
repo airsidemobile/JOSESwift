@@ -1,9 +1,21 @@
 language: swift
 os: osx
-osx_image: xcode9.2
-xcode_project: JOSESwift.xcodeproj
-xcode_workspace: JOSESwift.xcworkspace
-xcode_scheme: Tests
+osx_image: xcode10
+env: LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
-script:
-  - bundle exec fastlane scan -s JOSESwift
+addons:
+  homebrew:
+    update: true
+    brewfile: true
+
+before_install:
+  - bundle install
+
+jobs:
+  include:
+    - stage: test
+      name: testing
+      script: bundle exec fastlane test
+    - stage: test
+      name: linting
+      script: bundle exec fastlane lint

@@ -42,6 +42,7 @@ internal enum JWKError: Error {
 /// See [RFC-7518](https://tools.ietf.org/html/rfc7518#section-7.4) for details.
 public enum JWKKeyType: String, Codable {
     case RSA = "RSA"
+    case OCT = "oct"
     case EC = "EC"
 }
 

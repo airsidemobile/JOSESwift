@@ -78,6 +78,9 @@ extension JWKSet: Encodable {
             case is RSAPrivateKey:
                 // swiftlint:disable:next force_cast
                 try keyContainer.encode(key as! RSAPrivateKey)
+            case is SymmetricKey:
+                // swiftlint:disable:next force_cast
+                try keyContainer.encode(key as! SymmetricKey)
             case is ECPublicKey:
                 // swiftlint:disable:next force_cast
                 try keyContainer.encode(key as! ECPublicKey)
@@ -98,28 +101,36 @@ extension JWKSet: Decodable {
 
         var keys: [JWK] = []
         while !keyContainer.isAtEnd {
-            var key: JWK?
 
-            do {
-                _ = try keyContainer.decode(JWKBase.self)
-            } catch JWKTypeError.typeIsECPublic {
-                key = try keyContainer.decode(ECPublicKey.self)
-            } catch JWKTypeError.typeIsECPrivate {
-                key = try keyContainer.decode(ECPrivateKey.self)
-            } catch JWKTypeError.typeIsRSAPublic {
-                key = try keyContainer.decode(RSAPublicKey.self)
-            } catch JWKTypeError.typeIsRSAPrivate {
-                key = try keyContainer.decode(RSAPrivateKey.self)
+            if let key = try? keyContainer.decode(RSAPrivateKey.self) {
+                keys.append(key)
+                continue
             }
 
-            guard let rsaKey = key else {
-                throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
-                    No RSAPublicKey or RSAPrivateKey found to decode.
-                    """
-                )
+            if let key = try? keyContainer.decode(RSAPublicKey.self) {
+                keys.append(key)
+                continue
             }
 
-            keys.append(rsaKey)
+            if let key = try? keyContainer.decode(SymmetricKey.self) {
+                keys.append(key)
+                continue
+            }
+
+            if let key = try? keyContainer.decode(ECPrivateKey.self) {
+                keys.append(key)
+                continue
+            }
+
+            if let key = try? keyContainer.decode(ECPublicKey.self) {
+                keys.append(key)
+                continue
+            }
+
+            throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
+                No RSAPrivateKey, RSAPublicKey, or SymmetricKey found to decode.
+                """
+            )
         }
 
         self.init(keys: keys)

@@ -59,7 +59,7 @@ Encrypting and decrypting arbitrary data using the JWE standard.
 
 | RSA1_5 | RSA-OAEP | RSA-OAEP-256 | A128KW | A192KW | A256KW | dir | ECDH-ES | ECDH-ES+A128KW | ECDH-ES+A192KW | ECDH-ES+A256KW | A128GCMKW | A192GCMKW | A256GCMKW | PBES2-HS256+A128KW | PBES2-HS384+A192KW | PBES2-HS512+A256KW |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
-| :white_check_mark: | | | | | | | | | | | | | | | | |
+| :white_check_mark: | | | | | | :white_check_mark: | | | | | | | | | | |
 
 *Supported content encryption algorithms:*
 
@@ -75,7 +75,7 @@ Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKe
 
 | EC | RSA | oct |
 | :--: | :--: | :--: |
-| :white_check_mark: | :white_check_mark: | |
+| :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ## Installation
 
@@ -131,30 +131,49 @@ In order to construct a JWS we need to provide the following parts:
 
 1. Header
 2. Payload
-3. Signature
+3. Signer
+
+##### Header
+
+``` swift
+let header = JWSHeader(algorithm: .RS512)
+```
+
+Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7515#section-4.1):
+
+``` swift
+header.kid = "2018-10-08"
+
+header.typ = "JWS"
+```
+
+##### Payload
+
+``` swift
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
+
+let payload = Payload(message)
+```
+
+##### Signer
+
+The signer algorithm must match the header algorithm.
 
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
-```
-
-``` swift
-let header = JWSHeader(algorithm: .RS512)
-
-let payload = Payload(message)
-
-// Signer algorithm must match header algorithm.
 let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
 ```
+
+##### Serializing
+
+The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 ``` swift
 guard let jws = try? JWS(header: header, payload: payload, signer: signer) else { ... }
 
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
 ```  
-
-The JWS compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 More details about constructing a JWS can be found [in the wiki](../../wiki/jws).
 
@@ -169,7 +188,8 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jws = try JWS(compactSerialization: serialization)
-    let payload = try jws.validate(with: publicKey).payload
+    let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey)!
+    let payload = try jws.validate(using: verifier).payload
     let message = String(data: payload.data(), encoding: .utf8)!
 
     print(message) // Summer ⛱, Sun ☀️, Cactus 🌵
@@ -189,31 +209,50 @@ A JWE encapsulates and secures data by encrypting it. It can be decrypted by the
 In order to construct a JWE we need to provide the following parts:
 
 1. Header
-2. Plaintext
+2. Payload
 3. Encrypter
+
+##### Header
+
+``` swift
+let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+```
+
+Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7516#section-4.1):
+
+``` swift
+header.kid = "2018-10-08"
+
+header.typ = "JWE"
+```
+
+##### Payload
+
+``` swift
+let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
+
+let payload = Payload(message)
+```
+
+##### Encrypter
+
+The encrypter algorithms must match the header algorithms.
 
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let message = "Summer ⛱, Sun ☀️, Cactus 🌵".data(using: .utf8)!
+let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
 ```
 
-``` swift
-let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+##### Serialization
 
-let payload = Payload(message)
-
-// Encrypter algorithms must match header algorithms.
-let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, keyEncryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
-```
+The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 ``` swift
 guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else { ... }
 
 print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
 ```  
-
-The JWE compact serialization is a URL-safe string that can easily be transmitted to a third party using a method of your choice.
 
 More details about constructing a JWE can be found [in the wiki](../../wiki/jwe).
 
@@ -228,7 +267,8 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jwe = try JWE(compactSerialization: serialization)
-    let payload = try jwe.decrypt(with: privateKey)
+    let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+    let payload = try jwe.decrypt(using: decrypter)
     let message = String(data: payload.data(), encoding: .utf8)!
 
     print(message) // Summer ⛱, Sun ☀️, Cactus 🌵
@@ -266,6 +306,8 @@ let publicKey: SecKey = try! jwk.converted(to: SecKey.self)
 ```
 
 More details about decoding RSA public keys can be found [in the wiki](../../wiki/jwk).
+
+:warning: We currently ignore the key parameters [`"key_ops"`](https://tools.ietf.org/html/rfc7517#section-4.3) and [`"x5c"`](https://tools.ietf.org/html/rfc7517#section-4.7) when decoding. This is due to a bug in our decoding implementation. See [#117](https://github.com/airsidemobile/JOSESwift/issues/117) for details.
 
 ## Security
 

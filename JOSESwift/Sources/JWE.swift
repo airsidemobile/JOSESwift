@@ -122,8 +122,8 @@ public struct JWE {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
     }
 
-    /// Initializes a JWE by providing all of it's five parts. Onyl used during deserialization.
-    private init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
+    /// Initializes a JWE by providing all of it's five parts. Only used during deserialization.
+    fileprivate init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header
         self.encryptedKey = encryptedKey
         self.initializationVector = initializationVector
@@ -132,12 +132,13 @@ public struct JWE {
     }
 
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
-    /// As mentioned it is the responsibility of the user to cache this plaintext.
+    /// It is the responsibility of the user to cache this plaintext.
     ///
     /// - Parameter kdk: The private key to decrypt the JWE with.
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public func decrypt<KeyType>(with kdk: KeyType) throws -> Payload {
+    @available(*, deprecated, message: "Use `decrypt(using decrypter:)` instead")
+    public func decrypt<KeyType>(with key: KeyType) throws -> Payload {
         let context = DecryptionContext(
             header: header,
             encryptedKey: encryptedKey,
@@ -150,8 +151,37 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "Invalid header parameter.")
         }
 
-        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, keyDecryptionKey: kdk, contentDecryptionAlgorithm: enc) else {
+        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, decryptionKey: key, contentDecryptionAlgorithm: enc) else {
             throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
+        }
+
+        do {
+            return Payload(try decrypter.decrypt(context))
+        } catch {
+            throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
+        }
+    }
+
+    /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
+    /// It is the responsibility of the user to cache this plaintext.
+    ///
+    /// - Parameter decrypter: The decrypter to decrypt the JWE with.
+    /// - Returns: The decrypted payload of the JWE.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
+    public func decrypt(using decrypter: Decrypter) throws -> Payload {
+        let context = DecryptionContext(
+            header: header,
+            encryptedKey: encryptedKey,
+            initializationVector: initializationVector,
+            ciphertext: ciphertext,
+            authenticationTag: authenticationTag
+        )
+
+        guard
+            decrypter.asymmetric.algorithm == header.algorithm,
+            decrypter.symmetric.algorithm == header.encryptionAlgorithm
+        else {
+            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }
 
         do {

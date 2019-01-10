@@ -25,8 +25,11 @@ import XCTest
 @testable import JOSESwift
 
 class JWEHeaderTests: XCTestCase {
-    let parameterDict = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]
-    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5", "enc": "A256CBC-HS512"], options: [])
+    let parameterDictRSA = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]
+    let parameterDataRSA = try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5", "enc": "A256CBC-HS512"], options: [])
+
+    let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
+    let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [])
 
     override func setUp() {
         super.setUp()
@@ -36,16 +39,16 @@ class JWEHeaderTests: XCTestCase {
         super.tearDown()
     }
 
-    func testInitWithParameters() {
-        let header = try! JWEHeader(parameters: parameterDict, headerData: parameterData)
+    func testInitRSAWithParameters() {
+        let header = try! JWEHeader(parameters: parameterDictRSA, headerData: parameterDataRSA)
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []))
     }
 
-    func testInitWithData() {
-        let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
+    func testInitRSAWithData() {
+        let data = try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: [])
         let header = JWEHeader(data)!
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
@@ -53,10 +56,27 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), data)
     }
 
+    func testInitDirectWithParameters() {
+        let header = try! JWEHeader(parameters: parameterDictDirect, headerData: parameterDataDirect)
+
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.direct.rawValue)
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictDirect, options: []))
+    }
+
+    func testInitDirectWithData() {
+        let data = try! JSONSerialization.data(withJSONObject: parameterDictDirect, options: [])
+        let header = JWEHeader(data)!
+
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.direct.rawValue)
+        XCTAssertEqual(header.data(), data)
+    }
+
     func testInitWithAlgAndEnc() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []))
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
 
@@ -103,6 +123,63 @@ class JWEHeaderTests: XCTestCase {
         }
 
         XCTFail()
+    }
+
+    func testSetNonRequiredHeaderParametersInJWEHeader() {
+        let jku: URL? = nil
+        let jwk = "jwk"
+        let kid = "kid"
+        let x5u: URL? = nil
+        let x5c = ["key1", "key2"]
+        let x5t = "x5t"
+        let x5tS256 = "x5tS256"
+        let typ = "typ"
+        let cty = "cty"
+        let crit = ["crit1", "crit2"]
+
+        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        header.jku = jku
+        header.jwk = jwk
+        header.kid = kid
+        header.x5u = x5u
+        header.x5c = x5c
+        header.x5t = x5t
+        header.x5tS256 = x5tS256
+        header.typ = typ
+        header.cty = cty
+        header.crit = crit
+
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: header.parameters, options: []))
+
+        XCTAssertEqual(header.parameters["jku"] as? URL, jku)
+        XCTAssertEqual(header.jku, jku)
+
+        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
+        XCTAssertEqual(header.jwk, jwk)
+
+        XCTAssertEqual(header.parameters["kid"] as? String, kid)
+        XCTAssertEqual(header.kid, kid)
+
+        XCTAssertEqual(header.parameters["x5u"] as? URL, x5u)
+        XCTAssertEqual(header.x5u, x5u)
+
+        XCTAssertEqual(header.parameters["x5c"] as? [String], x5c)
+        XCTAssertEqual(header.x5c, x5c)
+
+        XCTAssertEqual(header.parameters["x5t"] as? String, x5t)
+        XCTAssertEqual(header.x5t, x5t)
+
+        XCTAssertEqual(header.parameters["x5tS256"] as? String, x5tS256)
+        XCTAssertEqual(header.x5tS256, x5tS256)
+
+        XCTAssertEqual(header.parameters["typ"] as? String, typ)
+        XCTAssertEqual(header.typ, typ)
+
+        XCTAssertEqual(header.parameters["cty"] as? String, cty)
+        XCTAssertEqual(header.cty, cty)
+
+        XCTAssertEqual(header.parameters["crit"] as? [String], crit)
+        XCTAssertEqual(header.crit, crit)
     }
 
 }
