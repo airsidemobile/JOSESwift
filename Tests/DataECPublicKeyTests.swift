@@ -26,42 +26,64 @@ import XCTest
 
 class DataECPublicKeyTests: ECCryptoTestCase {
 
-    private func _testPublicKeyCoordinates(testData: ECTestKeyData) {
-        let components = _getComponents(testData: testData)
-        XCTAssertEqual(testData.expectedXCoordinate, components?.x)
-        XCTAssertEqual(testData.expectedYCoordinate, components?.y)
-    }
-
-    private func _testPublicKeyCurveType(testData: ECTestKeyData) {
-        let components = _getComponents(testData: testData)
-        XCTAssertEqual(testData.expectedCurveType, components?.crv)
-    }
-
-    private func _testDataFromPublicKeyComponents(testData: ECTestKeyData) {
-        let components = (testData.expectedCurveType, testData.expectedXCoordinate, testData.expectedYCoordinate)
-        let data = try! Data.representing(ecPublicKeyComponents: components)
-        XCTAssertEqual(data, testData.publicKeyData)
-    }
-
     func testPublicKeyCoordinates() {
         allTestData.forEach { testData in
-            _testPublicKeyCoordinates(testData: testData)
+            let components = _getComponents(testData: testData)
+            XCTAssertEqual(testData.expectedXCoordinate, components?.x)
+            XCTAssertEqual(testData.expectedYCoordinate, components?.y)
         }
     }
 
     func testPublicKeyCurveType() {
         allTestData.forEach { testData in
-            _testPublicKeyCurveType(testData: testData)
+            let components = _getComponents(testData: testData)
+            XCTAssertEqual(testData.expectedCurveType, components?.crv)
         }
     }
 
     func testDataFromPublicKeyComponents() {
         allTestData.forEach { testData in
-            _testDataFromPublicKeyComponents(testData: testData)
+            let components = (testData.expectedCurveType, testData.expectedXCoordinate, testData.expectedYCoordinate)
+            let data = try! Data.representing(ecPublicKeyComponents: components)
+            XCTAssertEqual(data, testData.publicKeyData)
         }
     }
 
-    // TODO: Test fail conditions for unsupported curve sizes, invalid octet lengths and compressed points
+    func testCompressedPointRejection() {
+        allTestData.forEach { testData in
+            let errorHandler = { (error: Error) in
+                switch error {
+                case JOSESwiftError.compressedCurvePointsUnsupported: return
+                default: XCTFail("Unexpected error: \(error)")
+                }
+            }
+            checkInvalidDataToPublicKey(
+                    compression: UInt8(0x03),
+                    x: testData.expectedXCoordinate,
+                    y: testData.expectedYCoordinate,
+                    errorHandler: errorHandler
+            )
+        }
+    }
+
+    func testInvalidPointOctetLength() {
+        allTestData.forEach { testData in
+            let errorHandler = { (error: Error) in
+                switch error {
+                case JOSESwiftError.invalidCurvePointOctetLength: return
+                default: XCTFail("Unexpected error: \(error)")
+                }
+            }
+            checkInvalidDataToPublicKey(
+                    compression: UInt8(0x04),
+                    x: testData.expectedXCoordinate,
+                    y: testData.expectedYCoordinate.dropLast(),
+                    errorHandler: errorHandler
+            )
+        }
+    }
+
+    // MARK: Helper functions
 
     private func _getComponents(testData: ECTestKeyData) -> ECPublicKeyComponents? {
         guard let components = try? testData.publicKeyData.ecPublicKeyComponents() else {
@@ -69,6 +91,14 @@ class DataECPublicKeyTests: ECCryptoTestCase {
             return nil
         }
         return components
+    }
+
+    private func checkInvalidDataToPublicKey(compression: UInt8, x: Data, y: Data, errorHandler: (Error) -> Void) {
+        let keyData = ECTestKeyData.createKeyData(compression: compression, x: x, y: y, privateKey: nil)
+        XCTAssertThrowsError(
+                try keyData.ecPublicKeyComponents(),
+                "No error thrown for invalid point data"
+        ) { error in errorHandler(error) }
     }
 
 }

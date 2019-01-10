@@ -25,21 +25,38 @@ import XCTest
 @testable import JOSESwift
 
 class ECPublicKeyToSecKeyTests: ECCryptoTestCase {
-    private func _testPublicKeyToSecKey(testData: ECTestKeyData) {
-        let jwk = ECPublicKey(
-                crv: ECCurveType(rawValue: testData.expectedCurveType)!,
-                x: testData.expectedXCoordinateBase64Url,
-                y: testData.expectedYCoordinateBase64Url)
-        let key = try! jwk.converted(to: SecKey.self)
-
-        XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, testData.publicKeyData)
-    }
-
-    // TODO: tests for failure cases
 
     func testPublicKeyToSecKey() {
         allTestData.forEach { testData in
-            _testPublicKeyToSecKey(testData: testData)
+            let jwk = ECPublicKey(
+                    crv: ECCurveType(rawValue: testData.expectedCurveType)!,
+                    x: testData.expectedXCoordinateBase64Url,
+                    y: testData.expectedYCoordinateBase64Url
+            )
+            let key = try! jwk.converted(to: SecKey.self)
+
+            XCTAssertEqual(SecKeyCopyExternalRepresentation(key, nil)! as Data, testData.publicKeyData)
         }
     }
+
+    func testInvalidPublicKeyToSecKey() {
+        allTestData.forEach { testData in
+            let crv = ECCurveType(rawValue: testData.expectedCurveType)!
+            let x = testData.expectedXCoordinateBase64Url
+            let y = testData.expectedYCoordinateBase64Url
+            checkInvalidArgumentListForException(crv: crv, x: "wrong", y: y)
+            checkInvalidArgumentListForException(crv: crv, x: x, y: "wrong")
+        }
+    }
+
+    // MARK: Helper functions
+
+    func checkInvalidArgumentListForException(crv: ECCurveType, x: String, y: String) {
+        let closure = {
+            let jwk = ECPublicKey(crv: crv, x: x, y: y)
+            _ = try jwk.converted(to: SecKey.self)
+        }
+        XCTAssertThrowsError(try closure())
+    }
+
 }

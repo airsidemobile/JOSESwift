@@ -153,6 +153,15 @@ fileprivate extension SignatureAlgorithm {
     }
 }
 
+// Point compression prefix. Based on X9.62, Section 4.3.6
+public enum ECCompression: UInt8 {
+    case CompressedYEven = 0x02
+    case CompressedYOdd = 0x03
+    case Uncompressed = 0x04 // supported only
+    case HybridYEven = 0x06
+    case HybridYOdd = 0x07
+}
+
 internal struct EC {
     typealias KeyType = SecKey
 

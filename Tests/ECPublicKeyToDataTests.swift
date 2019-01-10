@@ -26,19 +26,15 @@ import XCTest
 
 class ECPublicKeyToDataTests: ECCryptoTestCase {
     
-    public func _testPublicKeyToData(testData: ECTestKeyData) {
-        let jwk = ECPublicKey(
-                crv: ECCurveType(rawValue: testData.expectedCurveType)!,
-                x: testData.expectedXCoordinateBase64Url,
-                y: testData.expectedYCoordinateBase64Url)
-        let data = try! jwk.converted(to: Data.self)
-
-        XCTAssertEqual(data, testData.publicKeyData)
-    }
-
     func testPublicKeyToData() {
         allTestData.forEach { testData in
-            _testPublicKeyToData(testData: testData)
+            let jwk = ECPublicKey(
+                    crv: ECCurveType(rawValue: testData.expectedCurveType)!,
+                    x: testData.expectedXCoordinateBase64Url,
+                    y: testData.expectedYCoordinateBase64Url)
+            let data = try! jwk.converted(to: Data.self)
+
+            XCTAssertEqual(data, testData.publicKeyData)
         }
     }
     

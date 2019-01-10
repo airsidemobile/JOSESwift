@@ -21,6 +21,7 @@
 //  ---------------------------------------------------------------------------
 //
 
+// n.b. the reference values here should not contain constants from the JOSESwift library itself, hence it isn't imported
 import XCTest
 import Foundation
 
@@ -79,16 +80,19 @@ struct ECTestKeyData {
         self.expectedCurveType = expectedCurveType
         self.signatureAlgorithm = signatureAlgorithm
 
-        var keyData: Data = Data([0x04])
-        keyData.append(expectedXCoordinate)
-        keyData.append(expectedYCoordinate)
-        keyData.append(expectedPrivateOctetString)
+        let keyData: Data = ECTestKeyData.createKeyData(
+                compression: 0x04,
+                x: expectedXCoordinate,
+                y: expectedYCoordinate,
+                privateKey: expectedPrivateOctetString
+        )
 
         let keyPair = CryptoTestCase.setupSecKeyPair(
                 type: kSecAttrKeyTypeECSECPrimeRandom as String,
                 size: bitSize,
                 data: keyData,
-                tag: privateKeyTag)!
+                tag: privateKeyTag
+        )!
 
         privateKey = keyPair.privateKey
         publicKey = keyPair.publicKey
@@ -96,6 +100,15 @@ struct ECTestKeyData {
         XCTAssertNotNil(publicKeyData)
     }
 
+    static func createKeyData(compression: UInt8, x: Data, y: Data, privateKey: Data?) -> Data {
+        var keyData: Data = Data([compression])
+        keyData.append(x)
+        keyData.append(y)
+        if let privateKey = privateKey {
+            keyData.append(privateKey)
+        }
+        return keyData
+    }
 }
 
 class ECCryptoTestCase: CryptoTestCase {
@@ -222,7 +235,7 @@ class ECCryptoTestCase: CryptoTestCase {
     let p384 = Curves.p384
     let p521 = Curves.p521
 
-    let allTestData = [Curves.p256, Curves.p384, Curves.p521]
+    let allTestData: [ECTestKeyData] = [Curves.p256, Curves.p384, Curves.p521]
 
     let plainTextSimpleHeader = """
                           {"alg":"<algorithm>"}

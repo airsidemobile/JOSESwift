@@ -27,7 +27,7 @@ extension Data: ExpressibleAsECPublicKeyComponents {
     public static func representing(ecPublicKeyComponents components: ECPublicKeyComponents) throws -> Data {
         let xBytes = [UInt8](components.x)
         let yBytes = [UInt8](components.y)
-        let uncompressedIndication: [UInt8] = [0x04]
+        let uncompressedIndication: [UInt8] = [ECCompression.Uncompressed.rawValue]
 
         guard
                 xBytes.count == yBytes.count,
@@ -41,7 +41,7 @@ extension Data: ExpressibleAsECPublicKeyComponents {
     public func ecPublicKeyComponents() throws -> ECPublicKeyComponents {
         var publicKeyBytes = [UInt8](self)
 
-        guard publicKeyBytes.removeFirst() == 0x04 else {
+        guard publicKeyBytes.removeFirst() == ECCompression.Uncompressed.rawValue else {
             throw JOSESwiftError.compressedCurvePointsUnsupported
         }
 
