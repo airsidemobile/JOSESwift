@@ -38,7 +38,7 @@ class ECPublicKeyToSecKeyTests: ECCryptoTestCase {
     // TODO: tests for failure cases
 
     func testPublicKeyToSecKey() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyToSecKey(testData: testData)
         }
     }

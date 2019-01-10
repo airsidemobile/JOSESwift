@@ -34,13 +34,13 @@ class JWSECTests: ECCryptoTestCase {
     }
 
     func testSignAndSerialize() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             self.performTestECSign(testData: testData)
         }
     }
 
     func testDeserializeFromCompactSerialization() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             self.performTestECDeserialization(testData: testData)
         }
     }

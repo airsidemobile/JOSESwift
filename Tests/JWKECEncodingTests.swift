@@ -31,7 +31,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
     }
 
     func testPublicKeyEncoding() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: [
                 "alg": keyData.signatureAlgorithm,
                 "kid": Consts.kid
@@ -45,7 +45,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
     }
 
     func testEncodingPublicKeyWithUnregisteredParameter() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: [
                 "alg": keyData.signatureAlgorithm,
                 "kid": Consts.kid,
@@ -61,7 +61,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
     }
 
     func testPrivateKeyEncoding() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
@@ -79,7 +79,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
     }
 
     func testEncodingPrivateKeyWithUnregisteredParameter() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,

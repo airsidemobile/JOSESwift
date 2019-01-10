@@ -27,7 +27,7 @@ import XCTest
 class JWKECKeysTests: ECCryptoTestCase {
 
     func testMergingDuplicateAdditionalParametersInPublicKey() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let params = [ "kty": "wrongKty" ]
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: params)
 
@@ -36,7 +36,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testMergingDuplicateAdditionalParametersInPrivateKey() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
@@ -50,7 +50,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testInitPublicKeyDirectlyWithoutAdditionalParameters() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let key = ECPublicKey(
                     crv: ECCurveType(rawValue: keyData.expectedCurveType)!,
                     x: keyData.expectedXCoordinateBase64Url,
@@ -76,7 +76,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testInitPrivateKeyDirectlyWithoutAdditionalParameters() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let key = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
@@ -106,7 +106,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testPublicKeyKeyTypeIsPresent() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey)
 
             XCTAssertEqual(jwk.keyType, .EC)
@@ -116,7 +116,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testPrivateKeyKeyTypeIsPresent() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let jwk = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
@@ -131,7 +131,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testSettingAndGettingAdditionalParameter() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let params = ["kid": "new on the block"]
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: params)
 
@@ -140,7 +140,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testPublicKeyAllParametersArePresentInDict() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let params = ["kid": "new on the block", "use": "test"]
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: params)
 
@@ -149,7 +149,7 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     func testPrivateKeyAllParametersArePresentInDict() {
-        [p256, p384, p521].forEach { keyData in
+        allTestData.forEach { keyData in
             let params = ["kid": "new on the block", "use": "test"]
             let jwk = try! ECPrivateKey(
                     crv: keyData.expectedCurveType,

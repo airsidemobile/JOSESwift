@@ -35,7 +35,7 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
     }
 
     func testPublicKeyComponents() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyComponents(testData: testData)
         }
     }
@@ -56,7 +56,7 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
     }
 
     func testJWKFromPublicKey() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testJWKFromPublicKey(testData: testData)
         }
     }
@@ -75,7 +75,7 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
     }
 
     func testPublicKeyFromPublicComponents() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyFromPublicComponents(testData: testData)
         }
     }

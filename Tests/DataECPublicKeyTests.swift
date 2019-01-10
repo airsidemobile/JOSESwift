@@ -44,19 +44,19 @@ class DataECPublicKeyTests: ECCryptoTestCase {
     }
 
     func testPublicKeyCoordinates() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyCoordinates(testData: testData)
         }
     }
 
     func testPublicKeyCurveType() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyCurveType(testData: testData)
         }
     }
 
     func testDataFromPublicKeyComponents() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testDataFromPublicKeyComponents(testData: testData)
         }
     }

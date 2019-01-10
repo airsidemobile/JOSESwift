@@ -37,7 +37,7 @@ class ECPublicKeyToDataTests: ECCryptoTestCase {
     }
 
     func testPublicKeyToData() {
-        [p256, p384, p521].forEach { testData in
+        allTestData.forEach { testData in
             _testPublicKeyToData(testData: testData)
         }
     }
