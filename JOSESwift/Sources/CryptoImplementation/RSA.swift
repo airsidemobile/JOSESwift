@@ -50,7 +50,9 @@ fileprivate extension AsymmetricKeyAlgorithm {
         switch self {
         case .RSA1_5:
             return .rsaEncryptionPKCS1
-        default:
+        case .RSAOAEP256:
+            return .rsaEncryptionOAEPSHA256
+        case .direct:
             return nil
         }
     }
@@ -58,12 +60,18 @@ fileprivate extension AsymmetricKeyAlgorithm {
     /// Checks if the plain text length does not exceed the maximum
     /// for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
+        let mLen = plainText.count
+        let k = SecKeyGetBlockSize(publicKey)
+
         switch self {
         case .RSA1_5:
             // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
-            return plainText.count <= (SecKeyGetBlockSize(publicKey) - 11)
-        default:
+            return mLen <= (k - 11)
+        case .RSAOAEP256:
+            let hLen = 20
+            return mLen <= (k - 2 * hLen - 2)
+        case .direct:
             return false
         }
     }
@@ -71,8 +79,17 @@ fileprivate extension AsymmetricKeyAlgorithm {
     func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
         switch self {
         case .RSA1_5:
+            // For detailed information about the allowed cipher length for RSAES-PKCS1-v1_5,
+            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2.2).
             return cipherText.count == SecKeyGetBlockSize(privateKey)
-        default:
+        case .RSAOAEP256:
+            // For detailed information about the allowed cipher length for RSAOAEP,
+            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1.2
+            // https://tools.ietf.org/html/rfc3174#section-1,
+            // and https://www.rfc-editor.org/errata_search.php?rfc=3447)
+            // C: ciphertext to be decrypted, an octet string of length k, where k >= 2hLen + 2
+            return cipherText.count == SecKeyGetBlockSize(privateKey)
+        case .direct:
             return false
         }
     }

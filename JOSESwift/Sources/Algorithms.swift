@@ -26,6 +26,8 @@ import Foundation
 /// An algorithm for signing and verifying.
 ///
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
+/// - RSAES-OAEP: [RSAES-OAEP](https://tools.ietf.org/html/rfc7518#section-4.3)
+/// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum SignatureAlgorithm: String {
     case RS256 = "RS256"
     case RS512 = "RS512"
@@ -37,6 +39,7 @@ public enum SignatureAlgorithm: String {
 /// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum AsymmetricKeyAlgorithm: String {
     case RSA1_5 = "RSA1_5"
+    case RSAOAEP256 = "RSA-OAEP-256"
     case direct = "dir"
 }
 
