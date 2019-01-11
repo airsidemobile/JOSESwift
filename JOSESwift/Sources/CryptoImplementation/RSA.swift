@@ -45,7 +45,8 @@ fileprivate extension SignatureAlgorithm {
     }
 }
 
-fileprivate extension AsymmetricKeyAlgorithm {
+public extension AsymmetricKeyAlgorithm {
+    /// Publically accessible mapping of AsymmetricKeyAlgorithm to Security Framework SecKeyAlgorithm
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RSA1_5:
@@ -57,20 +58,38 @@ fileprivate extension AsymmetricKeyAlgorithm {
         }
     }
 
+    /**
+     This method returns the maximum message length allow for an Asymmetric Algorithm
+     - parameters:
+        - publicKey: SecKey the publicKey used to acquire the SecKey block size
+     - returns: Int the maximum length allowed
+     discussion:
+     - RSA1_5: For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2)
+     - RSAOAEP256: For detailed information about the allowed plain text length for RSA-OAEP, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1)
+    */
+    func mLen(for publicKey: SecKey) -> Int {
+        let k = SecKeyGetBlockSize(publicKey)
+        switch self {
+        case .RSA1_5:
+            return (k - 11)
+        case .RSAOAEP256:
+            /// hash length calculation based on SHA-256 algorithm
+            let hLen = 256 / 8
+            return (k - 2 * hLen - 2)
+        case .direct: return 0
+        }
+    }
+}
+
+fileprivate extension AsymmetricKeyAlgorithm {
     /// Checks if the plain text length does not exceed the maximum
     /// for the chosen algorithm and the corresponding public key.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         let mLen = plainText.count
-        let k = SecKeyGetBlockSize(publicKey)
 
         switch self {
-        case .RSA1_5:
-            // For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
-            // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2).
-            return mLen <= (k - 11)
-        case .RSAOAEP256:
-            let hLen = 20
-            return mLen <= (k - 2 * hLen - 2)
+        case .RSA1_5, .RSAOAEP256:
+            return mLen <= self.mLen(for: publicKey)
         case .direct:
             return false
         }
