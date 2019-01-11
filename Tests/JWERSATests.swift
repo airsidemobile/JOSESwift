@@ -26,7 +26,7 @@ import XCTest
 
 class JWETests: CryptoTestCase {
 
-    let compactSerializedJWE = """
+    let compactSerializedJWERSA1 = """
         eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.Od5AMgOHu6rcEYWkX7w_x_wnMlM5JfZaszCC4xtLGYU9d0BnPm95UWUrgSh\
         StGH6LHMxpGdru6gXpdxfhhrji12vUIzmkbyNW5M9wjx2t0e4pzzBSYxgOzFoa3jT9a0PcZfyqHIeTrcrTHtpSJ_CIDiZ3MIeqA7hjuRqu2YcTA\
         E0v5TPLhHDVRBptkOggA5SL2-gRuUuYoWdanMw_JTHK4utXQZoSY1LTdub_Fh5ez1RqOouc3an5Hx6ImzyJS_cbO_l9xHpHjE7in6SeV9bAZTaY\
@@ -34,53 +34,81 @@ class JWETests: CryptoTestCase {
         YP_e_rhz0PVg9QnJXiRl030ggI9GGs3E_0pEPBs9_WJ3E60qQVoXTIMbJXSQ.bQc-W1Ph_0_3kX570pT8gjDlGyiK3kF8PlHiT7GWfMo
         """.data(using: .utf8)!
 
+    let compactSerializedJWERSAOAEPSHA256 = "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.RL7Ny2UFhgp04E_sJnnX77slkDM8X9LETqFAn3WpL_D6pXSYE9pUJK8DYFETi2FzANVqz128wzySW2tzVxltDfxi9irInmK0W0nls4aFRqpPUL2xG_izW624y-J5QebsjEUQg-RdbnHz82VO9OrvJVGst8HFQn0XsCN76WGgZcPfON3As5dfIyUctW3twCWB_G4lWZqmvOJ4GqkT3SpMc3aQtGzKdJ0WN-4MKbm0Shk-07um8yJgzH6xaLHcbJHhWjDB6VHBkiX6X7bbLiN_R_XQKO78Nlj2LFn5OO2B5VoINH_DZj6UsEuSywTHTl7ET-QgXYbsLTrXB2Pzs3gpvQ.L9MZP9n4UKljKgGEoEnbyA.8uZpYsF9pNIQy06zCoWv7gBNW6DC0-KwWUXpiGcFfVhyBD1hfQC7bQD1fH6GeargKBNjrYcv7bm_5purQFTt_A.ecd44cJE0BH4Fwqm2fDHM1dXhHtiFDJn2VEhw55VP28".data(using: .utf8)!
+
+    lazy var compactSerializedData: [String: Data] = {
+        [AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSA1,
+         AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256]
+    }()
+
     let plaintext = """
         The true sign of intelligence is not knowledge but imagination.
         """.data(using: .utf8)!
 
     @available(*, deprecated)
     func testJWERoundtrip() {
-        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
-        let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
-        let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        guard let publicKeyAlice2048 = publicKeyAlice2048  else {
+            XCTFail("publicKeyAlice2048 was nil.")
+            return
+        }
 
-        let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-        let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
-
-        XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            let payload = Payload(message.data(using: .utf8)!)
+            let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048, contentEncyptionAlgorithm: .A256CBCHS512)!
+            let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+            let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+            let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
+            
+            XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
+        }
     }
 
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
-        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
-        header.kid = "kid"
-
-        let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
-        let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
-
-        let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-        let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
-
-        XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            var header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            header.kid = "kid"
+            
+            let payload = Payload(message.data(using: .utf8)!)
+            let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+            let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+            
+            let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+            let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
+            
+            XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
+        }
     }
 
     @available(*, deprecated)
     func testDecryptWithInferredDecrypter() {
-        let jwe = try! JWE(compactSerialization: compactSerializedJWE)
-        let payload = try! jwe.decrypt(with: privateKeyAlice2048!).data()
-
-        XCTAssertEqual(payload, plaintext)
+        guard let privateKeyAlice2048 = privateKeyAlice2048  else {
+            XCTFail("privateKeyAlice2048 was nil.")
+            return
+        }
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
+            let payload = try! jwe.decrypt(with: privateKeyAlice2048).data()
+            
+            XCTAssertEqual(payload, plaintext)
+        }
     }
 
     @available(*, deprecated)
     func testDecryptFails() {
-        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
-        let payload = Payload(message.data(using: .utf8)!)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
-        let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
-
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
@@ -91,33 +119,55 @@ class JWETests: CryptoTestCase {
             ]
         ]
 
-        var error: Unmanaged<CFError>?
-
-        guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-            print(error!)
-            return
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            let payload = Payload(message.data(using: .utf8)!)
+            let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
+            let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+            
+            var error: Unmanaged<CFError>?
+            
+            guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+                print(error!)
+                return
+            }
+            
+            let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+            
+            XCTAssertThrowsError(try jweDec.decrypt(with: key))
         }
-
-        let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-
-        XCTAssertThrowsError(try jweDec.decrypt(with: key))
     }
 
     func testDecryptWithExplicitDecrypter() {
-        let jwe = try! JWE(compactSerialization: compactSerializedJWE)
+        guard let privateKeyAlice2048 = privateKeyAlice2048  else {
+            XCTFail("privateKeyAlice2048 was nil.")
+            return
+        }
 
-        let decrypter = Decrypter(
-            keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKeyAlice2048!,
-            contentDecryptionAlgorithm: .A256CBCHS512
-            )!
-
-        XCTAssertEqual(try! jwe.decrypt(using: decrypter).data(), plaintext)
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
+            
+            let decrypter = Decrypter(
+                keyDecryptionAlgorithm: algorithm,
+                decryptionKey: privateKeyAlice2048,
+                contentDecryptionAlgorithm: .A256CBCHS512
+                )!
+            
+            XCTAssertEqual(try! jwe.decrypt(using: decrypter).data(), plaintext)
+        }
     }
 
     func testDecryptWithExplicitDecrypterWrongAlgInHeader() {
         // Replaces alg "RSA1_5" with alg "RSA-OAEP" in header
-        let malformedSerialization = String(data: compactSerializedJWE, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0",
             with: "eyJhbGciOiAiUlNBLU9BRVAiLCJlbmMiOiAiQTI1NkNCQy1IUzUxMiJ9"
             ).data(using: .utf8)!
@@ -135,9 +185,29 @@ class JWETests: CryptoTestCase {
         }
     }
 
+    func testDecryptWithExplicitDecrypterWrongAlgInHeaderRSAOAEPSHA256() {
+        // Replaces alg "RSA-OAEP-256" with alg "RSA-OAEP" in header
+        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
+            with: "eyJhbGciOiAiUlNBLU9BRVAiLCJlbmMiOiAiQTI1NkNCQy1IUzUxMiJ9"
+            ).data(using: .utf8)!
+        
+        let jwe = try! JWE(compactSerialization: malformedSerialization)
+        
+        let decrypter = Decrypter(
+            keyDecryptionAlgorithm: .RSAOAEP256,
+            decryptionKey: privateKeyAlice2048!,
+            contentDecryptionAlgorithm: .A256CBCHS512
+            )!
+        
+        XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header with RSA-OAEP-256 algorithm") { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
+        }
+    }
+
     func testDecryptWithExplicitDecrypterWrongEncInHeader() {
         // Replaces enc "A256CBC-HS512" with enc "A128GCM" in header
-        let malformedSerialization = String(data: compactSerializedJWE, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0",
             with: "eyJhbGciOiAiUlNBMV81IiwiZW5jIjogIkExMjhHQ00ifQ"
             ).data(using: .utf8)!
@@ -155,9 +225,27 @@ class JWETests: CryptoTestCase {
         }
     }
 
-    func testDecryptWithExplicitDecrypterFailsForWrongKey() {
-        let jwe = try! JWE(compactSerialization: compactSerializedJWE)
+    func testDecryptWithExplicitDecrypterWrongEncInHeaderRSAOAEPSHA256() {
+        // Replaces enc "A256CBC-HS512" with enc "A128GCM" in header
+        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
+            with: "eyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0="
+            ).data(using: .utf8)!
+        
+        let jwe = try! JWE(compactSerialization: malformedSerialization)
+        
+        let decrypter = Decrypter(
+            keyDecryptionAlgorithm: .RSAOAEP256,
+            decryptionKey: privateKeyAlice2048!,
+            contentDecryptionAlgorithm: .A256CBCHS512
+            )!
+        
+        XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong enc in header") { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
+        }
+    }
 
+    func testDecryptWithExplicitDecrypterFailsForWrongKey() {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
             kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
@@ -166,21 +254,30 @@ class JWETests: CryptoTestCase {
                 kSecAttrIsPermanent as String: false,
             ]
         ]
-
+        
         var error: Unmanaged<CFError>?
-
+        
         guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
             print(error!)
             return
         }
 
-        let decrypter = Decrypter(
-            keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: key,
-            contentDecryptionAlgorithm: .A256CBCHS512
-            )!
-
-        XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+            
+            let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
+            
+            
+            let decrypter = Decrypter(
+                keyDecryptionAlgorithm: algorithm,
+                decryptionKey: key,
+                contentDecryptionAlgorithm: .A256CBCHS512
+                )!
+            
+            XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
+       }
     }
 
 }
