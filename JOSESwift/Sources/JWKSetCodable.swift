@@ -38,6 +38,7 @@ internal enum JWKTypeError: Error {
     case typeIsECPublic
     case typeIsRSAPublic
     case typeIsRSAPrivate
+    case typeIsSymmetric
     case typeIsUnknown
 }
 
@@ -47,13 +48,15 @@ class JWKBase: Decodable {
         let key = try container.decode(String.self, forKey: .kty)
         let d = try? container.decode(String.self, forKey: .d)
         switch key {
-        case "RSA":
+        case JWKKeyType.RSA.rawValue:
             if d == nil {
                 throw JWKTypeError.typeIsRSAPublic
             } else {
                 throw JWKTypeError.typeIsRSAPrivate
             }
-        case "EC":
+        case JWKKeyType.OCT.rawValue:
+            throw JWKTypeError.typeIsSymmetric
+        case JWKKeyType.EC.rawValue:
             if d == nil {
                 throw JWKTypeError.typeIsECPublic
             } else {
@@ -102,35 +105,36 @@ extension JWKSet: Decodable {
         var keys: [JWK] = []
         while !keyContainer.isAtEnd {
 
-            if let key = try? keyContainer.decode(RSAPrivateKey.self) {
-                keys.append(key)
-                continue
+            var maybeKey: JWK?
+
+            do {
+                _ = try keyContainer.decode(JWKBase.self)
+            } catch JWKTypeError.typeIsECPublic {
+                maybeKey = try? keyContainer.decode(ECPublicKey.self)
+            } catch JWKTypeError.typeIsECPrivate {
+                maybeKey = try? keyContainer.decode(ECPrivateKey.self)
+            } catch JWKTypeError.typeIsRSAPublic {
+                maybeKey = try? keyContainer.decode(RSAPublicKey.self)
+            } catch JWKTypeError.typeIsRSAPrivate {
+                maybeKey = try? keyContainer.decode(RSAPrivateKey.self)
+            } catch JWKTypeError.typeIsSymmetric {
+                maybeKey = try? keyContainer.decode(SymmetricKey.self)
+            } catch {
+                throw DecodingError.dataCorruptedError(
+                        in: keyContainer,
+                        debugDescription: "Key type could not be decoded"
+                )
             }
 
-            if let key = try? keyContainer.decode(RSAPublicKey.self) {
-                keys.append(key)
-                continue
+            guard let key = maybeKey else {
+                let description =
+                        """
+                        No RSAPrivateKey, RSAPublicKey, SymmetricKey, ECPrivateKey, or ECPublicKey found to decode.
+                        """
+                throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: description)
             }
 
-            if let key = try? keyContainer.decode(SymmetricKey.self) {
-                keys.append(key)
-                continue
-            }
-
-            if let key = try? keyContainer.decode(ECPrivateKey.self) {
-                keys.append(key)
-                continue
-            }
-
-            if let key = try? keyContainer.decode(ECPublicKey.self) {
-                keys.append(key)
-                continue
-            }
-
-            throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: """
-                No RSAPrivateKey, RSAPublicKey, or SymmetricKey found to decode.
-                """
-            )
+            keys.append(key)
         }
 
         self.init(keys: keys)

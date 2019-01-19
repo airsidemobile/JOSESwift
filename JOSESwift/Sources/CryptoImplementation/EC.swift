@@ -183,7 +183,7 @@ internal struct EC {
         let signature = NSMutableData(length: signatureLength)!
         let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
         let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)
-        if status != 0 {
+        if status != errSecSuccess {
             throw ECError.signingFailed(description: "Error creating signature. (OSStatus: \(status))")
         }
 
@@ -207,7 +207,7 @@ internal struct EC {
         let digest = try algorithm.createDigest(input: verifyingInput)
         let signatureBytes: [UInt8] = Array(signature)
         let status = SecKeyRawVerify(publicKey, .sigRaw, digest, digest.count, signatureBytes, curveType.signatureOctetLength)
-        if status != 0 {
+        if status != errSecSuccess {
             throw ECError.verifyingFailed(description: "Error validating signature. (OSStatus: \(status))")
         }
 

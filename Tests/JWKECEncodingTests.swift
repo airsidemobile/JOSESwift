@@ -93,6 +93,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
 
             checkRegularParameters(dict: dict, keyData: keyData)
             XCTAssertEqual(dict["d"] as? String ?? "", keyData.expectedPrivateBase64Url)
+            XCTAssertNil(dict["breeze"])
         }
     }
 
