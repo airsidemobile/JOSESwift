@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class RSADecrypterTests: CryptoTestCase {
+class RSADecrypterTests: RSACryptoTestCase {
 
     // Cipher texts are generated with `openssl rsautl`
     // `printf` is used because `echo` appends a newline at the end of the string

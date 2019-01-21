@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWEDirectEncryptionTests: CryptoTestCase {
+class JWEDirectEncryptionTests: RSACryptoTestCase {
 
     let data = "So Secret! 🔥🌵".data(using: .utf8)!
 
