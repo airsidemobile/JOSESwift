@@ -205,7 +205,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
 
             // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
             // See https://tools.ietf.org/html/rfc3447#section-7.2
-            let maxMessageLengthInBytes = algorithm.mLen(for: publicKeyAlice2048)
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
             let testMessage = Data(count: maxMessageLengthInBytes)
 
             let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
@@ -225,7 +225,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let maxMessageLengthInBytes = algorithm.mLen(for: publicKeyAlice2048)
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
             let testMessage = Data(count: maxMessageLengthInBytes + 1)
 
             let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)

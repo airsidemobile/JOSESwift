@@ -47,7 +47,7 @@ fileprivate extension SignatureAlgorithm {
     }
 }
 
-public extension AsymmetricKeyAlgorithm {
+fileprivate extension AsymmetricKeyAlgorithm {
     /// Publically accessible mapping of AsymmetricKeyAlgorithm to Security Framework SecKeyAlgorithm
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
@@ -69,7 +69,7 @@ public extension AsymmetricKeyAlgorithm {
      - RSA1_5: For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2)
      - RSAOAEP256: For detailed information about the allowed plain text length for RSA-OAEP, please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.1)
     */
-    func mLen(for publicKey: SecKey) -> Int {
+    func maxMessageLength(for publicKey: SecKey) -> Int {
         let k = SecKeyGetBlockSize(publicKey)
         switch self {
         case .RSA1_5:
@@ -91,7 +91,7 @@ fileprivate extension AsymmetricKeyAlgorithm {
 
         switch self {
         case .RSA1_5, .RSAOAEP256:
-            return mLen <= self.mLen(for: publicKey)
+            return mLen <= self.maxMessageLength(for: publicKey)
         case .direct:
             return false
         }
