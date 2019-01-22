@@ -12,7 +12,7 @@ Start each entry with one of the following keywords:
 their implementations
 - *Adds*: For listing new features
 - *Fixes*: For listing bugfixes
-- *Improves*: For listing other changes
+- *Changes*: For listing improvements other changes
 - *Deprecates*: For listing API deprecations
 - *Security*: For highlighting changes related to security vulnerabilities
 
