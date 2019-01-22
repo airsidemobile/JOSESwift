@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class EncrypterDecrypterInitializationTests: CryptoTestCase {
+class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testEncrypterDeprecatedRSAInitialization() {

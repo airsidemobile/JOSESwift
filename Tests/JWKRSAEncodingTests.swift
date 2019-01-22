@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWKRSAEncodingTests: CryptoTestCase {
+class JWKRSAEncodingTests: RSACryptoTestCase {
 
     func testPublicKeyEncoding() {
         let jwk = try! RSAPublicKey(publicKey: publicKeyAlice2048!, additionalParameters: [

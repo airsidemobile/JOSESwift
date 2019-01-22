@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class RSASignerTests: CryptoTestCase {
+class RSASignerTests: RSACryptoTestCase {
     let signatureBase64URL = "Zs9rmMw-za1uXpUS2VIOcEHaMuzQl6fBCi_40kRVIE0GUruWSvpHro1oXhGwf7HqKPLx_LM8bLPCORWi9OWU4swZHY8p-GR5rhLLs2XkdIvI5kdbikr7pZOsC9NaxJKMWAntKbTZY6exkoU8vM6xL9MQtH8QFLXTjI-ZvAXbp2Ws9CnIcvOPFqAupuUKADFRpSlODlsXy71CJ3iQeBaPfHvLk61jdW6hgHYj-0WYmrFhiF1dI9MZf9J3ApdKFsW0WFuxa8Y47HlCirEOb3lz7vm8o9lNBTnt0dpWOZMTU6lHuTBgiXvyENzJoKJymVsUbMmy-2LNejmVpPt1Pm3zrA"
 
     override func setUp() {

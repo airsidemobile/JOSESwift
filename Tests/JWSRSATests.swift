@@ -1,8 +1,9 @@
 //
-//  JWSTests.swift
+//  JWSRSATests.swift
 //  Tests
 //
 //  Created by Carol Capek on 30.10.17.
+//  Renamed by Jarrod Moldrich on 28.10.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,7 +25,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWSTests: CryptoTestCase {
+class JWSRSATests: RSACryptoTestCase {
     override func setUp() {
         super.setUp()
     }
@@ -102,4 +103,5 @@ class JWSTests: CryptoTestCase {
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }
+
 }

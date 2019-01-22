@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWSValidationTests: CryptoTestCase {
+class JWSValidationTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testIsValid() {

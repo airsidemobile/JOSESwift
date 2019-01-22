@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 18/08/2017.
+//  Modified by Jarrod Moldrich on 02.07.18.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -51,6 +52,12 @@ public struct Signer<KeyType> {
             }
             // swiftlint:disable:next force_cast
             self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey as! RSASigner.KeyType)
+        case .ES256, .ES384, .ES512:
+            guard type(of: privateKey) is ECSigner.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: privateKey as! ECSigner.KeyType)
         }
     }
 
