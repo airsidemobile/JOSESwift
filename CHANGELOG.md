@@ -20,3 +20,8 @@ Include references to issue- or pull-request numbers.
 Use active language and present tense.
 For convenience, feel free to track changes in the *Unreleased* section upon
 merge to master and move them to a respective version upon release.
+
+## [1.4.0] - 2018-12-04
+
+- Changes Swift version from 4.0 to 4.2 (#217)
+- Changes `CommonCrypto` import to use Swift’s new builtin `CommonCrypto` module instead of the custom `SJCommonCrypto` module (#217, #131)
