@@ -24,7 +24,7 @@
 import Foundation
 
 // Common protocol for all types that can be used as JWK parameters.
-public protocol JWKParameterType: Encodable, Decodable { }
+public protocol JWKParameterType: Codable { }
 
 extension String: JWKParameterType { }
 extension Array: JWKParameterType where Element == String { }
