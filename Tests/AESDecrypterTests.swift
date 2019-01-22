@@ -25,7 +25,7 @@ import XCTest
 @testable import JOSESwift
 import CommonCrypto
 
-class AESDecrypterTests: CryptoTestCase {
+class AESDecrypterTests: RSACryptoTestCase {
 
     override func setUp() {
         super.setUp()

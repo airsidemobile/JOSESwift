@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWETests: CryptoTestCase {
+class JWETests: RSACryptoTestCase {
 
     let compactSerializedJWE = """
         eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.Od5AMgOHu6rcEYWkX7w_x_wnMlM5JfZaszCC4xtLGYU9d0BnPm95UWUrgSh\

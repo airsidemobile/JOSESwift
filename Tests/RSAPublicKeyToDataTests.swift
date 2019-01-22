@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class RSAPublicKeyToDataTests: CryptoTestCase {
+class RSAPublicKeyToDataTests: RSACryptoTestCase {
     
     func testpublicKeyAlice2048ToData() {
         let jwk = RSAPublicKey(modulus: expectedModulus2048Base64, exponent: expectedExponentBase64)

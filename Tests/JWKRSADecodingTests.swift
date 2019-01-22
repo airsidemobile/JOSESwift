@@ -24,7 +24,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWKRSADecodingTests: CryptoTestCase {
+class JWKRSADecodingTests: RSACryptoTestCase {
 
     let publicKeyJSON = """
         {\
