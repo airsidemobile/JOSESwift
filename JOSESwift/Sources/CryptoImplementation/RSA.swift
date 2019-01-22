@@ -47,7 +47,7 @@ fileprivate extension SignatureAlgorithm {
     }
 }
 
-public extension AsymmetricKeyAlgorithm {
+internal extension AsymmetricKeyAlgorithm {
     /// Publically accessible mapping of AsymmetricKeyAlgorithm to Security Framework SecKeyAlgorithm
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
