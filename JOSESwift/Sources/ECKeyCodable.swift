@@ -33,8 +33,14 @@ extension ECPublicKey: Encodable {
         // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
-            if let key = JWKParameter(rawValue: parameter.key) {
-                try commonParameters.encode(parameter.value, forKey: key)
+            guard let key = JWKParameter(rawValue: parameter.key) else {
+                continue
+            }
+
+            if let value = parameter.value as? String {
+                try commonParameters.encode(value, forKey: key)
+            } else if let value = parameter.value as? [String] {
+                try commonParameters.encode(value, forKey: key)
             }
         }
 
@@ -62,9 +68,14 @@ extension ECPublicKey: Decodable {
         }
 
         // Other common parameters are optional.
-        var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        var parameters: [String: JWKParameterType] = [:]
+
+        for key in commonParameters.allKeys where key.type == String.self{
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
+        }
+
+        for key in commonParameters.allKeys where key.type == [String].self{
+            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
         }
 
         // EC public key specific parameters.
@@ -92,8 +103,14 @@ extension ECPrivateKey: Encodable {
         // Other common parameters are optional.
         for parameter in parameters {
             // Only encode known parameters.
-            if let key = JWKParameter(rawValue: parameter.key) {
-                try commonParameters.encode(parameter.value, forKey: key)
+            guard let key = JWKParameter(rawValue: parameter.key) else {
+                continue
+            }
+
+            if let value = parameter.value as? String {
+                try commonParameters.encode(value, forKey: key)
+            } else if let value = parameter.value as? [String] {
+                try commonParameters.encode(value, forKey: key)
             }
         }
 
@@ -122,9 +139,14 @@ extension ECPrivateKey: Decodable {
         }
 
         // Other common parameters are optional.
-        var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        var parameters: [String: JWKParameterType] = [:]
+
+        for key in commonParameters.allKeys where key.type == String.self{
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
+        }
+
+        for key in commonParameters.allKeys where key.type == [String].self{
+            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
         }
 
         // EC private key specific parameters.

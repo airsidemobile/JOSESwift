@@ -96,7 +96,7 @@ public struct ECPublicKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: String]
+    public let parameters: [String: JWKParameterType]
 
     /// The curve value for the EC public key.
     public let crv: ECCurveType
@@ -120,7 +120,10 @@ public struct ECPublicKey: JWK {
     ///   - y: The y coordinate for the EC public key in `base64urlUInt` encoding
     ///        as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(crv: ECCurveType, x: String, y: String, additionalParameters parameters: [String: String] = [:]) {
+    public init(crv: ECCurveType,
+                x: String,
+                y: String,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) {
         self.keyType = .EC
         self.crv = crv
         self.x = x
@@ -143,7 +146,8 @@ public struct ECPublicKey: JWK {
     ///   - publicKey: The public key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(publicKey: ExpressibleAsECPublicKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(publicKey: ExpressibleAsECPublicKeyComponents,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let components = try? publicKey.ecPublicKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
@@ -197,7 +201,7 @@ public struct ECPrivateKey: JWK {
     public let keyType: JWKKeyType
 
     /// The JWK parameters.
-    public let parameters: [String: String]
+    public let parameters: [String: JWKParameterType]
 
     /// The curve value for the EC public key.
     public let crv: ECCurveType
@@ -226,7 +230,11 @@ public struct ECPrivateKey: JWK {
     ///   - privateKey: The private key component for the EC public key in `base64urlUInt` encoding
     ///                 as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(crv: String, x: String, y: String, privateKey: String, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(crv: String,
+                x: String,
+                y: String,
+                privateKey: String,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         self.keyType = .EC
 
         guard let curve = ECCurveType(rawValue: crv) else {
@@ -256,7 +264,8 @@ public struct ECPrivateKey: JWK {
     ///   - privateKey: The private key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
-    public init(privateKey: ExpressibleAsECPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(privateKey: ExpressibleAsECPrivateKeyComponents,
+                additionalParameters parameters: [String: JWKParameterType] = [:]) throws {
         guard let (crv, x, y, privateKey) = try? privateKey.ecPrivateKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
