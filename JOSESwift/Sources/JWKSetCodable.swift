@@ -120,17 +120,19 @@ extension JWKSet: Decodable {
             } catch JWKTypeError.typeIsSymmetric {
                 maybeKey = try? keyContainer.decode(SymmetricKey.self)
             } catch {
-                throw DecodingError.dataCorruptedError(
-                        in: keyContainer,
-                        debugDescription: "Key type could not be decoded"
-                )
+                let description =
+                    """
+                    No valid RSAPrivateKey, RSAPublicKey, SymmetricKey, ECPrivateKey, or ECPublicKey
+                    JSON found to decode.
+                    """
+                throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: description)
             }
 
             guard let key = maybeKey else {
                 let description =
-                        """
-                        No RSAPrivateKey, RSAPublicKey, SymmetricKey, ECPrivateKey, or ECPublicKey found to decode.
-                        """
+                    """
+                    No RSAPrivateKey, RSAPublicKey, SymmetricKey, ECPrivateKey, or ECPublicKey found to decode.
+                    """
                 throw DecodingError.dataCorruptedError(in: keyContainer, debugDescription: description)
             }
 
