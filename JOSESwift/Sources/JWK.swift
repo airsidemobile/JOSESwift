@@ -61,7 +61,7 @@ public protocol JWK: Codable {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     ///
     /// - Parameter parameter: The desired parameter.
-    subscript(parameter: String) -> Any? { get }
+    subscript(parameter: String) -> JWKParameterType? { get }
 
     /// Initializes a JWK from given JSON data.
     ///
