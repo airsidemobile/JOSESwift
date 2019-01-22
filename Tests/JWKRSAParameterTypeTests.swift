@@ -1,5 +1,5 @@
 //
-//  JWKParameterTypeTests.swift
+//  JWKRSAParameterTypeTests.swift
 //  Tests
 //
 //  Created by Daniel on 24.10.18.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWKParameterTypeTests: XCTestCase {
+class JWKRSAParameterTypeTests: XCTestCase {
 
     let jwk = """
         { "kty": "RSA", "n": "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJ\

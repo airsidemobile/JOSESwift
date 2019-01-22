@@ -224,20 +224,20 @@ class JWKECDecodingTests: ECCryptoTestCase {
 
     private func checkSharedKeyComponents(jwk: ECPublicKey) {
         XCTAssertEqual(jwk.keyType, .EC)
-        XCTAssertEqual(jwk["kty"] ?? "", "EC")
+        XCTAssertEqual(jwk["kty"] as? String ?? "", "EC")
         XCTAssertEqual(jwk.x, Consts.keyX)
         XCTAssertEqual(jwk.y, Consts.keyY)
         XCTAssertEqual(jwk.crv, ECCurveType.P256)
-        XCTAssertEqual(jwk["kid"] ?? "", Consts.kid)
+        XCTAssertEqual(jwk["kid"] as? String ?? "", Consts.kid)
     }
 
     private func checkSharedKeyComponents(jwk: ECPrivateKey) {
         XCTAssertEqual(jwk.keyType, .EC)
-        XCTAssertEqual(jwk["kty"] ?? "", "EC")
+        XCTAssertEqual(jwk["kty"] as? String ?? "", "EC")
         XCTAssertEqual(jwk.x, Consts.keyX)
         XCTAssertEqual(jwk.y, Consts.keyY)
         XCTAssertEqual(jwk.crv, ECCurveType.P256)
-        XCTAssertEqual(jwk["kid"] ?? "", Consts.kid)
+        XCTAssertEqual(jwk["kid"] as? String ?? "", Consts.kid)
     }
 
     private func checkMissingKey(json: Data, key: String) {

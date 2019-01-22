@@ -31,7 +31,7 @@ class JWKECKeysTests: ECCryptoTestCase {
             let params = [ "kty": "wrongKty" ]
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: params)
 
-            XCTAssertEqual(jwk["kty"] ?? "", "EC")
+            XCTAssertEqual(jwk["kty"] as? String ?? "", "EC")
         }
     }
 
@@ -45,7 +45,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     additionalParameters: [ "kty": "wrongKty" ]
             )
 
-            XCTAssertEqual(jwk["kty"] ?? "", "EC")
+            XCTAssertEqual(jwk["kty"] as? String ?? "", "EC")
         }
     }
 
@@ -58,16 +58,16 @@ class JWKECKeysTests: ECCryptoTestCase {
             )
 
             XCTAssertEqual(key.keyType, .EC)
-            XCTAssertEqual(key["kty"] ?? "", "EC")
+            XCTAssertEqual(key["kty"] as? String ?? "", "EC")
 
             XCTAssertEqual(key.crv, ECCurveType(rawValue: keyData.expectedCurveType))
-            XCTAssertEqual(key["crv"] ?? "", keyData.expectedCurveType)
+            XCTAssertEqual(key["crv"] as? String ?? "", keyData.expectedCurveType)
 
             XCTAssertEqual(key.x, keyData.expectedXCoordinateBase64Url)
-            XCTAssertEqual(key["x"] ?? "", keyData.expectedXCoordinateBase64Url)
+            XCTAssertEqual(key["x"] as? String ?? "", keyData.expectedXCoordinateBase64Url)
 
             XCTAssertEqual(key.y, keyData.expectedYCoordinateBase64Url)
-            XCTAssertEqual(key["y"] ?? "", keyData.expectedYCoordinateBase64Url)
+            XCTAssertEqual(key["y"] as? String ?? "", keyData.expectedYCoordinateBase64Url)
 
             // kty, crv, x, y
             XCTAssertEqual(key.parameters.count, 4)
@@ -85,20 +85,20 @@ class JWKECKeysTests: ECCryptoTestCase {
             )
 
             XCTAssertEqual(key.keyType, .EC)
-            XCTAssertEqual(key["kty"] ?? "", "EC")
+            XCTAssertEqual(key["kty"] as? String ?? "", "EC")
 
             XCTAssertEqual(key.crv, ECCurveType(rawValue: keyData.expectedCurveType))
-            XCTAssertEqual(key["crv"] ?? "", keyData.expectedCurveType)
+            XCTAssertEqual(key["crv"] as? String ?? "", keyData.expectedCurveType)
 
             XCTAssertEqual(key.x, keyData.expectedXCoordinateBase64Url)
-            XCTAssertEqual(key["x"] ?? "", keyData.expectedXCoordinateBase64Url)
+            XCTAssertEqual(key["x"] as? String ?? "", keyData.expectedXCoordinateBase64Url)
 
             XCTAssertEqual(key.y, keyData.expectedYCoordinateBase64Url)
-            XCTAssertEqual(key["y"] ?? "", keyData.expectedYCoordinateBase64Url)
+            XCTAssertEqual(key["y"] as? String ?? "", keyData.expectedYCoordinateBase64Url)
 
 
             XCTAssertEqual(key.privateKey, keyData.expectedPrivateBase64Url)
-            XCTAssertEqual(key["d"] ?? "", keyData.expectedPrivateBase64Url)
+            XCTAssertEqual(key["d"] as? String ?? "", keyData.expectedPrivateBase64Url)
 
             // kty, crv, x, y, d
             XCTAssertEqual(key.parameters.count, 5)
@@ -110,8 +110,8 @@ class JWKECKeysTests: ECCryptoTestCase {
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey)
 
             XCTAssertEqual(jwk.keyType, .EC)
-            XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.EC.rawValue)
-            XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.EC.rawValue)
+            XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] as? String ?? "", JWKKeyType.EC.rawValue)
+            XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] as? String ?? "", JWKKeyType.EC.rawValue)
         }
     }
 
@@ -125,8 +125,8 @@ class JWKECKeysTests: ECCryptoTestCase {
             )
 
             XCTAssertEqual(jwk.keyType, .EC)
-            XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.EC.rawValue)
-            XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] ?? "", JWKKeyType.EC.rawValue)
+            XCTAssertEqual(jwk[JWKParameter.keyType.rawValue] as? String ?? "", JWKKeyType.EC.rawValue)
+            XCTAssertEqual(jwk.parameters[JWKParameter.keyType.rawValue] as? String ?? "", JWKKeyType.EC.rawValue)
         }
     }
 
@@ -135,7 +135,7 @@ class JWKECKeysTests: ECCryptoTestCase {
             let params = ["kid": "new on the block"]
             let jwk = try! ECPublicKey(publicKey: keyData.publicKey, additionalParameters: params)
 
-            XCTAssertEqual(jwk["kid"] ?? "", "new on the block")
+            XCTAssertEqual(jwk["kid"] as? String ?? "", "new on the block")
         }
     }
 
