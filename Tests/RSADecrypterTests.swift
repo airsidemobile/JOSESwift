@@ -38,7 +38,12 @@ KwawQvhC/447MoBlhtE3bYolvfu5vY3uFV/Dh8Ip5zRvZuE6NwRZN2EdWyR35iphyCgcKufJn9J1oYYZ
 
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey alice.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -out >(base64)
     //  *NOTE*: openssl v1.1.x is required to encrypt data using RSA-OAEP with SHA256 digest
-    let cipherTextWithAliceOAEPSHA256Base64 = "HtL3/k9aiCzON4dEAK930LXvxoWgu2cXHj011FAY4Z++CikiPn5gt/TLFEEV6c4MyMUN8Pj796XwO5a9LRfsV+XWjb5WIAUXewgdKYC1NBFf/qIp+NixeO6oo0nh5NlApJgphRIy1en9ARoz0rIzayt0Py4QOEse7OHLUnDA7PP8vp0X1pyqEG9FZaPViH4+/1zwvEjBVo4N5K4Zl4jqzFYTOkm4hhfRBJrMuiGEsWaGZ9qzn5zuyP3hwZeTsArDSvLMt/TwhRpwNp4O9G23ht2gM5N3C76eI8re08zq9L7jggZSbPO1qVY5dQGBJhS2EEXAVxTzgvxRPbteU7pSBA=="
+    let cipherTextWithAliceOAEPSHA256Base64 = """
+        HtL3/k9aiCzON4dEAK930LXvxoWgu2cXHj011FAY4Z++CikiPn5gt/TLFEEV6c4MyMUN8Pj796XwO5a9LRfsV+XWjb5WIAUXewgdKYC1NBFf/q\
+        Ip+NixeO6oo0nh5NlApJgphRIy1en9ARoz0rIzayt0Py4QOEse7OHLUnDA7PP8vp0X1pyqEG9FZaPViH4+/1zwvEjBVo4N5K4Zl4jqzFYTOkm4\
+        hhfRBJrMuiGEsWaGZ9qzn5zuyP3hwZeTsArDSvLMt/TwhRpwNp4O9G23ht2gM5N3C76eI8re08zq9L7jggZSbPO1qVY5dQGBJhS2EEXAVxTzgv\
+        xRPbteU7pSBA==
+    """
     
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl rsautl -encrypt -pubin -inkey bob.pub.pem -out >(base64)
     let cipherTextWithBobKeyBase64 = """
@@ -48,7 +53,12 @@ sVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrx
 """
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey bob.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -out >(base64)
     //  *NOTE*: openssl v1.1.x is required to encrypt data using RSA-OAEP with SHA256 digest
-    let cipherTextWithBobKeyOAEPSHA256Based64 = "IUCsUQzcyL/iuwWpgXK/TgyrsxuSbKKAXq1bd6wlRf7O+9UBlQAenAzXkhRchBOrCYbS1Bs2IwN3gu51RiVsuOg5oHxxKIbtfnbqwtw9beV02oRETCSZ5wPFC/tlYYYloGYR3O47VF5o+NV4qKOE6jbjBEknMAwdN1eoGb0LmF9kUvt9jCLkI1Jt3Cqs8fV9nxqI4Iyzn6hjlvRJk82Ah/q86XfNCQ3KcXrUUR7GQ1BY5qR+wu76HpI5a1yZmXrl2HL1MMtxMLxmawtNUWsMVm1lrq1jWw1TQTktV5zRl4p6DDlSSfEacwaBsVyr0SIKg8fPxP9olRvXZm+AS53GTQ=="
+    let cipherTextWithBobKeyOAEPSHA256Based64 = """
+        IUCsUQzcyL/iuwWpgXK/TgyrsxuSbKKAXq1bd6wlRf7O+9UBlQAenAzXkhRchBOrCYbS1Bs2IwN3gu51RiVsuOg5oHxxKIbtfnbqwtw9beV02oR\
+        ETCSZ5wPFC/tlYYYloGYR3O47VF5o+NV4qKOE6jbjBEknMAwdN1eoGb0LmF9kUvt9jCLkI1Jt3Cqs8fV9nxqI4Iyzn6hjlvRJk82Ah/q86XfNCQ\
+        3KcXrUUR7GQ1BY5qR+wu76HpI5a1yZmXrl2HL1MMtxMLxmawtNUWsMVm1lrq1jWw1TQTktV5zRl4p6DDlSSfEacwaBsVyr0SIKg8fPxP9olRvXZ\
+        m+AS53GTQ==
+    """
 
     let rsa1DecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))") // adjusted for RSA-OAEP-256 error having a differe 'err' number
     let rsaOAEPSHA256DecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))")

@@ -34,7 +34,13 @@ class JWETests: RSACryptoTestCase {
         YP_e_rhz0PVg9QnJXiRl030ggI9GGs3E_0pEPBs9_WJ3E60qQVoXTIMbJXSQ.bQc-W1Ph_0_3kX570pT8gjDlGyiK3kF8PlHiT7GWfMo
         """.data(using: .utf8)!
 
-    let compactSerializedJWERSAOAEPSHA256 = "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.RL7Ny2UFhgp04E_sJnnX77slkDM8X9LETqFAn3WpL_D6pXSYE9pUJK8DYFETi2FzANVqz128wzySW2tzVxltDfxi9irInmK0W0nls4aFRqpPUL2xG_izW624y-J5QebsjEUQg-RdbnHz82VO9OrvJVGst8HFQn0XsCN76WGgZcPfON3As5dfIyUctW3twCWB_G4lWZqmvOJ4GqkT3SpMc3aQtGzKdJ0WN-4MKbm0Shk-07um8yJgzH6xaLHcbJHhWjDB6VHBkiX6X7bbLiN_R_XQKO78Nlj2LFn5OO2B5VoINH_DZj6UsEuSywTHTl7ET-QgXYbsLTrXB2Pzs3gpvQ.L9MZP9n4UKljKgGEoEnbyA.8uZpYsF9pNIQy06zCoWv7gBNW6DC0-KwWUXpiGcFfVhyBD1hfQC7bQD1fH6GeargKBNjrYcv7bm_5purQFTt_A.ecd44cJE0BH4Fwqm2fDHM1dXhHtiFDJn2VEhw55VP28".data(using: .utf8)!
+    let compactSerializedJWERSAOAEPSHA256 = """
+        eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.RL7Ny2UFhgp04E_sJnnX77slkDM8X9LETqFAn3WpL_D6pXSYE9\
+        pUJK8DYFETi2FzANVqz128wzySW2tzVxltDfxi9irInmK0W0nls4aFRqpPUL2xG_izW624y-J5QebsjEUQg-RdbnHz82VO9OrvJVGst8HFQn0X\
+        sCN76WGgZcPfON3As5dfIyUctW3twCWB_G4lWZqmvOJ4GqkT3SpMc3aQtGzKdJ0WN-4MKbm0Shk-07um8yJgzH6xaLHcbJHhWjDB6VHBkiX6X7\
+        bbLiN_R_XQKO78Nlj2LFn5OO2B5VoINH_DZj6UsEuSywTHTl7ET-QgXYbsLTrXB2Pzs3gpvQ.L9MZP9n4UKljKgGEoEnbyA.8uZpYsF9pNIQy0\
+        6zCoWv7gBNW6DC0-KwWUXpiGcFfVhyBD1hfQC7bQD1fH6GeargKBNjrYcv7bm_5purQFTt_A.ecd44cJE0BH4Fwqm2fDHM1dXhHtiFDJn2VEhw55VP28
+        """.data(using: .utf8)!
 
     lazy var compactSerializedData: [String: Data] = {
         [AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSA1,
