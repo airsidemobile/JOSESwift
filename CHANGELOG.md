@@ -8,8 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Start each entry with one of the following keywords: 
 
-- *API*: For highlighting breaking API changes that require people to change 
-their implementations
+- *API*: For highlighting breaking API changes that require people to change their implementations
 - *Adds*: For listing new features
 - *Fixes*: For listing bugfixes
 - *Changes*: For listing improvements other changes
