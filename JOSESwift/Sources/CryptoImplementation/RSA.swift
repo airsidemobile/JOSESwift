@@ -73,7 +73,7 @@ internal extension AsymmetricKeyAlgorithm {
         case .RSA1_5:
             return (k - 11)
         case .RSAOAEP256:
-            // plaintext length is based on the hash length of SHA-256
+            // maximum plaintext length is based on the hash length of SHA-256
             let hLen = 256 / 8
             return (k - 2 * hLen - 2)
         case .direct: return 0
