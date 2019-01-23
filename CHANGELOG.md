@@ -24,6 +24,10 @@ merge to master and move them to a respective version upon release.
 
 Add your changes here.
 
+## [1.6.0] - 2019-01-24
+
+- Adds support for RSA-OAEP-256 ([#135](https://github.com/airsidemobile/JOSESwift/pull/135))
+
 ## [1.5.0] - 2019-01-23
 
 - Changes the way elliptic curve keys are decoded to work around [#86](https://github.com/airsidemobile/JOSESwift/issues/86) until [#120](https://github.com/airsidemobile/JOSESwift/pull/120) is merged ([#137](https://github.com/airsidemobile/JOSESwift/pull/137))
