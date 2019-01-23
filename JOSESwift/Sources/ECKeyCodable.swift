@@ -63,7 +63,7 @@ extension ECPublicKey: Decodable {
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 
@@ -123,7 +123,7 @@ extension ECPrivateKey: Decodable {
 
         // Other common parameters are optional.
         var parameters: [String: String] = [:]
-        for key in commonParameters.allKeys {
+        for key in commonParameters.allKeys where !JWKParameter.nonStringParameters.contains(key) {
             parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
         }
 

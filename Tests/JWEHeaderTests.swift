@@ -99,9 +99,22 @@ class JWEHeaderTests: XCTestCase {
         XCTFail()
     }
 
-    func testInitWithMissingRequiredAlgParameter() {
+    func testInitDirectlyWithMissingRequiredAlgParameter() {
         do {
             _ = try JWEHeader(parameters: ["enc": "something"], headerData: try! JSONSerialization.data(withJSONObject: ["enc": "something"], options: []))
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+
+        XCTFail()
+    }
+
+    func testInitWithMissingRequiredAlgParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["enc": "something"])
         } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
             XCTAssertEqual(parameter, "alg")
             return

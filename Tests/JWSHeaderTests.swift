@@ -61,9 +61,22 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.algorithm!, .RS512)
     }
 
-    func testInitWithMissingRequiredParameters() {
+    func testInitDirectlyWithMissingRequiredParameters() {
         do {
             _ = try JWSHeader(parameters: ["typ": "JWT"], headerData: try! JSONSerialization.data(withJSONObject: ["typ": "JWT"], options: []))
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+
+        XCTFail()
+    }
+
+    func testInitWithMissingRequiredParameters() {
+        do {
+            _ = try JWSHeader(parameters: ["typ": "JWT"])
         } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
             XCTAssertEqual(parameter, "alg")
             return
