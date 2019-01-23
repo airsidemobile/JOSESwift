@@ -61,4 +61,3 @@ extension Data: ExpressibleAsECPrivateKeyComponents {
         return (curve.rawValue, xData, yData, dData)
     }
 }
-
