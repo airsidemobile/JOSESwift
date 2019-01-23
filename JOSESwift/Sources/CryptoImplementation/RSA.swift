@@ -61,11 +61,10 @@ internal extension AsymmetricKeyAlgorithm {
     }
 
 
-    /// This method returns the maximum message length allowed for an `AsymmetricKeyAlgorithm`
-    /// - parameters:
-    ///    - `publicKey: SecKey the publicKey used to acquire the SecKey block size
-    /// - returns: Int the maximum messeage length allowed for use with the algorithm
-    /// discussion:
+    /// This method returns the maximum message length allowed for an `AsymmetricKeyAlgorithm`.
+    /// - Parameter publicKey: the publicKey used with the algorithm
+    /// - Returns: The maximum messeage length allowed for use with the algorithm
+    ///
     /// - RSA1_5: For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5, please refer to [RFC-3447, Section 7.2](https://tools.ietf.org/html/rfc3447#section-7.2).
     /// - RSAOAEP256: For detailed information about the allowed plain text length for RSA-OAEP, please refer to [RFC-3447, Section 7.1](https://tools.ietf.org/html/rfc3447#section-7.1).
     func maxMessageLength(for publicKey: SecKey) -> Int {
