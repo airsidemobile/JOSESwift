@@ -11,7 +11,7 @@ Start each entry with one of the following keywords:
 - *API*: For highlighting breaking API changes that require people to change their implementations
 - *Adds*: For listing new features
 - *Fixes*: For listing bugfixes
-- *Changes*: For listing improvements other changes
+- *Changes*: For listing improvements and other changes
 - *Deprecates*: For listing API deprecations
 - *Security*: For highlighting changes related to security vulnerabilities
 
@@ -23,7 +23,7 @@ merge to master and move them to a respective version upon release.
 ## Unreleased
 
 - Security: Change fastlane version to fix [#129](https://github.com/airsidemobile/JOSESwift/issues/129) ([#130](https://github.com/airsidemobile/JOSESwift/pull/130))
-- Changes travis to use builting homebrew addon ([#133](https://github.com/airsidemobile/JOSESwift/pull/133))
+- Changes travis to use builtin homebrew addon ([#133](https://github.com/airsidemobile/JOSESwift/pull/133))
 - Adds support for elliptic curve algorithms for JWS and elliptic curve keys for JWK ([#88](https://github.com/airsidemobile/JOSESwift/pull/88))
 
 ## [1.4.0] - 2018-12-04
