@@ -50,129 +50,188 @@ class RSAEncrypterTests: RSACryptoTestCase {
     }
 
     func testEncryptingWithAliceKey() {
-        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+        guard
+            let publicKeyAlice2048 = publicKeyAlice2048,
+            let privateKeyAlice2048 = privateKeyAlice2048 else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        var decryptionError: Unmanaged<CFError>?
-        guard let plainTextData = SecKeyCreateDecryptedData(privateKeyAlice2048!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
-            XCTFail()
-            return
-        }
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            guard
+                let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!),
+                let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
+                    XCTFail()
+                    return
+            }
 
-        XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+            var decryptionError: Unmanaged<CFError>?
+            guard let plainTextData = SecKeyCreateDecryptedData(privateKeyAlice2048, secKeyAlgorithm, cipherText as CFData, &decryptionError) else {
+                XCTFail()
+                return
+            }
+
+            XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+        }
     }
 
     func testEncryptingTwiceWithAliceKey() {
-        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+        guard let publicKeyAlice2048 = publicKeyAlice2048 else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        guard let cipherText2 = try? encrypter.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+                XCTFail()
+                return
+            }
 
-        // Cipher texts differ because of random padding, see https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding_schemes
-        XCTAssertNotEqual(cipherText, cipherText2)
+            guard let cipherText2 = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+                XCTFail()
+                return
+            }
+
+            // Cipher texts differ because of random padding, see https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding_schemes
+            XCTAssertNotEqual(cipherText, cipherText2)
+        }
     }
 
     func testEncryptingWithAliceAndBobKey() {
-        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil, publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
-            XCTFail()
-            return
+        guard
+            let publicKeyAlice2048 = publicKeyAlice2048,
+            let publicKeyBob2048 = publicKeyBob2048 else {
+                XCTFail()
+                return
         }
 
-        let encrypterAlice = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        let encrypterBob = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyBob2048!)
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        guard let cipherTextAlice = try? encrypterAlice.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
-        guard let cipherTextBob = try? encrypterBob.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
+            let encrypterAlice = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            let encrypterBob = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyBob2048)
 
-        // Cipher texts have to differ (different keys)
-        XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
+            guard let cipherTextAlice = try? encrypterAlice.encrypt(message.data(using: .utf8)!) else {
+                XCTFail()
+                return
+            }
+            guard let cipherTextBob = try? encrypterBob.encrypt(message.data(using: .utf8)!) else {
+                XCTFail()
+                return
+            }
+
+            // Cipher texts have to differ (different keys)
+            XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
+        }
     }
 
     func testEncryptingWithBobKey() {
-        guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
-            XCTFail()
-            return
+        guard
+            let publicKeyBob2048 = publicKeyBob2048,
+            let privateKeyBob2048 = privateKeyBob2048 else {
+                XCTFail()
+                return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyBob2048!)
-        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
-            XCTFail()
-            return
-        }
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        var decryptionError: Unmanaged<CFError>?
-        guard let plainTextData = SecKeyCreateDecryptedData(privateKeyBob2048!, .rsaEncryptionPKCS1, cipherText as CFData, &decryptionError) else {
-            XCTFail()
-            return
-        }
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyBob2048)
+            guard
+                let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!),
+                let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
+                    XCTFail()
+                    return
+            }
 
-        XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+            var decryptionError: Unmanaged<CFError>?
+            guard let plainTextData = SecKeyCreateDecryptedData(privateKeyBob2048, secKeyAlgorithm, cipherText as CFData, &decryptionError) else {
+                XCTFail()
+                return
+            }
+
+            XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+        }
     }
 
     func testPlainTextTooLong() {
-        guard publicKeyAlice2048 != nil else {
+        guard let publicKeyAlice2048 = publicKeyAlice2048 else {
             XCTFail()
             return
         }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
-            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
+
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
+                XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+            }
         }
     }
 
     func testMaximumPlainTextLength() {
-        guard publicKeyAlice2048 != nil else {
+        guard let publicKeyAlice2048 = publicKeyAlice2048 else {
             XCTFail()
             return
         }
 
-        // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
-        // See https://tools.ietf.org/html/rfc3447#section-7.2
-        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 11
-        let testMessage = Data(count: maxMessageLengthInBytes)
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        XCTAssertNoThrow(try encrypter.encrypt(testMessage))
+            // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
+            // See https://tools.ietf.org/html/rfc3447#section-7.2
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
+            let testMessage = Data(count: maxMessageLengthInBytes)
+
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            XCTAssertNoThrow(try encrypter.encrypt(testMessage), "using algorithm: \(algorithm)")
+        }
     }
 
     func testMaximumPlainTextLengthPlusOne() {
-        guard publicKeyAlice2048 != nil else {
+        guard let publicKeyAlice2048 = publicKeyAlice2048 else {
             XCTFail()
             return
         }
 
-        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 11
-        let testMessage = Data(count: maxMessageLengthInBytes + 1)
+        for algorithm in AsymmetricKeyAlgorithm.allCases {
+            // Skip over direct type
+            guard algorithm != .direct else {
+                continue
+            }
 
-        let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
-        XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
-            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
+            let testMessage = Data(count: maxMessageLengthInBytes + 1)
+
+            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+            XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
+                XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+            }
         }
     }
 

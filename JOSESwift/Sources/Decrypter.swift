@@ -79,7 +79,7 @@ public struct Decrypter {
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
             guard type(of: key) is RSADecrypter.KeyType.Type else {
                 return nil
             }
