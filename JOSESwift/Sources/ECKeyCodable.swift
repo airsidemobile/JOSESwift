@@ -143,4 +143,3 @@ extension ECPrivateKey: Decodable {
         )
     }
 }
-
