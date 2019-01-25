@@ -24,7 +24,7 @@ merge to master and move them to a respective version upon release.
 
 Add your changes here.
 
-## [1.6.0] - 2019-01-24
+## [1.6.0] - 2019-01-25
 
 - Adds support for RSA-OAEP-256 ([#135](https://github.com/airsidemobile/JOSESwift/pull/135))
 
