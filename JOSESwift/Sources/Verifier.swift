@@ -54,7 +54,7 @@ public struct Verifier {
             }
             // swiftlint:disable:next force_cast
             self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey as! RSAVerifier.KeyType)
-        case .ES256,.ES384,.ES512:
+        case .ES256, .ES384, .ES512:
             guard type(of: publicKey) is ECVerifier.KeyType.Type else {
                 return nil
             }

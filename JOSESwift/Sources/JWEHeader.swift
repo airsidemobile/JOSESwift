@@ -78,6 +78,12 @@ public struct JWEHeader: JOSEHeader {
         // swiftlint:disable:next force_try
         try! self.init(parameters: parameters, headerData: headerData)
     }
+
+    /// Initializes a `JWEHeader` with the specified parameters.
+    public init(parameters: [String: Any]) throws {
+        let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        try self.init(parameters: parameters, headerData: headerData)
+    }
 }
 
 // Header parameters that are specific to a JWE Header.

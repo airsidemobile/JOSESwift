@@ -28,6 +28,9 @@ class JWEHeaderTests: XCTestCase {
     let parameterDictRSA = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]
     let parameterDataRSA = try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5", "enc": "A256CBC-HS512"], options: [])
 
+    let parameterDictRSAOAEP256 = ["alg": "RSA-OAEP-256", "enc": "A256CBC-HS512"]
+    let parameterDataRSAOAEP256 = try! JSONSerialization.data(withJSONObject: ["alg": "RSA-OAEP-256", "enc": "A256CBC-HS512"], options: [])
+
     let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
     let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [])
 
@@ -47,12 +50,29 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []))
     }
 
+    func testInitRSAOAEP256WithParameters() {
+        let header = try! JWEHeader(parameters: parameterDictRSAOAEP256, headerData: parameterDataRSAOAEP256)
+        
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []))
+    }
+
     func testInitRSAWithData() {
         let data = try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: [])
         let header = JWEHeader(data)!
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
+        XCTAssertEqual(header.data(), data)
+    }
+
+    func testInitRSAOAEP256WithData() {
+        let data = try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: [])
+        let header = JWEHeader(data)!
+        
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.data(), data)
     }
 
@@ -86,6 +106,19 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
     }
 
+    func testInitWithAlgAndEncRSAOAEP256() {
+        let header = JWEHeader(algorithm: .RSAOAEP256, encryptionAlgorithm: .A256CBCHS512)
+        
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []))
+        XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
+        
+        XCTAssertNotNil(header.algorithm)
+        XCTAssertNotNil(header.encryptionAlgorithm)
+        XCTAssertEqual(header.algorithm!, .RSAOAEP256)
+        XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
+    }
+
     func testInitWithMissingRequiredEncParameter() {
         do {
             _ = try JWEHeader(parameters: ["alg": "RSA-OAEP"], headerData: try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5"], options: []))
@@ -99,9 +132,22 @@ class JWEHeaderTests: XCTestCase {
         XCTFail()
     }
 
-    func testInitWithMissingRequiredAlgParameter() {
+    func testInitDirectlyWithMissingRequiredAlgParameter() {
         do {
             _ = try JWEHeader(parameters: ["enc": "something"], headerData: try! JSONSerialization.data(withJSONObject: ["enc": "something"], options: []))
+        } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
+            XCTAssertEqual(parameter, "alg")
+            return
+        } catch {
+            XCTFail()
+        }
+
+        XCTFail()
+    }
+
+    func testInitWithMissingRequiredAlgParameter() {
+        do {
+            _ = try JWEHeader(parameters: ["enc": "something"])
         } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
             XCTAssertEqual(parameter, "alg")
             return

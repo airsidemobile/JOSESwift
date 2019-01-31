@@ -215,6 +215,29 @@ class JWKECDecodingTests: ECCryptoTestCase {
         XCTFail()
     }
 
+    func testBuildingJWKSetShouldNotFailIfCertificatesOrKeyOpsArePresent() {
+        let jwkSet = """
+        {
+            "keys": [{
+                \(Consts.innerKeyJSONKeyType),
+                \(Consts.innerKeyJSONX),
+                \(Consts.innerKeyJSONY),
+                \(Consts.innerKeyJSOND),
+                \(Consts.innerKeyJSON),
+                "x5c": ["Y2VydGlmaWNhdGUxMjM0NWRhdGEx"]
+            }, {
+                \(Consts.innerKeyJSONKeyType),
+                \(Consts.innerKeyJSONX),
+                \(Consts.innerKeyJSONY),
+                \(Consts.innerKeyJSON),
+                "key_ops": ["sign", "encrypt"]
+            }]
+        }
+        """.data(using: .utf8)!
+
+        XCTAssertNoThrow(try JWKSet(data: jwkSet))
+    }
+
     // MARK: Helper functions
 
     private func encloseJson(_ elements: [String]) -> Data {
