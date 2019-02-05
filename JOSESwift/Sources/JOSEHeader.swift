@@ -51,7 +51,8 @@ extension JOSEHeader {
             return nil
         }
 
-        if let _ = nil {
+        let optional: String? = nil
+        if let _ = optional {
             print("wtf")
         }
 
