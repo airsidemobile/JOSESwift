@@ -11,6 +11,9 @@ addons:
 before_install:
   - bundle install
 
+before_script:
+  - bundle exec danger
+
 jobs:
   include:
     - stage: test
