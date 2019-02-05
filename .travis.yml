@@ -19,6 +19,7 @@ jobs:
     - stage: test
       name: testing
       script: bundle exec fastlane test
-    - stage: test
-      name: linting
-      script: bundle exec fastlane lint
+    # Don'T lint the whole project now (#98)
+    # - stage: test
+    #   name: linting
+    #   script: bundle exec fastlane lint
