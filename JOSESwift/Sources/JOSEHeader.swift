@@ -23,7 +23,7 @@
 
 import Foundation
 
-enum HeaderParsingError : Error {
+enum HeaderParsingError: Error {
     case requiredHeaderParameterMissing(parameter: String)
     case headerIsNotValidJSONObject
 }
@@ -49,6 +49,10 @@ extension JOSEHeader {
             let parameters = json as? [String: Any]
         else {
             return nil
+        }
+
+        if let _ = nil {
+            print("wtf")
         }
 
         try? self.init(parameters: parameters, headerData: data)
