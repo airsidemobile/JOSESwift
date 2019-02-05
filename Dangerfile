@@ -1,1 +1,0 @@
-swiftlint.lint_files
