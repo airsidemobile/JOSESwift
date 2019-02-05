@@ -23,7 +23,7 @@
 
 import Foundation
 
-enum HeaderParsingError: Error {
+enum HeaderParsingError : Error {
     case requiredHeaderParameterMissing(parameter: String)
     case headerIsNotValidJSONObject
 }
