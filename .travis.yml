@@ -13,4 +13,4 @@ before_install:
 
 script:
   - bundle exec fastlane test
-  - bundle exec fastlane danger
+  - bundle exec danger
