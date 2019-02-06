@@ -11,15 +11,6 @@ addons:
 before_install:
   - bundle install
 
-before_script:
-  - bundle exec danger
-
-jobs:
-  include:
-    - stage: test
-      name: testing
-      script: bundle exec fastlane test
-    # Don'T lint the whole project now (#98)
-    # - stage: test
-    #   name: linting
-    #   script: bundle exec fastlane lint
+script:
+  - bundle exec fastlane test
+  - bundle exec fastlane danger
