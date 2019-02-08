@@ -74,6 +74,10 @@ GEM
     danger-slather (0.0.6)
       danger-plugin-api (~> 1.0)
       slather (~> 2.3)
+    danger-swiftlint (0.18.2)
+      danger
+      rake (> 10)
+      thor (~> 0.19)
     declarative (0.0.10)
     declarative-option (0.1.0)
     domain_name (0.5.20180417)
@@ -180,6 +184,7 @@ GEM
     os (1.0.0)
     plist (3.4.0)
     public_suffix (2.0.5)
+    rake (12.3.2)
     representable (3.0.4)
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
@@ -210,6 +215,7 @@ GEM
     terminal-notifier (1.8.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
+    thor (0.20.3)
     thread_safe (0.3.6)
     tty-cursor (0.6.0)
     tty-screen (0.6.5)
@@ -241,6 +247,7 @@ DEPENDENCIES
   cocoapods
   danger
   danger-slather
+  danger-swiftlint
   fastlane (>= 2.108.0)
   slather (= 2.4.6)
   xcpretty
