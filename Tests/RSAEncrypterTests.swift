@@ -49,7 +49,7 @@ class RSAEncrypterTests: CryptoTestCase {
         super.tearDown()
     }
 
-    func testEncryptingWithAliceKey() {
+    func testEncryptingWithAliceKey_RSA1_5() {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -70,7 +70,28 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
     }
 
-    func testEncryptingTwiceWithAliceKey() {
+    func testEncryptingWithAliceKey_RSAOAEP() {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        var decryptionError: Unmanaged<CFError>?
+        guard let plainTextData = SecKeyCreateDecryptedData(privateKeyAlice2048!, .rsaEncryptionOAEPSHA1, cipherText as CFData, &decryptionError) else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+    }
+
+    func testEncryptingTwiceWithAliceKey_RSA1_5() {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -91,7 +112,28 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertNotEqual(cipherText, cipherText2)
     }
 
-    func testEncryptingWithAliceAndBobKey() {
+    func testEncryptingTwiceWithAliceKey_RSAOAEP() {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        guard let cipherText2 = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        // Cipher texts differ because of random padding, see https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding_schemes
+        XCTAssertNotEqual(cipherText, cipherText2)
+    }
+
+    func testEncryptingWithAliceAndBobKey_RSA1_5() {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil, publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
             XCTFail()
             return
@@ -113,7 +155,29 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
     }
 
-    func testEncryptingWithBobKey() {
+    func testEncryptingWithAliceAndBobKey_RSAOAEP() {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil, publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypterAlice = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
+        let encrypterBob = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyBob2048!)
+
+        guard let cipherTextAlice = try? encrypterAlice.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+        guard let cipherTextBob = try? encrypterBob.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        // Cipher texts have to differ (different keys)
+        XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
+    }
+
+    func testEncryptingWithBobKey_RSA1_5() {
         guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
             XCTFail()
             return
@@ -134,7 +198,28 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
     }
 
-    func testPlainTextTooLong() {
+    func testEncryptingWithBobKey_RSAOAEP() {
+        guard publicKeyBob2048 != nil, privateKeyBob2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyBob2048!)
+        guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            XCTFail()
+            return
+        }
+
+        var decryptionError: Unmanaged<CFError>?
+        guard let plainTextData = SecKeyCreateDecryptedData(privateKeyBob2048!, .rsaEncryptionOAEPSHA1, cipherText as CFData, &decryptionError) else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertEqual(String(data: plainTextData as Data, encoding: .utf8), message)
+    }
+
+    func testPlainTextTooLong_RSA1_5() {
         guard publicKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -146,7 +231,19 @@ class RSAEncrypterTests: CryptoTestCase {
         }
     }
 
-    func testMaximumPlainTextLength() {
+    func testPlainTextTooLong_RSAOAEP() {
+        guard publicKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
+        XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+        }
+    }
+
+    func testMaximumPlainTextLength_RSA1_5() {
         guard publicKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -161,7 +258,23 @@ class RSAEncrypterTests: CryptoTestCase {
         XCTAssertNoThrow(try encrypter.encrypt(testMessage))
     }
 
-    func testMaximumPlainTextLengthPlusOne() {
+    func testMaximumPlainTextLength_RSAOAEP() {
+        guard publicKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        // RSAES-OAEP can operate on messages of length up to k - 2 * hLen - 2 octets
+        // (k = octet length of the RSA modulus and hLen = input limitation for the hash function, 20 octets for SHA-1)
+        // See https://tools.ietf.org/html/rfc3447#section-7.1.1 and https://tools.ietf.org/html/rfc3174#section-1
+        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 2 * 20 - 2
+        let testMessage = Data(count: maxMessageLengthInBytes)
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
+        XCTAssertNoThrow(try encrypter.encrypt(testMessage))
+    }
+
+    func testMaximumPlainTextLengthPlusOne_RSA1_5() {
         guard publicKeyAlice2048 != nil else {
             XCTFail()
             return
@@ -171,6 +284,21 @@ class RSAEncrypterTests: CryptoTestCase {
         let testMessage = Data(count: maxMessageLengthInBytes + 1)
 
         let encrypter = RSAEncrypter(algorithm: .RSA1_5, publicKey: publicKeyAlice2048!)
+        XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
+            XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
+        }
+    }
+
+    func testMaximumPlainTextLengthPlusOne_RSAOAEP() {
+        guard publicKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let maxMessageLengthInBytes = SecKeyGetBlockSize(publicKeyAlice2048!) - 2 * 20 - 2
+        let testMessage = Data(count: maxMessageLengthInBytes + 1)
+
+        let encrypter = RSAEncrypter(algorithm: .RSAOAEP, publicKey: publicKeyAlice2048!)
         XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
             XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
         }

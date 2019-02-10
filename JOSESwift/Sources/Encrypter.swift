@@ -80,7 +80,7 @@ public struct Encrypter<KeyType> {
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512):
             guard type(of: key) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
@@ -90,12 +90,12 @@ public struct Encrypter<KeyType> {
         case (.direct, .A256CBCHS512):
             guard type(of: key) is AESEncrypter.KeyType.Type else {
                 return nil
-            }
+        }
 
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm)
             // swiftlint:disable:next force_cast
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
-        }
+    }
     }
 
     /// Constructs an encrypter used to encrypt a JWE.
