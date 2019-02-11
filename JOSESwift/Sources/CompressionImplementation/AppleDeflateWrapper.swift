@@ -14,7 +14,7 @@
 import Foundation
 import Compression
 
-extension Data: DeflateCompressor {
+extension Data {
     /// Compresses the data using the zlib deflate algorithm.
     /// - returns: raw deflated data according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - note: Fixed at compression level 5 (best trade off between speed and time)

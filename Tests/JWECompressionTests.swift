@@ -8,7 +8,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWECompressionTests: CryptoTestCase {
+class JWECompressionTests: RSACryptoTestCase {
     
     let data = "So Secret! 🔥🌵".data(using: .utf8)!
     
