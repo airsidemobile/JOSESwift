@@ -67,6 +67,4 @@ class JWECompressionTests: RSACryptoTestCase {
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
         try XCTAssertThrowsError(jwe.decrypt(using: decrypter))
     }
-    
-    
 }
