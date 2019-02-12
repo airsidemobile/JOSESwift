@@ -22,6 +22,8 @@ merge to master and move them to a respective version upon release.
 
 ## Unreleased
 
+- Adds support for RSA-OAEP ([#95](https://github.com/airsidemobile/JOSESwift/pull/95), [#142](https://github.com/airsidemobile/JOSESwift/pull/142))
+
 Add your changes here.
 
 ## [1.6.0] - 2019-01-25
