@@ -40,11 +40,11 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 
 <table>
 	<tr>
-		<th colspan="2">🔏 JWS</th>
+		<th colspan="2">:lock_with_ink_pen: JWS</th>
 		<th rowspan="19"></th>
-		<th colspan="4">🔐 JWE</th>
+		<th colspan="4">:closed_lock_with_key: JWE</th>
 		<th rowspan="19"></th>
-		<th colspan="2">🔑 JWK</th>
+		<th colspan="2">:key: JWK</th>
 	</tr>
 	<tr>
 		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-3">Digital Signatures and MACs</a></th>
