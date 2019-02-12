@@ -34,7 +34,9 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 - **JWE**: Encrypting and decrypting arbitrary data using the JWE standard.
 - **JWK**: Encoding and decoding cryptographic keys.
 
-JOSESwift currently supports the following cryptographic algorithms:
+If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
+
+### Cryptographic Algorithms
 
 <table>
 	<tr>
@@ -69,16 +71,9 @@ JOSESwift currently supports the following cryptographic algorithms:
 	<tr>                                                       <td><code>PBES2-HS512+A256KW</code></td><td></td></tr>
 </table>
 
-For interchangeability JOSESwift currently supports the following serializations and formats:
+### Serializations
 
-<table>
-	<tr><th>JWS</th><th>JWE</th><th>JWK</th></tr>
-	<tr><th>Serialization</th><th>Serialization</th><th>Format</th>
-	<tr></td><td rowspan="2">Compact</td><td rowspan="2">Compact</td><td>JSON</td></tr>
-	<tr><td>JWK Set</td></tr>
-</table>
-
-If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
+For interchangeability JOSESwift, supports _Compact Serialization_ [for JWS](https://tools.ietf.org/html/rfc7515#section-3.1) and [for JWE](https://tools.ietf.org/html/rfc7516#section-3.1).
 
 ## Installation
 
