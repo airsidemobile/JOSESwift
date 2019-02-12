@@ -182,7 +182,7 @@ class JWEHeaderTests: XCTestCase {
         let typ = "typ"
         let cty = "cty"
         let crit = ["crit1", "crit2"]
-        let zip = "zip"
+        let zip = "def"
 
         var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         header.jku = jku

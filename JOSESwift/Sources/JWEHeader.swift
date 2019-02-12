@@ -104,6 +104,13 @@ public extension JWEHeader {
         // swiftlint:disable:next force_cast
         return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
     }
+    
+    public var compressionAlgorithm: CompressionAlgorithm? {
+        guard let compressionAlgorithm = parameters["zip"] as? String else {
+            return nil
+        }
+        return CompressionAlgorithm(rawValue: compressionAlgorithm)
+    }
 }
 
 extension JWEHeader: CommonHeaderParameterSpace {
@@ -224,7 +231,10 @@ extension JWEHeader: CommonHeaderParameterSpace {
             parameters["zip"] = newValue
         }
         get {
-            return parameters["zip"] as? String
+            guard let compressionAlgorithm = parameters["zip"] as? String else {
+                return nil
+            }
+            return compressionAlgorithm
         }
     }
 }
