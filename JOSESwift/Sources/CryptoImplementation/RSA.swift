@@ -48,7 +48,7 @@ fileprivate extension SignatureAlgorithm {
 }
 
 internal extension AsymmetricKeyAlgorithm {
-    /// Publically accessible mapping of AsymmetricKeyAlgorithm to Security Framework SecKeyAlgorithm
+    /// Mapping of `AsymmetricKeyAlgorithm` to Security Framework's `SecKeyAlgorithm`.
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
         case .RSA1_5:
@@ -96,6 +96,9 @@ internal extension AsymmetricKeyAlgorithm {
 fileprivate extension AsymmetricKeyAlgorithm {
     /// Checks if the plain text length does not exceed the maximum
     /// for the chosen algorithm and the corresponding public key.
+    /// This length checking is just for usability reasons.
+    /// Proper length checking is done in the implementation of iOS'
+    /// `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
     func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
         let mLen = plainText.count
 
@@ -107,9 +110,11 @@ fileprivate extension AsymmetricKeyAlgorithm {
         }
     }
 
-    // This lenght checking is jut for usability reasons.
-    // Proper length checking is done in the implementation of iOS'
-    // `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
+    /// Checks if the ciphertext length does not exceed the maximum
+    /// for the chosen algorithm and the corresponding private key.
+    /// This length checking is just for usability reasons.
+    /// Proper length checking is done in the implementation of iOS'
+    /// `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
     func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
         switch self {
         case .RSA1_5:
