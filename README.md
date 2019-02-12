@@ -3,7 +3,7 @@
 <br>
 
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
-It is designed with usage on iOS and pure Swift environments in mind.
+It is designed for usage on iOS but could be extended to be used in pure Swift environments.
 
 [![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
 
@@ -17,7 +17,6 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
-	- [Swift Package Manager](#swift-package-manager)
 - [Usage](#usage)
 	- [JWS: Digital Signatures](#jws-digital-signatures)
 	- [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
@@ -31,51 +30,55 @@ As of now, usage is limited to iOS. See [Security](#security) for details.
 
 ## Features
 
+- **JWS**: Digitally signing and verifying arbitrary data using the JWS standard.
+- **JWE**: Encrypting and decrypting arbitrary data using the JWE standard.
+- **JWK**: Encoding and decoding cryptographic keys.
+
+JOSESwift currently supports the following cryptographic algorithms:
+
+<table>
+	<tr>
+		<th colspan="2">🔏 JWS</th>
+		<th rowspan="19"></th>
+		<th colspan="4">🔐 JWE</th>
+		<th rowspan="19"></th>
+		<th colspan="2">🔑 JWK</th>
+	</tr>
+	<tr>
+		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-3">Digital Signatures and MACs</a></th>
+		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-4">Key Management</a></th>
+		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-5">Content Encryption</a></th>
+		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-6">Keys</a></th>
+	</tr>
+	<tr><td><code>HS256</code></td><td></td>                   <td><code>RSA1_5</code></td><td>:white_check_mark:</td>       <td><code>A128CBC-HS256</code></td><td></td>                   <td><code>RSA</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>HS384</code></td><td></td>                   <td><code>RSA-OAEP</code></td><td></td>                       <td><code>A128CBC-HS384</code></td><td></td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>HS512</code></td><td></td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A128CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td></td>                         <td><code>A128GCM</code></td><td></td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
+	<tr><td><code>RS384</code></td><td></td>                   <td><code>A192KW</code></td><td></td>                         <td><code>A192GCM</code></td><td></td>
+	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td></td>                         <td><code>A256GCM</code></td><td></td>
+	<tr><td><code>ES256</code></td><td>:white_check_mark:</td> <td><code>dir</code></td><td>:white_check_mark:</td>          <th rowspan="11"></th><th rowspan="11"></th></tr>
+	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td></td></tr>
+	<tr><td><code>ES512</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A128KW</code></td><td></td></tr>
+	<tr><td><code>PS256</code></td><td></td>                   <td><code>ECDH-ES+A192KW</code></td><td></td></tr>
+	<tr><td><code>PS384</code></td><td></td>                   <td><code>ECDH-ES+A256KW</code></td><td></td></tr>
+	<tr><td><code>PS512</code></td><td></td>                   <td><code>A128GCMKW</code></td><td></td></tr>
+	<tr><th rowspan="5"></th><th rowspan="5"></th>             <td><code>A192GCMKW</code></td><td></td></tr>
+	<tr>                                                       <td><code>A256GCMKW</code></td><td></td></tr>
+	<tr>                                                       <td><code>PBES2-HS256+A128KW</code></td><td></td></tr>
+	<tr>                                                       <td><code>PBES2-HS384+A192KW</code></td><td></td></tr>
+	<tr>                                                       <td><code>PBES2-HS512+A256KW</code></td><td></td></tr>
+</table>
+
+For interchangeability JOSESwift currently supports the following serializations and formats:
+
+<table>
+	<tr><th>JWS</th><th>JWE</th><th>JWK</th></tr>
+	<tr><th>Serialization</th><th>Serialization</th><th>Format</th>
+	<tr></td><td rowspan="2">Compact</td><td rowspan="2">Compact</td><td>JSON</td></tr>
+	<tr><td>JWK Set</td></tr>
+</table>
+
 If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
-
-### General
-
-*Supported serializations:*
-
-| Compact Serialization | JSON Serialization |
-| :-------------------: | :----------------: |
-| :white_check_mark:    |                    |
-
-### JWS :pencil:
-
-Digitally signing and verifying arbitrary data using the JWS standard.
-
-*Supported algorithms:*
-
-| HS256 | HS384 | HS512 | RS256 | RS384 | RS512 | ES256 | ES384 | ES512 | PS256  | PS384 | PS512 |
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| | | | :white_check_mark: | | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | | | |
-
-### JWE :lock:
-
-Encrypting and decrypting arbitrary data using the JWE standard.
-
-*Supported key encryption algorithms:*
-
-| RSA1_5 | RSA-OAEP | RSA-OAEP-256 | A128KW | A192KW | A256KW | dir | ECDH-ES | ECDH-ES+A128KW | ECDH-ES+A192KW | ECDH-ES+A256KW | A128GCMKW | A192GCMKW | A256GCMKW | PBES2-HS256+A128KW | PBES2-HS384+A192KW | PBES2-HS512+A256KW |
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | 
-| :white_check_mark: | |:white_check_mark:| | | | :white_check_mark: | | | | | | | | | | |
-
-*Supported content encryption algorithms:*
-
-| A128CBC-HS256 | A192CBC-HS384 | A256CBC-HS512 | A128GCM | A192GCM | A256GCM |
-| :--: | :--: | :--: | :--: | :--: | :--: |
-| | | :white_check_mark: | | | |
-
-### JWK :key:
-
-Encoding and decoding RSA public key data in PKCS#1 format as well as iOS `SecKey`s.
-
-*Supported key types:*
-
-| EC | RSA | oct |
-| :--: | :--: | :--: |
-| :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 ## Installation
 
