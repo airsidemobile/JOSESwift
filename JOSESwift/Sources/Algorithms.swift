@@ -39,8 +39,8 @@ public enum SignatureAlgorithm: String {
 /// An algorithm for asymmetric encryption and decryption.
 ///
 /// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
-/// - RSAESOAEP: [RSAES-OAEP](https://tools.ietf.org/html/rfc7518#section-4.3)
-/// - RSAESOAEP256: [RSAES-OAEP](https://tools.ietf.org/html/rfc7518#section-4.3)
+/// - RSAOAEP: [RSAES OAEP using SHA-1 and MGF1 with SHA-1](https://tools.ietf.org/html/rfc7518#section-4.3)
+/// - RSAOAEP256: [RSAES OAEP using SHA-256 and MGF1 with SHA-256](https://tools.ietf.org/html/rfc7518#section-4.3)
 /// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum AsymmetricKeyAlgorithm: String, CaseIterable {
     case RSA1_5 = "RSA1_5"
@@ -51,7 +51,7 @@ public enum AsymmetricKeyAlgorithm: String, CaseIterable {
 
 /// An algorithm for symmetric encryption and decryption.
 ///
-/// - A256CBC-HS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
+/// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
 public enum SymmetricKeyAlgorithm: String {
     case A256CBCHS512 = "A256CBC-HS512"
 
