@@ -30,7 +30,7 @@ class JWERSATests: RSACryptoTestCase {
     // The key used to encrypt the JWEs in Nimbus is the JWK representation of `publicKeyAlice2048`.
     // That way we can decrypt them using the corresponding `privateKeyAlice2048`.
     //
-    // To generage the serializations, setup a Maven project according to https://connect2id.com/products/nimbus-jose-jwt.
+    // To generate the serializations, setup a Maven project according to https://connect2id.com/products/nimbus-jose-jwt.
     // Then use the following code to print out serializations:
     //
     // JWEHeader header = new JWEHeader(JWEAlgorithm.RSA_OAEP_256, com.nimbusds.jose.EncryptionMethod.A256CBC_HS512);
