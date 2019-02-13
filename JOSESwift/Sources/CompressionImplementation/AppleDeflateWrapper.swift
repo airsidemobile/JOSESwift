@@ -14,26 +14,27 @@
 import Foundation
 import Compression
 
-extension Data {
+struct DeflateCompressor: CompressorProtocol {
     /// Compresses the data using the zlib deflate algorithm.
     /// - returns: raw deflated data according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
-    public func deflate() -> Data? {
-        return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
-            let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
-            return perform(config, source: sourcePtr, sourceSize: count)
-        }
+    public func compress(data: Data) -> Data {
+        let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
+        return data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
+            return perform(config, source: sourcePtr, sourceSize: data.count)
+        }!
     }
     
     /// Decompresses the data using the zlib deflate algorithm. Self is expected to be a raw deflate
     /// stream according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - returns: uncompressed data
-    public func inflate() -> Data? {
-        return self.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
-            let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
-            return perform(config, source: sourcePtr, sourceSize: count)
-        }
+    public func decompress(data: Data) -> Data {
+        let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
+        return data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
+            return perform(config, source: sourcePtr, sourceSize: data.count)
+        }!
     }
+    
 }
 
 private typealias Config = (operation: compression_stream_operation, algorithm: compression_algorithm)

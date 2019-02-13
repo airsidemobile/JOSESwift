@@ -72,21 +72,13 @@ public struct JWE {
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
     public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
         self.header = header
-        if header.compressionAlgorithm != nil && header.compressionAlgorithm != CompressionAlgorithm.deflate {
-            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
-        }
         
-        var _payload: Payload = payload
-        // If "zip" parameter is present, compression is applied to the plaintext before encryption.
-        switch header.compressionAlgorithm {
-        case .deflate?: _payload = Payload(payload.data().deflate()!)
-            break
-        default: break
-        }
+        // Obtain the compressor defaults to none
+        let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
         
         var encryptionContext: EncryptionContext
         do {
-            encryptionContext = try encrypter.encrypt(header: header, payload: _payload)
+            encryptionContext = try encrypter.encrypt(header: header, payload: Payload(compressor.compress(data: payload.data())))
         } catch {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
@@ -172,17 +164,9 @@ public struct JWE {
         }
 
         do {
-            var decryptedData = try decrypter.decrypt(context)
-            switch header.compressionAlgorithm {
-            case .deflate?:
-                // If "zip" parameter is present, decompression is applied to the plaintext after decryption.
-                if header.compressionAlgorithm == CompressionAlgorithm.deflate {
-                    decryptedData = decryptedData.inflate()!
-                }
-                break
-            default: break
-            }
-            return Payload(decryptedData)
+            let decryptedData = try decrypter.decrypt(context)
+            let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
+            return Payload(compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
@@ -210,17 +194,10 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }
 
-        // Use of this Header Parameter is OPTIONAL. This Header Parameter MUST be understood and processed by implementations.
-        if header.compressionAlgorithm != nil && header.compressionAlgorithm != CompressionAlgorithm.deflate {
-            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
-        }
-
         do {
-            var decryptedData = try decrypter.decrypt(context)
-            if header.compressionAlgorithm == CompressionAlgorithm.deflate {
-                decryptedData = decryptedData.inflate()!
-            }
-            return Payload(decryptedData)
+            let decryptedData = try decrypter.decrypt(context)
+            let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
+            return Payload(compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }

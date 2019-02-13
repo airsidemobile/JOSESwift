@@ -86,6 +86,7 @@
 		65FBFDE71F45CC7C005C7D68 /* JOSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* JOSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A30B8F822118FD0001834E3 /* AppleDeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F722118FD0001834E3 /* AppleDeflateWrapper.swift */; };
 		8A30B8FA22118FE6001834E3 /* JWECompressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */; };
+		8A4B08B22213FF0600828536 /* Compressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B08B12213FF0600828536 /* Compressor.swift */; };
 		C803EFE51FA77E3000B71335 /* JWSRSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSRSATests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWERSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWERSATests.swift */; };
@@ -204,6 +205,7 @@
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A30B8F722118FD0001834E3 /* AppleDeflateWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleDeflateWrapper.swift; sourceTree = "<group>"; };
 		8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWECompressionTests.swift; sourceTree = "<group>"; };
+		8A4B08B12213FF0600828536 /* Compressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compressor.swift; sourceTree = "<group>"; };
 		C803EFE41FA77E3000B71335 /* JWSRSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSRSATests.swift; sourceTree = "<group>"; };
 		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFEC1FA8849C00B71335 /* JWERSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWERSATests.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 			isa = PBXGroup;
 			children = (
 				8A30B8F722118FD0001834E3 /* AppleDeflateWrapper.swift */,
+				8A4B08B12213FF0600828536 /* Compressor.swift */,
 			);
 			path = CompressionImplementation;
 			sourceTree = "<group>";
@@ -717,6 +720,7 @@
 				C85B1EF2204D82640026BDCB /* JWS.swift in Sources */,
 				5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */,
 				5FB764055756A9190628BDDE /* ECKeyCodable.swift in Sources */,
+				8A4B08B22213FF0600828536 /* Compressor.swift in Sources */,
 				5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */,
 				5FB762CE28963B4780B33973 /* SecKeyECPublicKey.swift in Sources */,
 				5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */,

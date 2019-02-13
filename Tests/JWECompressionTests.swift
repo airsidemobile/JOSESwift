@@ -46,19 +46,7 @@ class JWECompressionTests: RSACryptoTestCase {
         
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
-    
-    func testEncryptWithNotSupportedZipHeaderValue() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
-        
-        var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
-        header.zip = "GZIP"
-        
-        let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
-        
-        try XCTAssertThrowsError(JWE(header: header, payload: payload, encrypter: encrypter))
-    }
-    
+
     // Note this test only works as long as the guard statement is before the actual decryption operation
     func testDecryptWithNotSupportedZipHeaderValue() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
