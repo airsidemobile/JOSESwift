@@ -73,7 +73,11 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 
 ### Serializations
 
-For interchangeability JOSESwift, supports _Compact Serialization_ [for JWS](https://tools.ietf.org/html/rfc7515#section-3.1) and [for JWE](https://tools.ietf.org/html/rfc7516#section-3.1).
+For interchangeability JOSESwift currently supports compact serialization [for JWS](https://tools.ietf.org/html/rfc7515#section-3.1) and [for JWE](https://tools.ietf.org/html/rfc7516#section-3.1).
+
+| Compact Serialization | JSON Serialization |		
+| :-------------------: | :----------------: |		
+| :white_check_mark:    |                    |
 
 ## Installation
 
