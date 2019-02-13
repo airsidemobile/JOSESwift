@@ -40,7 +40,7 @@ class JWERSATests: RSACryptoTestCase {
     // JWEObject jwe = new JWEObject(header, payload);
     //
     // Base64URL n = new Base64URL("<Insert modulus of public key here (can be obtained by converting it to a JWK>");
-    // Base64URL e = new Base64URL("<Insert public exponent of public key here (can be obtained by converting it to a JWK>");
+    // Base64URL e = new Base64URL("<Insert public exponent of public key here (can be obtained by converting it to a JWK)>");
     // RSAKey jwk = new RSAKey(n, e, null, null, null, null, null, null, null, null, null);
     //
     // RSAEncrypter encrypter = new RSAEncrypter(jwk);
