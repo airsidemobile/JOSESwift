@@ -49,7 +49,7 @@ class JWERSATests: RSACryptoTestCase {
     //
     // System.out.println(jwe.serialize());
 
-    let compactSerializedJWERSA1 = """
+    let compactSerializedJWERSHA1 = """
         eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.Od5AMgOHu6rcEYWkX7w_x_wnMlM5JfZaszCC4xtLGYU9d0BnPm95UWUrgSh\
         StGH6LHMxpGdru6gXpdxfhhrji12vUIzmkbyNW5M9wjx2t0e4pzzBSYxgOzFoa3jT9a0PcZfyqHIeTrcrTHtpSJ_CIDiZ3MIeqA7hjuRqu2YcTA\
         E0v5TPLhHDVRBptkOggA5SL2-gRuUuYoWdanMw_JTHK4utXQZoSY1LTdub_Fh5ez1RqOouc3an5Hx6ImzyJS_cbO_l9xHpHjE7in6SeV9bAZTaY\
@@ -57,7 +57,7 @@ class JWERSATests: RSACryptoTestCase {
         YP_e_rhz0PVg9QnJXiRl030ggI9GGs3E_0pEPBs9_WJ3E60qQVoXTIMbJXSQ.bQc-W1Ph_0_3kX570pT8gjDlGyiK3kF8PlHiT7GWfMo
         """.data(using: .utf8)!
 
-    let compactSerializedJWERSAOAEPSHA = """
+    let compactSerializedJWERSAOAEPSHA1 = """
         eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAifQ.VjoovzQfSQ9zRbPxFR-7suNJesM9yVQrH7tqvEWospcIuYBSQjPTBE6j\
         m32iqx9YQd3LiCLqDwz9fzn6_FANSGAYrVgibYX0BqCzN_l83t7YWIa_h43TCgE4sRestYasbqwXY-EfLNK2u37tRxCxxLKDtyugujxNZyQxpOh\
         gEA0TzJwwPa2ITX37Z0zF_sAEp_09lF0jWm9u4cVSt-mIIYcpgh5c3sIw1IWs7ynPNWn9Y68YmXJhgeZkIzDiLNGhf3KesH9to4z-EvIyXVBIWl\
@@ -75,8 +75,8 @@ class JWERSATests: RSACryptoTestCase {
 
     lazy var compactSerializedData: [String: Data] = {
         [
-            AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSA1,
-            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: compactSerializedJWERSAOAEPSHA,
+            AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSHA1,
+            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: compactSerializedJWERSAOAEPSHA1,
             AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256
         ]
     }()

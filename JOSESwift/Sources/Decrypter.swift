@@ -137,7 +137,7 @@ public struct Decrypter {
             cek = symmetricKey
         } else {
             // Generate a random CEK to substitue in case we fail to decrypt the CEK.
-            // This is to prevent the to prevent MMA (Million Message Attack) against RSA.
+            // This is to prevent the MMA (Million Message Attack) against RSA.
             // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),
             // RFC-5246 (https://tools.ietf.org/html/rfc5246#appendix-F.1.1.2),
             // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html.

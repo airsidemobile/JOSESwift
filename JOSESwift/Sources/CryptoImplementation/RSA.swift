@@ -69,9 +69,9 @@ internal extension AsymmetricKeyAlgorithm {
     ///
     /// - RSA1_5: For detailed information about the allowed plain text length for RSAES-PKCS1-v1_5,
     /// please refer to [RFC-3447, Section 7.2](https://tools.ietf.org/html/rfc3447#section-7.2).
-    /// - RSAOAEP: For detailed information about the allowed plain text length for RSA-OAEP,
+    /// - RSAOAEP: For detailed information about the allowed plain text length for RSAES-OAEP,
     /// please refer to [RFC-3447, Section 7.1](https://tools.ietf.org/html/rfc3447#section-7.1).
-    /// - RSAOAEP256: For detailed information about the allowed plain text length for RSA-OAEP-256,
+    /// - RSAOAEP256: For detailed information about the allowed plain text length for RSAES-OAEP-256,
     /// please refer to [RFC-3447, Section 7.1](https://tools.ietf.org/html/rfc3447#section-7.1).
     func maxMessageLength(for publicKey: SecKey) -> Int {
         let k = SecKeyGetBlockSize(publicKey)
@@ -122,10 +122,10 @@ fileprivate extension AsymmetricKeyAlgorithm {
             // please refer to the RFC(https://tools.ietf.org/html/rfc3447#section-7.2.2).
             return cipherText.count == SecKeyGetBlockSize(privateKey)
         case .RSAOAEP, .RSAOAEP256:
-            // For detailed information about the allowed cipher length for RSA-OAEP and RSA-OAEP-256,
+            // For detailed information about the allowed cipher length for RSAES-OAEP and RSAES-OAEP-256,
             // please refer to RFC-3447 (https://tools.ietf.org/html/rfc3447#section-7.1.2,
             // https://www.rfc-editor.org/errata_search.php?rfc=3447):
-            // The ciphertext to be decrypted is an an octet string of length k,
+            // The ciphertext to be decrypted is an octet string of length k,
             // where k is the length in octets of the RSA modulus,
             // and k >= 2hLen + 2
             return cipherText.count == SecKeyGetBlockSize(privateKey)

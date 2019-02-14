@@ -26,8 +26,8 @@ import XCTest
 
 class RSADecrypterTests: RSACryptoTestCase {
 
-    // Cipher texts are generated with `openssl rsautl`
-    // `printf` is used because `echo` appends a newline at the end of the string
+    // Cipher texts are generated with `openssl rsautl`.
+    // `printf` is used because `echo` appends a newline at the end of the string.
 
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl rsautl -encrypt -pubin -inkey alice.pub.pem -out >(base64)
     let cipherTextWithAliceKeyBase64 = """
@@ -38,7 +38,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         """
 
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey alice.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -out >(base64)
-    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSA-OAEP with SHA256 digest
+    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSAES-OAEP with SHA256 digest.
     let cipherTextWithAliceOAEPSHA256Base64 = """
         HtL3/k9aiCzON4dEAK930LXvxoWgu2cXHj011FAY4Z++CikiPn5gt/TLFEEV6c4MyMUN8Pj796XwO5a9LRfsV+XWjb5WIAUXewgdKYC1NBFf/q\
         Ip+NixeO6oo0nh5NlApJgphRIy1en9ARoz0rIzayt0Py4QOEse7OHLUnDA7PP8vp0X1pyqEG9FZaPViH4+/1zwvEjBVo4N5K4Zl4jqzFYTOkm4\
@@ -47,7 +47,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         """
 
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey alice.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha1 -pkeyopt rsa_mgf1_md:sha1 -out >(base64)
-    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSA-OAEP with SHA256 digest
+    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSAES-OAEP with SHA256 digest.
     let cipherTextWithAliceOAEPSHA1Base64 = """
         bx+Sg8AfSLUGUL/ogL6LZLJdX62N7sYA413SG5sfaAunpyrH3/SCJNTsjQow8zk99jbbiSABWKowDb8tfIwY0SHiU/aKW46f7FeP/70vF2zOefr\
         LnVjw1hE9mJi/P7qP66Md8lNC7iRRDtluAHzPE7Hr8E4Xam2lEmZOXsE0lFnHf0eyG23rezGfnJ4lIY40GK926qyjTkSvtHJa57bzfP3Bxj61NK\
@@ -64,7 +64,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         """
     
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey bob.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -out >(base64)
-    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSA-OAEP with SHA256 digest
+    //  *NOTE*: openssl v1.1.x is required to encrypt data using RSAES-OAEP with SHA256 digest.
     let cipherTextWithBobKeyOAEPSHA256Base64 = """
         IUCsUQzcyL/iuwWpgXK/TgyrsxuSbKKAXq1bd6wlRf7O+9UBlQAenAzXkhRchBOrCYbS1Bs2IwN3gu51RiVsuOg5oHxxKIbtfnbqwtw9beV02oR\
         ETCSZ5wPFC/tlYYYloGYR3O47VF5o+NV4qKOE6jbjBEknMAwdN1eoGb0LmF9kUvt9jCLkI1Jt3Cqs8fV9nxqI4Iyzn6hjlvRJk82Ah/q86XfNCQ\
