@@ -22,6 +22,8 @@ merge to master and move them to a respective version upon release.
 
 ## Unreleased
 
+- Restyle features section in readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143))
+
 Add your changes here.
 
 ## [1.6.0] - 2019-01-25
