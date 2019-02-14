@@ -28,8 +28,10 @@ enum HeaderParsingError: Error {
     case headerIsNotValidJSONObject
 }
 
-/// A `JOSEHeader` is a JSON object representing various Header Parameters.
-/// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
+/**
+ A `JOSEHeader` is a JSON object representing various Header Parameters.
+ Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
+ */
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var headerData: Data { get }
     var parameters: [String: Any] { get }
