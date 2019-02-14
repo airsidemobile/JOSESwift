@@ -136,15 +136,17 @@ public struct Decrypter {
 
             cek = symmetricKey
         } else {
-        // Generate random CEK to prevent MMA (Million Message Attack).
-        // For detailed information, please refer to this RFC(https://tools.ietf.org/html/rfc3218#section-2.3.2)
-        // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html
-        let randomCEK = try SecureRandom.generate(count: enc.keyLength)
+            // Generate a random CEK to substitue in case we fail to decrypt the CEK.
+            // This is to prevent the to prevent MMA (Million Message Attack) against RSA.
+            // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),
+            // RFC-5246 (https://tools.ietf.org/html/rfc5246#appendix-F.1.1.2),
+            // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html.
+            let randomCEK = try SecureRandom.generate(count: enc.keyLength)
 
-        if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
-            cek = decryptedCEK
-        } else {
-            cek = randomCEK
+            if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
+                cek = decryptedCEK
+            } else {
+                cek = randomCEK
             }
         }
 
