@@ -53,6 +53,8 @@ extension JOSEHeader {
             return nil
         }
 
+        let dict = [1, 2, ]
+
         let optional: String? = nil
         if let _ = optional {
             print("wtf")
