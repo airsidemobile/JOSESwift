@@ -74,7 +74,7 @@ public struct JWE {
         self.header = header
         
         // Obtain the compressor defaults to none
-        let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
+        let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
         
         var encryptionContext: EncryptionContext
         do {
@@ -165,7 +165,7 @@ public struct JWE {
 
         do {
             let decryptedData = try decrypter.decrypt(context)
-            let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
+            let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             return Payload(compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
@@ -196,7 +196,7 @@ public struct JWE {
 
         do {
             let decryptedData = try decrypter.decrypt(context)
-            let compressor = CompressorFactory.getCompressor(algorithm: header.compressionAlgorithm)
+            let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             return Payload(compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
