@@ -51,8 +51,6 @@ extension JOSEHeader {
             return nil
         }
 
-        let dict = [1, 2, 3,]
-
         try? self.init(parameters: parameters, headerData: data)
     }
 
