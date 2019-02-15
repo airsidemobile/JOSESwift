@@ -20,9 +20,13 @@ struct DeflateCompressor: CompressorProtocol {
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
     public func compress(data: Data) -> Data {
         let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
-        return data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
+        let optionalData = data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             return perform(config, source: sourcePtr, sourceSize: data.count)
-        }!
+        }
+        if let _data = optionalData {
+            return _data
+        }
+        return Data()
     }
     
     /// Decompresses the data using the zlib deflate algorithm. Self is expected to be a raw deflate
@@ -30,9 +34,13 @@ struct DeflateCompressor: CompressorProtocol {
     /// - returns: uncompressed data
     public func decompress(data: Data) -> Data {
         let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
-        return data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
+        let optionalData = data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             return perform(config, source: sourcePtr, sourceSize: data.count)
-        }!
+        }
+        if let _data = optionalData {
+            return _data
+        }
+        return Data()
     }
     
 }
