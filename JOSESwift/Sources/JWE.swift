@@ -159,7 +159,7 @@ public struct JWE {
         }
 
         // Use of this Header Parameter is OPTIONAL. This Header Parameter MUST be understood and processed by implementations.
-        if header.compressionAlgorithm != nil && header.compressionAlgorithm != CompressionAlgorithm.deflate {
+        if header.compressionAlgorithm != nil && header.compressionAlgorithm != CompressionAlgorithm.DEFLATE {
             throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
         }
 

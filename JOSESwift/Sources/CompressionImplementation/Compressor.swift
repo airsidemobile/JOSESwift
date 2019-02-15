@@ -24,7 +24,7 @@ struct NoneCompressor: CompressorProtocol {
 struct CompressorFactory {
     static func makeCompressor(algorithm: CompressionAlgorithm?) -> CompressorProtocol {
         switch algorithm {
-        case .deflate?:
+        case .DEFLATE?:
             return DeflateCompressor()
         default:
             return NoneCompressor()
