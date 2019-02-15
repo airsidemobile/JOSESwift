@@ -120,9 +120,10 @@ public enum HMACAlgorithm: String {
 /// - Deflate: [DEF](https://tools.ietf.org/html/rfc7516#section-4.1.3)
 public enum CompressionAlgorithm: String {
     init() {
-        self = .none
+        // Permissive: defaults to none also for unknown values
+        self = .NONE
     }
     
-    case deflate = "DEF"
-    case none
+    case DEFLATE = "DEF"
+    case NONE
 }
