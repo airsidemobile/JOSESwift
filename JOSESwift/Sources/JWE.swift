@@ -158,11 +158,6 @@ public struct JWE {
             throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
         }
 
-        // Use of this Header Parameter is OPTIONAL. This Header Parameter MUST be understood and processed by implementations.
-        if header.compressionAlgorithm != nil && header.compressionAlgorithm != CompressionAlgorithm.DEFLATE {
-            throw JOSESwiftError.decryptingFailed(description: "Only DEF supported as zip parameter.")
-        }
-
         do {
             let decryptedData = try decrypter.decrypt(context)
             let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
