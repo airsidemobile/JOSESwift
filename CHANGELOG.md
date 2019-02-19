@@ -37,7 +37,7 @@ Add your changes here.
 
 - Changes the way elliptic curve keys are decoded to work around [#86](https://github.com/airsidemobile/JOSESwift/issues/86) until [#120](https://github.com/airsidemobile/JOSESwift/pull/120) is merged ([#137](https://github.com/airsidemobile/JOSESwift/pull/137)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 - Adds a changelog ([#136](https://github.com/airsidemobile/JOSESwift/pull/136)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
-- Changes travis to use builtin homebrew addon ([#133](https://github.com/airsidemobile/JOSESwift/pull/133))  via [@stephengroat](https://github.com/stephengroat)
+- Changes travis to use builtin homebrew addon ([#133](https://github.com/airsidemobile/JOSESwift/pull/133)) via [@stephengroat](https://github.com/stephengroat)
 - Security: Change fastlane version to fix [#129](https://github.com/airsidemobile/JOSESwift/issues/129) ([#130](https://github.com/airsidemobile/JOSESwift/pull/130)) via [@alex-mohemian](https://github.com/alex-mohemian)
 - Adds support for elliptic curve algorithms for JWS and elliptic curve keys for JWK ([#88](https://github.com/airsidemobile/JOSESwift/pull/88)) via [@jarrodmoldrich](https://github.com/jarrodmoldrich)
 
