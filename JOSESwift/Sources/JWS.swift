@@ -107,6 +107,10 @@ public struct JWS {
         self.signature = signature
     }
 
+    func test() {
+        print("test")
+    }
+
     /// Checks whether the JWS's signature is valid using a given public key.
     ///
     /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
