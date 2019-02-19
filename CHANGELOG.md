@@ -22,7 +22,8 @@ merge to master and move them to a respective version upon release.
 
 ## Unreleased
 
-- Restyle features section in readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143))
+- Adds new features section in readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143))
+- Adds support for RSA-OAEP ([#95](https://github.com/airsidemobile/JOSESwift/pull/95), [#142](https://github.com/airsidemobile/JOSESwift/pull/142))
 
 Add your changes here.
 

@@ -1,5 +1,5 @@
 //
-//  JWETests.swift
+//  JWERSATests.swift
 //  Tests
 //
 //  Created by Carol Capek on 31.10.17.
@@ -24,9 +24,32 @@
 import XCTest
 @testable import JOSESwift
 
-class JWETests: RSACryptoTestCase {
+class JWERSATests: RSACryptoTestCase {
 
-    let compactSerializedJWERSA1 = """
+    // The JWE serializations below are generated using the Java library Nimbus JOSE + JWT.
+    // The key used to encrypt the JWEs in Nimbus is the JWK representation of `publicKeyAlice2048`.
+    // That way we can decrypt them using the corresponding `privateKeyAlice2048`.
+    //
+    // To generate the serializations, setup a Maven project according to https://connect2id.com/products/nimbus-jose-jwt.
+    // Then use the following code to print out serializations:
+    //
+    // JWEHeader header = new JWEHeader(JWEAlgorithm.RSA_OAEP_256, com.nimbusds.jose.EncryptionMethod.A256CBC_HS512);
+    //
+    // Payload payload = new Payload("The true sign of intelligence is not knowledge but imagination.");
+    //
+    // JWEObject jwe = new JWEObject(header, payload);
+    //
+    // Base64URL n = new Base64URL("<Insert modulus of public key here (can be obtained by converting it to a JWK)>");
+    // Base64URL e = new Base64URL("<Insert public exponent of public key here (can be obtained by converting it to a JWK)>");
+    // RSAKey jwk = new RSAKey(n, e, null, null, null, null, null, null, null, null, null);
+    //
+    // RSAEncrypter encrypter = new RSAEncrypter(jwk);
+    //
+    // jwe.encrypt(encrypter);
+    //
+    // System.out.println(jwe.serialize());
+
+    let compactSerializedJWERSHA1 = """
         eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.Od5AMgOHu6rcEYWkX7w_x_wnMlM5JfZaszCC4xtLGYU9d0BnPm95UWUrgSh\
         StGH6LHMxpGdru6gXpdxfhhrji12vUIzmkbyNW5M9wjx2t0e4pzzBSYxgOzFoa3jT9a0PcZfyqHIeTrcrTHtpSJ_CIDiZ3MIeqA7hjuRqu2YcTA\
         E0v5TPLhHDVRBptkOggA5SL2-gRuUuYoWdanMw_JTHK4utXQZoSY1LTdub_Fh5ez1RqOouc3an5Hx6ImzyJS_cbO_l9xHpHjE7in6SeV9bAZTaY\
@@ -34,17 +57,28 @@ class JWETests: RSACryptoTestCase {
         YP_e_rhz0PVg9QnJXiRl030ggI9GGs3E_0pEPBs9_WJ3E60qQVoXTIMbJXSQ.bQc-W1Ph_0_3kX570pT8gjDlGyiK3kF8PlHiT7GWfMo
         """.data(using: .utf8)!
 
+    let compactSerializedJWERSAOAEPSHA1 = """
+        eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAifQ.VjoovzQfSQ9zRbPxFR-7suNJesM9yVQrH7tqvEWospcIuYBSQjPTBE6j\
+        m32iqx9YQd3LiCLqDwz9fzn6_FANSGAYrVgibYX0BqCzN_l83t7YWIa_h43TCgE4sRestYasbqwXY-EfLNK2u37tRxCxxLKDtyugujxNZyQxpOh\
+        gEA0TzJwwPa2ITX37Z0zF_sAEp_09lF0jWm9u4cVSt-mIIYcpgh5c3sIw1IWs7ynPNWn9Y68YmXJhgeZkIzDiLNGhf3KesH9to4z-EvIyXVBIWl\
+        edDnI6qUShAtcvkFctCqRbxIwIVGfuy1Mr1DBx6564Pe3i96V2jqW9b98svcVyQQ.dXU-3Hw7_IY5OC46PBLj3A.4WBT8JS5c7P5iSoME8U0wkl\
+        DAnkrZOVxFIvWyCZ5bd1gLLAtrNynfos1dS8lZaMBuaB8qFVxeASG93WpTGcM3Q.BQIMElwgzx7ytiikieuxxRTjrzA8dvr8MpQIF27oH2o
+        """.data(using: .utf8)!
+
     let compactSerializedJWERSAOAEPSHA256 = """
-        eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.RL7Ny2UFhgp04E_sJnnX77slkDM8X9LETqFAn3WpL_D6pXSYE9\
-        pUJK8DYFETi2FzANVqz128wzySW2tzVxltDfxi9irInmK0W0nls4aFRqpPUL2xG_izW624y-J5QebsjEUQg-RdbnHz82VO9OrvJVGst8HFQn0X\
-        sCN76WGgZcPfON3As5dfIyUctW3twCWB_G4lWZqmvOJ4GqkT3SpMc3aQtGzKdJ0WN-4MKbm0Shk-07um8yJgzH6xaLHcbJHhWjDB6VHBkiX6X7\
-        bbLiN_R_XQKO78Nlj2LFn5OO2B5VoINH_DZj6UsEuSywTHTl7ET-QgXYbsLTrXB2Pzs3gpvQ.L9MZP9n4UKljKgGEoEnbyA.8uZpYsF9pNIQy0\
-        6zCoWv7gBNW6DC0-KwWUXpiGcFfVhyBD1hfQC7bQD1fH6GeargKBNjrYcv7bm_5purQFTt_A.ecd44cJE0BH4Fwqm2fDHM1dXhHtiFDJn2VEhw55VP28
+        eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.U1gJUJ81kHBO02JbjsPXOu0sbbV38R87jTzc4SHPs3BcFjzrTSd\
+        ECN6sqcNQ-Yq_Z9-aO0Xjs_plCxY3ICWt066bDqSYPIHtSPP-dZ_UMoJb6yHZNkBQqv-_pONL_p4kUTVfEpfxtkDvl2qojOS04aFdKSDv6Pr5jo\
+        YlV266u9p-qdbaaEk2B3yihbaenXUnJKU-uJJN_zRYPX5slFWR9ahYEniw-xV4CT6guVgZu8MdZuzSm_HRu4PS5SzH3sc7lvk50rXRL-ivHC2bX\
+        WlJJlHwsgGiQiln7VxKx7-NrCpRiWGv0lrz41YKtMXO7iqStLozmYl-FoM37C03XDQyJw.5kuCqSzPQ79yxN4SkWbVTg.kosTf8K4SIX2cgibmC\
+        z8ONRqnbRk8OhF79pAKmid7C6oTXmVRl-anwQYN8KP_1aUGOIzYaZnZEHufsm6F9BTRA.eeuVZVDX-zSiikfD4Np6LiPNuC12zRvtgVc6NbcHo4Q
         """.data(using: .utf8)!
 
     lazy var compactSerializedData: [String: Data] = {
-        [AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSA1,
-         AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256]
+        [
+            AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSHA1,
+            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: compactSerializedJWERSAOAEPSHA1,
+            AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256
+        ]
     }()
 
     let plaintext = """
@@ -165,7 +199,7 @@ class JWETests: RSACryptoTestCase {
                 keyDecryptionAlgorithm: algorithm,
                 decryptionKey: privateKeyAlice2048,
                 contentDecryptionAlgorithm: .A256CBCHS512
-                )!
+            )!
             
             XCTAssertEqual(try! jwe.decrypt(using: decrypter).data(), plaintext)
         }
