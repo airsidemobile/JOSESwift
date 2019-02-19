@@ -26,9 +26,6 @@ import Foundation
 public struct Payload: DataConvertible {
     let payload: Data
 
-    /**
-        Test
-    */
     public init(_ payload: Data) {
         self.payload = payload
     }
