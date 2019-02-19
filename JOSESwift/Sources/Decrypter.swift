@@ -78,8 +78,9 @@ public struct Decrypter {
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+        // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
             guard type(of: key) is RSADecrypter.KeyType.Type else {
                 return nil
             }
@@ -135,9 +136,11 @@ public struct Decrypter {
 
             cek = symmetricKey
         } else {
-            // Generate random CEK to prevent MMA (Million Message Attack).
-            // For detailed information, please refer to this RFC(https://tools.ietf.org/html/rfc3218#section-2.3.2)
-            // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html
+            // Generate a random CEK to substitue in case we fail to decrypt the CEK.
+            // This is to prevent the MMA (Million Message Attack) against RSA.
+            // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),
+            // RFC-5246 (https://tools.ietf.org/html/rfc5246#appendix-F.1.1.2),
+            // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html.
             let randomCEK = try SecureRandom.generate(count: enc.keyLength)
 
             if let decryptedCEK = try? asymmetric.decrypt(context.encryptedKey) {
