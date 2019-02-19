@@ -26,7 +26,7 @@ Add your changes here.
 
 ## [1.7.0] - 2019-02-19
 
-- Adds a new features section in readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds a new features section in the readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 - Adds support for RSA-OAEP ([#95](https://github.com/airsidemobile/JOSESwift/pull/95), [#142](https://github.com/airsidemobile/JOSESwift/pull/142)) via [@garrefa](https://github.com/garrefa)
 
 ## [1.6.0] - 2019-01-25
