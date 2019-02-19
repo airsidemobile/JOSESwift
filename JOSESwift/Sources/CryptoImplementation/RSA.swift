@@ -62,7 +62,6 @@ internal extension AsymmetricKeyAlgorithm {
         }
     }
 
-
     /// This method returns the maximum message length allowed for an `AsymmetricKeyAlgorithm`.
     /// - Parameter publicKey: The publicKey used with the algorithm.
     /// - Returns: The maximum message length allowed for use with the algorithm.
