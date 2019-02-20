@@ -86,6 +86,7 @@
 		65F44EB11FE2D941000C5EA0 /* JWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB01FE2D941000C5EA0 /* JWK.swift */; };
 		65F44EB31FE2E1C6000C5EA0 /* RSAKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* JOSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* JOSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		65FC10A4221DC2C000F3F2C0 /* JWKRSAParameterTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6508625A2180D9A00052F9CA /* JWKRSAParameterTypeTests.swift */; };
 		C803EFE51FA77E3000B71335 /* JWSRSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSRSATests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWERSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWERSATests.swift */; };
@@ -632,6 +633,7 @@
 				C803EFEF1FA884C100B71335 /* JWEHeaderTests.swift in Sources */,
 				C81DD92A1FD7096B00026024 /* HMACTests.swift in Sources */,
 				65684A4F2031971A00E56C68 /* RSAPublicKeyToSecKeyTests.swift in Sources */,
+				65FC10A4221DC2C000F3F2C0 /* JWKRSAParameterTypeTests.swift in Sources */,
 				65E733D51FEC031B0009EAC6 /* JWKRSAKeysTests.swift in Sources */,
 				65E733D31FEBFDB30009EAC6 /* JWKtoJSONTests.swift in Sources */,
 				C803EFE51FA77E3000B71335 /* JWSRSATests.swift in Sources */,
