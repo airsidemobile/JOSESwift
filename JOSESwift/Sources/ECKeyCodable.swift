@@ -144,12 +144,15 @@ extension ECPrivateKey: Decodable {
         // Other common parameters are optional.
         var parameters: [String: JWKParameterType] = [:]
 
-        for key in commonParameters.allKeys where key.type == String.self{
-            parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
-        }
-
-        for key in commonParameters.allKeys where key.type == [String].self{
-            parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
+        for key in commonParameters.allKeys {
+            switch key.type {
+            case is String.Type:
+                parameters[key.rawValue] = try commonParameters.decode(String.self, forKey: key)
+            case is [String].Type:
+                parameters[key.rawValue] = try commonParameters.decode([String].self, forKey: key)
+            default:
+                break
+            }
         }
 
         // EC private key specific parameters.
