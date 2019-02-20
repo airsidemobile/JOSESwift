@@ -79,8 +79,9 @@ public struct Encrypter<KeyType> {
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+        // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
             guard type(of: key) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
