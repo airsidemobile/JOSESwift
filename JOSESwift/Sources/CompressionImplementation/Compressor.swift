@@ -34,7 +34,7 @@ struct NoneCompressor: CompressorProtocol {
 struct CompressorFactory {
     /// Select the appropriate `Compressor` for a given `CompressionAlgorithm. Defaults to the `NoneCompressor`.
     ///
-    /// - Parameter the `CompressionAlgorithm` for selecting the appropriate compressor.
+    /// - Parameter algorithm: The `CompressionAlgorithm` for selecting the appropriate compressor.
     /// - Returns: The appropriate compressor
     static func makeCompressor(algorithm: CompressionAlgorithm?) -> CompressorProtocol {
         switch algorithm {
