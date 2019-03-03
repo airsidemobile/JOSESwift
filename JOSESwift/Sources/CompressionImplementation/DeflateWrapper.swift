@@ -18,7 +18,7 @@ struct DeflateCompressor: CompressorProtocol {
     /// Compresses the data using the zlib deflate algorithm.
     /// - returns: raw deflated data according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
-    public func compress(data: Data) -> Data {
+    public func compress(data: Data) throws -> Data {
         let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
         let optionalData = data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             return perform(config, source: sourcePtr, sourceSize: data.count)
@@ -26,13 +26,13 @@ struct DeflateCompressor: CompressorProtocol {
         if let _data = optionalData {
             return _data
         }
-        return Data()
+        throw JOSESwiftError.compressionFailed
     }
     
     /// Decompresses the data using the zlib deflate algorithm. Self is expected to be a raw deflate
     /// stream according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - returns: uncompressed data
-    public func decompress(data: Data) -> Data {
+    public func decompress(data: Data) throws -> Data {
         let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
         let optionalData = data.withUnsafeBytes { (sourcePtr: UnsafePointer<UInt8>) -> Data? in
             return perform(config, source: sourcePtr, sourceSize: data.count)
@@ -40,7 +40,7 @@ struct DeflateCompressor: CompressorProtocol {
         if let _data = optionalData {
             return _data
         }
-        return Data()
+        throw JOSESwiftError.decompressionFailed
     }
     
 }

@@ -12,12 +12,12 @@ protocol CompressorProtocol {
     ///
     /// - Parameter data: The uncompressed data.
     /// - Returns: The compressed data.
-    func compress(data: Data) -> Data
+    func compress(data: Data) throws -> Data
     /// Decompresses data using the `CompressionAlgorithm`.
     ///
     /// - Parameter data: The compressed data.
     /// - Returns: The decompressed data.
-    func decompress(data: Data) -> Data
+    func decompress(data: Data) throws -> Data
 }
 
 /// A `Compressor` that takes the data and passes it back without doing any compression or decompression.

@@ -161,7 +161,7 @@ public struct JWE {
         do {
             let decryptedData = try decrypter.decrypt(context)
             let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-            return Payload(compressor.decompress(data: decryptedData))
+            return Payload(try compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
@@ -192,7 +192,7 @@ public struct JWE {
         do {
             let decryptedData = try decrypter.decrypt(context)
             let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-            return Payload(compressor.decompress(data: decryptedData))
+            return Payload(try compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
