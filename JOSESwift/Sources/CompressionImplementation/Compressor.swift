@@ -15,7 +15,7 @@ protocol CompressorProtocol {
     func compress(data: Data) -> Data
     /// Decompresses data using the `CompressionAlgorithm`.
     ///
-    /// - Parameter compressed data.
+    /// - Parameter data: The compressed data.
     /// - Returns: The decompressed data.
     func decompress(data: Data) -> Data
 }
