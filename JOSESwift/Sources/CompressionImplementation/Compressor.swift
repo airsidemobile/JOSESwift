@@ -10,7 +10,7 @@ import Foundation
 protocol CompressorProtocol {
     /// Compresses data using the `CompressionAlgorithm`.
     ///
-    /// - Parameter decompressed data.
+    /// - Parameter data: The uncompressed data.
     /// - Returns: The compressed data.
     func compress(data: Data) -> Data
     /// Decompresses data using the `CompressionAlgorithm`.
