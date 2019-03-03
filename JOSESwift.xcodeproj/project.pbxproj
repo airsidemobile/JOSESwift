@@ -306,6 +306,7 @@
 		653355281F8F6B4A00A660C6 /* JWE */ = {
 			isa = PBXGroup;
 			children = (
+				8A4B08B12213FF0600828536 /* Compressor.swift */,
 				6533552D1F8FB61000A660C6 /* JWE.swift */,
 				653355291F8F6B6800A660C6 /* JWEHeader.swift */,
 				65617FCA1F90F8C700D8C743 /* Encrypter.swift */,
@@ -475,7 +476,6 @@
 			isa = PBXGroup;
 			children = (
 				8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */,
-				8A4B08B12213FF0600828536 /* Compressor.swift */,
 			);
 			path = CompressionImplementation;
 			sourceTree = "<group>";
