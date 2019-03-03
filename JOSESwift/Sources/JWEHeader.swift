@@ -111,6 +111,19 @@ public extension JWEHeader {
         }
         return CompressionAlgorithm(rawValue: compressionAlgorithm)
     }
+
+    /// The zip header parameter indicates the content has been compressed before encryption
+    public var zip: String? {
+        set {
+            parameters["zip"] = newValue
+        }
+        get {
+            guard let compressionAlgorithm = parameters["zip"] as? String else {
+                return nil
+            }
+            return compressionAlgorithm
+        }
+    }
 }
 
 extension JWEHeader: CommonHeaderParameterSpace {
@@ -222,19 +235,6 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
         get {
             return parameters["crit"] as? [String]
-        }
-    }
-
-    /// The zip header parameter indicates the content has been compressed before encryption
-    public var zip: String? {
-        set {
-            parameters["zip"] = newValue
-        }
-        get {
-            guard let compressionAlgorithm = parameters["zip"] as? String else {
-                return nil
-            }
-            return compressionAlgorithm
         }
     }
 }
