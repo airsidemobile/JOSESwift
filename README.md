@@ -73,7 +73,11 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 
 ### Compression Algorithms
 
-*Supported compression algorithm:* "DEF" - Compression with the DEFLATE [RFC1951] algorithm.
+JOSESwift supports the [DEFLATE](https://tools.ietf.org/html/rfc1951) compression algorithm [for JWE](https://tools.ietf.org/html/rfc7516#section-4.1.3).
+
+| DEF                   |
+| :-------------------: |
+| :white_check_mark:    |
 
 ### Serializations
 
