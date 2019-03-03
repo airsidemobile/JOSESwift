@@ -1,5 +1,5 @@
 //
-//  AppleDeflateWrapper.swift
+//  DeflateWrapper.swift
 //  JOSESwift
 //
 //  Modified by Florian Häser on 24.12.18.
