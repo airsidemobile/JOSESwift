@@ -119,7 +119,7 @@ public extension JWEHeader {
         }
         get {
             guard let compressionAlgorithm = parameters["zip"] as? String else {
-                return nil
+                return "NONE"
             }
             return compressionAlgorithm
         }
