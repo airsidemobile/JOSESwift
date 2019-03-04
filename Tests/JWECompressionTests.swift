@@ -11,6 +11,7 @@ import XCTest
 class JWECompressionTests: RSACryptoTestCase {
     
     let data = "So Secret! 🔥🌵".data(using: .utf8)!
+    let compressedDataBase64URLEncodedString = "C85XCE5NLkotUVT4MH_K0g_ze7YCAA"
     
     let jweSerializedNotSupportedZipHeaderValue = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiemlwIjoiR1pJUCJ9..I62WKaitlHoJ-Kz3zvQ-Tw.Tu9hk_AMRMRTc8ggsoWifFS979Nz8xt-xx4FpF6waeE.w7c8eAGXpUD3tNskLzdl17s4vsCCSUwe5bRFpJg1kUs"
     
@@ -80,5 +81,25 @@ class JWECompressionTests: RSACryptoTestCase {
         XCTAssert(noneCompressor is NoneCompressor)
         
         try XCTAssertThrowsError(CompressorFactory.makeCompressor(algorithm: nil))
+    }
+    
+    func testNoneCompressor() throws {
+        let noneCompressor = try CompressorFactory.makeCompressor(algorithm: CompressionAlgorithm.NONE)
+        XCTAssert(noneCompressor is NoneCompressor)
+        //test none compress
+        XCTAssertEqual(try noneCompressor.compress(data: data), data)
+        //test none decompress
+        XCTAssertEqual(try noneCompressor.decompress(data: data), data)
+    }
+
+    func testDeflateCompressor() throws {
+        let deflateCompressor = try CompressorFactory.makeCompressor(algorithm: CompressionAlgorithm.DEFLATE)
+        XCTAssert(deflateCompressor is DeflateCompressor)
+        
+        var compressedData = try deflateCompressor.compress(data: data)
+        XCTAssertEqual(compressedData.base64URLEncodedString(), compressedDataBase64URLEncodedString)
+        
+        compressedData = Data.init(base64URLEncoded: compressedDataBase64URLEncodedString)!
+        XCTAssertEqual(try deflateCompressor.decompress(data: compressedData), data)
     }
 }
