@@ -112,7 +112,7 @@ public extension JWEHeader {
         return CompressionAlgorithm(rawValue: compressionAlgorithm)
     }
 
-    /// The zip header parameter indicates the content has been compressed before encryption
+    /// The zip header parameter indicates that the content has been compressed before encryption. If no compression is applied, the `zip` parameter is `nil`.
     public var zip: String? {
         set {
             parameters["zip"] = newValue
