@@ -36,12 +36,14 @@ struct CompressorFactory {
     ///
     /// - Parameter algorithm: The `CompressionAlgorithm` for selecting the appropriate compressor.
     /// - Returns: The appropriate compressor
-    static func makeCompressor(algorithm: CompressionAlgorithm?) -> CompressorProtocol {
+    static func makeCompressor(algorithm: CompressionAlgorithm?) throws -> CompressorProtocol {
         switch algorithm {
         case .DEFLATE?:
             return DeflateCompressor()
-        default:
+        case .NONE?:
             return NoneCompressor()
+        default:
+            throw JOSESwiftError.compressionAlgorithmNotSupported
         }
     }
 }

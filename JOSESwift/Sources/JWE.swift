@@ -72,12 +72,10 @@ public struct JWE {
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
     public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
         self.header = header
-        
-        // Obtain the compressor defaults to none
-        let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-        
+
         var encryptionContext: EncryptionContext
         do {
+            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             encryptionContext = try encrypter.encrypt(header: header, payload: Payload(compressor.compress(data: payload.data())))
         } catch {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
@@ -160,7 +158,7 @@ public struct JWE {
 
         do {
             let decryptedData = try decrypter.decrypt(context)
-            let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
+            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             return Payload(try compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
@@ -191,7 +189,7 @@ public struct JWE {
 
         do {
             let decryptedData = try decrypter.decrypt(context)
-            let compressor = CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
+            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             return Payload(try compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)

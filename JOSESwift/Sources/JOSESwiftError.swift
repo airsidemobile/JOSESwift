@@ -40,4 +40,5 @@ public enum JOSESwiftError: Error {
     // Compression erros
     case compressionFailed
     case decompressionFailed
+    case compressionAlgorithmNotSupported
 }
