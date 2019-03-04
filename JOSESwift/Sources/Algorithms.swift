@@ -53,44 +53,55 @@ public enum AsymmetricKeyAlgorithm: String, CaseIterable {
 ///
 /// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
 public enum SymmetricKeyAlgorithm: String {
+    case A128KW = "A128KW"
+    case A192KW = "A192KW"
+    case A256KW = "A256KW"
     case A256CBCHS512 = "A256CBC-HS512"
 
     var hmacAlgorithm: HMACAlgorithm {
         switch self {
         case .A256CBCHS512:
             return .SHA512
+        default:
+            return .none
         }
     }
 
     var keyLength: Int {
         switch self {
+        case .A128KW:
+            return 16
+        case .A192KW:
+            return 24
+        case .A256KW:
+            return 32
         case .A256CBCHS512:
             return 64
+
         }
     }
 
     var initializationVectorLength: Int {
         switch self {
-        case .A256CBCHS512:
+        case .A128KW, .A192KW, .A256KW, .A256CBCHS512:
             return 16
         }
     }
 
     func checkKeyLength(for key: Data) -> Bool {
-        switch self {
-        case .A256CBCHS512:
-            return key.count == 64
-        }
+        return key.count == keyLength
     }
 
     func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+        guard checkKeyLength(for: inputKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
         switch self {
         case .A256CBCHS512:
-            guard checkKeyLength(for: inputKey) else {
-                throw JWEError.keyLengthNotSatisfied
-            }
-
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
+        default:
+            return (Data(), inputKey)
         }
     }
 
@@ -98,6 +109,8 @@ public enum SymmetricKeyAlgorithm: String {
         switch self {
         case .A256CBCHS512:
             return hmac.subdata(in: 0..<32)
+        default:
+            return Data()
         }
     }
 }
@@ -107,11 +120,14 @@ public enum SymmetricKeyAlgorithm: String {
 /// - SHA512
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
+    case none = "none"
 
     var outputLength: Int {
         switch self {
         case .SHA512:
             return 64
+        case .none:
+            return 0
         }
     }
 }
