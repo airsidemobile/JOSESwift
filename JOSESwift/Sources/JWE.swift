@@ -75,8 +75,7 @@ public struct JWE {
 
         var encryptionContext: EncryptionContext
         do {
-            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-            encryptionContext = try encrypter.encrypt(header: header, payload: Payload(compressor.compress(data: payload.data())))
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload.compressed(using: header.compressionAlgorithm))
         } catch {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
