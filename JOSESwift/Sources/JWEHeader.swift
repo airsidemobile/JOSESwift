@@ -104,7 +104,7 @@ public extension JWEHeader {
         // swiftlint:disable:next force_cast
         return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
     }
-    
+    /// The compression algorithm applied to the plaintext before encryption. If no compression is applied, the `.NONE` algorithm is returned.
     public var compressionAlgorithm: CompressionAlgorithm? {
         guard let compressionAlgorithm = parameters["zip"] as? String else {
             return CompressionAlgorithm.NONE
