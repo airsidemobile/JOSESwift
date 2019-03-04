@@ -47,12 +47,34 @@ class JWECompressionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
 
-    // Note this test only works as long as the guard statement is before the actual decryption operation
+    // Note this test only works as long as the compression factory is invoked before the acutal decryption
     func testDecryptWithNotSupportedZipHeaderValue() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
         
         let jwe = try! JWE(compactSerialization: jweSerializedNotSupportedZipHeaderValue)
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
         try XCTAssertThrowsError(jwe.decrypt(using: decrypter))
+    }
+    
+    // Note this test only works as long as the compression factory is invoked before the acutal encryption
+    func testEncryptWithNotSupportedZipHeaderValue() {
+        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        
+        var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
+        header.zip = "GZIP"
+        
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        try XCTAssertThrowsError(JWE(header: header, payload: payload, encrypter: encrypter))
+    }
+    
+    func testCompressorFactory() throws {
+        let deflateCompressor = try CompressorFactory.makeCompressor(algorithm: CompressionAlgorithm.DEFLATE)
+        XCTAssert(deflateCompressor is DeflateCompressor)
+        
+        let noneCompressor = try CompressorFactory.makeCompressor(algorithm: CompressionAlgorithm.NONE)
+        XCTAssert(noneCompressor is NoneCompressor)
+        
+        try XCTAssertThrowsError(CompressorFactory.makeCompressor(algorithm: nil))
     }
 }

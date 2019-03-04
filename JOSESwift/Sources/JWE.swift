@@ -188,8 +188,8 @@ public struct JWE {
         }
 
         do {
-            let decryptedData = try decrypter.decrypt(context)
             let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
+            let decryptedData = try decrypter.decrypt(context)
             return Payload(try compressor.decompress(data: decryptedData))
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
