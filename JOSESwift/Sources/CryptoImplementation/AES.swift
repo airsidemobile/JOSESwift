@@ -33,7 +33,7 @@ internal enum AESError: Error {
 fileprivate extension SymmetricKeyAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
-        case .A256CBCHS512, .A256CBCHS512, .A128KW, .A192KW, .A256KW:
+        case .A256CBCHS256, .A256CBCHS512, .A128KW, .A192KW, .A256KW:
             return CCAlgorithm(kCCAlgorithmAES)
         }
     }
