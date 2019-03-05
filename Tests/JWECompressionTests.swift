@@ -55,7 +55,7 @@ class JWECompressionTests: RSACryptoTestCase {
         let jwe = try! JWE(compactSerialization: jweSerializedNotSupportedZipHeaderValue)
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
         try XCTAssertThrowsError(jwe.decrypt(using: decrypter)) { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "The operation couldn’t be completed. (JOSESwift.JOSESwiftError error 22.)"))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.compressionAlgorithmNotSupported)
         }
     }
     
@@ -69,7 +69,7 @@ class JWECompressionTests: RSACryptoTestCase {
         let payload = Payload(data)
         let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
         try XCTAssertThrowsError(JWE(header: header, payload: payload, encrypter: encrypter)) { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.encryptingFailed(description: "The operation couldn’t be completed. (JOSESwift.JOSESwiftError error 22.)"))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.compressionAlgorithmNotSupported)
         }
     }
     

@@ -248,7 +248,7 @@ extension JOSESwiftError: Equatable {
         case (.encryptingFailed(let lhs), .encryptingFailed(let rhs)):
             return lhs == rhs
         default:
-            return false
+            return lhs.localizedDescription == rhs.localizedDescription
         }
     }
 }
