@@ -24,6 +24,8 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+- Adds basic Danger integration ([#140](https://github.com/airsidemobile/JOSESwift/pull/140)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+
 ## [1.7.0] - 2019-02-19
 
 - Adds a new features section in the readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
