@@ -268,7 +268,7 @@ class JWEHeaderTests: XCTestCase {
 
         header.zip = "NONE"
         XCTAssertEqual(header.compressionAlgorithm, CompressionAlgorithm.NONE)
-        
+
         header.zip = "GZIP"
         XCTAssertEqual(header.compressionAlgorithm, nil)
     }
