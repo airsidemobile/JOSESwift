@@ -120,7 +120,7 @@ public enum HMACAlgorithm: String {
 /// List of [supported compression algorithms](https://www.iana.org/assignments/jose/jose.xhtml#web-encryption-compression-algorithms)
 ///
 /// - Deflate: [DEF](https://tools.ietf.org/html/rfc7516#section-4.1.3)
-public enum CompressionAlgorithm: String {    
+public enum CompressionAlgorithm: String {
     case DEFLATE = "DEF"
     case NONE = "NONE"
 }

@@ -36,7 +36,7 @@ public enum JOSESwiftError: Error {
     case invalidCurveType
     case compressedCurvePointsUnsupported
     case invalidCurvePointOctetLength
-    
+
     // Compression erros
     case compressionFailed
     case decompressionFailed
