@@ -81,14 +81,14 @@ public struct Encrypter<KeyType> {
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A256CBCHS256), (.RSAOAEP, .A256CBCHS256), (.RSAOAEP256, .A256CBCHS256):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A128CBCHS256), (.RSAOAEP, .A128CBCHS256), (.RSAOAEP256, .A128CBCHS256):
             guard type(of: key) is RSAEncrypter.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: (key as! RSAEncrypter.KeyType))
             self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
-        case (.direct, .A256CBCHS512), (.direct, .A256CBCHS256):
+        case (.direct, .A256CBCHS512), (.direct, .A128CBCHS256):
             guard type(of: key) is AESEncrypter.KeyType.Type else {
                 return nil
             }
