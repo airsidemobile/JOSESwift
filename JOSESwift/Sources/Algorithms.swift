@@ -52,6 +52,7 @@ public enum AsymmetricKeyAlgorithm: String, CaseIterable {
 /// An algorithm for symmetric encryption and decryption.
 ///
 /// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
+/// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
 public enum SymmetricKeyAlgorithm: String {
     case A256CBCHS512 = "A256CBC-HS512"
     case A128CBCHS256 = "A128CBC-HS256"
@@ -122,6 +123,7 @@ public enum SymmetricKeyAlgorithm: String {
 /// An algorithm for HMAC calculation.
 ///
 /// - SHA512
+/// - SHA256
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
     case SHA256 = "SHA256"
