@@ -5,17 +5,11 @@ env: LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 addons:
   homebrew:
-    update: true
     brewfile: true
 
 before_install:
   - bundle install
 
-jobs:
-  include:
-    - stage: test
-      name: testing
-      script: bundle exec fastlane test
-    - stage: test
-      name: linting
-      script: bundle exec fastlane lint
+script:
+  - bundle exec fastlane test
+  - bundle exec danger

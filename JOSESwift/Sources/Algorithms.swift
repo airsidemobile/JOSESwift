@@ -137,3 +137,12 @@ public enum HMACAlgorithm: String {
         }
     }
 }
+
+/// An algorithm for compressing the plain text before encryption.
+/// List of [supported compression algorithms](https://www.iana.org/assignments/jose/jose.xhtml#web-encryption-compression-algorithms)
+///
+/// - Deflate: [DEF](https://tools.ietf.org/html/rfc7516#section-4.1.3)
+public enum CompressionAlgorithm: String {
+    case DEFLATE = "DEF"
+    case NONE = "NONE"
+}

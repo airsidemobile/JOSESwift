@@ -245,8 +245,10 @@ extension JOSESwiftError: Equatable {
             return lhs == rhs
         case (.decryptingFailed(let lhs), .decryptingFailed(let rhs)):
             return lhs == rhs
+        case (.encryptingFailed(let lhs), .encryptingFailed(let rhs)):
+            return lhs == rhs
         default:
-            return false
+            return lhs.localizedDescription == rhs.localizedDescription
         }
     }
 }
