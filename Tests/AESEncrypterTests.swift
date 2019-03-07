@@ -55,7 +55,7 @@ class AESEncrypterTests: RSACryptoTestCase {
         concatData.append(String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData().getByteLengthAsOctetHexData())
 
         let keyLength = size_t(kCCKeySizeAES128)
-        var macOutData = Data(count: 64)
+        var macOutData = Data(count: 32)
 
         macOutData.withUnsafeMutableBytes { macOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
