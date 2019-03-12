@@ -4,6 +4,7 @@
 //
 //  Created by Carol Capek on 06.02.18.
 //  Modified by Jarrod Moldrich on 02.07.18.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -25,11 +26,58 @@
 import Foundation
 import CommonCrypto
 
+public protocol Algorithm {
+    var rawValue: String { get }
+
+    init?(rawValue: String)
+}
+
+public extension Algorithm {
+    func equals<A: Algorithm>(_ other: A) -> Bool {
+        return equals(other as Algorithm)
+    }
+
+    func equals(_ other: Algorithm) -> Bool {
+        return rawValue == other.rawValue
+    }
+}
+
+extension Optional where Wrapped: Algorithm {
+    func wrappedType() -> Wrapped.Type {
+        return type(of: self.unsafelyUnwrapped)
+    }
+}
+
+public struct AlgorithmFactory {
+    @available(*, unavailable) private init() {}
+
+    static func createKeyAlgorithm(rawValue: String) -> KeyAlgorithm? {
+        let keyAlgTypes: [Algorithm.Type] = [AsymmetricKeyAlgorithm.self, SymmetricKeyAlgorithm.self]
+        return getInstance(rawType: rawValue, algorithmTypes: keyAlgTypes) as? KeyAlgorithm
+
+    }
+
+    static func createContentAlgorithm(rawValue: String) -> ContentAlgorithm? {
+        let contentAlgTypes: [Algorithm.Type] = [SymmetricContentAlgorithm.self]
+        return getInstance(rawType: rawValue, algorithmTypes: contentAlgTypes) as? ContentAlgorithm
+    }
+
+    private static func getInstance(rawType: String, algorithmTypes: [Algorithm.Type]) -> Algorithm? {
+        for algType in algorithmTypes {
+            if let algCase = algType.init(rawValue: rawType) {
+                return algCase
+            }
+        }
+
+        return nil
+    }
+}
+
 /// An algorithm for signing and verifying.
 ///
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
 /// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
-public enum SignatureAlgorithm: String {
+public enum SignatureAlgorithm: String, Algorithm {
     case RS256 = "RS256"
     case RS512 = "RS512"
     case ES256 = "ES256"
@@ -37,41 +85,74 @@ public enum SignatureAlgorithm: String {
     case ES512 = "ES512"
 }
 
-/// An algorithm for asymmetric encryption and decryption.
+/// Both key encryption and content encryption symmetric algorithms.
+public protocol SymmetricAlgorithm: Algorithm {
+    var defaultInitialValue: Data { get }
+    var keyLength: Int { get }
+    var initializationVectorLength: Int { get }
+
+    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data)
+}
+
+public extension SymmetricAlgorithm {
+    var defaultInitialValue: Data {
+        // Same as rfc3394 IV, [0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6, 0xA6]
+        return Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+    }
+
+    var keyLength: Int {
+        return 0
+    }
+
+    var initializationVectorLength: Int {
+        return CCrfc3394_ivLen
+    }
+
+    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+        throw JWEError.keyLengthNotSatisfied
+    }
+}
+
+// Covers all asymmetric algorythms, but RFC only defines asym. algorithms for key encryption.
+public protocol AsymmetricAlgorithm: KeyAlgorithm {}
+
+public protocol ContentAlgorithm: SymmetricAlgorithm {
+    //static func == <A: AnyAlgorithm>(lhs: ContentEncryptionAlgorithm, rhs: A) -> Bool
+} // TODO: think about extending SymmetricAlgorithm
+
+public protocol KeyAlgorithm: Algorithm {
+    //static func == <A: AnyAlgorithm>(lhs: KeyEncryptionAlgorithm, rhs: A) -> Bool
+}
+
+/// An algorithm for asymmetric JWE key encryption and decryption.
 ///
 /// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
 /// - RSAOAEP: [RSAES OAEP using SHA-1 and MGF1 with SHA-1](https://tools.ietf.org/html/rfc7518#section-4.3)
 /// - RSAOAEP256: [RSAES OAEP using SHA-256 and MGF1 with SHA-256](https://tools.ietf.org/html/rfc7518#section-4.3)
 /// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
-public enum AsymmetricKeyAlgorithm: String, CaseIterable {
+public enum AsymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, AsymmetricAlgorithm {
     case RSA1_5 = "RSA1_5"
     case RSAOAEP = "RSA-OAEP"
     case RSAOAEP256 = "RSA-OAEP-256"
     case direct = "dir"
 }
 
-/// An algorithm for symmetric encryption and decryption.
+/// An algorithm for symmetric JWE key encryption and decryption.
 ///
-/// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
-public enum SymmetricKeyAlgorithm: String {
+/// - A128KW: [Key Wrapping with AES-128 Key Wrap](https://tools.ietf.org/html/rfc7518#section-4.4)
+/// - A192KW: [Key Wrapping with AES-192 Key Wrap](https://tools.ietf.org/html/rfc7518#section-4.4)
+/// - A256KW: [Key Wrapping with AES-256 Key Wrap](https://tools.ietf.org/html/rfc7518#section-4.4)
+public enum SymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, SymmetricAlgorithm {
     case A128KW = "A128KW"
     case A192KW = "A192KW"
     case A256KW = "A256KW"
-    case A256CBCHS512 = "A256CBC-HS512"
-    case A256CBCHS256 = "A256CBC-HS256"
 
     var hmacAlgorithm: HMACAlgorithm {
-        switch self {
-        case .A256CBCHS512:
-            return .SHA512
-        case .A256CBCHS256:
-            return .SHA256
-        default:
-            return .none
-        }
+        // TODO: Perhaps refactor and remove.
+        return .none
     }
 
-    var keyLength: Int {
+    public var keyLength: Int {
         switch self {
         case .A128KW:
             return 16
@@ -79,18 +160,12 @@ public enum SymmetricKeyAlgorithm: String {
             return 24
         case .A256KW:
             return 32
-        case .A256CBCHS512:
-            return 64
-        case .A256CBCHS256:
-            return 32
         }
     }
 
-    var initializationVectorLength: Int {
+    public var initializationVectorLength: Int {
         switch self {
-        case .A128KW, .A192KW, .A256KW, .A256CBCHS512:
-            return 16
-        case .A256CBCHS256:
+        case .A128KW, .A192KW, .A256KW:
             return 16
         }
     }
@@ -99,7 +174,60 @@ public enum SymmetricKeyAlgorithm: String {
         return key.count == keyLength
     }
 
-    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+    public func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+        guard checkKeyLength(for: inputKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
+        // TODO: Perhaps refactor to optional, these algorithms do not have HMAC.
+        return (Data(), inputKey)
+    }
+
+    func authenticationTag(for hmac: Data) -> Data {
+        // TODO: Perhaps refactor to optional, these algorithms do not have HMAC.
+        return Data()
+    }
+}
+
+
+/// An algorithm for symmetric JWE content encryption and decryption.
+///
+/// - A256CBCHS256: [AES_256_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.4)
+/// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
+public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, SymmetricAlgorithm {
+    case A256CBCHS256 = "A256CBC-HS256"
+    case A256CBCHS512 = "A256CBC-HS512"
+
+    var hmacAlgorithm: HMACAlgorithm {
+        switch self {
+        case .A256CBCHS512:
+            return .SHA512
+        case .A256CBCHS256:
+            return .SHA256
+        }
+    }
+
+    public var keyLength: Int {
+        switch self {
+        case .A256CBCHS512:
+            return 64
+        case .A256CBCHS256:
+            return 32
+        }
+    }
+
+    public var initializationVectorLength: Int {
+        switch self {
+        case .A256CBCHS256, .A256CBCHS512:
+            return 16
+        }
+    }
+
+    func checkKeyLength(for key: Data) -> Bool {
+        return key.count == keyLength
+    }
+
+    public func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
         guard checkKeyLength(for: inputKey) else {
             throw JWEError.keyLengthNotSatisfied
         }
@@ -109,8 +237,6 @@ public enum SymmetricKeyAlgorithm: String {
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
         case .A256CBCHS256:
             return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
-        default:
-            return (Data(), inputKey)
         }
     }
 
@@ -120,8 +246,6 @@ public enum SymmetricKeyAlgorithm: String {
             return hmac.subdata(in: 0..<32)
         case .A256CBCHS256:
             return hmac.subdata(in: 0..<16)
-        default:
-            return Data()
         }
     }
 }
@@ -139,9 +263,15 @@ public enum HMACAlgorithm: String {
         case .SHA512:
             return 64
         case .SHA256:
-            return Int(CC_SHA256_DIGEST_LENGTH)
+            return 32
         case .none:
             return 0
         }
     }
+}
+
+/// Algorithm "none" type that should be upsupported for any cryptographic operation.
+/// TODO: Perhaps remove if Optionals are enough.
+public enum UnsupportedAlgorithm: String, CaseIterable, ContentAlgorithm, KeyAlgorithm {
+    case none = "none"
 }

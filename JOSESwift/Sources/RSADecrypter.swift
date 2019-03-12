@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 19/10/2017.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,23 +25,30 @@
 import Foundation
 
 /// An `AsymmetricDecrypter` to decrypt cipher text with a `RSA` algorithm.
-internal struct RSADecrypter: AsymmetricDecrypter {
+internal struct RSADecrypter: KeyDecrypter {
     typealias KeyType = RSA.KeyType
 
-    let algorithm: AsymmetricKeyAlgorithm
-    let privateKey: KeyType?
+    var algorithm: KeyAlgorithm {
+        return rsaAlgorithm
+    }
+    private var rsaAlgorithm: AsymmetricKeyAlgorithm
+
+    var key: Any? {
+        return privateKey
+    }
+    private var privateKey: KeyType?
 
     init(algorithm: AsymmetricKeyAlgorithm, privateKey: KeyType? = nil) {
-        self.algorithm = algorithm
+        self.rsaAlgorithm = algorithm
         self.privateKey = privateKey
     }
 
     func decrypt(_ ciphertext: Data) throws -> Data {
-        guard let privateKey = privateKey else {
+        guard let privateKey = privateKey, rsaAlgorithm != .direct else {
             // If no key is set, we're using direct encryption so the encrypted key is empty.
             return Data()
         }
 
-        return try RSA.decrypt(ciphertext, with: privateKey, and: algorithm)
+        return try RSA.decrypt(ciphertext, with: privateKey, and: rsaAlgorithm)
     }
 }

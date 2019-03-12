@@ -44,14 +44,14 @@ class AESDecrypterTests: RSACryptoTestCase {
         let authenticationTag = "4d d3 b4 c0 88 a7 f4 5c 21 68 39 64 5b 20 12 bf 2e 62 69 a8 c5 6a 81 6d bc 1b 26 77 61 95 5b c5".hexadecimalToData()
         let testPlaintext = "41 20 63 69 70 68 65 72 20 73 79 73 74 65 6d 20 6d 75 73 74 20 6e 6f 74 20 62 65 20 72 65 71 75 69 72 65 64 20 74 6f 20 62 65 20 73 65 63 72 65 74 2c 20 61 6e 64 20 69 74 20 6d 75 73 74 20 62 65 20 61 62 6c 65 20 74 6f 20 66 61 6c 6c 20 69 6e 74 6f 20 74 68 65 20 68 61 6e 64 73 20 6f 66 20 74 68 65 20 65 6e 65 6d 79 20 77 69 74 68 6f 75 74 20 69 6e 63 6f 6e 76 65 6e 69 65 6e 63 65".hexadecimalToData()
 
-        let context = SymmetricDecryptionContext (
+        let context = ContentDecryptionContext (
             ciphertext: ciphertext!,
             initializationVector: iv,
             additionalAuthenticatedData: additionalAuthenticatedData!,
             authenticationTag: authenticationTag!
         )
 
-        let decrypter = AESDecrypter(algorithm: .A256CBCHS512)
+        let decrypter = AESContentDecrypter(algorithm: .A256CBCHS512)
         let plaintext = try! decrypter.decrypt(context, with: keyData!)
 
         XCTAssertEqual(plaintext, testPlaintext!)

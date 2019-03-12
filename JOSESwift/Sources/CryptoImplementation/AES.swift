@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Carol Capek on 04.01.18.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -33,7 +34,7 @@ internal enum AESError: Error {
 fileprivate extension SymmetricKeyAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
-        case .A256CBCHS256, .A256CBCHS512, .A128KW, .A192KW, .A256KW:
+        case .A128KW, .A192KW, .A256KW:
             return CCAlgorithm(kCCAlgorithmAES)
         }
     }
@@ -44,9 +45,24 @@ fileprivate extension SymmetricKeyAlgorithm {
             return key.count == kCCKeySizeAES128
         case .A192KW:
             return key.count == kCCKeySizeAES192
-        case .A256CBCHS512, .A256KW:
+        case .A256KW:
             return key.count == kCCKeySizeAES256
+        }
+    }
+}
 
+fileprivate extension SymmetricContentAlgorithm {
+    var ccAlgorithm: CCAlgorithm {
+        switch self {
+        case .A256CBCHS256, .A256CBCHS512:
+            return CCAlgorithm(kCCAlgorithmAES)
+        }
+    }
+
+    func checkAESKeyLength(for key: Data) -> Bool {
+        switch self {
+        case .A256CBCHS512:
+            return key.count == kCCKeySizeAES256
         case .A256CBCHS256:
             return key.count == kCCKeySizeAES128
         }
@@ -57,6 +73,7 @@ internal struct AES {
     typealias KeyType = Data
 
     /// Encrypts a plain text using a given `AES` algorithm, the corresponding symmetric key and an initialization vector.
+    /// Used for both key and content encryption, type is decided by `SymmetricAlgorithm` provided.
     ///
     /// - Parameters:
     ///   - plaintext: The plain text to encrypt.
@@ -65,20 +82,36 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `AESError` if any error occurs during encryption.
-    static func encrypt(plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+    static func encrypt(plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricAlgorithm, and initializationVector: Data) throws -> Data {
+        switch algorithm {
+        case let algorithm as SymmetricKeyAlgorithm:
+            return try encryptKey(plaintext, with: encryptionKey, using: algorithm, and: initializationVector)
+        case let algorithm as SymmetricContentAlgorithm:
+            return try encryptContent(plaintext, with: encryptionKey, using: algorithm, and: initializationVector)
+        default:
+            throw AESError.encryptingFailed(description: "Unknown algorithm type \(algorithm)")
+        }
+    }
+
+    private static func encryptContent(_ plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricContentAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512, .A256CBCHS256:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
                 throw AESError.keyLengthNotSatisfied
             }
 
-            let encrypted = aes(operation: CCOperation(kCCEncrypt), data: plaintext, key: encryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
+            let encrypted = aescbcCrypt(operation: CCOperation(kCCEncrypt), data: plaintext, key: encryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard encrypted.status == UInt32(kCCSuccess) else {
                 throw AESError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
             }
 
             return encrypted.data
+        }
+    }
+
+    private static func encryptKey(_ plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+        switch algorithm {
         case .A128KW, .A192KW, .A256KW:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
                 throw AESError.keyLengthNotSatisfied
@@ -103,20 +136,19 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The plain text (decrypted cipher text).
     /// - Throws: `AESError` if any error occurs during decryption.
-    static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+    static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
-        case .A256CBCHS512, .A256CBCHS256:
-            guard algorithm.checkAESKeyLength(for: decryptionKey) else {
-                throw AESError.keyLengthNotSatisfied
-            }
+        case let algorithm as SymmetricKeyAlgorithm:
+            return try decryptKey(cipherText, with: decryptionKey, using: algorithm, and: initializationVector)
+        case let algorithm as SymmetricContentAlgorithm:
+            return try decryptContent(cipherText, with: decryptionKey, using: algorithm, and: initializationVector)
+        default:
+            throw AESError.decryptingFailed(description: "Unknown algorithm type \(algorithm)")
+        }
+    }
 
-            let decrypted = aes(operation: CCOperation(kCCDecrypt), data: cipherText, key: decryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
-
-            guard decrypted.status == UInt32(kCCSuccess) else {
-                throw AESError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
-            }
-
-            return decrypted.data
+    private static func decryptKey(_ cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+        switch algorithm {
         case .A128KW, .A192KW, .A256KW:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
                 throw AESError.keyLengthNotSatisfied
@@ -132,7 +164,24 @@ internal struct AES {
         }
     }
 
-    static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: CCCryptorStatus) {
+    private static func decryptContent(_ cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricContentAlgorithm, and initializationVector: Data) throws -> Data {
+        switch algorithm {
+        case .A256CBCHS512, .A256CBCHS256:
+            guard algorithm.checkAESKeyLength(for: decryptionKey) else {
+                throw AESError.keyLengthNotSatisfied
+            }
+
+            let decrypted = aescbcCrypt(operation: CCOperation(kCCDecrypt), data: cipherText, key: decryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
+
+            guard decrypted.status == UInt32(kCCSuccess) else {
+                throw AESError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
+            }
+
+            return decrypted.data
+        }
+    }
+
+    static func aescbcCrypt(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: CCCryptorStatus) {
         let dataLength = data.count
 
         //AES's 128 block size is fix for every key length.

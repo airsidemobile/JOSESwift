@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 12/10/2017.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -64,8 +65,17 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
-        let parameters = [
+    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricContentAlgorithm) {
+        self.init(algorithm: algorithm as KeyAlgorithm, encryptionAlgorithm: encryptionAlgorithm as ContentAlgorithm)
+    }
+
+    /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
+    public init(algorithm: SymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricContentAlgorithm) {
+        self.init(algorithm: algorithm as KeyAlgorithm, encryptionAlgorithm: encryptionAlgorithm as ContentAlgorithm)
+    }
+
+    private init(algorithm: KeyAlgorithm, encryptionAlgorithm: ContentAlgorithm) {
+        let parameters: [String: Any] = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
         ]
@@ -89,20 +99,32 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: AsymmetricKeyAlgorithm? {
+    public var algorithm: KeyAlgorithm? {
         // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
-        return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
+        //return AlgorithmFactory.createKeyAlgorithm(rawValue: parameters["alg"] as! String)
+
+        guard let alg = parameters["alg"] as? String else {
+            return nil
+        }
+
+        return AlgorithmFactory.createKeyAlgorithm(rawValue: alg)
     }
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: SymmetricKeyAlgorithm? {
+    public var encryptionAlgorithm: ContentAlgorithm? {
         // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
-        return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
+        //return AlgorithmFactory.createContentAlgorithm(rawValue: parameters["enc"] as! String)
+
+        guard let enc = parameters["enc"] as? String else {
+            return nil
+        }
+
+        return AlgorithmFactory.createContentAlgorithm(rawValue: enc)
     }
 }
 

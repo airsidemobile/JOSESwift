@@ -55,6 +55,7 @@ class JWSECTests: ECCryptoTestCase {
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compact = jws.compactSerializedString
         let splitCompact = compact.split(separator: ".")
+        let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: testData.publicKey)!
 
         XCTAssertEqual(String(splitCompact[0]), testData.compactSerializedJWSSimpleHeaderConst)
         XCTAssertEqual(String(splitCompact[1]), testData.compactSerializedJWSPayloadConst)
@@ -63,7 +64,7 @@ class JWSECTests: ECCryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compact)
 
-        XCTAssertTrue(secondJWS.isValid(for: testData.publicKey))
+        XCTAssertTrue(secondJWS.isValid(for: verifier))
     }
 
     private func performTestECDeserialization(testData: ECTestKeyData) {
