@@ -45,8 +45,22 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
     ])
 
     @available(*, deprecated)
-    func testRoundtrip() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+    func testRoundtripA256CBCHS256() {
+        let symmetricKey = try! SecureRandom.generate(count: SymmetricContentAlgorithm.A256CBCHS256.keyLength)
+
+        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS256)
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS256)!
+
+        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        let serialization = jwe.compactSerializedString
+
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+    }
+
+    @available(*, deprecated)
+    func testRoundtripA256CBCHS512() {
+        let symmetricKey = try! SecureRandom.generate(count: SymmetricContentAlgorithm.A256CBCHS512.keyLength)
 
         let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(data)
@@ -69,7 +83,7 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testDecryptWithWrongSymmetricKey() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: SymmetricContentAlgorithm.A256CBCHS512.keyLength)
 
         let jwe = try! JWE(compactSerialization: serializationFromNimbus)
 

@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 12/10/2017.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -28,6 +29,8 @@ internal enum JWEError: Error {
     case contentEncryptionAlgorithmMismatch
     case keyLengthNotSatisfied
     case hmacNotAuthenticated
+    case contentEncryptionAlgorithmUnsupported
+    case keyNotSetOrInvalid
 }
 
 /// A JWE consisting of five parameters as specified in [RFC-7516](https://tools.ietf.org/html/rfc7516).
@@ -70,7 +73,7 @@ public struct JWE {
     ///   - payload: A fully initialized `Payload`.
     ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
-    public init<KeyType>(header: JWEHeader, payload: Payload, encrypter: Encrypter<KeyType>) throws {
+    public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
         self.header = header
 
         var encryptionContext: EncryptionContext
@@ -152,7 +155,7 @@ public struct JWE {
         }
 
         guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, decryptionKey: key, contentDecryptionAlgorithm: enc) else {
-            throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
+            throw JOSESwiftError.decryptingFailed(description: "Cannot create decryptor.")
         }
 
         do {
@@ -178,8 +181,8 @@ public struct JWE {
         )
 
         guard
-            decrypter.asymmetric.algorithm == header.algorithm,
-            decrypter.symmetric.algorithm == header.encryptionAlgorithm
+            let alg = header.algorithm, alg.equals(decrypter.keyDecrypter.algorithm),
+            let enc = header.encryptionAlgorithm, enc.equals(decrypter.contentDecrypter.algorithm)
         else {
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }

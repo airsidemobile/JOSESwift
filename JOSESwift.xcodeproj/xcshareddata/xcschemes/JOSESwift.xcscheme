@@ -40,7 +40,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "CryptoTestCase">
+                  Identifier = "CryptoTestCaseBase">
                </Test>
             </SkippedTests>
          </TestableReference>

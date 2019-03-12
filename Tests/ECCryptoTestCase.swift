@@ -88,7 +88,7 @@ struct ECTestKeyData {
                 privateKey: expectedPrivateOctetString
         )
 
-        let keyPair = CryptoTestCase.setupSecKeyPair(
+        let keyPair = CryptoTestCaseBase.setupSecKeyPair(
                 type: kSecAttrKeyTypeECSECPrimeRandom as String,
                 size: bitSize,
                 data: keyData,
@@ -113,7 +113,7 @@ struct ECTestKeyData {
     }
 }
 
-class ECCryptoTestCase: CryptoTestCase {
+class ECCryptoTestCase: CryptoTestCaseBase {
 
     private struct Curves {
         // Keys generated and values extracted using the following openssl commands:

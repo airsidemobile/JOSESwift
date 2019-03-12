@@ -3,6 +3,7 @@
 //  JOSESwift
 //
 //  Created by Daniel Egger on 13/10/2017.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -24,14 +25,21 @@
 import Foundation
 
 /// An `AsymmetricEncrypter` to encrypt plain text with an `RSA` algorithm.
-internal struct RSAEncrypter: AsymmetricEncrypter {
+internal struct RSAEncrypter: KeyEncrypter {
     typealias KeyType = RSA.KeyType
 
-    let algorithm: AsymmetricKeyAlgorithm
-    let publicKey: KeyType?
+    private var rsaAlgorithm: AsymmetricKeyAlgorithm
+    var algorithm: KeyAlgorithm {
+        return rsaAlgorithm
+    }
+
+    private var publicKey: KeyType?
+    var key: Any? {
+        return publicKey
+    }
 
     init(algorithm: AsymmetricKeyAlgorithm, publicKey: KeyType? = nil) {
-        self.algorithm = algorithm
+        self.rsaAlgorithm = algorithm
         self.publicKey = publicKey
     }
 
@@ -41,6 +49,6 @@ internal struct RSAEncrypter: AsymmetricEncrypter {
             return Data()
         }
 
-        return try RSA.encrypt(plaintext, with: publicKey, and: algorithm)
+        return try RSA.encrypt(plaintext, with: publicKey, and: rsaAlgorithm)
     }
 }

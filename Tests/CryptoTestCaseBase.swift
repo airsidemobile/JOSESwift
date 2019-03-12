@@ -3,6 +3,7 @@
 //  Tests
 //
 //  Created by Carol Capek on 02.11.17.
+//  Refactored by Marius Tamulis on 2019-03-12.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2018 Airside Mobile Inc.
@@ -23,7 +24,7 @@
 
 import XCTest
 
-class CryptoTestCase: XCTestCase {
+internal class CryptoTestCaseBase: XCTestCase {
     let message = "The true sign of intelligence is not knowledge but imagination."
 
     override func setUp() {

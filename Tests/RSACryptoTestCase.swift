@@ -23,7 +23,7 @@
 
 import XCTest
 
-class RSACryptoTestCase: CryptoTestCase {
+class RSACryptoTestCase: CryptoTestCaseBase {
     let privateKeyAlice2048Tag = "com.airsidemobile.JOSESwift.testRSAPrivateKeyAlice2048"
     let privateKeyBob2048Tag = "com.airsidemobile.JOSESwift.testRSAPrivateKeyBob2048"
     let privateKey4096Tag = "com.airsidemobile.JOSESwift.testRSAPrivateKey4096"
@@ -140,7 +140,7 @@ class RSACryptoTestCase: CryptoTestCase {
 
             // 2048 - Alice
 
-            let keyPairAlice2048 = CryptoTestCase.setupSecKeyPair(
+            let keyPairAlice2048 = CryptoTestCaseBase.setupSecKeyPair(
                     type: kSecAttrKeyTypeRSA as String,
                     size: 2048,
                     data: keyDataAlice2048,
@@ -152,7 +152,7 @@ class RSACryptoTestCase: CryptoTestCase {
 
             // 2048 - Bob
 
-            let keyPairBob2048 = CryptoTestCase.setupSecKeyPair(
+            let keyPairBob2048 = CryptoTestCaseBase.setupSecKeyPair(
                     type: kSecAttrKeyTypeRSA as String,
                     size: 2048,
                     data: keyDataBob2048,
@@ -164,7 +164,7 @@ class RSACryptoTestCase: CryptoTestCase {
 
             // 4096
 
-            let keyPair4096 = CryptoTestCase.setupSecKeyPair(
+            let keyPair4096 = CryptoTestCaseBase.setupSecKeyPair(
                     type: kSecAttrKeyTypeRSA as String,
                     size: 4096,
                     data: keyData4096,
