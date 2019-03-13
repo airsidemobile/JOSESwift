@@ -192,17 +192,17 @@ public enum SymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, Symmetric
 
 /// An algorithm for symmetric JWE content encryption and decryption.
 ///
-/// - A256CBCHS256: [AES_256_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.4)
+/// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
 /// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
 public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, SymmetricAlgorithm {
-    case A256CBCHS256 = "A256CBC-HS256"
+    case A128CBCHS256 = "A128CBC-HS256"
     case A256CBCHS512 = "A256CBC-HS512"
 
     var hmacAlgorithm: HMACAlgorithm {
         switch self {
         case .A256CBCHS512:
             return .SHA512
-        case .A256CBCHS256:
+        case .A128CBCHS256:
             return .SHA256
         }
     }
@@ -211,14 +211,14 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
         switch self {
         case .A256CBCHS512:
             return 64
-        case .A256CBCHS256:
+        case .A128CBCHS256:
             return 32
         }
     }
 
     public var initializationVectorLength: Int {
         switch self {
-        case .A256CBCHS256, .A256CBCHS512:
+        case .A128CBCHS256, .A256CBCHS512:
             return 16
         }
     }
@@ -235,7 +235,7 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
         switch self {
         case .A256CBCHS512:
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
-        case .A256CBCHS256:
+        case .A128CBCHS256:
             return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
         }
     }
@@ -244,7 +244,7 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
         switch self {
         case .A256CBCHS512:
             return hmac.subdata(in: 0..<32)
-        case .A256CBCHS256:
+        case .A128CBCHS256:
             return hmac.subdata(in: 0..<16)
         }
     }
@@ -253,6 +253,7 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
 /// An algorithm for HMAC calculation.
 ///
 /// - SHA512
+/// - SHA256
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
     case SHA256 = "SHA256"
@@ -274,4 +275,13 @@ public enum HMACAlgorithm: String {
 /// TODO: Perhaps remove if Optionals are enough.
 public enum UnsupportedAlgorithm: String, CaseIterable, ContentAlgorithm, KeyAlgorithm {
     case none = "none"
+}
+
+/// An algorithm for compressing the plain text before encryption.
+/// List of [supported compression algorithms](https://www.iana.org/assignments/jose/jose.xhtml#web-encryption-compression-algorithms)
+///
+/// - Deflate: [DEF](https://tools.ietf.org/html/rfc7516#section-4.1.3)
+public enum CompressionAlgorithm: String {
+    case DEFLATE = "DEF"
+    case NONE = "NONE"
 }

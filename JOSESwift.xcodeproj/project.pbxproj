@@ -84,6 +84,9 @@
 		65F44EB11FE2D941000C5EA0 /* JWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB01FE2D941000C5EA0 /* JWK.swift */; };
 		65F44EB31FE2E1C6000C5EA0 /* RSAKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */; };
 		65FBFDE71F45CC7C005C7D68 /* JOSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* JOSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A30B8F822118FD0001834E3 /* DeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */; };
+		8A30B8FA22118FE6001834E3 /* JWECompressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */; };
+		8A4B08B22213FF0600828536 /* Compressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B08B12213FF0600828536 /* Compressor.swift */; };
 		C803EFE51FA77E3000B71335 /* JWSRSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSRSATests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWERSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWERSATests.swift */; };
@@ -200,6 +203,9 @@
 		65FBFDE21F45CC7C005C7D68 /* JOSESwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JOSESwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FBFDE51F45CC7C005C7D68 /* JOSESwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JOSESwift.h; sourceTree = "<group>"; };
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeflateWrapper.swift; sourceTree = "<group>"; };
+		8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWECompressionTests.swift; sourceTree = "<group>"; };
+		8A4B08B12213FF0600828536 /* Compressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compressor.swift; sourceTree = "<group>"; };
 		C803EFE41FA77E3000B71335 /* JWSRSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSRSATests.swift; sourceTree = "<group>"; };
 		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFEC1FA8849C00B71335 /* JWERSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWERSATests.swift; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 		65125A2E1FBF6B9E007CF3AE /* JWE */ = {
 			isa = PBXGroup;
 			children = (
+				8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */,
 				65676D8A1FC220C70031B26D /* JWEDeserializationTests.swift */,
 				C803EFEC1FA8849C00B71335 /* JWERSATests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
@@ -299,6 +306,7 @@
 		653355281F8F6B4A00A660C6 /* JWE */ = {
 			isa = PBXGroup;
 			children = (
+				8A4B08B12213FF0600828536 /* Compressor.swift */,
 				6533552D1F8FB61000A660C6 /* JWE.swift */,
 				653355291F8F6B6800A660C6 /* JWEHeader.swift */,
 				65617FCA1F90F8C700D8C743 /* Encrypter.swift */,
@@ -339,6 +347,7 @@
 		65A9D3E21F45CDF1004E0B61 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8A30B8F622118FD0001834E3 /* CompressionImplementation */,
 				6582C0BB1F4B09DC00B153D5 /* Common */,
 				65FABAEB1F4AD8FA006D7679 /* JWS */,
 				653355281F8F6B4A00A660C6 /* JWE */,
@@ -461,6 +470,14 @@
 				65A9D3E21F45CDF1004E0B61 /* Sources */,
 			);
 			path = JOSESwift;
+			sourceTree = "<group>";
+		};
+		8A30B8F622118FD0001834E3 /* CompressionImplementation */ = {
+			isa = PBXGroup;
+			children = (
+				8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */,
+			);
+			path = CompressionImplementation;
 			sourceTree = "<group>";
 		};
 		C8610F54202DD93600859FCC /* Frameworks */ = {
@@ -652,6 +669,7 @@
 				5FB7656FF300A4A3EF0F3597 /* DataECPrivateKeyTests.swift in Sources */,
 				5FB762ED79A6159B5A9EDECC /* ECPrivateKeyToSecKeyTests.swift in Sources */,
 				5FB7666062B4008362CC88FF /* ECPrivateKeyToDataTests.swift in Sources */,
+				8A30B8FA22118FE6001834E3 /* JWECompressionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,6 +705,7 @@
 				65D1D0651F7A4DB3006377CD /* DataConvertible.swift in Sources */,
 				6533552E1F8FB61000A660C6 /* JWE.swift in Sources */,
 				C85B1EF4204D82860026BDCB /* Signer.swift in Sources */,
+				8A30B8F822118FD0001834E3 /* DeflateWrapper.swift in Sources */,
 				65D8E8EA20F4AF880059506A /* SymmetricKeyCodable.swift in Sources */,
 				C85B1EF6204D82970026BDCB /* RSASigner.swift in Sources */,
 				65344C3E20F4CC9000FCBBA1 /* DataSymmetricKey.swift in Sources */,
@@ -701,6 +720,7 @@
 				C85B1EF2204D82640026BDCB /* JWS.swift in Sources */,
 				5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */,
 				5FB764055756A9190628BDDE /* ECKeyCodable.swift in Sources */,
+				8A4B08B22213FF0600828536 /* Compressor.swift in Sources */,
 				5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */,
 				5FB762CE28963B4780B33973 /* SecKeyECPublicKey.swift in Sources */,
 				5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */,

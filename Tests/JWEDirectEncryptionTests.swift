@@ -45,12 +45,12 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
     ])
 
     @available(*, deprecated)
-    func testRoundtripA256CBCHS256() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricContentAlgorithm.A256CBCHS256.keyLength)
-
-        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS256)
+    func testRoundtripA128CBCHS256() {
+        let algorithm = SymmetricContentAlgorithm.A128CBCHS256
+        let symmetricKey = try! SecureRandom.generate(count: algorithm.keyLength)
+        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: algorithm)
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS256)!
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: algorithm)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
@@ -58,18 +58,18 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
     }
 
-    @available(*, deprecated)
     func testRoundtripA256CBCHS512() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricContentAlgorithm.A256CBCHS512.keyLength)
 
         let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(data)
         let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
-        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
 
     @available(*, deprecated)

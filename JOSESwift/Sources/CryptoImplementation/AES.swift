@@ -54,7 +54,7 @@ fileprivate extension SymmetricKeyAlgorithm {
 fileprivate extension SymmetricContentAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
-        case .A256CBCHS256, .A256CBCHS512:
+        case .A128CBCHS256, .A256CBCHS512:
             return CCAlgorithm(kCCAlgorithmAES)
         }
     }
@@ -63,7 +63,7 @@ fileprivate extension SymmetricContentAlgorithm {
         switch self {
         case .A256CBCHS512:
             return key.count == kCCKeySizeAES256
-        case .A256CBCHS256:
+        case .A128CBCHS256:
             return key.count == kCCKeySizeAES128
         }
     }
@@ -95,7 +95,7 @@ internal struct AES {
 
     private static func encryptContent(_ plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricContentAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
-        case .A256CBCHS512, .A256CBCHS256:
+        case .A256CBCHS512, .A128CBCHS256:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
                 throw AESError.keyLengthNotSatisfied
             }
@@ -166,7 +166,7 @@ internal struct AES {
 
     private static func decryptContent(_ cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricContentAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
-        case .A256CBCHS512, .A256CBCHS256:
+        case .A256CBCHS512, .A128CBCHS256:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {
                 throw AESError.keyLengthNotSatisfied
             }

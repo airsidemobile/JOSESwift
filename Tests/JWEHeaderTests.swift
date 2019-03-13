@@ -215,6 +215,7 @@ class JWEHeaderTests: XCTestCase {
         let typ = "typ"
         let cty = "cty"
         let crit = ["crit1", "crit2"]
+        let zip = "DEF"
 
         var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         header.jku = jku
@@ -227,6 +228,7 @@ class JWEHeaderTests: XCTestCase {
         header.typ = typ
         header.cty = cty
         header.crit = crit
+        header.zip = zip
 
         XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: header.parameters, options: []))
 
@@ -259,6 +261,15 @@ class JWEHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["crit"] as? [String], crit)
         XCTAssertEqual(header.crit, crit)
-    }
 
+        XCTAssertEqual(header.parameters["zip"] as? String, zip)
+        XCTAssertEqual(header.zip, zip)
+        XCTAssertEqual(header.compressionAlgorithm, CompressionAlgorithm.DEFLATE)
+
+        header.zip = "NONE"
+        XCTAssertEqual(header.compressionAlgorithm, CompressionAlgorithm.NONE)
+
+        header.zip = "GZIP"
+        XCTAssertEqual(header.compressionAlgorithm, nil)
+    }
 }
