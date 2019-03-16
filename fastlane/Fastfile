@@ -9,8 +9,7 @@ end
 
 desc "Lint Swift files"
 lane :lint do
-  # Todo: Don't ignore exit status (#98)
-  swiftlint(ignore_exit_status: true)
+  swiftlint()
 end
 
 desc "Format Swift files"
