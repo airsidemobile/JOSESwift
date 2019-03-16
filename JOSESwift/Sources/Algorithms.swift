@@ -43,6 +43,7 @@ public enum SignatureAlgorithm: String {
 /// - RSAOAEP256: [RSAES OAEP using SHA-256 and MGF1 with SHA-256](https://tools.ietf.org/html/rfc7518#section-4.3)
 /// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum AsymmetricKeyAlgorithm: String, CaseIterable {
+    // swiftlint:disable:next identifier_name
     case RSA1_5 = "RSA1_5"
     case RSAOAEP = "RSA-OAEP"
     case RSAOAEP256 = "RSA-OAEP-256"
