@@ -42,10 +42,7 @@ class RSASignerTests: RSACryptoTestCase {
     }
 
     func testSigning() {
-        guard privateKeyAlice2048 != nil else {
-            XCTFail()
-            return
-        }
+        XCTAssertNotNil(privateKeyAlice2048)
 
         let signer = RSASigner(algorithm: .RS512, privateKey: privateKeyAlice2048!)
         let signature = try! signer.sign(message.data(using: .utf8)!)
