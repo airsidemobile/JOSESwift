@@ -75,21 +75,21 @@ public struct Encrypter {
     /// Constructs an encrypter used to encrypt a JWE.
     ///
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyEncryptionAlgorithm alg: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm enc: SymmetricContentAlgorithm) {
+    public init?(keyEncryptionAlgorithm alg: AsymmetricKeyAlgorithm, encryptionKey key: Any, contentEncyptionAlgorithm enc: SymmetricContentAlgorithm) {
         self.init(alg, key, enc)
     }
 
     /// Constructs an encrypter used to encrypt a JWE.
     ///
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyEncryptionAlgorithm alg: SymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm enc: SymmetricContentAlgorithm) {
+    public init?(keyEncryptionAlgorithm alg: SymmetricKeyAlgorithm, encryptionKey key: Any, contentEncyptionAlgorithm enc: SymmetricContentAlgorithm) {
         self.init(alg, key, enc)
     }
 
     /// Constructs an encrypter used to encrypt a JWE.
     ///
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyEncryptionAlgorithm alg: KeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm enc: ContentAlgorithm) {
+    public init?(keyEncryptionAlgorithm alg: KeyAlgorithm, encryptionKey key: Any, contentEncyptionAlgorithm enc: ContentAlgorithm) {
         switch enc {
         case let enc as SymmetricContentAlgorithm:
             switch alg {
@@ -115,7 +115,7 @@ public struct Encrypter {
     ///           details.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    internal init?<KeyAlgType: KeyAlgorithm, KeyType, ContentAlgType: ContentAlgorithm>(_ alg: KeyAlgType, _ key: KeyType, _ enc: ContentAlgType) {
+    internal init?(_ alg: KeyAlgorithm, _ key: Any, _ enc: ContentAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch alg {
         case let alg as AsymmetricKeyAlgorithm:
@@ -128,10 +128,6 @@ public struct Encrypter {
                 // swiftlint:disable:next force_cast
                 keyEncrypter = RSAEncrypter(algorithm: alg, publicKey: (key as! RSAEncrypter.KeyType))
             case .direct:
-                guard type(of: key) is AESContentEncrypter.KeyType.Type else {
-                    return nil
-                }
-
                 keyEncrypter = RSAEncrypter(algorithm: alg)
             }
         case let alg as SymmetricKeyAlgorithm:
@@ -148,6 +144,10 @@ public struct Encrypter {
         switch enc {
         case let enc as SymmetricContentAlgorithm:
             if alg.equals(AsymmetricKeyAlgorithm.direct) {
+                guard type(of: key) is AESContentEncrypter.KeyType.Type else {
+                    return nil
+                }
+
                 // swiftlint:disable:next force_cast
                 contentEncrypter = AESContentEncrypter(algorithm: enc, contentKey: (key as! AESContentEncrypter.KeyType))
             } else {
@@ -167,7 +167,7 @@ public struct Encrypter {
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
-    public init?<KeyType>(keyEncryptionAlgorithm alg: KeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm enc: ContentAlgorithm) {
+    public init?(keyEncryptionAlgorithm alg: KeyAlgorithm, keyEncryptionKey kek: Any, contentEncyptionAlgorithm enc: ContentAlgorithm) {
         self.init(keyEncryptionAlgorithm: alg, encryptionKey: kek, contentEncyptionAlgorithm: enc)
     }
 

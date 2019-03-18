@@ -80,9 +80,9 @@ internal struct AESContentDecrypter: ContentDecrypter {
         self.symmetricKey = contentKey
     }
 
-    func decrypt(_ context: ContentDecryptionContext, with contentKey: Any? = nil) throws -> Data {
-        guard let combinedKey = (contentKey == nil) ? symmetricKey : contentKey as? KeyType else {
-            // Key not nil but cannot be cast to correct type
+    func decrypt(_ context: ContentDecryptionContext, with key: Any? = nil) throws -> Data {
+        guard let combinedKey:KeyType = (key == nil) ? symmetricKey : key as? KeyType else {
+            // Both keys are nil or argument key cannot be cast to correct type
             throw JWEError.keyNotSetOrInvalid
         }
 

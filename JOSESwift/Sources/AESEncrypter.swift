@@ -51,7 +51,7 @@ internal struct AESKeyEncrypter: KeyEncrypter {
         return try encrypt(plaintext, with: symmetricKey).ciphertext
     }
 
-    func encrypt(_ plaintext: Data, with symmetricKey: Data) throws -> SymmetricEncryptionContext {
+    func encrypt(_ plaintext: Data, with symmetricKey: KeyType) throws -> SymmetricEncryptionContext {
         // For symmetric (shared) key encryption default (rfc) IV is used.
         //
         // "This section defines the specifics of encrypting a JWE CEK with the
@@ -90,7 +90,7 @@ internal struct AESContentEncrypter: ContentEncrypter {
         self.symmetricKey = contentKey
     }
 
-    func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
+    func encrypt(_ plaintext: Data, with symmetricKey: KeyType, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
         // Generate random intitialization vector.
         let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength)
 
