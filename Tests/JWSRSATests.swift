@@ -48,7 +48,6 @@ class JWSRSATests: RSACryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
 
-
     @available(*, deprecated)
     func testSignAndSerializeRS512() {
         self.performTestRSASign(algorithm: .RS512)

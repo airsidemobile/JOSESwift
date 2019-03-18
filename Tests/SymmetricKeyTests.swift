@@ -24,9 +24,8 @@
 import XCTest
 @testable import JOSESwift
 
-
 class SymmetricKeyTests: XCTestCase {
-    
+
     func testCreatingSymmetricKeyFromData() {
         // Example key data from https://tools.ietf.org/html/rfc7517#appendix-A.3 but with different "alg" parameter
         // because we don't (yet) support "A128KW".
@@ -122,5 +121,5 @@ class SymmetricKeyTests: XCTestCase {
 
         XCTAssertThrowsError(try SymmetricKey(data: json))
     }
-    
+
 }

@@ -185,7 +185,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             }
 
             let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
+            XCTAssertThrowsError(try encrypter.encrypt(Data(count: 300))) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
             }
         }

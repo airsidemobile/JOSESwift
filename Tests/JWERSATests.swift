@@ -96,14 +96,14 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048, contentEncyptionAlgorithm: .A256CBCHS512)!
             let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
             let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
-            
+
             XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
         }
     }
@@ -114,17 +114,17 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             var header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             header.kid = "kid"
-            
+
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
             let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
-            
+
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
             let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
-            
+
             XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
         }
     }
@@ -139,10 +139,10 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
             let payload = try! jwe.decrypt(with: privateKeyAlice2048).data()
-            
+
             XCTAssertEqual(payload, plaintext)
         }
     }
@@ -163,21 +163,21 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)!
             let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
-            
+
             var error: Unmanaged<CFError>?
-            
+
             guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
                 print(error!)
                 return
             }
-            
+
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-            
+
             XCTAssertThrowsError(try jweDec.decrypt(with: key))
         }
     }
@@ -192,15 +192,15 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
-            
+
             let decrypter = Decrypter(
                 keyDecryptionAlgorithm: algorithm,
                 decryptionKey: privateKeyAlice2048,
                 contentDecryptionAlgorithm: .A256CBCHS512
             )!
-            
+
             XCTAssertEqual(try! jwe.decrypt(using: decrypter).data(), plaintext)
         }
     }
@@ -231,15 +231,15 @@ class JWERSATests: RSACryptoTestCase {
             of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
             with: "eyJhbGciOiAiUlNBLU9BRVAiLCJlbmMiOiAiQTI1NkNCQy1IUzUxMiJ9"
             ).data(using: .utf8)!
-        
+
         let jwe = try! JWE(compactSerialization: malformedSerialization)
-        
+
         let decrypter = Decrypter(
             keyDecryptionAlgorithm: .RSAOAEP256,
             decryptionKey: privateKeyAlice2048!,
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
-        
+
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header with RSA-OAEP-256 algorithm") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
         }
@@ -271,15 +271,15 @@ class JWERSATests: RSACryptoTestCase {
             of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
             with: "eyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0="
             ).data(using: .utf8)!
-        
+
         let jwe = try! JWE(compactSerialization: malformedSerialization)
-        
+
         let decrypter = Decrypter(
             keyDecryptionAlgorithm: .RSAOAEP256,
             decryptionKey: privateKeyAlice2048!,
             contentDecryptionAlgorithm: .A256CBCHS512
             )!
-        
+
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong enc in header") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
         }
@@ -291,12 +291,12 @@ class JWERSATests: RSACryptoTestCase {
             kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
             kSecAttrKeySizeInBits as String: 2048,
             kSecPrivateKeyAttrs as String: [
-                kSecAttrIsPermanent as String: false,
+                kSecAttrIsPermanent as String: false
             ]
         ]
-        
+
         var error: Unmanaged<CFError>?
-        
+
         guard let key = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
             print(error!)
             return
@@ -306,16 +306,15 @@ class JWERSATests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
-            
-            
+
             let decrypter = Decrypter(
                 keyDecryptionAlgorithm: algorithm,
                 decryptionKey: key,
                 contentDecryptionAlgorithm: .A256CBCHS512
                 )!
-            
+
             XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
        }
     }

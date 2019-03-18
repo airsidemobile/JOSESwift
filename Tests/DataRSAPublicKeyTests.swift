@@ -90,5 +90,5 @@ class DataRSAPublicKeyTests: RSACryptoTestCase {
 
         XCTAssertEqual(data, expectedData)
     }
-    
+
 }

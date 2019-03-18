@@ -69,7 +69,7 @@ class AESEncrypterTests: RSACryptoTestCase {
 
         let dataLength = symmetricEncryptionContext.ciphertext.count
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
-        var cryptData = Data(count:cryptLength)
+        var cryptData = Data(count: cryptLength)
 
         let options = CCOptions(kCCOptionPKCS7Padding)
 
@@ -98,7 +98,6 @@ class AESEncrypterTests: RSACryptoTestCase {
 
         XCTAssertEqual(cryptData, plaintext)
     }
-
 
     /// Tests the `AES` encryption implementation for AES_256_CBC_HMAC_SHA_512 with the test data provided in the [RFC-7518](https://tools.ietf.org/html/rfc7518#appendix-B.3).
     func testEncryptingA256CBCHS512() {
@@ -134,7 +133,7 @@ class AESEncrypterTests: RSACryptoTestCase {
 
         let dataLength = symmetricEncryptionContext.ciphertext.count
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
-        var cryptData = Data(count:cryptLength)
+        var cryptData = Data(count: cryptLength)
 
         let options = CCOptions(kCCOptionPKCS7Padding)
 

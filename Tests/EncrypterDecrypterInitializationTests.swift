@@ -32,7 +32,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Encrypter(keyEncryptionAlgorithm: algorithm, keyEncryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
             )
@@ -44,7 +44,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
             )
@@ -75,7 +75,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Decrypter(keyDecryptionAlgorithm: algorithm, keyDecryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
             )
@@ -87,7 +87,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Decrypter(keyDecryptionAlgorithm: algorithm, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
             )
@@ -111,5 +111,5 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
         )
     }
-    
+
 }

@@ -96,7 +96,7 @@ class ASN1DERParsingTests: XCTestCase {
             """
         )!
     )
-    
+
     func testParsingIntTLVLong() {
         let tlv = intTLVLong
 
@@ -270,5 +270,5 @@ class ASN1DERParsingTests: XCTestCase {
                 XCTAssertEqual(error as? ASN1DERParsingError, ASN1DERParsingError.incorrectTLVLength)
         }
     }
-    
+
 }
