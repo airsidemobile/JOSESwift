@@ -76,21 +76,21 @@ public struct Decrypter {
     /// Constructs a decrypter used to decrypt a JWE.
     ///
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyDecryptionAlgorithm alg: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm enc: SymmetricContentAlgorithm) {
+    public init?(keyDecryptionAlgorithm alg: AsymmetricKeyAlgorithm, decryptionKey key: Any, contentDecryptionAlgorithm enc: SymmetricContentAlgorithm) {
         self.init(alg, key, enc)
     }
 
     /// Constructs a decrypter used to decrypt a JWE.
     ///
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyDecryptionAlgorithm alg: SymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm enc: SymmetricContentAlgorithm) {
+    public init?(keyDecryptionAlgorithm alg: SymmetricKeyAlgorithm, decryptionKey key: Any, contentDecryptionAlgorithm enc: SymmetricContentAlgorithm) {
         self.init(alg, key, enc)
     }
 
     /// Constructs a decrypter used to decrypt a JWE.
     ///
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyDecryptionAlgorithm alg: KeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm enc: ContentAlgorithm) {
+    public init?(keyDecryptionAlgorithm alg: KeyAlgorithm, decryptionKey key: Any, contentDecryptionAlgorithm enc: ContentAlgorithm) {
         switch enc {
         case let enc as SymmetricContentAlgorithm:
             switch alg {
@@ -116,7 +116,7 @@ public struct Decrypter {
     ///           details.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    internal init?<KeyAlgType: KeyAlgorithm, KeyType, ContentAlgType: ContentAlgorithm>(_ alg: KeyAlgType, _ key: KeyType, _ enc: ContentAlgType) {
+    internal init?(_ alg: KeyAlgorithm, _ key: Any, _ enc: ContentAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch alg {
         case let alg as AsymmetricKeyAlgorithm:

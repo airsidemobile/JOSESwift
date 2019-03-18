@@ -74,7 +74,7 @@ public struct JWEHeader: JOSEHeader {
         self.init(algorithm: algorithm as KeyAlgorithm, encryptionAlgorithm: encryptionAlgorithm as ContentAlgorithm)
     }
 
-    private init(algorithm: KeyAlgorithm, encryptionAlgorithm: ContentAlgorithm) {
+    public init(algorithm: KeyAlgorithm, encryptionAlgorithm: ContentAlgorithm) {
         let parameters: [String: Any] = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
