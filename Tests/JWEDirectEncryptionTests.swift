@@ -45,7 +45,22 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
     ])
 
     @available(*, deprecated)
-    func testRoundtrip() {
+
+    func testRoundtripA128CBCHS256() {
+        let algorithm = SymmetricKeyAlgorithm.A128CBCHS256
+        let symmetricKey = try! SecureRandom.generate(count: algorithm.keyLength)
+
+        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: algorithm)
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: algorithm)!
+
+        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        let serialization = jwe.compactSerializedString
+
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+    }
+
+    func testRoundtripA256CBCHS512() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
 
         let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)

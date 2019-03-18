@@ -52,13 +52,17 @@ public enum AsymmetricKeyAlgorithm: String, CaseIterable {
 /// An algorithm for symmetric encryption and decryption.
 ///
 /// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
+/// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
 public enum SymmetricKeyAlgorithm: String {
     case A256CBCHS512 = "A256CBC-HS512"
+    case A128CBCHS256 = "A128CBC-HS256"
 
     var hmacAlgorithm: HMACAlgorithm {
         switch self {
         case .A256CBCHS512:
             return .SHA512
+        case .A128CBCHS256:
+            return .SHA256
         }
     }
 
@@ -66,12 +70,16 @@ public enum SymmetricKeyAlgorithm: String {
         switch self {
         case .A256CBCHS512:
             return 64
+        case .A128CBCHS256:
+            return 32
         }
     }
 
     var initializationVectorLength: Int {
         switch self {
         case .A256CBCHS512:
+            return 16
+        case .A128CBCHS256:
             return 16
         }
     }
@@ -80,6 +88,8 @@ public enum SymmetricKeyAlgorithm: String {
         switch self {
         case .A256CBCHS512:
             return key.count == 64
+        case .A128CBCHS256:
+            return key.count == 32
         }
     }
 
@@ -91,6 +101,12 @@ public enum SymmetricKeyAlgorithm: String {
             }
 
             return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
+
+        case .A128CBCHS256:
+            guard checkKeyLength(for: inputKey) else {
+                throw JWEError.keyLengthNotSatisfied
+            }
+            return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
         }
     }
 
@@ -98,6 +114,8 @@ public enum SymmetricKeyAlgorithm: String {
         switch self {
         case .A256CBCHS512:
             return hmac.subdata(in: 0..<32)
+        case .A128CBCHS256:
+            return hmac.subdata(in: 0..<16)
         }
     }
 }
@@ -105,13 +123,17 @@ public enum SymmetricKeyAlgorithm: String {
 /// An algorithm for HMAC calculation.
 ///
 /// - SHA512
+/// - SHA256
 public enum HMACAlgorithm: String {
     case SHA512 = "SHA512"
+    case SHA256 = "SHA256"
 
     var outputLength: Int {
         switch self {
         case .SHA512:
             return 64
+        case .SHA256:
+            return 32
         }
     }
 }
