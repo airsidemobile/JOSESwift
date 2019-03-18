@@ -235,7 +235,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         XCTAssertFalse(jws.isValid(for: verifier))
     }
-    
+
 }
 
 extension JOSESwiftError: Equatable {

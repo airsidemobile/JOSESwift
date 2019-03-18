@@ -25,7 +25,7 @@ import XCTest
 @testable import JOSESwift
 
 class ECPrivateKeyToDataTests: ECCryptoTestCase {
-    
+
     func testPrivateKeyToData() {
         allTestData.forEach { testData in
             let jwk = try! ECPrivateKey(
@@ -39,5 +39,5 @@ class ECPrivateKeyToDataTests: ECCryptoTestCase {
             XCTAssertEqual(data, testData.privateKeyData)
         }
     }
-    
+
 }

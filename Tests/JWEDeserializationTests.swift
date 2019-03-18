@@ -83,7 +83,7 @@ class JWEDeserializationTests: XCTestCase {
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
         } catch JOSESwiftError.componentCouldNotBeInitializedFromData(let data) {
-            XCTAssertEqual(data, Data(base64URLEncoded:"e2FsZzpSU0EtT0FFUCwK")!)
+            XCTAssertEqual(data, Data(base64URLEncoded: "e2FsZzpSU0EtT0FFUCwK")!)
             return
         } catch {
             XCTFail()
@@ -99,7 +99,7 @@ class JWEDeserializationTests: XCTestCase {
         do {
             _ = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: wrongSerialization)
         } catch JOSESwiftError.componentCouldNotBeInitializedFromData(let data) {
-            XCTAssertEqual(data, Data(base64URLEncoded:"eyJ0eXAiOiJKV0UiLDE6IlJTQS1PQUVQIn0")!)
+            XCTAssertEqual(data, Data(base64URLEncoded: "eyJ0eXAiOiJKV0UiLDE6IlJTQS1PQUVQIn0")!)
             return
         } catch {
             XCTFail()

@@ -57,9 +57,9 @@ class JWKSetCollectionTests: XCTestCase {
     func testSubscriptAccess() {
         let set =  JWKSet(keys: rsaKeys)
 
-        XCTAssertEqual((set[1] as! RSAPublicKey).modulus,  rsaKeys[1].modulus)
-        XCTAssertEqual((set[0] as! RSAPublicKey).modulus,  rsaKeys[0].modulus)
-        XCTAssertEqual((set[2] as! RSAPublicKey).modulus,  rsaKeys[2].modulus)
+        XCTAssertEqual((set[1] as! RSAPublicKey).modulus, rsaKeys[1].modulus)
+        XCTAssertEqual((set[0] as! RSAPublicKey).modulus, rsaKeys[0].modulus)
+        XCTAssertEqual((set[2] as! RSAPublicKey).modulus, rsaKeys[2].modulus)
     }
 
     func testIndices() {
