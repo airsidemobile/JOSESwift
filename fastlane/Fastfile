@@ -9,7 +9,7 @@ end
 
 desc "Lint Swift files"
 lane :lint do
-  swiftlint()
+  swiftlint
 end
 
 desc "Format Swift files"
