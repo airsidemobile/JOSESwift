@@ -25,7 +25,7 @@ import XCTest
 @testable import JOSESwift
 
 extension RSAError: Equatable {
-    public static func ==(lhs: RSAError, rhs: RSAError) -> Bool {
+    public static func == (lhs: RSAError, rhs: RSAError) -> Bool {
         switch (lhs, rhs) {
         case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
             return true

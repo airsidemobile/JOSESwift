@@ -25,7 +25,7 @@ import XCTest
 @testable import JOSESwift
 
 extension ASN1DERParsingError: Equatable {
-    public static func ==(lhs: ASN1DERParsingError, rhs: ASN1DERParsingError) -> Bool {
+    public static func == (lhs: ASN1DERParsingError, rhs: ASN1DERParsingError) -> Bool {
         switch (lhs, rhs) {
         case (.incorrectLengthFieldLength, .incorrectLengthFieldLength):
             return true
