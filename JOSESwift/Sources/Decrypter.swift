@@ -122,7 +122,7 @@ public struct Decrypter {
 
         var cek: Data
 
-        if (alg == .direct) {
+        if alg == .direct {
             guard context.encryptedKey == Data() else {
                 throw JOSESwiftError.decryptingFailed(
                     description: "Direct encryption does not expect an encrypted key."
