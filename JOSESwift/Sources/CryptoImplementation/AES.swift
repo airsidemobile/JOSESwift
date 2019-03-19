@@ -115,6 +115,7 @@ internal struct AES {
         }
     }
 
+    // swiftlint:disable:next function_parameter_count
     static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
         let dataLength = data.count
 
