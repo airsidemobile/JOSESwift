@@ -100,11 +100,11 @@ class ASN1DERParsingTests: XCTestCase {
     func testParsingIntTLVLong() {
         let tlv = intTLVLong
 
-        let (tag, length, value) = try! tlv.nextTLVTriplet()
+        let triplet = try! tlv.nextTLVTriplet()
 
-        XCTAssertEqual(tag, 0x02)
-        XCTAssertEqual(length, [ 0x81, 0x81 ])
-        XCTAssertEqual(value, [
+        XCTAssertEqual(triplet.tag, 0x02)
+        XCTAssertEqual(triplet.length, [ 0x81, 0x81 ])
+        XCTAssertEqual(triplet.value, [
             0x00,
             0x8f, 0xe2, 0x41, 0x2a, 0x08, 0xe8, 0x51, 0xa8, 0x8c, 0xb3, 0xe8, 0x53, 0xe7, 0xd5, 0x49, 0x50,
             0xb3, 0x27, 0x8a, 0x2b, 0xcb, 0xea, 0xb5, 0x42, 0x73, 0xea, 0x02, 0x57, 0xcc, 0x65, 0x33, 0xee,
@@ -120,21 +120,21 @@ class ASN1DERParsingTests: XCTestCase {
     func testParsingIntTLVShort() {
         let tlv = intTLVShort
 
-        let (tag, length, value) = try! tlv.nextTLVTriplet()
+        let triplet = try! tlv.nextTLVTriplet()
 
-        XCTAssertEqual(tag, 0x02)
-        XCTAssertEqual(length, [ 0x01 ])
-        XCTAssertEqual(value, [ 0x03 ])
+        XCTAssertEqual(triplet.tag, 0x02)
+        XCTAssertEqual(triplet.length, [ 0x01 ])
+        XCTAssertEqual(triplet.value, [ 0x03 ])
     }
 
     func testParsingSequenceTLV() {
         let tlv = sequenceTLV
 
-        let (tag, length, value) = try! tlv.nextTLVTriplet()
+        let triplet = try! tlv.nextTLVTriplet()
 
-        XCTAssertEqual(tag, 0x30)
-        XCTAssertEqual(length, [ 0x82, 0x01, 0x0a ])
-        XCTAssertEqual(value, [
+        XCTAssertEqual(triplet.tag, 0x30)
+        XCTAssertEqual(triplet.length, [ 0x82, 0x01, 0x0a ])
+        XCTAssertEqual(triplet.value, [
             0x02, 0x82, 0x01, 0x01, 0x00, 0x88, 0x00, 0xf3, 0xc4, 0xc2, 0x7e, 0x97, 0xf3,
             0x48, 0x54, 0xf6, 0xea, 0xcf, 0xd7, 0xa8, 0x05, 0xe9, 0xd4, 0x08, 0x25, 0x22,
             0x34, 0xd7, 0xd9, 0xdf, 0xb7, 0x3a, 0x81, 0x42, 0x70, 0x58, 0x47, 0xc9, 0x47,
