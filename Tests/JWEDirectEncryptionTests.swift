@@ -60,6 +60,7 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
     }
 
+    @available(*, deprecated)
     func testRoundtripA256CBCHS512() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
 
