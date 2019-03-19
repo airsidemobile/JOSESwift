@@ -15,6 +15,7 @@ disabled_rules:
   - file_length
   - type_name
   - identifier_name
+  - todo
 
 line_length:
   ignores_comments: true
