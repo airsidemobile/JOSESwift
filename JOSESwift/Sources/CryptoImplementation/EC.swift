@@ -96,10 +96,10 @@ public enum ECCurveType: String, Codable {
 
 fileprivate extension SignatureAlgorithm {
     typealias DigestFunction = (
-            Optional<UnsafeRawPointer>,
+            UnsafeRawPointer?,
             UInt32,
-            Optional<UnsafeMutablePointer<UInt8>>
-    ) -> Optional<UnsafeMutablePointer<UInt8>>
+            UnsafeMutablePointer<UInt8>?
+    ) -> UnsafeMutablePointer<UInt8>?
 
     func createDigest(input: Data) throws -> [UInt8] {
         guard
