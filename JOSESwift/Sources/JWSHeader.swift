@@ -33,7 +33,7 @@ public struct JWSHeader: JOSEHeader {
             }
             // Forcing the try is ok here, because it is valid JSON.
             // swiftlint:disable:next force_try
-            headerData = (try? JSONSerialization.data(withJSONObject: parameters, options: []))!
+            headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
         }
     }
 
