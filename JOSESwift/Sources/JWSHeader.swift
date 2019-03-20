@@ -26,10 +26,6 @@ import Foundation
 /// The header of a `JWS` object.
 public struct JWSHeader: JOSEHeader {
     var headerData: Data
-
-    /**
-      test comment
-    */
     var parameters: [String: Any] {
         didSet {
             guard JSONSerialization.isValidJSONObject(parameters) else {
@@ -37,7 +33,7 @@ public struct JWSHeader: JOSEHeader {
             }
             // Forcing the try is ok here, because it is valid JSON.
             // swiftlint:disable:next force_try
-            headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+            headerData = (try? JSONSerialization.data(withJSONObject: parameters, options: []))!
         }
     }
 
