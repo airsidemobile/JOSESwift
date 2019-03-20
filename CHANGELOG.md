@@ -24,6 +24,8 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+- Enables SwiftLint and fixes many violations ([#98](https://github.com/airsidemobile/JOSESwift/issues/98) via [@xavierLowmiller](https://github.com/xavierLowmiller))
+
 ## [1.8.0] - 2019-03-18
 
 - Adds A128CBCHS256 support ([#147](https://github.com/airsidemobile/JOSESwift/pull/147)) via [@ramunasjurgilas](https://github.com/ramunasjurgilas)

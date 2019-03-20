@@ -239,7 +239,7 @@ class JWSValidationTests: RSACryptoTestCase {
 }
 
 extension JOSESwiftError: Equatable {
-    public static func ==(lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
+    public static func == (lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
         switch (lhs, rhs) {
         case (.verifyingFailed(let lhs), .verifyingFailed(let rhs)):
             return lhs == rhs

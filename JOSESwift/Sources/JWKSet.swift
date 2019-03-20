@@ -84,8 +84,8 @@ extension JWKSet: Collection {
         return keys[index]
     }
 
-    public func index(after i: Index) -> Index {
-        return self.keys.index(after: i)
+    public func index(after index: Index) -> Index {
+        return self.keys.index(after: index)
     }
 
     public func makeIterator() -> IndexingIterator<ArrayType> {

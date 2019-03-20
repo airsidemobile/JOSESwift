@@ -14,7 +14,11 @@ class JWECompressionTests: RSACryptoTestCase {
     let data = "So Secret! 🔥🌵".data(using: .utf8)!
     let compressedDataBase64URLEncodedString = "C85XCE5NLkotUVT4MH_K0g_ze7YCAA"
 
-    let jweSerializedNotSupportedZipHeaderValue = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiemlwIjoiR1pJUCJ9..I62WKaitlHoJ-Kz3zvQ-Tw.Tu9hk_AMRMRTc8ggsoWifFS979Nz8xt-xx4FpF6waeE.w7c8eAGXpUD3tNskLzdl17s4vsCCSUwe5bRFpJg1kUs"
+    let jweSerializedNotSupportedZipHeaderValue = """
+        eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiemlwIjoiR1pJUCJ9..I62W\
+        KaitlHoJ-Kz3zvQ-Tw.Tu9hk_AMRMRTc8ggsoWifFS979Nz8xt-xx4FpF6waeE.w7c8eAG\
+        XpUD3tNskLzdl17s4vsCCSUwe5bRFpJg1kUs
+        """
 
     @available(*, deprecated)
     func testRoundtripWithLegacyDecrypter() {

@@ -53,13 +53,10 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
         }
     }
 
-    func testPublicKeyFromPublicComponents() {
-        allTestData.forEach { testData in
+    func testPublicKeyFromPublicComponents() throws {
+        try allTestData.forEach { testData in
             let components = (testData.expectedCurveType, testData.expectedXCoordinate, testData.expectedYCoordinate)
-            guard let secKey = try? SecKey.representing(ecPublicKeyComponents: components) else {
-                XCTFail()
-                return
-            }
+            let secKey = try SecKey.representing(ecPublicKeyComponents: components)
 
             let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
             let dataExpected = SecKeyCopyExternalRepresentation(testData.publicKey, nil)! as Data

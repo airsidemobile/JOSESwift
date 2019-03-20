@@ -71,7 +71,11 @@ internal struct AES {
                 throw AESError.keyLengthNotSatisfied
             }
 
-            let encrypted = aes(operation: CCOperation(kCCEncrypt), data: plaintext, key: encryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
+            let encrypted = aes(operation: CCOperation(kCCEncrypt),
+                                data: plaintext, key: encryptionKey,
+                                algorithm: algorithm.ccAlgorithm,
+                                initializationVector: initializationVector,
+                                padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard encrypted.status == UInt32(kCCSuccess) else {
                 throw AESError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
@@ -97,7 +101,11 @@ internal struct AES {
                 throw AESError.keyLengthNotSatisfied
             }
 
-            let decrypted = aes(operation: CCOperation(kCCDecrypt), data: cipherText, key: decryptionKey, algorithm: algorithm.ccAlgorithm, initializationVector: initializationVector, padding: CCOptions(kCCOptionPKCS7Padding))
+            let decrypted = aes(operation: CCOperation(kCCDecrypt),
+                                data: cipherText, key: decryptionKey,
+                                algorithm: algorithm.ccAlgorithm,
+                                initializationVector: initializationVector,
+                                padding: CCOptions(kCCOptionPKCS7Padding))
 
             guard decrypted.status == UInt32(kCCSuccess) else {
                 throw AESError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
@@ -107,6 +115,7 @@ internal struct AES {
         }
     }
 
+    // swiftlint:disable:next function_parameter_count
     static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
         let dataLength = data.count
 

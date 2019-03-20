@@ -29,11 +29,11 @@ import Foundation
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
 /// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
 public enum SignatureAlgorithm: String {
-    case RS256 = "RS256"
-    case RS512 = "RS512"
-    case ES256 = "ES256"
-    case ES384 = "ES384"
-    case ES512 = "ES512"
+    case RS256
+    case RS512
+    case ES256
+    case ES384
+    case ES512
 }
 
 /// An algorithm for asymmetric encryption and decryption.
@@ -43,6 +43,7 @@ public enum SignatureAlgorithm: String {
 /// - RSAOAEP256: [RSAES OAEP using SHA-256 and MGF1 with SHA-256](https://tools.ietf.org/html/rfc7518#section-4.3)
 /// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
 public enum AsymmetricKeyAlgorithm: String, CaseIterable {
+    // swiftlint:disable:next identifier_name
     case RSA1_5 = "RSA1_5"
     case RSAOAEP = "RSA-OAEP"
     case RSAOAEP256 = "RSA-OAEP-256"
@@ -125,8 +126,8 @@ public enum SymmetricKeyAlgorithm: String {
 /// - SHA512
 /// - SHA256
 public enum HMACAlgorithm: String {
-    case SHA512 = "SHA512"
-    case SHA256 = "SHA256"
+    case SHA512
+    case SHA256
 
     var outputLength: Int {
         switch self {

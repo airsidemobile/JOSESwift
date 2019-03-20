@@ -81,8 +81,12 @@ class RSADecrypterTests: RSACryptoTestCase {
         8GmvJ5UwA==
         """
 
-    let rsa1DecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))") // adjusted for RSA-OAEP-256 error having a differe 'err' number
-    let rsaOAEPDecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))")
+    let rsa1DecryptionError = RSAError.decryptingFailed(description: """
+        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))
+        """) // adjusted for RSA-OAEP-256 error having a differe 'err' number
+    let rsaOAEPDecryptionError = RSAError.decryptingFailed(description: """
+        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))
+        """)
 
     /// Dictionary of decryption errors for each available Asymmetric key algorithm
     lazy var decryptionErrors: [String: RSAError] = {

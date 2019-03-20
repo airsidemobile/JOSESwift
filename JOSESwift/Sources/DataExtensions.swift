@@ -35,10 +35,10 @@ extension Data {
 
         let mod = s.count % 4
         switch mod {
-            case 0: break
-            case 2: s.append("==")
-            case 3: s.append("=")
-            default: return nil
+        case 0: break
+        case 2: s.append("==")
+        case 3: s.append("=")
+        default: return nil
         }
 
         self.init(base64Encoded: s)
@@ -86,15 +86,15 @@ extension Data {
         var dataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
 
         var dataIndex = dataLengthBytes.count-1
-        for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
+        for index in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var offset = 2
             var hexStringChunk = ""
 
-            if dataLengthInHex.count-i == 1 {
+            if dataLengthInHex.count-index == 1 {
                 offset = 1
             }
 
-            let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
+            let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -index)
             let startIndex = dataLengthInHex.index(endIndex, offsetBy: -offset)
             let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
             hexStringChunk = String(dataLengthInHex[range])
