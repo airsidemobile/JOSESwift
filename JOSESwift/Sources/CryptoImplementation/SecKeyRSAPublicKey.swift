@@ -1,4 +1,3 @@
-// swiftlint:disable force_unwrapping
 //
 //  SecKeyRSAPublicKey.swift
 //  JOSESwift
@@ -46,6 +45,7 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
 
         var error: Unmanaged<CFError>?
         guard let keyReference = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
+            // swiftlint:disable:next force_unwrapping
             throw error!.takeRetainedValue() as Error
         }
 
@@ -69,6 +69,7 @@ extension SecKey: ExpressibleAsRSAPublicKeyComponents {
 
         var error: Unmanaged<CFError>?
         guard let keyData = SecKeyCopyExternalRepresentation(self, &error) else {
+            // swiftlint:disable:next force_unwrapping
             throw error!.takeRetainedValue() as Error
         }
 
