@@ -28,7 +28,7 @@ public struct JWSHeader: JOSEHeader {
     var headerData: Data
 
     /**
-      test
+      test comment
     */
     var parameters: [String: Any] {
         didSet {
