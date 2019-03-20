@@ -17,5 +17,8 @@ disabled_rules:
   - identifier_name
   - todo
 
+opt_in_rules:
+  - force_unwrapping
+
 line_length:
   ignores_comments: true
