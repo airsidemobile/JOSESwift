@@ -48,7 +48,7 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
             let jwk = try? ECPublicKey(publicKey: testData.publicKey)
 
             XCTAssertNotNil(jwk)
-            XCTAsser tEqual(jwk?.crv.rawValue, testData.expectedCurveType)
+            XCTAssertEqual(jwk?.crv.rawValue, testData.expectedCurveType)
             XCTAssertEqual(jwk?.x, testData.expectedXCoordinateBase64Url)
             XCTAssertEqual(jwk?.y, testData.expectedYCoordinateBase64Url)
         }
