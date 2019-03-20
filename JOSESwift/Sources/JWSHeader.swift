@@ -26,6 +26,10 @@ import Foundation
 /// The header of a `JWS` object.
 public struct JWSHeader: JOSEHeader {
     var headerData: Data
+
+    /**
+      test
+    */
     var parameters: [String: Any] {
         didSet {
             guard JSONSerialization.isValidJSONObject(parameters) else {
