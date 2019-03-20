@@ -179,7 +179,7 @@ internal struct EC {
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
-        
+
         let digest = try algorithm.createDigest(input: signingInput)
         var signatureLength = curveType.signatureOctetLength
 
