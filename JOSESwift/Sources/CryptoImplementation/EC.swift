@@ -32,6 +32,7 @@ internal enum ECError: Error {
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
     case invalidCurveDigestAlgorithm
+    case couldNotAllocateMemoryForSignature
 }
 
 /// Identifies the curve type parameter of a JWK representing an elliptic curve key
@@ -178,10 +179,14 @@ internal struct EC {
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
+        
         let digest = try algorithm.createDigest(input: signingInput)
         var signatureLength = curveType.signatureOctetLength
-        // swiftlint:disable:next force_unwrapping
-        let signature = NSMutableData(length: signatureLength)!
+
+        guard let signature = NSMutableData(length: signatureLength) else {
+            throw ECError.couldNotAllocateMemoryForSignature
+        }
+
         let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
         let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)
         if status != errSecSuccess {
