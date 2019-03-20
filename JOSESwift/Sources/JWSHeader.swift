@@ -25,12 +25,6 @@ import Foundation
 
 /// The header of a `JWS` object.
 public struct JWSHeader: JOSEHeader {
-    /**
-     test
-    */
-    var test: Int {
-        return 0
-    }
     var headerData: Data
     var parameters: [String: Any] {
         didSet {
