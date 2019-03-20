@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  SecKeyECPublicKeyTests.swift
 //  Tests
@@ -47,7 +48,7 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
             let jwk = try? ECPublicKey(publicKey: testData.publicKey)
 
             XCTAssertNotNil(jwk)
-            XCTAssertEqual(jwk?.crv.rawValue, testData.expectedCurveType)
+            XCTAsser tEqual(jwk?.crv.rawValue, testData.expectedCurveType)
             XCTAssertEqual(jwk?.x, testData.expectedXCoordinateBase64Url)
             XCTAssertEqual(jwk?.y, testData.expectedYCoordinateBase64Url)
         }

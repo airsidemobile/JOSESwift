@@ -180,6 +180,7 @@ internal struct EC {
         }
         let digest = try algorithm.createDigest(input: signingInput)
         var signatureLength = curveType.signatureOctetLength
+        // swiftlint:disable:next force_unwrapping
         let signature = NSMutableData(length: signatureLength)!
         let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
         let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)

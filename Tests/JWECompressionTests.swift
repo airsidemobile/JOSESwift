@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 // swiftlint:disable force_cast
 //
 //  JWECompressionTests.swift

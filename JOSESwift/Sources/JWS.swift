@@ -43,7 +43,7 @@ public struct JWS {
     /// The compact serialization of this JWS object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
-        // swiftlint:disable:next force_unwrap
+        // swiftlint:disable:next force_unwrapping
         return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
