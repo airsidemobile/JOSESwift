@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------------------
 
 swiftlint.config_file = '.swiftlint.yml'
+swiftlint.lint_files fail_on_error: true
 swiftlint.lint_files inline_mode: true
 
 # ------------------------------------------------------------------------------
