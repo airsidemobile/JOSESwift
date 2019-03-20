@@ -24,7 +24,8 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
-- Enables SwiftLint and fixes many violations ([#98](https://github.com/airsidemobile/JOSESwift/issues/98) via [@xavierLowmiller](https://github.com/xavierLowmiller))
+- Adds pull request linting in Danger ([#153](https://github.com/airsidemobile/JOSESwift/pull/153)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds a SwiftLint build phase and fixes many violations ([#151](https://github.com/airsidemobile/JOSESwift/pull/151)) via [@xavierLowmiller](https://github.com/xavierLowmiller)
 
 ## [1.8.0] - 2019-03-18
 
