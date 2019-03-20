@@ -3,10 +3,9 @@
 # ------------------------------------------------------------------------------
 
 swiftlint.config_file = '.swiftlint.yml'
-swiftlint.lint_files fail_on_error: true
 
 has_linting_violations = false
-swiftlint.lint_files(inline_mode: true) { |violation|
+swiftlint.lint_files(inline_mode: true, fail_on_error: true) { |violation|
 	has_linting_violations = true
 	true
 }
