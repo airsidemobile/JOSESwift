@@ -7,7 +7,6 @@ swiftlint.config_file = '.swiftlint.yml'
 has_linting_violations = false
 swiftlint.lint_files(inline_mode: true, fail_on_error: true) { |violation|
 	has_linting_violations = true
-	true
 }
 
 if has_linting_violations 
