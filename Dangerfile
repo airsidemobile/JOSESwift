@@ -14,6 +14,7 @@ swiftlint.lint_files(inline_mode: true) { |violation|
 if has_linting_violations 
 	warn("Your pull request seems to introduce linting violations. Some of them may be fixable by running `bundle exec fastlane format_code`.")
 end
+
 # ------------------------------------------------------------------------------
 # Did you add a changelog entry?
 # ------------------------------------------------------------------------------
