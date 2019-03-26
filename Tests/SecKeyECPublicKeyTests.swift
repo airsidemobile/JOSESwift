@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  SecKeyECPublicKeyTests.swift
 //  Tests

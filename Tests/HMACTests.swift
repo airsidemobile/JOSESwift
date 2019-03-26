@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  HMACTests.swift
 //  Tests
