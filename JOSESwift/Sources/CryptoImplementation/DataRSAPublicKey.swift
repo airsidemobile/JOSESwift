@@ -38,7 +38,7 @@ extension Data: ExpressibleAsRSAPublicKeyComponents {
 
         let sequenceEncoded = (modulusEncoded + exponentEncoded).encode(as: .sequence)
 
-        return Data(bytes: sequenceEncoded)
+        return Data(sequenceEncoded)
     }
 
     public func rsaPublicKeyComponents() throws -> RSAPublicKeyComponents {
@@ -55,8 +55,8 @@ extension Data: ExpressibleAsRSAPublicKeyComponents {
         }
 
         return (
-            Data(bytes: modulus),
-            Data(bytes: exponent)
+            Data(modulus),
+            Data(exponent)
         )
     }
 }

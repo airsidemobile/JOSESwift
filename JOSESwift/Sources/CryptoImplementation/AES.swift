@@ -126,10 +126,10 @@ internal struct AES {
         let keyLength = key.count
         var numBytesCrypted: size_t = 0
 
-        let cryptStatus = cryptData.withUnsafeMutableBytes {cryptBytes in
-            data.withUnsafeBytes {dataBytes in
-                initializationVector.withUnsafeBytes {ivBytes in
-                    key.withUnsafeBytes {keyBytes in
+        let cryptStatus = cryptData.withUnsafeMutableBytes { cryptBytes in
+            data.withUnsafeBytes { dataBytes in
+                initializationVector.withUnsafeBytes { ivBytes in
+                    key.withUnsafeBytes { keyBytes in
                         CCCrypt(operation,
                                 algorithm,
                                 padding,
