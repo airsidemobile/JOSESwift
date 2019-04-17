@@ -133,10 +133,10 @@ internal struct AES {
                         CCCrypt(operation,
                                 algorithm,
                                 padding,
-                                keyBytes, keyLength,
-                                ivBytes,
-                                dataBytes, dataLength,
-                                cryptBytes, cryptLength,
+                                keyBytes.baseAddress!, keyLength,
+                                ivBytes.baseAddress!,
+                                dataBytes.baseAddress!, dataLength,
+                                cryptBytes.baseAddress!, cryptLength,
                                 &numBytesCrypted)
                     }
                 }
