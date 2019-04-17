@@ -28,6 +28,7 @@ internal enum AESError: Error {
     case keyLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
+    case cannotPerformOperationOnEmptyDataBuffer
 }
 
 fileprivate extension SymmetricKeyAlgorithm {
@@ -71,11 +72,13 @@ internal struct AES {
                 throw AESError.keyLengthNotSatisfied
             }
 
-            let encrypted = aes(operation: CCOperation(kCCEncrypt),
-                                data: plaintext, key: encryptionKey,
-                                algorithm: algorithm.ccAlgorithm,
-                                initializationVector: initializationVector,
-                                padding: CCOptions(kCCOptionPKCS7Padding))
+            let encrypted = try aes(
+                operation: CCOperation(kCCEncrypt),
+                data: plaintext, key: encryptionKey,
+                algorithm: algorithm.ccAlgorithm,
+                initializationVector: initializationVector,
+                padding: CCOptions(kCCOptionPKCS7Padding)
+            )
 
             guard encrypted.status == UInt32(kCCSuccess) else {
                 throw AESError.encryptingFailed(description: "Encryption failed with status: \(encrypted.status).")
@@ -101,11 +104,13 @@ internal struct AES {
                 throw AESError.keyLengthNotSatisfied
             }
 
-            let decrypted = aes(operation: CCOperation(kCCDecrypt),
-                                data: cipherText, key: decryptionKey,
-                                algorithm: algorithm.ccAlgorithm,
-                                initializationVector: initializationVector,
-                                padding: CCOptions(kCCOptionPKCS7Padding))
+            let decrypted = try aes(
+                operation: CCOperation(kCCDecrypt),
+                data: cipherText, key: decryptionKey,
+                algorithm: algorithm.ccAlgorithm,
+                initializationVector: initializationVector,
+                padding: CCOptions(kCCOptionPKCS7Padding)
+            )
 
             guard decrypted.status == UInt32(kCCSuccess) else {
                 throw AESError.decryptingFailed(description: "Decryption failed with CryptoStatus: \(decrypted.status).")
@@ -116,16 +121,24 @@ internal struct AES {
     }
 
     // swiftlint:disable:next function_parameter_count
-    static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: UInt32) {
+    static func aes(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) throws -> (data: Data, status: UInt32) {
         let dataLength = data.count
+        let keyLength = key.count
+        let ivLength = initializationVector.count
 
-        //AES's 128 block size is fix for every key length.
+        guard dataLength > 0, keyLength > 0, ivLength > 0 else {
+            throw AESError.cannotPerformOperationOnEmptyDataBuffer
+        }
+
+        // AES's 128 block size is fix for every key length and guaranteed not to be 0.
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var cryptData = Data(count: cryptLength)
 
-        let keyLength = key.count
         var numBytesCrypted: size_t = 0
 
+        // Force unwrapping is ok, since buffers are guaranteed not to be empty.
+        // From the docs: If the baseAddress of this buffer is nil, the count is zero.
+        // swiftlint:disable force_unwrapping
         let cryptStatus = cryptData.withUnsafeMutableBytes { cryptBytes in
             data.withUnsafeBytes { dataBytes in
                 initializationVector.withUnsafeBytes { ivBytes in
@@ -142,6 +155,7 @@ internal struct AES {
                 }
             }
         }
+        // swiftlint:enable force_unwrapping
 
         if UInt32(cryptStatus) == UInt32(kCCSuccess) {
             cryptData.removeSubrange(numBytesCrypted..<cryptLength)
