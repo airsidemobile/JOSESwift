@@ -45,7 +45,7 @@ public struct SecureRandom {
         let randomGenerationStatus = generatedRandom.withUnsafeMutableBytes { mutableRandomBytes in
             // Force unwrapping is ok, since the buffer is guaranteed not to be empty.
             // From the docs: If the baseAddress of this buffer is nil, the count is zero.
-            // swiftlint:disable force_unwrapping
+            // swiftlint:disable:next force_unwrapping
             SecRandomCopyBytes(kSecRandomDefault, count, mutableRandomBytes.baseAddress!)
         }
 

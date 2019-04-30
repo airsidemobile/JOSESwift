@@ -19,9 +19,16 @@ struct DeflateCompressor: CompressorProtocol {
     /// - returns: raw deflated data according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - note: Fixed at compression level 5 (best trade off between speed and time)
     public func compress(data: Data) throws -> Data {
+        guard data.count > 0 else {
+            throw JOSESwiftError.rawDataMustBeGreaterThanZero
+        }
+
         let config = (operation: COMPRESSION_STREAM_ENCODE, algorithm: COMPRESSION_ZLIB)
         if let data = data.withUnsafeBytes({ sourcePtr in
-            perform(config, source: sourcePtr, sourceSize: data.count)
+            // Force unwrapping is ok, since data is guaranteed not to be empty.
+            // From the docs: If the baseAddress of this buffer is nil, the count is zero.
+            // swiftlint:disable:next force_unwrapping
+            perform(config, source: sourcePtr.baseAddress!.assumingMemoryBound(to: UInt8.self), sourceSize: data.count)
         }) {
             return data
         } else {
@@ -33,9 +40,16 @@ struct DeflateCompressor: CompressorProtocol {
     /// stream according to [RFC-1951](https://tools.ietf.org/html/rfc1951).
     /// - returns: uncompressed data
     public func decompress(data: Data) throws -> Data {
+        guard data.count > 0 else {
+            throw JOSESwiftError.compressedDataMustBeGreaterThanZero
+        }
+
         let config = (operation: COMPRESSION_STREAM_DECODE, algorithm: COMPRESSION_ZLIB)
         if let data = data.withUnsafeBytes({ sourcePtr in
-            perform(config, source: sourcePtr, sourceSize: data.count)
+            // Force unwrapping is ok, since data is guaranteed not to be empty.
+            // From the docs: If the baseAddress of this buffer is nil, the count is zero.
+            // swiftlint:disable:next force_unwrapping
+            perform(config, source: sourcePtr.baseAddress!.assumingMemoryBound(to: UInt8.self), sourceSize: data.count)
         }) {
             return data
         } else {
