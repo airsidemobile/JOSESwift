@@ -61,7 +61,7 @@ class AESEncrypterTests: RSACryptoTestCase {
         macOutData.withUnsafeMutableBytes { macOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
                 concatData.withUnsafeBytes { concatBytes in
-                    CCHmac(CCAlgorithm(kCCHmacAlgSHA256), hmacKeyBytes, keyLength, concatBytes, concatData.count, macOutBytes)
+                    CCHmac(CCAlgorithm(kCCHmacAlgSHA256), hmacKeyBytes.baseAddress!, keyLength, concatBytes.baseAddress!, concatData.count, macOutBytes.baseAddress!)
                 }
             }
         }
@@ -83,10 +83,10 @@ class AESEncrypterTests: RSACryptoTestCase {
                         CCCrypt(CCOperation(kCCDecrypt),
                                 CCAlgorithm(kCCAlgorithmAES128),
                                 options,
-                                keyBytes, keyLength,
-                                ivBytes,
-                                dataBytes, dataLength,
-                                cryptBytes, cryptLength,
+                                keyBytes.baseAddress!, keyLength,
+                                ivBytes.baseAddress!,
+                                dataBytes.baseAddress!, dataLength,
+                                cryptBytes.baseAddress!, cryptLength,
                                 &numBytesEncrypted)
                     }
                 }
@@ -135,7 +135,7 @@ class AESEncrypterTests: RSACryptoTestCase {
         macOutData.withUnsafeMutableBytes { macOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
                 concatData.withUnsafeBytes { concatBytes in
-                    CCHmac(CCAlgorithm(kCCHmacAlgSHA512), hmacKeyBytes, keyLength, concatBytes, concatData.count, macOutBytes)
+                    CCHmac(CCAlgorithm(kCCHmacAlgSHA512), hmacKeyBytes.baseAddress!, keyLength, concatBytes.baseAddress!, concatData.count, macOutBytes.baseAddress!)
                 }
             }
         }
@@ -157,10 +157,10 @@ class AESEncrypterTests: RSACryptoTestCase {
                         CCCrypt(CCOperation(kCCDecrypt),
                                 CCAlgorithm(kCCAlgorithmAES128),
                                 options,
-                                keyBytes, keyLength,
-                                ivBytes,
-                                dataBytes, dataLength,
-                                cryptBytes, cryptLength,
+                                keyBytes.baseAddress!, keyLength,
+                                ivBytes.baseAddress!,
+                                dataBytes.baseAddress!, dataLength,
+                                cryptBytes.baseAddress!, cryptLength,
                                 &numBytesEncrypted)
                     }
                 }
