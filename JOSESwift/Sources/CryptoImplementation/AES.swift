@@ -130,7 +130,7 @@ internal struct AES {
             throw AESError.cannotPerformOperationOnEmptyDataBuffer
         }
 
-        // AES's 128 block size is fix for every key length and guaranteed not to be 0.
+        // AES's 128 block size is fixed for every key length and guaranteed not to be 0.
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var cryptData = Data(count: cryptLength)
 
