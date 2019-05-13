@@ -34,7 +34,7 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         v1eE.8sOW54Soupo_-TdXg5A9qXvokaHzS8cGb__ca3MvuEo
         """
 
-    let keyFromNimbus = Data(bytes: [
+    let keyFromNimbus = Data([
         177, 119, 33, 13, 164, 30, 108, 121,
         207, 136, 107, 242, 12, 224, 19, 226,
         198, 134, 17, 71, 173, 75, 42, 61,

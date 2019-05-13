@@ -103,7 +103,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
     private func checkAndGetDictionary(jsonData: Data?) -> [String: Any] {
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
         return dict!
     }

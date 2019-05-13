@@ -107,7 +107,7 @@ extension Data {
             dataIndex -= 1
         }
 
-        return Data(bytes: dataLengthBytes)
+        return Data(dataLengthBytes)
     }
 }
 

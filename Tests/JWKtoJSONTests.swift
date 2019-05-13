@@ -37,7 +37,7 @@ class JWKtoJSONTests: RSACryptoTestCase {
         XCTAssertNotNil(jsonString)
 
         let jsonData = jsonString!.data(using: .utf8)!
-        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
@@ -57,7 +57,7 @@ class JWKtoJSONTests: RSACryptoTestCase {
         let jsonData = jwk.jsonData()
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")

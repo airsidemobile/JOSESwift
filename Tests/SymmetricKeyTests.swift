@@ -30,7 +30,7 @@ class SymmetricKeyTests: XCTestCase {
     func testCreatingSymmetricKeyFromData() {
         // Example key data from https://tools.ietf.org/html/rfc7517#appendix-A.3 but with different "alg" parameter
         // because we don't (yet) support "A128KW".
-        let key = Data(bytes: [
+        let key = Data([
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
         ])
 
@@ -50,7 +50,7 @@ class SymmetricKeyTests: XCTestCase {
     }
 
     func testParsingSymmetricKeyFromJSONData() {
-        let key = Data(bytes: [
+        let key = Data([
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
         ])
 
@@ -72,7 +72,7 @@ class SymmetricKeyTests: XCTestCase {
     }
 
     func testParsingSymmetricKeyFromOtherKeyRepresentation() {
-        let key: ExpressibleAsSymmetricKeyComponents = Data(bytes: [
+        let key: ExpressibleAsSymmetricKeyComponents = Data([
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
         ])
 
@@ -94,7 +94,7 @@ class SymmetricKeyTests: XCTestCase {
     }
 
     func testSymmetricKeyToData() {
-        let key = Data(bytes: [
+        let key = Data([
             0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
             ])
 

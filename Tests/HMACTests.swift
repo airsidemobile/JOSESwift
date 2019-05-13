@@ -40,7 +40,7 @@ class HMACTests: RSACryptoTestCase {
 
     /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
     func testHMACCalculation() {
-        let hmacOutput = HMAC.calculate(from: testData, with: testKey, using: .SHA512)
+        let hmacOutput = try! HMAC.calculate(from: testData, with: testKey, using: .SHA512)
 
         XCTAssertEqual(hmacOutput, hmacTestOutput)
     }
@@ -49,7 +49,7 @@ class HMACTests: RSACryptoTestCase {
     func testHMACCalculationWithFalseKey() {
         let falseKey = "abcdefg".hexadecimalToData()!
 
-        let hmacOutput = HMAC.calculate(from: testData, with: falseKey, using: .SHA512)
+        let hmacOutput = try! HMAC.calculate(from: testData, with: falseKey, using: .SHA512)
 
         XCTAssertNotEqual(hmacOutput, hmacTestOutput)
     }
@@ -58,7 +58,7 @@ class HMACTests: RSACryptoTestCase {
     func testHMACCalculationWithFalseData() {
         let falseData = "abcdefg".hexadecimalToData()!
 
-        let hmacOutput = HMAC.calculate(from: falseData, with: testKey, using: .SHA512)
+        let hmacOutput = try! HMAC.calculate(from: falseData, with: testKey, using: .SHA512)
 
         XCTAssertNotEqual(hmacOutput, hmacTestOutput)
     }
