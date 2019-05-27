@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWSECTests.swift
 //  Tests
@@ -33,6 +34,7 @@ class JWSECTests: ECCryptoTestCase {
         super.tearDown()
     }
 
+    @available(*, deprecated)
     func testSignAndSerialize() {
         allTestData.forEach { testData in
             self.performTestECSign(testData: testData)
@@ -47,6 +49,7 @@ class JWSECTests: ECCryptoTestCase {
 
     // MARK: - EC Tests
 
+    @available(*, deprecated)
     private func performTestECSign(testData: ECTestKeyData) {
         let algorithm = SignatureAlgorithm(rawValue: testData.signatureAlgorithm)!
         let header = JWSHeader(algorithm: algorithm)

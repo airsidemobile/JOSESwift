@@ -47,6 +47,12 @@ internal enum ASN1Type {
     }
 }
 
+internal struct TLVTriplet {
+    let tag: UInt8
+    let length: [UInt8]
+    let value: [UInt8]
+}
+
 // MARK: Array Extension for Parsing
 // Inspired by: https://github.com/henrinormak/Heimdall/blob/master/Heimdall/Heimdall.swift
 
@@ -99,7 +105,7 @@ internal extension Array where Element == UInt8 {
     /// [here](https://msdn.microsoft.com/en-us/library/windows/desktop/bb540801(v=vs.85).aspx).
     ///
     /// - Returns: A triplet containing the ASN.1 type's tag, length, and value field.
-    func nextTLVTriplet() throws -> (tag: UInt8, length: [UInt8], value: [UInt8]) {
+    func nextTLVTriplet() throws -> TLVTriplet {
         var pointer = 0
 
         // DER encoding of an ASN.1 type: [ TAG | LENGTH | VALUE ].
@@ -117,7 +123,7 @@ internal extension Array where Element == UInt8 {
 
         let valueField = try readValueField(ofLength: valueFieldLength, from: self, pointer: &pointer)
 
-        return (tag: tag, length: lengthField, value: valueField)
+        return TLVTriplet(tag: tag, length: lengthField, value: valueField)
     }
 
 }

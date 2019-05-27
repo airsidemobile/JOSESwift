@@ -127,5 +127,5 @@ class ASN1DEREncodingTests: XCTestCase {
 
         XCTAssertEqual(tlv, expectedSequenceTLVShortFirst)
     }
-    
+
 }

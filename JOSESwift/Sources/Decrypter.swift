@@ -80,14 +80,14 @@ public struct Decrypter {
     public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512):
+        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A128CBCHS256), (.RSAOAEP, .A128CBCHS256), (.RSAOAEP256, .A128CBCHS256):
             guard type(of: key) is RSADecrypter.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
             self.asymmetric = RSADecrypter(algorithm: keyDecryptionAlgorithm, privateKey: (key as! RSADecrypter.KeyType))
             self.symmetric = AESDecrypter(algorithm: contentDecryptionAlgorithm)
-        case (.direct, .A256CBCHS512):
+        case (.direct, .A256CBCHS512), (.direct, .A128CBCHS256):
             guard type(of: key) is AESDecrypter.KeyType.Type else {
                 return nil
             }
@@ -122,7 +122,7 @@ public struct Decrypter {
 
         var cek: Data
 
-        if (alg == .direct) {
+        if alg == .direct {
             guard context.encryptedKey == Data() else {
                 throw JOSESwiftError.decryptingFailed(
                     description: "Direct encryption does not expect an encrypted key."

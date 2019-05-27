@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWSHeaderTests.swift
 //  Tests
@@ -40,7 +41,7 @@ class JWSHeaderTests: XCTestCase {
         let header = try! JWSHeader(parameters: parameterDict, headerData: parameterData)
 
         XCTAssertEqual(header.parameters["alg"] as? String, parameterDict["alg"])
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDict, options: []).count)
     }
 
     func testInitWithData() {
@@ -54,7 +55,7 @@ class JWSHeaderTests: XCTestCase {
     func testInitWithAlg() {
         let header = JWSHeader(algorithm: .RS512)
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDict, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDict, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, SignatureAlgorithm.RS512.rawValue)
 
         XCTAssertNotNil(header.algorithm)
@@ -124,7 +125,7 @@ class JWSHeaderTests: XCTestCase {
         header.cty = cty
         header.crit = crit
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: header.parameters, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: header.parameters, options: []).count)
 
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)

@@ -48,6 +48,7 @@ extension SecKey: ExpressibleAsECPrivateKeyComponents {
 
         var error: Unmanaged<CFError>?
         guard let keyReference = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
+            // swiftlint:disable:next force_unwrapping
             throw error!.takeRetainedValue() as Error
         }
 
@@ -71,6 +72,7 @@ extension SecKey: ExpressibleAsECPrivateKeyComponents {
 
         var error: Unmanaged<CFError>?
         guard let keyData = SecKeyCopyExternalRepresentation(self, &error) else {
+            // swiftlint:disable:next force_unwrapping
             throw error!.takeRetainedValue() as Error
         }
 

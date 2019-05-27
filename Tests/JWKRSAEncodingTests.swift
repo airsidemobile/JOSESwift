@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWKRSAEncodingTests.swift
 //  Tests
@@ -35,7 +36,7 @@ class JWKRSAEncodingTests: RSACryptoTestCase {
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
@@ -56,7 +57,7 @@ class JWKRSAEncodingTests: RSACryptoTestCase {
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
@@ -79,7 +80,7 @@ class JWKRSAEncodingTests: RSACryptoTestCase {
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")
@@ -102,7 +103,7 @@ class JWKRSAEncodingTests: RSACryptoTestCase {
         let jsonData = try? JSONEncoder().encode(jwk)
         XCTAssertNotNil(jsonData!)
 
-        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as! [String: Any]
+        let dict = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [String: Any]
         XCTAssertNotNil(dict!)
 
         XCTAssertEqual(dict!["kty"] as? String ?? "", "RSA")

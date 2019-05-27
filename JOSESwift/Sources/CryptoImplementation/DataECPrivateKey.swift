@@ -37,7 +37,7 @@ extension Data: ExpressibleAsECPrivateKeyComponents {
             throw JOSESwiftError.invalidCurvePointOctetLength
         }
 
-        return Data(bytes: uncompressedIndication + xBytes + yBytes + dBytes)
+        return Data(uncompressedIndication + xBytes + yBytes + dBytes)
     }
 
     public func ecPrivateKeyComponents() throws -> ECPrivateKeyComponents {
@@ -55,9 +55,9 @@ extension Data: ExpressibleAsECPrivateKeyComponents {
         let xBytes = privateKeyBytes[0..<pointSize]
         let yBytes = privateKeyBytes[pointSize..<pointSize*2]
         let dBytes = privateKeyBytes[pointSize*2..<pointSize*3]
-        let xData = Data(bytes: xBytes)
-        let yData = Data(bytes: yBytes)
-        let dData = Data(bytes: dBytes)
+        let xData = Data(xBytes)
+        let yData = Data(yBytes)
+        let dData = Data(dBytes)
         return (curve.rawValue, xData, yData, dData)
     }
 }

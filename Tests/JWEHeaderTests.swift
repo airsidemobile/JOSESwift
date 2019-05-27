@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWEHeaderTests.swift
 //  Tests
@@ -50,7 +51,7 @@ class JWEHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []).count)
     }
 
     func testInitRSAOAEPWithParameters() {
@@ -58,15 +59,15 @@ class JWEHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP.rawValue)
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP, options: []).count)
     }
 
     func testInitRSAOAEP256WithParameters() {
         let header = try! JWEHeader(parameters: parameterDictRSAOAEP256)
-        
+
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
     }
 
     func testInitRSA1WithData() {
@@ -90,7 +91,7 @@ class JWEHeaderTests: XCTestCase {
     func testInitRSAOAEP256WithData() {
         let data = try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: [])
         let header = JWEHeader(data)!
-        
+
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.data(), data)
@@ -101,7 +102,7 @@ class JWEHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.direct.rawValue)
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictDirect, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictDirect, options: []).count)
     }
 
     func testInitDirectWithData() {
@@ -116,7 +117,7 @@ class JWEHeaderTests: XCTestCase {
     func testInitWithAlgAndEncRSA1() {
         let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
 
@@ -129,7 +130,7 @@ class JWEHeaderTests: XCTestCase {
     func testInitWithAlgAndEncRSAOAEP() {
         let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .A256CBCHS512)
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
 
@@ -141,11 +142,11 @@ class JWEHeaderTests: XCTestCase {
 
     func testInitWithAlgAndEncRSAOAEP256() {
         let header = JWEHeader(algorithm: .RSAOAEP256, encryptionAlgorithm: .A256CBCHS512)
-        
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []))
+
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricKeyAlgorithm.A256CBCHS512.rawValue)
-        
+
         XCTAssertNotNil(header.algorithm)
         XCTAssertNotNil(header.encryptionAlgorithm)
         XCTAssertEqual(header.algorithm!, .RSAOAEP256)
@@ -215,6 +216,7 @@ class JWEHeaderTests: XCTestCase {
         let typ = "typ"
         let cty = "cty"
         let crit = ["crit1", "crit2"]
+        let zip = "DEF"
 
         var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
         header.jku = jku
@@ -227,8 +229,9 @@ class JWEHeaderTests: XCTestCase {
         header.typ = typ
         header.cty = cty
         header.crit = crit
+        header.zip = zip
 
-        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: header.parameters, options: []))
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: header.parameters, options: []).count)
 
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)
@@ -259,6 +262,15 @@ class JWEHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["crit"] as? [String], crit)
         XCTAssertEqual(header.crit, crit)
-    }
 
+        XCTAssertEqual(header.parameters["zip"] as? String, zip)
+        XCTAssertEqual(header.zip, zip)
+        XCTAssertEqual(header.compressionAlgorithm, CompressionAlgorithm.DEFLATE)
+
+        header.zip = "NONE"
+        XCTAssertEqual(header.compressionAlgorithm, CompressionAlgorithm.NONE)
+
+        header.zip = "GZIP"
+        XCTAssertEqual(header.compressionAlgorithm, nil)
+    }
 }

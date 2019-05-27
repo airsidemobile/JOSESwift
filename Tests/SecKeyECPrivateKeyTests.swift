@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  SecKeyECPrivateKeyTests.swift
 //  Tests
@@ -55,18 +56,15 @@ class SecKeyECPrivateKeyTests: ECCryptoTestCase {
         }
     }
 
-    func testPrivateKeyFromPrivateComponents() {
-        allTestData.forEach { testData in
+    func testPrivateKeyFromPrivateComponents() throws {
+        try allTestData.forEach { testData in
             let components = (
                     testData.expectedCurveType,
                     testData.expectedXCoordinate,
                     testData.expectedYCoordinate,
                     testData.expectedPrivateOctetString
             )
-            guard let secKey = try? SecKey.representing(ecPrivateKeyComponents: components) else {
-                XCTFail()
-                return
-            }
+            let secKey = try SecKey.representing(ecPrivateKeyComponents: components)
 
             let data = SecKeyCopyExternalRepresentation(secKey, nil)! as Data
             let dataExpected = SecKeyCopyExternalRepresentation(testData.privateKey, nil)! as Data

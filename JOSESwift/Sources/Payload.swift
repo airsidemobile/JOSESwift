@@ -33,4 +33,9 @@ public struct Payload: DataConvertible {
     public func data() -> Data {
         return payload
     }
+
+    func compressed(using algorithm: CompressionAlgorithm?) throws -> Payload {
+        let compressor = try CompressorFactory.makeCompressor(algorithm: algorithm)
+        return Payload(try compressor.compress(data: payload))
+    }
 }

@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  RSADecrypterTests.swift
 //  Tests
@@ -54,7 +55,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         uuc1nX1oTg9bkHLnqpTK4YtNZ1Roj5qTbNvA0BKyz6+xDGMqiCTLkkjadh2Nc1mMrThkul8ehGUi89i72aydwt7rRtM5O4Y3x1mLv4Z7q8ruxa+\
         xjVJh5uQQ==
         """
-    
+
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl rsautl -encrypt -pubin -inkey bob.pub.pem -out >(base64)
     let cipherTextWithBobKeyBase64 = """
         TA13QruprKdRMt6JVE6dJWKF6bRUZyQLCZKA1KnJCsQx7nprXjYUFlAouhoVfcKPUTuMiyKSMFvkDOqcoJwP3zz14CFA+nI3OeAHiYvMasoJ/H6\
@@ -62,7 +63,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         mNYaDDsxfYHg3LzWsVyhqpFuZQ6hhklG9lJr6OBBuk/+pcJYdHuYEuLnJhPeKqF/9xgMOU0e0xLMtkQW+IfDMlm0oAVavHrxk7A4T5L9+yjuxNj\
         N16k2Rqiw==
         """
-    
+
     // printf "The true sign of intelligence is not knowledge but imagination." | openssl pkeyutl -encrypt -pubin -inkey bob.pub.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -pkeyopt rsa_mgf1_md:sha256 -out >(base64)
     //  *NOTE*: openssl v1.1.x is required to encrypt data using RSAES-OAEP with SHA256 digest.
     let cipherTextWithBobKeyOAEPSHA256Base64 = """
@@ -81,9 +82,13 @@ class RSADecrypterTests: RSACryptoTestCase {
         8GmvJ5UwA==
         """
 
-    let rsa1DecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))") // adjusted for RSA-OAEP-256 error having a differe 'err' number
-    let rsaOAEPDecryptionError = RSAError.decryptingFailed(description: "The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))")
-    
+    let rsa1DecryptionError = RSAError.decryptingFailed(description: """
+        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))
+        """) // adjusted for RSA-OAEP-256 error having a differe 'err' number
+    let rsaOAEPDecryptionError = RSAError.decryptingFailed(description: """
+        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))
+        """)
+
     /// Dictionary of decryption errors for each available Asymmetric key algorithm
     lazy var decryptionErrors: [String: RSAError] = {
         [
@@ -101,7 +106,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             AsymmetricKeyAlgorithm.RSAOAEP.rawValue: self.cipherTextWithAliceOAEPSHA1Base64
         ]
     }()
-    
+
     /// Dictionary of ciphertexts for each available Asymmetric algorithm generate via openssl with Bob's public key
     lazy var bobCipherTextDict: [String: String] = {
         [
@@ -111,7 +116,7 @@ class RSADecrypterTests: RSACryptoTestCase {
 
         ]
     }()
-    
+
     override func setUp() {
         super.setUp()
     }
@@ -130,7 +135,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
             let decryptedData = try? decrypter.decrypt(Data(base64Encoded: aliceCipherTextDict[algorithm.rawValue]!)!)
             let decryptedMessage = String(data: decryptedData ?? Data(count: 10), encoding: String.Encoding.utf8)
@@ -153,7 +158,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyBob2048!)
             let decryptedData = try! decrypter.decrypt(Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!)
             let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
-            
+
             XCTAssertEqual(decryptedMessage, message)
         }
     }
@@ -168,9 +173,9 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyBob2048!)
-            
+
             // Decrypting with the wrong key should throw an error
             XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
@@ -190,7 +195,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             }
 
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            
+
             // Decrypting with the wrong key should throw an error
             XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
@@ -208,7 +213,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
             XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -226,7 +231,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
             XCTAssertThrowsError(try decrypter.decrypt(Data(count: 0))) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -249,7 +254,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             }
 
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            
+
             XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
                 // Should throw "decryption failed", but
                 // should _not_ throw cipherTextLenghtNotSatisfied
@@ -271,7 +276,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
             XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -292,7 +297,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
             XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)

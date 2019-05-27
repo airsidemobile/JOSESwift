@@ -1,2 +1,24 @@
-included:
-  - JOSESwift/Sources
+custom_rules:
+  doc_blocks:
+    name: "Documentation Comment Format"
+    regex: '(\/\*\*)'
+    message: "Use `///` instead of `/** ... */` for documentation comments."
+    severity: warning
+
+disabled_rules:
+  - force_try
+  - force_cast
+  - xctfail_message
+  - line_length
+  - function_body_length
+  - type_body_length
+  - file_length
+  - type_name
+  - identifier_name
+  - todo
+
+opt_in_rules:
+  - force_unwrapping
+
+line_length:
+  ignores_comments: true

@@ -59,7 +59,7 @@ public struct JWE {
     /// The compact serialization of this JWE object as data.
     public var compactSerializedData: Data {
         // Force unwrapping is ok here, since `serialize` returns a string generated from data.
-        // swiftlint:disable:next force_unwrap
+        // swiftlint:disable:next force_unwrapping
         return JOSESerializer().serialize(compact: self).data(using: .utf8)!
     }
 
@@ -75,7 +75,11 @@ public struct JWE {
 
         var encryptionContext: EncryptionContext
         do {
-            encryptionContext = try encrypter.encrypt(header: header, payload: payload)
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload.compressed(using: header.compressionAlgorithm))
+        } catch JOSESwiftError.compressionFailed {
+            throw JOSESwiftError.compressionFailed
+        } catch JOSESwiftError.compressionAlgorithmNotSupported {
+            throw JOSESwiftError.compressionAlgorithmNotSupported
         } catch {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
@@ -156,7 +160,13 @@ public struct JWE {
         }
 
         do {
-            return Payload(try decrypter.decrypt(context))
+            let decryptedData = try decrypter.decrypt(context)
+            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
+            return Payload(try compressor.decompress(data: decryptedData))
+        } catch JOSESwiftError.decompressionFailed {
+            throw JOSESwiftError.decompressionFailed
+        } catch JOSESwiftError.compressionAlgorithmNotSupported {
+            throw JOSESwiftError.compressionAlgorithmNotSupported
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
@@ -185,7 +195,13 @@ public struct JWE {
         }
 
         do {
-            return Payload(try decrypter.decrypt(context))
+            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
+            let decryptedData = try decrypter.decrypt(context)
+            return Payload(try compressor.decompress(data: decryptedData))
+        } catch JOSESwiftError.decompressionFailed {
+            throw JOSESwiftError.decompressionFailed
+        } catch JOSESwiftError.compressionAlgorithmNotSupported {
+            throw JOSESwiftError.compressionAlgorithmNotSupported
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }

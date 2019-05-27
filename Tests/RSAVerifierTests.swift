@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  RSAVerifierTests.swift
 //  Tests

@@ -24,6 +24,15 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+- Update to Swift 5 [#154](https://github.com/airsidemobile/JOSESwift/pull/154)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds pull request linting in Danger ([#153](https://github.com/airsidemobile/JOSESwift/pull/153)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds a SwiftLint build phase and fixes many violations ([#151](https://github.com/airsidemobile/JOSESwift/pull/151)) via [@xavierLowmiller](https://github.com/xavierLowmiller)
+
+## [1.8.0] - 2019-03-18
+
+- Adds A128CBCHS256 support ([#147](https://github.com/airsidemobile/JOSESwift/pull/147)) via [@ramunasjurgilas](https://github.com/ramunasjurgilas)
+- Adds "zip" support ([#145](https://github.com/airsidemobile/JOSESwift/pull/145)) via [@fhaeser](https://github.com/fhaeser)
+
 ## [1.7.0] - 2019-02-19
 
 - Adds a new features section in the readme ([#143](https://github.com/airsidemobile/JOSESwift/pull/143)) via [@daniel-mohemian](https://github.com/daniel-mohemian)

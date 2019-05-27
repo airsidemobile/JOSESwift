@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWEDirectEncryptionTests.swift
 //  Tests
@@ -33,19 +34,35 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         v1eE.8sOW54Soupo_-TdXg5A9qXvokaHzS8cGb__ca3MvuEo
         """
 
-    let keyFromNimbus = Data(bytes: [
-        177, 119,  33,  13, 164,  30, 108, 121,
-        207, 136, 107, 242,  12, 224,  19, 226,
-        198, 134,  17,  71, 173,  75,  42,  61,
-         48, 162, 206, 161,  97, 108, 185, 234,
-         60, 181,  90,  85,  51, 123,   6, 224,
-          4, 122,  29, 230, 151,  12, 244, 127,
-        121,  25,   4,  85, 220, 144, 215, 110,
-        130,  17,  68, 228, 129, 138,   7, 130
+    let keyFromNimbus = Data([
+        177, 119, 33, 13, 164, 30, 108, 121,
+        207, 136, 107, 242, 12, 224, 19, 226,
+        198, 134, 17, 71, 173, 75, 42, 61,
+         48, 162, 206, 161, 97, 108, 185, 234,
+         60, 181, 90, 85, 51, 123, 6, 224,
+          4, 122, 29, 230, 151, 12, 244, 127,
+        121, 25, 4, 85, 220, 144, 215, 110,
+        130, 17, 68, 228, 129, 138, 7, 130
     ])
 
     @available(*, deprecated)
-    func testRoundtrip() {
+
+    func testRoundtripA128CBCHS256() {
+        let algorithm = SymmetricKeyAlgorithm.A128CBCHS256
+        let symmetricKey = try! SecureRandom.generate(count: algorithm.keyLength)
+
+        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: algorithm)
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: algorithm)!
+
+        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        let serialization = jwe.compactSerializedString
+
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+    }
+
+    @available(*, deprecated)
+    func testRoundtripA256CBCHS512() {
         let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
 
         let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)

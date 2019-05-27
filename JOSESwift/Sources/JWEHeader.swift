@@ -89,7 +89,7 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: AsymmetricKeyAlgorithm? {
+    var algorithm: AsymmetricKeyAlgorithm? {
         // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
@@ -98,11 +98,31 @@ public extension JWEHeader {
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: SymmetricKeyAlgorithm? {
+    var encryptionAlgorithm: SymmetricKeyAlgorithm? {
         // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
         return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
+    }
+    /// The compression algorithm applied to the plaintext before encryption. If no compression is applied, the `.NONE` algorithm is returned.
+    var compressionAlgorithm: CompressionAlgorithm? {
+        guard let compressionAlgorithm = parameters["zip"] as? String else {
+            return CompressionAlgorithm.NONE
+        }
+        return CompressionAlgorithm(rawValue: compressionAlgorithm)
+    }
+
+    /// The zip header parameter indicates that the content has been compressed before encryption. If no compression is applied, the `zip` parameter is `nil`.
+    var zip: String? {
+        set {
+            parameters["zip"] = newValue
+        }
+        get {
+            guard let compressionAlgorithm = parameters["zip"] as? String else {
+                return nil
+            }
+            return compressionAlgorithm
+        }
     }
 }
 

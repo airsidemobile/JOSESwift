@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  RSAEncrypterTests.swift
 //  Tests
@@ -25,7 +26,7 @@ import XCTest
 @testable import JOSESwift
 
 extension RSAError: Equatable {
-    public static func ==(lhs: RSAError, rhs: RSAError) -> Bool {
+    public static func == (lhs: RSAError, rhs: RSAError) -> Bool {
         switch (lhs, rhs) {
         case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
             return true
@@ -109,7 +110,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
         }
     }
 
-    func testEncryptingWithAliceAndBobKey() {
+    func testEncryptingWithAliceAndBobKey() throws {
         guard
             let publicKeyAlice2048 = publicKeyAlice2048,
             let publicKeyBob2048 = publicKeyBob2048 else {
@@ -126,14 +127,8 @@ class RSAEncrypterTests: RSACryptoTestCase {
             let encrypterAlice = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
             let encrypterBob = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyBob2048)
 
-            guard let cipherTextAlice = try? encrypterAlice.encrypt(message.data(using: .utf8)!) else {
-                XCTFail()
-                return
-            }
-            guard let cipherTextBob = try? encrypterBob.encrypt(message.data(using: .utf8)!) else {
-                XCTFail()
-                return
-            }
+            let cipherTextAlice = try encrypterAlice.encrypt(message.data(using: .utf8)!)
+            let cipherTextBob = try encrypterBob.encrypt(message.data(using: .utf8)!)
 
             // Cipher texts have to differ (different keys)
             XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
@@ -185,7 +180,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             }
 
             let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            XCTAssertThrowsError(try encrypter.encrypt(Data(count:300))) { (error: Error) in
+            XCTAssertThrowsError(try encrypter.encrypt(Data(count: 300))) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
             }
         }
