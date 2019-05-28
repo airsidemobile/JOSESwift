@@ -95,6 +95,19 @@ public enum ECCurveType: String, Codable {
     }
 }
 
+fileprivate extension Data {
+    func withLengthFixedTo(_ octetLength: Int) -> Data {
+        let varLength = self.count
+        if varLength == octetLength + 1 {
+            return self.dropFirst()
+        }
+        if varLength < octetLength {
+            return Data.init(count: octetLength - varLength) + self
+        }
+        return self
+    }
+}
+
 fileprivate extension SignatureAlgorithm {
     typealias DigestFunction = (
             UnsafeRawPointer?,
@@ -114,6 +127,18 @@ fileprivate extension SignatureAlgorithm {
         return digest
     }
 
+    var secKeyAlgorithm: SecKeyAlgorithm? {
+        switch self {
+        case .ES256:
+            return .ecdsaSignatureMessageX962SHA256
+        case .ES384:
+            return .ecdsaSignatureMessageX962SHA384
+        case .ES512:
+            return .ecdsaSignatureMessageX962SHA512
+        default:
+            return nil
+        }
+    }
     var digestLength: Int? {
         switch self {
         case .ES256:
@@ -179,21 +204,28 @@ internal struct EC {
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
-
-        let digest = try algorithm.createDigest(input: signingInput)
-        var signatureLength = curveType.signatureOctetLength
-
-        guard let signature = NSMutableData(length: signatureLength) else {
-            throw ECError.couldNotAllocateMemoryForSignature
+        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
+            throw ECError.algorithmNotSupported
         }
 
-        let signatureBytes = signature.mutableBytes.assumingMemoryBound(to: UInt8.self)
-        let status = SecKeyRawSign(privateKey, .sigRaw, digest, digest.count, signatureBytes, &signatureLength)
-        if status != errSecSuccess {
-            throw ECError.signingFailed(description: "Error creating signature. (OSStatus: \(status))")
+        var cfErrorRef: Unmanaged<CFError>?
+        let signature = SecKeyCreateSignature(privateKey, secKeyAlgorithm, signingInput as CFData, &cfErrorRef)
+        if cfErrorRef != nil {
+            throw ECError.signingFailed(description: "Error creating signature. (CFError: \(cfErrorRef!.takeRetainedValue()))")
         }
 
-        return signature as Data
+        let ecSignatureTLV = [UInt8](signature! as Data)
+        do {
+            let ecSignature = try ecSignatureTLV.read(.sequence)
+            let varlenR = try Data(ecSignature.read(.integer))
+            let varlenS = try Data(ecSignature.skip(.integer).read(.integer))
+            let fixlenR = varlenR.withLengthFixedTo(curveType.coordinateOctetLength)
+            let fixlenS = varlenS.withLengthFixedTo(curveType.coordinateOctetLength)
+
+            return fixlenR + fixlenS
+        } catch {
+            throw ECError.signingFailed(description: "could not unwrap ASN1 EC signature")
+        }
     }
 
     /// Verifies input data against a signature with a given elliptic curve algorithm and the corresponding public key.
