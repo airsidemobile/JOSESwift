@@ -95,6 +95,8 @@ public enum ECCurveType: String, Codable {
     }
 }
 
+// converting integers to and from DER encoded ASN.1 as described here:
+// https://docs.microsoft.com/en-us/windows/desktop/seccertenroll/about-integer
 fileprivate extension Data {
     func withLengthFixedTo(_ octetLength: Int) -> Data {
         let varLength = self.count
@@ -112,26 +114,18 @@ fileprivate extension Data {
         }
         fatalError("Unable to parse ASN.1 Integer")
     }
-}
+
+    func fixedLengthToAsn1() -> Data {
+        assert(self.count > 0)
+        let msb : UInt8 = 0b1000_0000
+        let varlen = self.drop { $0 == 0}
+        if (varlen.first! & msb) == msb {
+            return Data(count: 1) + varlen
+        }
+        return varlen
+    }}
 
 fileprivate extension SignatureAlgorithm {
-    typealias DigestFunction = (
-            UnsafeRawPointer?,
-            UInt32,
-            UnsafeMutablePointer<UInt8>?
-    ) -> UnsafeMutablePointer<UInt8>?
-
-    func createDigest(input: Data) throws -> [UInt8] {
-        guard
-                let computedDigestLength = digestLength,
-                let computedDigestFunction = digestFunction
-                else {
-            throw ECError.invalidCurveDigestAlgorithm
-        }
-        var digest = [UInt8](repeating: 0, count: computedDigestLength)
-        _ = computedDigestFunction(Array(input), UInt32(input.count), &digest)
-        return digest
-    }
 
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
@@ -145,18 +139,6 @@ fileprivate extension SignatureAlgorithm {
             return nil
         }
     }
-    var digestLength: Int? {
-        switch self {
-        case .ES256:
-            return Int(CC_SHA256_DIGEST_LENGTH)
-        case .ES384:
-            return Int(CC_SHA384_DIGEST_LENGTH)
-        case .ES512:
-            return Int(CC_SHA512_DIGEST_LENGTH)
-        default:
-            return nil
-        }
-    }
 
     var curveType: ECCurveType? {
         switch self {
@@ -166,19 +148,6 @@ fileprivate extension SignatureAlgorithm {
             return ECCurveType.P384
         case .ES512:
             return ECCurveType.P521
-        default:
-            return nil
-        }
-    }
-
-    var digestFunction: DigestFunction? {
-        switch self {
-        case .ES256:
-            return CC_SHA256
-        case .ES384:
-            return CC_SHA384
-        case .ES512:
-            return CC_SHA512
         default:
             return nil
         }
@@ -248,14 +217,23 @@ internal struct EC {
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
-        let digest = try algorithm.createDigest(input: verifyingInput)
-        let signatureBytes: [UInt8] = Array(signature)
-        let status = SecKeyRawVerify(publicKey, .sigRaw, digest, digest.count, signatureBytes, curveType.signatureOctetLength)
-        if status != errSecSuccess {
-            throw ECError.verifyingFailed(description: "Error validating signature. (OSStatus: \(status))")
+        guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
+            throw ECError.algorithmNotSupported
         }
 
-        return true
+        // pack raw signature as apecified for JWS into BER encoded ASN.1 format
+        let fixlenR = signature.prefix(curveType.coordinateOctetLength)
+        let varlenR = [UInt8](fixlenR.fixedLengthToAsn1())
+        let fixlenS = signature.suffix(curveType.coordinateOctetLength)
+        let varlenS = [UInt8](fixlenS.fixedLengthToAsn1())
+        let asn1Signature = Data((varlenR.encode(as: .integer) + varlenS.encode(as: .integer)).encode(as: .sequence))
+
+        var cfErrorRef: Unmanaged<CFError>?
+        let isValid = SecKeyVerifySignature(publicKey, secKeyAlgorithm, verifyingInput as CFData, asn1Signature as CFData, &cfErrorRef)
+        if cfErrorRef != nil {
+            throw ECError.signingFailed(description: "Error verifying signature. (CFError: \(cfErrorRef!.takeRetainedValue()))")
+        }
+        return isValid
     }
 
 }
