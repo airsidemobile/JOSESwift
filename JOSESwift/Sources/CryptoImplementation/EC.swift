@@ -98,13 +98,19 @@ public enum ECCurveType: String, Codable {
 fileprivate extension Data {
     func withLengthFixedTo(_ octetLength: Int) -> Data {
         let varLength = self.count
+        if varLength > octetLength + 1 {
+            fatalError("Unable to parse ASN.1 Integer")
+        }
         if varLength == octetLength + 1 {
             return self.dropFirst()
+        }
+        if varLength == octetLength {
+            return self
         }
         if varLength < octetLength {
             return Data.init(count: octetLength - varLength) + self
         }
-        return self
+        fatalError("Unable to parse ASN.1 Integer")
     }
 }
 
@@ -200,7 +206,6 @@ internal struct EC {
     /// - Returns: The signature.
     /// - Throws: `ECError` if any errors occur while signing the input data.
     static func sign(_ signingInput: Data, with privateKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Data {
-        // Sign the input as raw elliptic curve coordinates using a hashing algorithm and a private key.
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
@@ -214,6 +219,7 @@ internal struct EC {
             throw ECError.signingFailed(description: "Error creating signature. (CFError: \(cfErrorRef!.takeRetainedValue()))")
         }
 
+        // unpack BER encoded ASN.1 format signature to raw format as specified for JWS
         let ecSignatureTLV = [UInt8](signature! as Data)
         do {
             let ecSignature = try ecSignatureTLV.read(.sequence)
@@ -224,7 +230,7 @@ internal struct EC {
 
             return fixlenR + fixlenS
         } catch {
-            throw ECError.signingFailed(description: "could not unwrap ASN1 EC signature")
+            throw ECError.signingFailed(description: "could not unpack ASN.1 EC signature")
         }
     }
 
