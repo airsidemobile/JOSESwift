@@ -195,13 +195,15 @@ internal struct EC {
         }
 
         var cfErrorRef: Unmanaged<CFError>?
-        let signature = SecKeyCreateSignature(privateKey, secKeyAlgorithm, signingInput as CFData, &cfErrorRef)
-        if let error = cfErrorRef {
-            throw ECError.signingFailed(description: "Error creating signature. (CFError: \(error.takeRetainedValue()))")
+        guard let signature = SecKeyCreateSignature(privateKey, secKeyAlgorithm, signingInput as CFData, &cfErrorRef) else {
+            if let error = cfErrorRef {
+                throw ECError.signingFailed(description: "Error creating signature. (CFError: \(error.takeRetainedValue()))")
+            }
+            fatalError("SecKeyCreateSignature returned nil but did not set CFError object.")
         }
 
         // unpack BER encoded ASN.1 format signature to raw format as specified for JWS
-        let ecSignatureTLV = [UInt8](signature! as Data)
+        let ecSignatureTLV = [UInt8](signature as Data)
         do {
             let ecSignature = try ecSignatureTLV.read(.sequence)
             let varlenR = try Data(ecSignature.read(.integer))
@@ -232,7 +234,7 @@ internal struct EC {
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
             throw ECError.algorithmNotSupported
         }
-        if (signature.count != curveType.coordinateOctetLength * 2) {
+        if signature.count != (curveType.coordinateOctetLength * 2) {
             throw ECError.verifyingFailed(description: "Signature is \(signature.count) bytes long instead of the expected \(curveType.coordinateOctetLength * 2).")
         }
 
