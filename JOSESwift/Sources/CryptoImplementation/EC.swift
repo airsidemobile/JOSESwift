@@ -95,8 +95,12 @@ public enum ECCurveType: String, Codable {
     }
 }
 
-// converting integers to and from DER encoded ASN.1 as described here:
+// Converting integers to and from DER encoded ASN.1 as described here:
 // https://docs.microsoft.com/en-us/windows/desktop/seccertenroll/about-integer
+// This conversion is required because the Secure Enclave only supports generating ASN.1 encoded signatures,
+// while the JWS Standard requires raw signatures, where the R and S values unsigned integers with a fixed length:
+// https://github.com/airsidemobile/JOSESwift/pull/156#discussion_r292370209
+// https://tools.ietf.org/html/rfc7515#appendix-A.3.1
 fileprivate extension Data {
     func withLengthFixedTo(_ octetLength: Int) -> Data {
         let varLength = self.count
@@ -104,26 +108,34 @@ fileprivate extension Data {
             fatalError("Unable to parse ASN.1 Integer")
         }
         if varLength == octetLength + 1 {
+            assert(self.first == 0)
             return self.dropFirst()
         }
         if varLength == octetLength {
             return self
         }
         if varLength < octetLength {
-            return Data.init(count: octetLength - varLength) + self
+            // pad to fixed length using 0x00 bytes
+            return Data(count: octetLength - varLength) + self
         }
         fatalError("Unable to parse ASN.1 Integer")
     }
 
     func fixedLengthToAsn1() -> Data {
         assert(self.count > 0)
-        let msb : UInt8 = 0b1000_0000
+        let msb: UInt8 = 0b1000_0000
+        // drop all leading zero bytes
         let varlen = self.drop { $0 == 0}
-        if (varlen.first! & msb) == msb {
+        guard let firstNonZero = varlen.first else {
+            // all bytes were zero so the encoded value is zero
+            return Data(count: 1)
+        }
+        if (firstNonZero & msb) == msb {
             return Data(count: 1) + varlen
         }
         return varlen
-    }}
+    }
+}
 
 fileprivate extension SignatureAlgorithm {
 
@@ -184,8 +196,8 @@ internal struct EC {
 
         var cfErrorRef: Unmanaged<CFError>?
         let signature = SecKeyCreateSignature(privateKey, secKeyAlgorithm, signingInput as CFData, &cfErrorRef)
-        if cfErrorRef != nil {
-            throw ECError.signingFailed(description: "Error creating signature. (CFError: \(cfErrorRef!.takeRetainedValue()))")
+        if let error = cfErrorRef {
+            throw ECError.signingFailed(description: "Error creating signature. (CFError: \(error.takeRetainedValue()))")
         }
 
         // unpack BER encoded ASN.1 format signature to raw format as specified for JWS
@@ -199,7 +211,7 @@ internal struct EC {
 
             return fixlenR + fixlenS
         } catch {
-            throw ECError.signingFailed(description: "could not unpack ASN.1 EC signature")
+            throw ECError.signingFailed(description: "Could not unpack ASN.1 EC signature")
         }
     }
 
@@ -213,15 +225,18 @@ internal struct EC {
     /// - Returns: True if the signature is verified, false if it is not verified.
     /// - Throws: `ECError` if any errors occur while verifying the input data against the signature.
     static func verify(_ verifyingInput: Data, against signature: Data, with publicKey: KeyType, and algorithm: SignatureAlgorithm) throws -> Bool {
-        // Verify the raw signature against an input with a hashing algorithm and public key.
+        // verify the raw signature against an input with a hashing algorithm and public key
         guard let curveType = algorithm.curveType else {
             throw ECError.invalidCurveDigestAlgorithm
         }
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
             throw ECError.algorithmNotSupported
         }
+        if (signature.count != curveType.coordinateOctetLength * 2) {
+            throw ECError.verifyingFailed(description: "Signature is \(signature.count) bytes long instead of the expected \(curveType.coordinateOctetLength * 2).")
+        }
 
-        // pack raw signature as apecified for JWS into BER encoded ASN.1 format
+        // pack raw signature as specified for JWS into BER encoded ASN.1 format
         let fixlenR = signature.prefix(curveType.coordinateOctetLength)
         let varlenR = [UInt8](fixlenR.fixedLengthToAsn1())
         let fixlenS = signature.suffix(curveType.coordinateOctetLength)
@@ -230,8 +245,8 @@ internal struct EC {
 
         var cfErrorRef: Unmanaged<CFError>?
         let isValid = SecKeyVerifySignature(publicKey, secKeyAlgorithm, verifyingInput as CFData, asn1Signature as CFData, &cfErrorRef)
-        if cfErrorRef != nil {
-            throw ECError.signingFailed(description: "Error verifying signature. (CFError: \(cfErrorRef!.takeRetainedValue()))")
+        if let error = cfErrorRef {
+            throw ECError.verifyingFailed(description: "Error verifying signature. (CFError: \(error.takeRetainedValue()))")
         }
         return isValid
     }
