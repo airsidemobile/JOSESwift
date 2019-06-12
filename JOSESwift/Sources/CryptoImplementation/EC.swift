@@ -105,7 +105,7 @@ fileprivate extension Data {
     func withLengthFixedTo(_ octetLength: Int) -> Data {
         let varLength = self.count
         if varLength > octetLength + 1 {
-            fatalError("Unable to parse ASN.1 Integer")
+            fatalError("ASN.1 integer is \(varLength) bytes long when it should be < \(octetLength + 1).")
         }
         if varLength == octetLength + 1 {
             assert(self.first == 0)
@@ -118,7 +118,7 @@ fileprivate extension Data {
             // pad to fixed length using 0x00 bytes
             return Data(count: octetLength - varLength) + self
         }
-        fatalError("Unable to parse ASN.1 Integer")
+        fatalError("Unable to parse ASN.1 integer. This should be unreachable.")
     }
 
     func fixedLengthToAsn1() -> Data {
@@ -213,7 +213,7 @@ internal struct EC {
 
             return fixlenR + fixlenS
         } catch {
-            throw ECError.signingFailed(description: "Could not unpack ASN.1 EC signature")
+            throw ECError.signingFailed(description: "Could not unpack ASN.1 EC signature.")
         }
     }
 
