@@ -113,24 +113,19 @@ lane :release do
   pod_push(path: "JOSESwift.podspec")
 
   ensure_git_status_clean
+
+  # Sonarqube
+  sonarqube
 end
 
 desc "Run Sonarqube analysis after running the test lane"
 lane :sonarqube do |options|
-  branch = options[:branch] || ""
-  pr_number = options[:pr_number] || ""
-  if branch.empty? then
-    UI.important("Running regular (non-branch) Sonarqube analysis")
-  else
-    if pr_number.empty? then
-      UI.important "Running Sonarqube analysis for branch #{branch}"
-    else
-      UI.important "Running Sonarqube analysis for pull request #{pr_number}"
-    end
+  unless ENV['FL_SONAR_LOGIN']
+    UI.important "Skipping Sonarqube analysis because login is not specified"
+    next
   end
 
   # Convert Xcode coverate report to Sonarqube generic format
-
   sq_coverage_report = "#{TEST_OUTPUT}/sonarqube-coverage.xml"
   Dir.chdir("..") do
     sh "rm  #{sq_coverage_report}"
@@ -138,19 +133,8 @@ lane :sonarqube do |options|
     sh "scripts/xccov-to-sonarqube.sh #{xccov_reports} > #{sq_coverage_report}"
   end
 
-  # Set branch/pullrequest analysis options
-
-  runner_args = "-Dsonar.coverageReportPaths=#{sq_coverage_report}"
-  if !branch.empty? then
-    if pr_number.empty? then
-      runner_args = "#{runner_args} -Dsonar.branch.name=#{branch}"
-    else
-      runner_args = "#{runner_args} -Dsonar.pullrequest.branch=#{branch} -Dsonar.pullrequest.key=#{pr_number}"
-    end
-  end
-
   # Run Sonarqube analysis
-
+  runner_args = "-Dsonar.coverageReportPaths=#{sq_coverage_report}"
   sonar(
     project_version: get_version_number,
     sonar_runner_args: runner_args
