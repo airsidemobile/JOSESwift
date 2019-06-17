@@ -3,7 +3,7 @@
 <br>
 
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
-As of now, usage is limited to iOS because it makes use of the iOS cryptography frameworks.
+As of now, its usage is limited to iOS because it relies on the iOS cryptography frameworks.
 
 [![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
 
