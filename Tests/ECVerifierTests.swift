@@ -34,22 +34,34 @@ class ECVerifierTests: ECCryptoTestCase {
         super.tearDown()
     }
 
-    private func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
-        let jws = try! JWS(compactSerialization: keyData.compactSerializedJWSConst)
+    private func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData, validSignature: Bool = true) -> Bool {
+        let validJWS = keyData.compactSerializedJWSConst
+        let serializedJWS = validSignature ? validJWS : invalidateCompactSerializedJWS(validJWS)
+
+        let jws = try! JWS(compactSerialization: serializedJWS)
         let verifier = ECVerifier(algorithm: algorithm, publicKey: keyData.publicKey)
 
         guard let signingInput = [jws.header, jws.payload].asJOSESigningInput() else {
             XCTFail()
-            return
+            return false
         }
 
-        XCTAssertTrue(try! verifier.verify(signingInput, against: jws.signature))
+        return (try? verifier.verify(signingInput, against: jws.signature)) ?? false
+    }
+
+    private func invalidateCompactSerializedJWS(_ validJWS: String) -> String {
+        return validJWS.dropLast(7).appending("INVALID")
     }
 
     func testVerifying() {
-        _testVerifying(algorithm: .ES256, keyData: p256)
-        _testVerifying(algorithm: .ES384, keyData: p384)
-        _testVerifying(algorithm: .ES512, keyData: p521)
+        XCTAssertTrue(_testVerifying(algorithm: .ES256, keyData: p256))
+        XCTAssertTrue(_testVerifying(algorithm: .ES384, keyData: p384))
+        XCTAssertTrue(_testVerifying(algorithm: .ES512, keyData: p521))
     }
 
+    func testVerifyingInvalid() {
+        XCTAssertFalse(_testVerifying(algorithm: .ES256, keyData: p256, validSignature: false))
+        XCTAssertFalse(_testVerifying(algorithm: .ES384, keyData: p384, validSignature: false))
+        XCTAssertFalse(_testVerifying(algorithm: .ES512, keyData: p521, validSignature: false))
+    }
 }
