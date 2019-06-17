@@ -10,6 +10,11 @@ addons:
 before_install:
   - bundle install
 
+before_script:
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - export PR_NUMBER=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo ""; else echo $TRAVIS_PULL_REQUEST; fi)
+
 script:
   - bundle exec fastlane test
   - bundle exec danger
+  - bundle exec sonarqube branch:$BRANCH pr_number:$PR_NUMBER
