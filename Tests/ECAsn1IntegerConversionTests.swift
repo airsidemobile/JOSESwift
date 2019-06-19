@@ -1,6 +1,5 @@
-// swiftlint:disable force_unwrapping
 //
-//  ECAsn1ConversionTests.swift
+//  ECAsn1IntegerConversionTests.swift
 //  Tests
 //
 //  Created by Martin Schwaighofer on 12.06.19.
@@ -91,7 +90,7 @@ class ECAsn1IntegerConversionTests: XCTestCase {
 
     func testDecodeFourByteInts() {
         for int in fourByteInts {
-            XCTAssertEqual (EC.Asn1IntegerConversion.toRaw(int.asn1, of: 4), int.raw,  "Failure for \"\(int.description)\" example.")
+            XCTAssertEqual (EC.Asn1IntegerConversion.toRaw(int.asn1, of: 4), int.raw, "Failure for \"\(int.description)\" example.")
         }
     }
 
