@@ -99,6 +99,6 @@ class ECAsn1IntegerConversionTests: XCTestCase {
     }
 
     func testDecodeHugeInt() {
-        XCTAssertEqual (EC.Asn1IntegerConversion.fromRaw(hugeInt.asn1), hugeInt.raw)
+        XCTAssertEqual (EC.Asn1IntegerConversion.toRaw(hugeInt.asn1, of: 64), hugeInt.raw)
     }
 }
