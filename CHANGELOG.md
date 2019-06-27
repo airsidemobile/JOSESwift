@@ -27,7 +27,7 @@ Add your changes here.
 ## [1.8.1] - 2019-06-27
 
 - Adds tests for conversion from ASN.1 encoded EC signatures to raw EC signatures ([#160](https://github.com/airsidemobile/JOSESwift/pull/160)) via [@mschwaig](https://github.com/mschwaig)
-- Adds support for EC256 keys that are stored inside the Secure Enclave ([#156](https://github.com/airsidemobile/JOSESwift/pull/156)) via [@mschwaig](https://github.com/mschwaig)
+- Adds support for EC keys that are stored inside the Secure Enclave ([#156](https://github.com/airsidemobile/JOSESwift/pull/156)) via [@mschwaig](https://github.com/mschwaig)
 - Changes swift version to Swift 5 [#154](https://github.com/airsidemobile/JOSESwift/pull/154)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 - Adds pull request linting in Danger ([#153](https://github.com/airsidemobile/JOSESwift/pull/153)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 - Adds a SwiftLint build phase and fixes many violations ([#151](https://github.com/airsidemobile/JOSESwift/pull/151)) via [@xavierLowmiller](https://github.com/xavierLowmiller)
