@@ -125,7 +125,7 @@ lane :sonarqube do |options|
     next
   end
 
-  # Convert Xcode coverate report to Sonarqube generic format
+  # Convert Xcode coverage report to Sonarqube generic format
   sq_coverage_report = "#{TEST_OUTPUT}/sonarqube-coverage.xml"
   Dir.chdir("..") do
     sh "rm  #{sq_coverage_report}"
