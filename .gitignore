@@ -82,6 +82,7 @@ DerivedData/
 
 # fastlane specific
 fastlane/report.xml
-
-# scan temporary files
 fastlane/test_output
+
+# Sonarqube
+.scannerwork
