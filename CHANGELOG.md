@@ -24,6 +24,12 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+## [2.0.0] - 2019-08-05
+
+- Bump swift version in podspec and version file [#167](https://github.com/airsidemobile/JOSESwift/pull/167)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Bump fastlane to resolve mini_magick dependency warning [#164](https://github.com/airsidemobile/JOSESwift/pull/164)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Add simple Sonarqube setup [#158](https://github.com/airsidemobile/JOSESwift/pull/158)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+
 ## [1.8.1] - 2019-06-27
 
 - Adds tests for conversion from ASN.1 encoded EC signatures to raw EC signatures ([#160](https://github.com/airsidemobile/JOSESwift/pull/160)) via [@mschwaig](https://github.com/mschwaig)
