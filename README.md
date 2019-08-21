@@ -3,11 +3,9 @@
 <br>
 
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
-It is designed for usage on iOS but could be extended to be used in pure Swift environments.
+As of now, its usage is limited to iOS because it relies on the iOS cryptography frameworks.
 
 [![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
-
-As of now, usage is limited to iOS. See [Security](#security) for details.
 
 > :bulb: Please note that this implementation of the JOSE standards is not fully complete yet. For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
 
@@ -52,9 +50,9 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-5">Content Encryption</a></th>
 		<th colspan="2"><a href="https://tools.ietf.org/html/rfc7518#section-6">Keys</a></th>
 	</tr>
-	<tr><td><code>HS256</code></td><td></td>                   <td><code>RSA1_5</code></td><td>:white_check_mark:</td>       <td><code>A128CBC-HS256</code></td><td></td>                   <td><code>RSA</code></td><td>:white_check_mark:</td></tr>
-	<tr><td><code>HS384</code></td><td></td>                   <td><code>RSA-OAEP</code></td><td>:white_check_mark:</td>     <td><code>A128CBC-HS384</code></td><td></td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
-	<tr><td><code>HS512</code></td><td></td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A128CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>HS256</code></td><td></td>                   <td><code>RSA1_5</code></td><td>:white_check_mark:</td>       <td><code>A128CBC-HS256</code></td><td>:white_check_mark:</td>                   <td><code>RSA</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>HS384</code></td><td></td>                   <td><code>RSA-OAEP</code></td><td>:white_check_mark:</td>     <td><code>A192CBC-HS384</code></td><td></td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>HS512</code></td><td></td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A256CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td></td>                         <td><code>A128GCM</code></td><td></td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
 	<tr><td><code>RS384</code></td><td></td>                   <td><code>A192KW</code></td><td></td>                         <td><code>A192GCM</code></td><td></td>
 	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td></td>                         <td><code>A256GCM</code></td><td></td>
@@ -323,9 +321,9 @@ More details about decoding RSA public keys can be found [in the wiki](../../wik
 
 JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
 
-It is designed in a way that it is easy to switch out the implementation for a specific cryptographic operation. Non-iOS users can add their own platform independent crypto implementation instead of the ones mentioned above.
-
 For security disclosures or related matters, please contact <joseswift@airsidemobile.com>.
+
+See our [security policy](SECURITY.md) for more information.
 
 ## Contributing
 
