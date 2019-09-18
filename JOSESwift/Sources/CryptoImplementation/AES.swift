@@ -29,6 +29,7 @@ internal enum AESError: Error {
     case keyLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
+    case cannotPerformOperationOnEmptyDataBuffer
 }
 
 fileprivate extension SymmetricKeyAlgorithm {
@@ -183,30 +184,39 @@ internal struct AES {
 
     static func aescbcCrypt(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: CCCryptorStatus) {
         let dataLength = data.count
+        let keyLength = key.count
+        let ivLength = initializationVector.count
 
-        //AES's 128 block size is fix for every key length.
+        guard dataLength > 0, keyLength > 0, ivLength > 0 else {
+            return (Data(), CCCryptorStatus(kCCKeySizeError))
+        }
+
+        // AES's 128 block size is fixed for every key length and guaranteed not to be 0.
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
         var cryptData = Data(count: cryptLength)
 
-        let keyLength = key.count
         var numBytesCrypted: size_t = 0
 
-        let cryptStatus = cryptData.withUnsafeMutableBytes {cryptBytes in
-            data.withUnsafeBytes {dataBytes in
-                initializationVector.withUnsafeBytes {ivBytes in
-                    key.withUnsafeBytes {keyBytes in
+        // Force unwrapping is ok, since buffers are guaranteed not to be empty.
+        // From the docs: If the baseAddress of this buffer is nil, the count is zero.
+        // swiftlint:disable force_unwrapping
+        let cryptStatus = cryptData.withUnsafeMutableBytes { cryptBytes in
+            data.withUnsafeBytes { dataBytes in
+                initializationVector.withUnsafeBytes { ivBytes in
+                    key.withUnsafeBytes { keyBytes in
                         CCCrypt(operation,
                                 algorithm,
                                 padding,
-                                keyBytes, keyLength,
-                                ivBytes,
-                                dataBytes, dataLength,
-                                cryptBytes, cryptLength,
+                                keyBytes.baseAddress!, keyLength,
+                                ivBytes.baseAddress!,
+                                dataBytes.baseAddress!, dataLength,
+                                cryptBytes.baseAddress!, cryptLength,
                                 &numBytesCrypted)
                     }
                 }
             }
         }
+        // swiftlint:enable force_unwrapping
 
         if cryptStatus == kCCSuccess {
             cryptData.removeSubrange(numBytesCrypted..<cryptLength)

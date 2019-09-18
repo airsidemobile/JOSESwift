@@ -24,9 +24,18 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
-- Adds "zip" support ([#145](https://github.com/airsidemobile/JOSESwift/pull/145)) via [@fhaeser)
+## [1.8.1] - 2019-06-27
 
-- Adds basic Danger integration ([#140](https://github.com/airsidemobile/JOSESwift/pull/140)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds tests for conversion from ASN.1 encoded EC signatures to raw EC signatures ([#160](https://github.com/airsidemobile/JOSESwift/pull/160)) via [@mschwaig](https://github.com/mschwaig)
+- Adds support for EC keys that are stored inside the Secure Enclave ([#156](https://github.com/airsidemobile/JOSESwift/pull/156)) via [@mschwaig](https://github.com/mschwaig)
+- Changes swift version to Swift 5 [#154](https://github.com/airsidemobile/JOSESwift/pull/154)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds pull request linting in Danger ([#153](https://github.com/airsidemobile/JOSESwift/pull/153)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds a SwiftLint build phase and fixes many violations ([#151](https://github.com/airsidemobile/JOSESwift/pull/151)) via [@xavierLowmiller](https://github.com/xavierLowmiller)
+
+## [1.8.0] - 2019-03-18
+
+- Adds A128CBCHS256 support ([#147](https://github.com/airsidemobile/JOSESwift/pull/147)) via [@ramunasjurgilas](https://github.com/ramunasjurgilas)
+- Adds "zip" support ([#145](https://github.com/airsidemobile/JOSESwift/pull/145)) via [@fhaeser](https://github.com/fhaeser)
 
 ## [1.7.0] - 2019-02-19
 

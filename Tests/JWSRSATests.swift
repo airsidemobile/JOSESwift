@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWSRSATests.swift
 //  Tests
@@ -47,7 +48,6 @@ class JWSRSATests: RSACryptoTestCase {
     func testDeserializeFromCompactSerializationRS256() {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
-
 
     @available(*, deprecated)
     func testSignAndSerializeRS512() {

@@ -109,7 +109,7 @@ internal struct AESContentEncrypter: ContentEncrypter {
         concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
         // Calculate the HMAC with the concatenated input data, the HMAC key and the HMAC algorithm.
-        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: symmetricAlgorithm.hmacAlgorithm)
+        let hmacOutput = try HMAC.calculate(from: concatData, with: hmacKey, using: symmetricAlgorithm.hmacAlgorithm)
         let authenticationTag = symmetricAlgorithm.authenticationTag(for: hmacOutput)
 
         return SymmetricEncryptionContext(

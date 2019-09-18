@@ -41,4 +41,6 @@ public enum JOSESwiftError: Error {
     case compressionFailed
     case decompressionFailed
     case compressionAlgorithmNotSupported
+    case rawDataMustBeGreaterThanZero
+    case compressedDataMustBeGreaterThanZero
 }

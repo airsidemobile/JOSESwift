@@ -127,7 +127,7 @@ public extension JWEHeader {
         return AlgorithmFactory.createContentAlgorithm(rawValue: enc)
     }
     /// The compression algorithm applied to the plaintext before encryption. If no compression is applied, the `.NONE` algorithm is returned.
-    public var compressionAlgorithm: CompressionAlgorithm? {
+    var compressionAlgorithm: CompressionAlgorithm? {
         guard let compressionAlgorithm = parameters["zip"] as? String else {
             return CompressionAlgorithm.NONE
         }
@@ -135,7 +135,7 @@ public extension JWEHeader {
     }
 
     /// The zip header parameter indicates that the content has been compressed before encryption. If no compression is applied, the `zip` parameter is `nil`.
-    public var zip: String? {
+    var zip: String? {
         set {
             parameters["zip"] = newValue
         }

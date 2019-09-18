@@ -35,10 +35,10 @@ extension Data {
 
         let mod = s.count % 4
         switch mod {
-            case 0: break
-            case 2: s.append("==")
-            case 3: s.append("=")
-            default: return nil
+        case 0: break
+        case 2: s.append("==")
+        case 3: s.append("=")
+        default: return nil
         }
 
         self.init(base64Encoded: s)
@@ -73,6 +73,7 @@ extension Data {
     public func base64URLEncodedData() -> Data {
         // UTF-8 can represent [all Unicode characters](https://en.wikipedia.org/wiki/UTF-8), so this 
         // forced unwrap is safe. See also [this](https://stackoverflow.com/a/46152738/5233456) SO answer.
+        // swiftlint:disable:next force_unwrapping
         return self.base64URLEncodedString().data(using: .utf8)!
     }
 
@@ -86,15 +87,15 @@ extension Data {
         var dataLengthBytes = [UInt8](repeatElement(0x00, count: 8))
 
         var dataIndex = dataLengthBytes.count-1
-        for i in stride(from: 0, to: dataLengthInHex.count, by: 2) {
+        for index in stride(from: 0, to: dataLengthInHex.count, by: 2) {
             var offset = 2
             var hexStringChunk = ""
 
-            if dataLengthInHex.count-i == 1 {
+            if dataLengthInHex.count-index == 1 {
                 offset = 1
             }
 
-            let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -i)
+            let endIndex = dataLengthInHex.index(dataLengthInHex.endIndex, offsetBy: -index)
             let startIndex = dataLengthInHex.index(endIndex, offsetBy: -offset)
             let range = Range(uncheckedBounds: (lower: startIndex, upper: endIndex))
             hexStringChunk = String(dataLengthInHex[range])
@@ -106,7 +107,7 @@ extension Data {
             dataIndex -= 1
         }
 
-        return Data(bytes: dataLengthBytes)
+        return Data(dataLengthBytes)
     }
 }
 

@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWKRSADecodingTests.swift
 //  Tests
@@ -102,7 +103,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = String(data: publicKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
             return
@@ -120,7 +121,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = String(data: publicKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: wrongKeyType).data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
             return
@@ -142,7 +143,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = String(data: publicKeyJSON, encoding: .utf8)!.replacingOccurrences(of: modulus, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, RSAParameter.modulus.rawValue)
             return
@@ -159,7 +160,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = String(data: publicKeyJSON, encoding: .utf8)!.replacingOccurrences(of: exponent, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, RSAParameter.exponent.rawValue)
             return
@@ -174,7 +175,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = "{\"kty\":\"RSA\"".data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPublicKey.self, from: wrongPublicKey)
         } catch DecodingError.dataCorrupted(let context) {
             XCTAssertEqual(context.debugDescription, "The given data was not valid JSON.")
             return
@@ -213,7 +214,6 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         XCTAssertEqual(jwk!["kid"] ?? "", "2011-04-29")
     }
 
-
     func testDecodingPrivateKey() {
         let jwk = try? JSONDecoder().decode(RSAPrivateKey.self, from: privateKeyJSON)
 
@@ -246,7 +246,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPrivateKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
             return
@@ -264,7 +264,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPublicKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: keyType, with: wrongKeyType).data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPublicKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPublicKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, JWKParameter.keyType.rawValue)
             return
@@ -274,7 +274,6 @@ class JWKRSADecodingTests: RSACryptoTestCase {
 
         XCTFail()
     }
-
 
     func testDecodingPrivateKeyMissingModulus() {
         let modulus = """
@@ -287,7 +286,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPrivateKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: modulus, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, RSAParameter.modulus.rawValue)
             return
@@ -304,7 +303,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPrivateKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: exponent, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, RSAParameter.exponent.rawValue)
             return
@@ -326,7 +325,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPrivateKey = String(data: privateKeyJSON, encoding: .utf8)!.replacingOccurrences(of: privateExponent, with: "").data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.keyNotFound(let key, _) {
             XCTAssertEqual(key.stringValue, RSAParameter.privateExponent.rawValue)
             return
@@ -341,7 +340,7 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         let wrongPrivateKey = "{\"kty\":\"RSA\"".data(using: .utf8)!
 
         do {
-            let _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
+            _ = try JSONDecoder().decode(RSAPrivateKey.self, from: wrongPrivateKey)
         } catch DecodingError.dataCorrupted(let context) {
             XCTAssertEqual(context.debugDescription, "The given data was not valid JSON.")
             return
@@ -351,7 +350,6 @@ class JWKRSADecodingTests: RSACryptoTestCase {
 
         XCTFail()
     }
-
 
     func testBuildingJWKSetShouldNotFailIfCertificatesArePresent() {
         // Given

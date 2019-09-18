@@ -195,8 +195,8 @@ public enum SymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, Symmetric
 /// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
 /// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
 public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, SymmetricAlgorithm {
-    case A128CBCHS256 = "A128CBC-HS256"
     case A256CBCHS512 = "A256CBC-HS512"
+    case A128CBCHS256 = "A128CBC-HS256"
 
     var hmacAlgorithm: HMACAlgorithm {
         switch self {
@@ -219,6 +219,8 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
     public var initializationVectorLength: Int {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
+            return 16
+        case .A128CBCHS256:
             return 16
         }
     }

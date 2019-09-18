@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  EncrypterDecrypterInitializationTests.swift
 //  Tests
@@ -32,7 +33,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048! as SecKey, contentEncyptionAlgorithm: .A256CBCHS512)
             )
@@ -44,7 +45,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
             )
@@ -75,7 +76,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Decrypter(keyDecryptionAlgorithm: algorithm, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
             )
@@ -87,7 +88,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             guard algorithm != .direct else {
                 continue
             }
-            
+
             XCTAssertNotNil(
                 Decrypter(keyDecryptionAlgorithm: algorithm, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
             )

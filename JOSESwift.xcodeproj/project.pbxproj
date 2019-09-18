@@ -87,6 +87,7 @@
 		8A30B8F822118FD0001834E3 /* DeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */; };
 		8A30B8FA22118FE6001834E3 /* JWECompressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */; };
 		8A4B08B22213FF0600828536 /* Compressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B08B12213FF0600828536 /* Compressor.swift */; };
+		9665A24722B0F3E100EAC14A /* ECAsn1IntegerConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9665A24622B0F3E100EAC14A /* ECAsn1IntegerConversionTests.swift */; };
 		C803EFE51FA77E3000B71335 /* JWSRSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE41FA77E3000B71335 /* JWSRSATests.swift */; };
 		C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */; };
 		C803EFED1FA8849C00B71335 /* JWERSATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803EFEC1FA8849C00B71335 /* JWERSATests.swift */; };
@@ -206,6 +207,7 @@
 		8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeflateWrapper.swift; sourceTree = "<group>"; };
 		8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWECompressionTests.swift; sourceTree = "<group>"; };
 		8A4B08B12213FF0600828536 /* Compressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compressor.swift; sourceTree = "<group>"; };
+		9665A24622B0F3E100EAC14A /* ECAsn1IntegerConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECAsn1IntegerConversionTests.swift; sourceTree = "<group>"; };
 		C803EFE41FA77E3000B71335 /* JWSRSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSRSATests.swift; sourceTree = "<group>"; };
 		C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHeaderTests.swift; sourceTree = "<group>"; };
 		C803EFEC1FA8849C00B71335 /* JWERSATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWERSATests.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		65125A2C1FBF6B79007CF3AE /* JWS */ = {
 			isa = PBXGroup;
 			children = (
+				9665A24622B0F3E100EAC14A /* ECAsn1IntegerConversionTests.swift */,
 				6575696C203EF9CE004A0EFD /* JWSValidationTests.swift */,
 				652C61391FD99A3300578E2A /* JWSSigningInputTest.swift */,
 				C803EFE81FA7893A00B71335 /* JWSHeaderTests.swift */,
@@ -546,6 +549,7 @@
 				65FBFDDE1F45CC7C005C7D68 /* Frameworks */,
 				65FBFDDF1F45CC7C005C7D68 /* Headers */,
 				65FBFDE01F45CC7C005C7D68 /* Resources */,
+				4E06574B223CC78D00D7A199 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -563,19 +567,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					65A9D3D61F45CDD7004E0B61 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = QG88PL75JK;
-						LastSwiftMigration = 1000;
+						DevelopmentTeam = 4857DE3DAC;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					65FBFDE11F45CC7C005C7D68 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = QG88PL75JK;
-						LastSwiftMigration = 1010;
+						DevelopmentTeam = 4857DE3DAC;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -585,6 +589,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 65FBFDD81F45CC7C005C7D68;
@@ -616,11 +621,33 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4E06574B223CC78D00D7A199 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint or run `brew bundle`\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		65A9D3D31F45CDD7004E0B61 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9665A24722B0F3E100EAC14A /* ECAsn1IntegerConversionTests.swift in Sources */,
 				65826AB420286B3A00AFFC46 /* JWKRSAEncodingTests.swift in Sources */,
 				C83070051FD1B7390068C5CB /* AESDecrypterTests.swift in Sources */,
 				C803EFE91FA7893A00B71335 /* JWSHeaderTests.swift in Sources */,
@@ -751,6 +778,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -763,6 +791,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -771,6 +800,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -835,6 +865,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -905,7 +936,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -926,7 +957,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.airsidemobile.JOSESwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

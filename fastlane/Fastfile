@@ -2,15 +2,21 @@ fastlane_version "2.63.0"
 
 skip_docs
 
+TEST_OUTPUT = "fastlane/test_output"
+DERIVED_DATA_PATH = "#{TEST_OUTPUT}/derived_data"
+
 desc "Run the tests"
 lane :test do
-  scan(scheme: "JOSESwift")
+  UI.message "Cleaning derived data directory"
+  sh "rm -rf ../#{DERIVED_DATA_PATH}"
+
+  UI.message "Testing"
+  scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true)
 end
 
 desc "Lint Swift files"
 lane :lint do
-  # Todo: Don't ignore exit status (#98)
-  swiftlint(ignore_exit_status: true)
+  swiftlint
 end
 
 desc "Format Swift files"
@@ -107,4 +113,30 @@ lane :release do
   pod_push(path: "JOSESwift.podspec")
 
   ensure_git_status_clean
+
+  # Sonarqube
+  sonarqube
+end
+
+desc "Run Sonarqube analysis after running the test lane"
+lane :sonarqube do |options|
+  unless ENV['FL_SONAR_LOGIN']
+    UI.important "Skipping Sonarqube analysis because login is not specified"
+    next
+  end
+
+  # Convert Xcode coverage report to Sonarqube generic format
+  sq_coverage_report = "#{TEST_OUTPUT}/sonarqube-coverage.xml"
+  Dir.chdir("..") do
+    sh "rm  #{sq_coverage_report}"
+    xccov_reports = Dir["#{DERIVED_DATA_PATH}/Logs/Test/**/*.xccovarchive"].join(" ")
+    sh "scripts/xccov-to-sonarqube.sh #{xccov_reports} > #{sq_coverage_report}"
+  end
+
+  # Run Sonarqube analysis
+  runner_args = "-Dsonar.coverageReportPaths=#{sq_coverage_report}"
+  sonar(
+    project_version: get_version_number,
+    sonar_runner_args: runner_args
+  )
 end

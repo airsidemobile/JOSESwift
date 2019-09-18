@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWKECKeysTests.swift
 //  Tests
@@ -95,7 +96,6 @@ class JWKECKeysTests: ECCryptoTestCase {
 
             XCTAssertEqual(key.y, keyData.expectedYCoordinateBase64Url)
             XCTAssertEqual(key["y"] ?? "", keyData.expectedYCoordinateBase64Url)
-
 
             XCTAssertEqual(key.privateKey, keyData.expectedPrivateBase64Url)
             XCTAssertEqual(key["d"] ?? "", keyData.expectedPrivateBase64Url)

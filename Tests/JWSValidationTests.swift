@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWSValidationTests.swift
 //  Tests
@@ -235,11 +236,11 @@ class JWSValidationTests: RSACryptoTestCase {
 
         XCTAssertFalse(jws.isValid(for: verifier))
     }
-    
+
 }
 
 extension JOSESwiftError: Equatable {
-    public static func ==(lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
+    public static func == (lhs: JOSESwiftError, rhs: JOSESwiftError) -> Bool {
         switch (lhs, rhs) {
         case (.verifyingFailed(let lhs), .verifyingFailed(let rhs)):
             return lhs == rhs

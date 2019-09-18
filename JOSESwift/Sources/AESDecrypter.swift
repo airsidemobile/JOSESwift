@@ -103,7 +103,7 @@ internal struct AESContentDecrypter: ContentDecrypter {
         concatData.append(context.additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
         // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
-        let hmacOutput = HMAC.calculate(from: concatData, with: hmacKey, using: symmetricAlgorithm.hmacAlgorithm)
+        let hmacOutput = try HMAC.calculate(from: concatData, with: hmacKey, using: symmetricAlgorithm.hmacAlgorithm)
 
         guard context.authenticationTag == symmetricAlgorithm.authenticationTag(for: hmacOutput) else {
             throw JWEError.hmacNotAuthenticated
