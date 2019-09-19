@@ -24,6 +24,13 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+## [1.8.2] - 2019-09-19
+
+- 
+- Adds A128KW, A192KW and A256KW encryption and decryption by [@mtamu](https://github.com/mtamu)
+- Fixes all warnings by [@ramunasjurgilas](https://github.com/ramunasjurgilas)
+
+
 ## [1.8.1] - 2019-06-27
 
 - Adds tests for conversion from ASN.1 encoded EC signatures to raw EC signatures ([#160](https://github.com/airsidemobile/JOSESwift/pull/160)) via [@mschwaig](https://github.com/mschwaig)

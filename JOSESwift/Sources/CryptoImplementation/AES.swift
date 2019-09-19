@@ -217,7 +217,6 @@ internal struct AES {
                 }
             }
         }
-        // swiftlint:enable force_unwrapping
 
         if cryptStatus == kCCSuccess {
             cryptData.removeSubrange(numBytesCrypted..<cryptLength)

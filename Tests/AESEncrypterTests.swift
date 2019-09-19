@@ -325,17 +325,9 @@ class AESEncrypterTests: RSACryptoTestCase {
         // Length: 24 bytes
         let rfcExpectedCiphertext = "64 e8 c3 f9 ce 0f 5b a2  63 e9 77 79 05 81 8a 2a  93 c8 19 1e 7d 6e 8a e7".hexadecimalToData()!
 
-//        print("-- Encrypting...")
         let ciphertext = try! AES.encrypt(plaintext: rfcPlaintextKey, with: rfcKEK, using: alg, and: rfcIV)
 
-//        print("CIPHERTEXT OUTPUT:")
-//        printDebug("cipher text", for: ciphertext)
-//
-//        print("-- Decrypting...")
         let decryptedKey = try! AES.decrypt(cipherText: ciphertext, with: rfcKEK, using: alg, and: rfcIV)
-
-//        print("PLAINTEXT OUTPUT:")
-//        printDebug("decryptedKey", for: decryptedKey)
 
         XCTAssertEqual(ciphertext, rfcExpectedCiphertext, "Ciphertext differs from expected")
         XCTAssertEqual(decryptedKey, rfcPlaintextKey, "Decrypted Key differs from original")
