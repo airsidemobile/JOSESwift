@@ -60,7 +60,14 @@ class AESEncrypterTests: RSACryptoTestCase {
 
         macOutData.withUnsafeMutableBytes { macOutBytes in
             hmacKey.withUnsafeBytes { hmacKeyBytes in
-                concatData.withUnsafeBytes { concatBytes in
+                concatData.withUnsafeBytes { concatBytes -> Void in
+                    guard
+                        let macOutBytes = macOutBytes.baseAddress,
+                        let hmacKeyBytes = hmacKeyBytes.baseAddress,
+                        let concatBytes = concatBytes.baseAddress
+                    else {
+                        return
+                    }
                     CCHmac(CCAlgorithm(kCCHmacAlgSHA256), hmacKeyBytes, keyLength, concatBytes, concatData.count, macOutBytes)
                 }
             }
@@ -79,8 +86,16 @@ class AESEncrypterTests: RSACryptoTestCase {
         let cryptStatus = cryptData.withUnsafeMutableBytes {cryptBytes in
             symmetricEncryptionContext.ciphertext.withUnsafeBytes {dataBytes in
                 symmetricEncryptionContext.initializationVector.withUnsafeBytes {ivBytes in
-                    encryptionKey.withUnsafeBytes {keyBytes in
-                        CCCrypt(CCOperation(kCCDecrypt),
+                    encryptionKey.withUnsafeBytes {keyBytes -> Int32 in
+                        guard
+                            let cryptBytes = cryptBytes.baseAddress,
+                            let dataBytes = dataBytes.baseAddress,
+                            let ivBytes = ivBytes.baseAddress,
+                            let keyBytes = keyBytes.baseAddress
+                        else {
+                            return Int32(kCCMemoryFailure)
+                        }
+                        return CCCrypt(CCOperation(kCCDecrypt),
                                 CCAlgorithm(kCCAlgorithmAES128),
                                 options,
                                 keyBytes, keyLength,
