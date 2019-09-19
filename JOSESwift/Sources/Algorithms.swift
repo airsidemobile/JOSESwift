@@ -78,11 +78,11 @@ public struct AlgorithmFactory {
 /// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
 /// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
 public enum SignatureAlgorithm: String, Algorithm {
-    case RS256 = "RS256"
-    case RS512 = "RS512"
-    case ES256 = "ES256"
-    case ES384 = "ES384"
-    case ES512 = "ES512"
+    case RS256
+    case RS512
+    case ES256
+    case ES384
+    case ES512
 }
 
 /// Both key encryption and content encryption symmetric algorithms.
@@ -143,9 +143,9 @@ public enum AsymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, Asymmetr
 /// - A192KW: [Key Wrapping with AES-192 Key Wrap](https://tools.ietf.org/html/rfc7518#section-4.4)
 /// - A256KW: [Key Wrapping with AES-256 Key Wrap](https://tools.ietf.org/html/rfc7518#section-4.4)
 public enum SymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, SymmetricAlgorithm {
-    case A128KW = "A128KW"
-    case A192KW = "A192KW"
-    case A256KW = "A256KW"
+    case A128KW
+    case A192KW
+    case A256KW
 
     var hmacAlgorithm: HMACAlgorithm {
         // TODO: Perhaps refactor and remove.
@@ -254,9 +254,9 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
 /// - SHA512
 /// - SHA256
 public enum HMACAlgorithm: String {
-    case SHA512 = "SHA512"
-    case SHA256 = "SHA256"
-    case none = "none"
+    case SHA512
+    case SHA256
+    case none
 
     var outputLength: Int {
         switch self {
@@ -273,7 +273,7 @@ public enum HMACAlgorithm: String {
 /// Algorithm "none" type that should be upsupported for any cryptographic operation.
 /// TODO: Perhaps remove if Optionals are enough.
 public enum UnsupportedAlgorithm: String, CaseIterable, ContentAlgorithm, KeyAlgorithm {
-    case none = "none"
+    case none
 }
 
 /// An algorithm for compressing the plain text before encryption.
