@@ -232,15 +232,24 @@ internal struct AES {
         var wrappedKey = Data(count: wrappedKeyLength)
 
         // WRAP KEY
-        let status = wrappedKey.withUnsafeMutableBytes {
-            wrappedBytes in rawKey.withUnsafeBytes {
-                rawKeyBytes in iv.withUnsafeBytes {
-                    ivBytes in key.withUnsafeBytes {
-                        keyBytes in return CCSymmetricKeyWrap(alg,
-                                                   ivBytes, iv.count,
-                                                   keyBytes, key.count,
-                                                   rawKeyBytes, rawKey.count,
-                                                   wrappedBytes, &wrappedKeyLength)
+        let status = wrappedKey.withUnsafeMutableBytes { wrappedBytes -> Int32 in
+            rawKey.withUnsafeBytes { rawKeyBytes -> Int32 in
+                iv.withUnsafeBytes { ivBytes -> Int32 in
+                    key.withUnsafeBytes { keyBytes -> Int32 in
+                        guard
+                            let wrappedBytes = wrappedBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let keyBytes = keyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress
+                        else {
+                            return Int32(kCCMemoryFailure)
+                        }
+                        return CCSymmetricKeyWrap(
+                            alg,
+                            ivBytes, iv.count,
+                            keyBytes, key.count,
+                            rawKeyBytes, rawKey.count,
+                            wrappedBytes, &wrappedKeyLength)
                     }
                 }
             }
@@ -259,16 +268,24 @@ internal struct AES {
         var rawKey = Data(count: rawKeyLength)
 
         // UNWRAP KEY
-        let status = rawKey.withUnsafeMutableBytes {
-            rawBytes in wrappedKey.withUnsafeBytes {
-                wrappedKeyBytes in iv.withUnsafeBytes {
-                    ivBytes in key.withUnsafeBytes {
-                        keyBytes in
-                            return CCSymmetricKeyUnwrap(alg,
-                                             ivBytes, iv.count,
-                                             keyBytes, key.count,
-                                             wrappedKeyBytes, wrappedKey.count,
-                                             rawBytes, &rawKeyLength)
+        let status = rawKey.withUnsafeMutableBytes { rawBytes -> Int32 in
+            wrappedKey.withUnsafeBytes { wrappedKeyBytes -> Int32 in
+                iv.withUnsafeBytes { ivBytes -> Int32 in
+                    key.withUnsafeBytes { keyBytes -> Int32 in
+                        guard
+                            let rawBytes = rawBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let keyBytes = keyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress
+                            else {
+                                return Int32(kCCMemoryFailure)
+                        }
+                        return CCSymmetricKeyUnwrap(
+                            alg,
+                            ivBytes, iv.count,
+                            keyBytes, key.count,
+                            wrappedKeyBytes, wrappedKey.count,
+                            rawBytes, &rawKeyLength)
                     }
                 }
             }
