@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name              = "JOSESwift"
   s.version           = "1.8.1"
   s.license           = "Apache License, Version 2.0"
-  s.summary           = "JOSE framework for Swift (Danske Bank fork)"
+  s.summary           = "JOSE framework for Swift"
   s.authors           = { "Daniel Egger" => "daniel.egger@airsidemobile.com", "Carol Capek" => "carol.capek@airsidemobile.com", "Christoph Gigi Fuchs" => "christoph.fuchs@airsidemobile.com", "Ramunas Jurgilas" => "rjur@danskebank.lt", "Marius Tamulis" => "mtamu@danskebank.lt" }
   s.homepage          = "https://github.com/airsidemobile/JOSESwift"
   s.documentation_url = "https://github.com/airsidemobile/JOSESwift/wiki"
