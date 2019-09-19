@@ -99,7 +99,7 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    public var algorithm: KeyAlgorithm? {
+    var algorithm: KeyAlgorithm? {
         // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
@@ -114,7 +114,7 @@ public extension JWEHeader {
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    public var encryptionAlgorithm: ContentAlgorithm? {
+    var encryptionAlgorithm: ContentAlgorithm? {
         // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast

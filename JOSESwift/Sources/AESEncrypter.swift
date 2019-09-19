@@ -42,12 +42,12 @@ internal struct AESKeyEncrypter: KeyEncrypter {
         self.symmetricAlgorithm = algorithm
         self.symmetricKey = symmetricKey
     }
-    
+
     func encrypt(_ plaintext: Data) throws -> Data {
         guard let symmetricKey = self.symmetricKey else {
             throw AESError.encryptingFailed(description: "Encryption key is not set")
         }
-        
+
         return try encrypt(plaintext, with: symmetricKey).ciphertext
     }
 

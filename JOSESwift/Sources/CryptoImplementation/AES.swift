@@ -182,6 +182,7 @@ internal struct AES {
         }
     }
 
+    // swiftlint:disable function_parameter_count
     static func aescbcCrypt(operation: CCOperation, data: Data, key: Data, algorithm: CCAlgorithm, initializationVector: Data, padding: CCOptions) -> (data: Data, status: CCCryptorStatus) {
         let dataLength = data.count
         let keyLength = key.count

@@ -70,7 +70,7 @@ class AESEncrypterTests: RSACryptoTestCase {
 
         let dataLength = symmetricEncryptionContext.ciphertext.count
         let cryptLength  = size_t(dataLength + kCCBlockSizeAES128)
-        var cryptData = Data(count:cryptLength)
+        var cryptData = Data(count: cryptLength)
 
         let options = CCOptions(kCCOptionPKCS7Padding)
 

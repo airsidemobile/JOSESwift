@@ -189,7 +189,6 @@ public enum SymmetricKeyAlgorithm: String, CaseIterable, KeyAlgorithm, Symmetric
     }
 }
 
-
 /// An algorithm for symmetric JWE content encryption and decryption.
 ///
 /// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
@@ -219,8 +218,6 @@ public enum SymmetricContentAlgorithm: String, CaseIterable, ContentAlgorithm, S
     public var initializationVectorLength: Int {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
-            return 16
-        case .A128CBCHS256:
             return 16
         }
     }

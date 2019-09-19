@@ -47,7 +47,7 @@ internal struct AESKeyDecrypter: KeyDecrypter {
         guard let symmetricKey = symmetricKey else {
             throw JWEError.keyNotSetOrInvalid
         }
-        
+
         guard symmetricAlgorithm.checkKeyLength(for: symmetricKey) else {
             throw JWEError.keyLengthNotSatisfied
         }
@@ -81,7 +81,7 @@ internal struct AESContentDecrypter: ContentDecrypter {
     }
 
     func decrypt(_ context: ContentDecryptionContext, with key: Any? = nil) throws -> Data {
-        guard let combinedKey:KeyType = (key == nil) ? symmetricKey : key as? KeyType else {
+        guard let combinedKey: KeyType = (key == nil) ? symmetricKey : key as? KeyType else {
             // Both keys are nil or argument key cannot be cast to correct type
             throw JWEError.keyNotSetOrInvalid
         }

@@ -64,7 +64,7 @@ class JWEHeaderTests: XCTestCase {
 
     func testInitRSAOAEP256WithParameters() {
         let header = try! JWEHeader(parameters: parameterDictRSAOAEP256)
-        
+
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricContentAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
@@ -91,7 +91,7 @@ class JWEHeaderTests: XCTestCase {
     func testInitRSAOAEP256WithData() {
         let data = try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: [])
         let header = JWEHeader(data)!
-        
+
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricContentAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.data(), data)
@@ -146,7 +146,7 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, AsymmetricKeyAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, SymmetricContentAlgorithm.A256CBCHS512.rawValue)
-        
+
         XCTAssertNotNil(header.algorithm)
         XCTAssertNotNil(header.encryptionAlgorithm)
         XCTAssertEqual(header.algorithm as! AsymmetricKeyAlgorithm, .RSAOAEP256)
