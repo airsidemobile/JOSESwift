@@ -115,6 +115,7 @@ public struct Encrypter {
     ///           details.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
+    // swiftlint:disable cyclomatic_complexity
     internal init?(_ alg: KeyAlgorithm, _ key: Any, _ enc: ContentAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch alg {

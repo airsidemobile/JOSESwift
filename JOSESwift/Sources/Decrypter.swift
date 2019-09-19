@@ -116,6 +116,7 @@ public struct Decrypter {
     ///           details.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
+    // swiftlint:disable cyclomatic_complexity
     internal init?(_ alg: KeyAlgorithm, _ key: Any, _ enc: ContentAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch alg {
@@ -168,7 +169,7 @@ public struct Decrypter {
 
         var cek: Any
 
-        if (alg.equals(AsymmetricKeyAlgorithm.direct)) {
+        if alg.equals(AsymmetricKeyAlgorithm.direct) {
             guard context.encryptedKey == Data() else {
                 throw JOSESwiftError.decryptingFailed(
                     description: "Direct encryption does not expect an encrypted key."

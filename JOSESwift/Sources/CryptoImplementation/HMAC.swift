@@ -33,7 +33,6 @@ fileprivate extension HMACAlgorithm {
         switch self {
         case .SHA512:
             return CCAlgorithm(kCCHmacAlgSHA512)
-            
         case .SHA256:
             return CCAlgorithm(kCCHmacAlgSHA256)
         default:
