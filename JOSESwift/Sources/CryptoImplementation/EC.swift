@@ -160,7 +160,7 @@ internal struct EC {
                 let cfError = error.takeRetainedValue()
                 let errorDomain = CFErrorGetDomain(cfError)
                 let errorCode = CFErrorGetCode(cfError)
-                
+
                 if errorDomain == LAErrorDomain as CFErrorDomain {
                     throw ECError.localAuthenticationFailed(errorCode: errorCode)
                 }

@@ -71,7 +71,7 @@ public struct JWS {
             }
             throw JOSESwiftError.signingFailed(description: error.localizedDescription)
         }
-        
+
     }
 
     /// Constructs a JWS object from a given compact serialization string.
@@ -201,7 +201,7 @@ public struct JWS {
             return false
         }
     }
-    
+
 }
 
 extension JWS: CompactSerializable {
