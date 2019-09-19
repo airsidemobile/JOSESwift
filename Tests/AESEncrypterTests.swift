@@ -257,17 +257,9 @@ class AESEncrypterTests: RSACryptoTestCase {
         // Length: 24 bytes
         let rfcExpectedCiphertext = "1f a6 8b 0a 81 12 b4 47  ae f3 4b d8 fb 5a 7b 82  9d 3e 86 23 71 d2 cf e5".hexadecimalToData()!
 
-//        print("-- Encrypting...")
         let ciphertext = try! AES.encrypt(plaintext: rfcPlaintextKey, with: rfcKEK, using: alg, and: rfcIV)
 
-//        print("CIPHERTEXT OUTPUT:")
-//        printDebug("cipher text", for: ciphertext)
-
-//        print("-- Decrypting...")
         let decryptedKey = try! AES.decrypt(cipherText: ciphertext, with: rfcKEK, using: alg, and: rfcIV)
-
-//        print("PLAINTEXT OUTPUT:")
-//        printDebug("decryptedKey", for: decryptedKey)
 
         XCTAssertEqual(ciphertext, rfcExpectedCiphertext, "Ciphertext differs from expected")
         XCTAssertEqual(decryptedKey, rfcPlaintextKey, "Decrypted Key differs from original")
@@ -291,17 +283,9 @@ class AESEncrypterTests: RSACryptoTestCase {
         // Length: 24 bytes
         let rfcExpectedCiphertext = "96 77 8b 25 ae 6c a4 35  f9 2b 5b 97 c0 50 ae d2  46 8a b8 a1 7a d8 4e 5d".hexadecimalToData()!
 
-//        print("-- Encrypting...")
         let ciphertext = try! AES.encrypt(plaintext: rfcPlaintextKey, with: rfcKEK, using: alg, and: rfcIV)
 
-//        print("CIPHERTEXT OUTPUT:")
-//        printDebug("cipher text", for: ciphertext)
-//
-//        print("-- Decrypting...")
         let decryptedKey = try! AES.decrypt(cipherText: ciphertext, with: rfcKEK, using: alg, and: rfcIV)
-
-//        print("PLAINTEXT OUTPUT:")
-//        printDebug("decryptedKey", for: decryptedKey)
 
         XCTAssertEqual(ciphertext, rfcExpectedCiphertext, "Ciphertext differs from expected")
         XCTAssertEqual(decryptedKey, rfcPlaintextKey, "Decrypted Key differs from original")

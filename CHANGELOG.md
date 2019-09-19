@@ -26,7 +26,6 @@ Add your changes here.
 
 ## [1.8.2] - 2019-09-19
 
-- 
 - Adds A128KW, A192KW and A256KW encryption and decryption by [@mtamu](https://github.com/mtamu)
 - Fixes all warnings by [@ramunasjurgilas](https://github.com/ramunasjurgilas)
 
