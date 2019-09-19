@@ -53,9 +53,9 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr><td><code>HS256</code></td><td></td>                   <td><code>RSA1_5</code></td><td>:white_check_mark:</td>       <td><code>A128CBC-HS256</code></td><td>:white_check_mark:</td>                   <td><code>RSA</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>HS384</code></td><td></td>                   <td><code>RSA-OAEP</code></td><td>:white_check_mark:</td>     <td><code>A192CBC-HS384</code></td><td></td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>HS512</code></td><td></td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A256CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
-	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td></td>                         <td><code>A128GCM</code></td><td></td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
-	<tr><td><code>RS384</code></td><td></td>                   <td><code>A192KW</code></td><td></td>                         <td><code>A192GCM</code></td><td></td>
-	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td></td>                         <td><code>A256GCM</code></td><td></td>
+	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td>:white_check_mark:</td>                         <td><code>A128GCM</code></td><td></td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
+	<tr><td><code>RS384</code></td><td></td>                   <td><code>A192KW</code></td><td>:white_check_mark:</td>                         <td><code>A192GCM</code></td><td></td>
+	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td>:white_check_mark:</td>                         <td><code>A256GCM</code></td><td></td>
 	<tr><td><code>ES256</code></td><td>:white_check_mark:</td> <td><code>dir</code></td><td>:white_check_mark:</td>          <th rowspan="11"></th><th rowspan="11"></th></tr>
 	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td></td></tr>
 	<tr><td><code>ES512</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A128KW</code></td><td></td></tr>
@@ -316,6 +316,24 @@ let publicKey: SecKey = try! jwk.converted(to: SecKey.self)
 More details about decoding RSA public keys can be found [in the wiki](../../wiki/jwk).
 
 :warning: We currently ignore the key parameters [`"key_ops"`](https://tools.ietf.org/html/rfc7517#section-4.3) and [`"x5c"`](https://tools.ietf.org/html/rfc7517#section-4.7) when decoding. This is due to a bug in our decoding implementation. See [#117](https://github.com/airsidemobile/JOSESwift/issues/117) for details.
+
+### KW: Encryption and Decryption
+
+``` swift
+let alg = SymmetricKeyAlgorithm.A256KW
+
+let plaintext = "00 11 22 33 44 55 66 77  88 99 aa bb cc dd ee ff".hexadecimalToData()!
+
+let rfcKEK = "00 01 02 03 04 05 06 07  08 09 0a 0b 0c 0d 0e 0f  10 11 12 13 14 15 16 17  18 19 1a 1b 1c 1d 1e 1f".hexadecimalToData()!
+
+// A[0], the initial value (IV) that enables to verify integrity on the data.
+// Equals to: a6 a6 a6 a6 a6 a6 a6 a6 (length: 8 byte)
+let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+
+let ciphertext = try! AES.encrypt(plaintext: plaintext, with: rfcKEK, using: alg, and: iv)
+
+let decryptedKey = try! AES.decrypt(cipherText: ciphertext, with: rfcKEK, using: alg, and: iv)
+```
 
 ## Security
 
