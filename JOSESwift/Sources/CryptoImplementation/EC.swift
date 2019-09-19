@@ -24,6 +24,7 @@
 import Foundation
 import Security
 import CommonCrypto
+import LocalAuthentication
 
 internal enum ECError: Error {
     case algorithmNotSupported
@@ -33,6 +34,7 @@ internal enum ECError: Error {
     case decryptingFailed(description: String)
     case invalidCurveDigestAlgorithm
     case couldNotAllocateMemoryForSignature
+    case localAuthenticationFailed(errorCode: Int)
 }
 
 /// Identifies the curve type parameter of a JWK representing an elliptic curve key
@@ -155,7 +157,14 @@ internal struct EC {
         var cfErrorRef: Unmanaged<CFError>?
         guard let signature = SecKeyCreateSignature(privateKey, secKeyAlgorithm, signingInput as CFData, &cfErrorRef) else {
             if let error = cfErrorRef {
-                throw ECError.signingFailed(description: "Error creating signature. (CFError: \(error.takeRetainedValue()))")
+                let cfError = error.takeRetainedValue()
+                let errorDomain = CFErrorGetDomain(cfError)
+                let errorCode = CFErrorGetCode(cfError)
+                
+                if errorDomain == LAErrorDomain as CFErrorDomain {
+                    throw ECError.localAuthenticationFailed(errorCode: errorCode)
+                }
+                throw ECError.signingFailed(description: "Error creating signature. (CFError: \(cfError))")
             }
             fatalError("SecKeyCreateSignature returned nil but did not set CFError object.")
         }
