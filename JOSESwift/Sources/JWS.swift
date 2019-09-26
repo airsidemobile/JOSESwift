@@ -61,8 +61,17 @@ public struct JWS {
         do {
             self.signature = try signer.sign(header: header, payload: payload)
         } catch {
+            if let ecError = error as? ECError {
+                switch ecError {
+                case .localAuthenticationFailed(errorCode: let errorCode):
+                    throw JOSESwiftError.localAuthenticationFailed(errorCode: errorCode)
+                default:
+                    break
+                }
+            }
             throw JOSESwiftError.signingFailed(description: error.localizedDescription)
         }
+
     }
 
     /// Constructs a JWS object from a given compact serialization string.
@@ -192,6 +201,7 @@ public struct JWS {
             return false
         }
     }
+
 }
 
 extension JWS: CompactSerializable {
