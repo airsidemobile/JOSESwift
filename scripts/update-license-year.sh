@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Updates the year in the license header of Swift files to the current year.
+# Updates the year in the license header of Swift files to the current year
 
 correct_license_header="Copyright $(date +%Y) Airside Mobile Inc." # we want this header
 any_license_header="Copyright [0-9]* Airside Mobile Inc." # this could be any header
