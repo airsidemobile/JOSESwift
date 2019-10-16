@@ -75,6 +75,11 @@ lane :prepare do |options|
   sh("git diff-index --quiet HEAD || git commit -am 'Automatically format code'")
   ensure_git_status_clean
 
+  # Update license header year
+  sh "scripts/update-license-year.sh"
+  sh("git diff-index --quiet HEAD || git commit -am 'Update license header year - happy new year'")
+  ensure_git_status_clean
+
   # Run tests
   test
 
