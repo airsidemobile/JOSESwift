@@ -24,3 +24,31 @@ not_declared_trivial = !(github.pr_labels.include? "trivial")
 if has_changes && no_changelog_entry && not_declared_trivial
   message("Any non-trivial changes to code should be reflected in the changelog. Please consider adding a note in the _Unreleased_ section of the [CHANGELOG.md](https://github.com/airsidemobile/JOSESwift/blob/master/CHANGELOG.md).")
 end
+
+# ------------------------------------------------------------------------------
+# Dependency check
+# ------------------------------------------------------------------------------
+
+dependency_report_file = "./dependency-check-report.json"
+if File.exist?(dependency_report_file)
+  require "json"
+
+  file = File.read(dependency_report_file)
+  json = JSON.parse(file)
+
+  vulnerable_dependency_exists = false
+  vulnerable_dependencies = "## Vulnerable dependencies\n"
+
+  json['dependencies'].each do |dependency|
+    if dependency.key?('vulnerabilities')
+      vulnerable_dependency_exists = true
+      vulnerable_dependencies = vulnerable_dependencies + "- #{dependency['fileName']}\n"
+    end
+  end
+
+  if vulnerable_dependency_exists
+    fail(vulnerable_dependencies)
+  else
+    message("No vulnerable dependencies.")
+  end
+end
