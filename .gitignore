@@ -86,3 +86,5 @@ fastlane/test_output
 
 # Sonarqube
 .scannerwork
+/dependency-check-report.json
+/dependency-check-report.html
