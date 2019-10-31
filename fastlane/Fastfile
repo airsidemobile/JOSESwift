@@ -130,6 +130,10 @@ lane :sonarqube do |options|
     next
   end
 
+  # Check dependencies
+
+  sh "dependency-check --enableExperimental --project . --out . -s . --format HTML --format JSON', log: false"
+
   # Convert Xcode coverage report to Sonarqube generic format
   sq_coverage_report = "#{TEST_OUTPUT}/sonarqube-coverage.xml"
   Dir.chdir("..") do
