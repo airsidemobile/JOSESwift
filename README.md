@@ -365,7 +365,7 @@ JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 
 ### Logo
 
-The logo was designed by Ivan Leuzzi.
+The logo was designed by [Ivan Leuzzi](https://twitter.com/ILeuzzi?s=17).
 
 ### Thanks
 
