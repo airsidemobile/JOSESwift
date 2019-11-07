@@ -132,7 +132,7 @@ class JWSRSATests: RSACryptoTestCase {
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }
-    
+
     @available(*, deprecated)
     private func performTestRSASerializationValidationAndDeserialization(algorithm: SignatureAlgorithm) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {

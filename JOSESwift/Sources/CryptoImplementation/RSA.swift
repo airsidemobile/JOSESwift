@@ -49,14 +49,14 @@ fileprivate extension SignatureAlgorithm {
             } else {
                 return nil
             }
-        
+
         case .PS384:
             if #available(iOS 11.0, *) {
                 return .rsaSignatureMessagePSSSHA384
             } else {
                 return nil
             }
-        
+
         case .PS512:
             if #available(iOS 11.0, *) {
                 return .rsaSignatureMessagePSSSHA512

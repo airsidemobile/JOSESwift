@@ -45,7 +45,7 @@ class RSACryptoTestCase: CryptoTestCase {
         XZa_Aj3LkNWn1GSw5B4WQueb8E0uJVAzLSNbxA-ZNowlOgDtKHOEkwbZu6zj7WvLEm8xovgmAha_y7HssoXnH26Nu-8RMUYw-LXUJz6Fny1F_xc\
         v_TA
         """
-        
+
     let compactSerializedJWSRS384Const =
         """
         eyJhbGciOiJSUzM4NCJ9.VGhlIHRydWUgc2lnbiBvZiBpbnRlbGxpZ2VuY2UgaXMgbm90IGtub3dsZWRnZSBidXQgaW1hZ2luYXRpb24u.NWuwp\
