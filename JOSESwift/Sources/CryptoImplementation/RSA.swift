@@ -39,8 +39,30 @@ fileprivate extension SignatureAlgorithm {
         switch self {
         case .RS256:
             return .rsaSignatureMessagePKCS1v15SHA256
+        case .RS384:
+            return .rsaSignatureMessagePKCS1v15SHA384
         case .RS512:
             return .rsaSignatureMessagePKCS1v15SHA512
+        case .PS256:
+            if #available(iOS 11.0, *) {
+                return .rsaSignatureMessagePSSSHA256
+            } else {
+                return nil
+            }
+        
+        case .PS384:
+            if #available(iOS 11.0, *) {
+                return .rsaSignatureMessagePSSSHA384
+            } else {
+                return nil
+            }
+        
+        case .PS512:
+            if #available(iOS 11.0, *) {
+                return .rsaSignatureMessagePSSSHA512
+            } else {
+                return nil
+            }
         default:
             return nil
         }

@@ -30,7 +30,11 @@ import Foundation
 /// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
 public enum SignatureAlgorithm: String {
     case RS256
+    case RS384
     case RS512
+    case PS256
+    case PS384
+    case PS512
     case ES256
     case ES384
     case ES512
