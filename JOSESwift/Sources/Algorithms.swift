@@ -32,9 +32,9 @@ public enum SignatureAlgorithm: String {
     case RS256
     case RS384
     case RS512
-    case PS256
-    case PS384
-    case PS512
+    @available(iOS 11, *) case PS256
+    @available(iOS 11, *) case PS384
+    @available(iOS 11, *) case PS512
     case ES256
     case ES384
     case ES512

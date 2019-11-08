@@ -77,17 +77,17 @@ class JWSRSATests: RSACryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
     }
 
-    @available(*, deprecated)
+    @available(iOS 11, *)
     func testSignVerifyAndDeserializeForPS256() {
         performTestRSASerializationValidationAndDeserialization(algorithm: .PS256)
     }
 
-    @available(*, deprecated)
+    @available(iOS 11, *)
     func testSignVerifyAndDeserializeForPS384() {
         performTestRSASerializationValidationAndDeserialization(algorithm: .PS384)
     }
 
-    @available(*, deprecated)
+    @available(iOS 11, *)
     func testSignVerifyAndDeserializeForPS512() {
         performTestRSASerializationValidationAndDeserialization(algorithm: .PS512)
     }
@@ -133,7 +133,6 @@ class JWSRSATests: RSACryptoTestCase {
         XCTAssertEqual(jws.signature.data(), signature)
     }
 
-    @available(*, deprecated)
     private func performTestRSASerializationValidationAndDeserialization(algorithm: SignatureAlgorithm) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
@@ -149,8 +148,9 @@ class JWSRSATests: RSACryptoTestCase {
         XCTAssertEqual(compactSerializedJWS, compactSerializedJWS)
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
+        let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
 
-        XCTAssertTrue(secondJWS.isValid(for: publicKeyAlice2048!))
+        XCTAssertTrue(secondJWS.isValid(for: verifier!))
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
     }
