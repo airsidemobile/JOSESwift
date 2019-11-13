@@ -145,8 +145,6 @@ class JWSRSATests: RSACryptoTestCase {
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
-        XCTAssertEqual(compactSerializedJWS, compactSerializedJWS)
-
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
         let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
 
