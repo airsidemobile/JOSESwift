@@ -50,6 +50,20 @@ class JWSRSATests: RSACryptoTestCase {
     }
 
     @available(*, deprecated)
+    func testSignAndSerializeRS384() {
+        self.performTestRSASign(algorithm: .RS384)
+    }
+
+    @available(*, deprecated)
+    func testSignAndVerifyRS384WithNonRequiredHeaderParameter() {
+        self.performTestRSASign(algorithm: .RS384, withKid: true)
+    }
+
+    func testDeserializeFromCompactSerializationRS384() {
+        self.performTestRSADeserialization(algorithm: .RS384, compactSerializedJWS: compactSerializedJWSRS384Const)
+    }
+
+    @available(*, deprecated)
     func testSignAndSerializeRS512() {
         self.performTestRSASign(algorithm: .RS512)
     }
@@ -61,6 +75,21 @@ class JWSRSATests: RSACryptoTestCase {
 
     func testDeserializeFromCompactSerializationRS512() {
         self.performTestRSADeserialization(algorithm: .RS512, compactSerializedJWS: compactSerializedJWSRS512Const)
+    }
+
+    @available(iOS 11, *)
+    func testSignVerifyAndDeserializeForPS256() {
+        performTestRSASerializationValidationAndDeserialization(algorithm: .PS256)
+    }
+
+    @available(iOS 11, *)
+    func testSignVerifyAndDeserializeForPS384() {
+        performTestRSASerializationValidationAndDeserialization(algorithm: .PS384)
+    }
+
+    @available(iOS 11, *)
+    func testSignVerifyAndDeserializeForPS512() {
+        performTestRSASerializationValidationAndDeserialization(algorithm: .PS512)
     }
 
     // MARK: - RSA Tests
@@ -102,6 +131,26 @@ class JWSRSATests: RSACryptoTestCase {
         let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
+    }
+
+    private func performTestRSASerializationValidationAndDeserialization(algorithm: SignatureAlgorithm) {
+        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
+            XCTFail()
+            return
+        }
+
+        let header = JWSHeader(algorithm: algorithm)
+        let payload = Payload(message.data(using: .utf8)!)
+        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
+        let jws = try! JWS(header: header, payload: payload, signer: signer)
+        let compactSerializedJWS = jws.compactSerializedString
+
+        let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
+        let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
+
+        XCTAssertTrue(secondJWS.isValid(for: verifier!))
+        XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
+        XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
     }
 
 }
