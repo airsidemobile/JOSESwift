@@ -46,6 +46,15 @@ class RSACryptoTestCase: CryptoTestCase {
         v_TA
         """
 
+    let compactSerializedJWSRS384Const =
+        """
+        eyJhbGciOiJSUzM4NCJ9.VGhlIHRydWUgc2lnbiBvZiBpbnRlbGxpZ2VuY2UgaXMgbm90IGtub3dsZWRnZSBidXQgaW1hZ2luYXRpb24u.NWuwp\
+        XlQ3uw0I8rqPkTfBKf51L96AJ3kldSkNa-CP6f9yWjq9BZMZv9vB7Xf8_9JMUUXAR1zT26y0fEN2QE_cD9a6qrzmNA5VzWLmRU8W1tJKgZK-blJ\
+        GoAKPmJkTO-jbv5FmoxTseBgkXmtk7qcBUacAmbHHnUpHI3doAiWwttytmQ8qHjwI4R0GkzP_-kvKBouzCDtaaFaFOKIu6hac0X3-wujzYgAJAo\
+        KgCpVXyaXV14SBSB34Am2QDQnxC66olfuC0J6tYEWxrQ9akze0KBOnDP3ujRta3yG1i19ziG_J8VHBzgBHPp4qSU78pGgb2n6_9UcYwjJialwiI\
+        Fq3w
+        """
+
     let compactSerializedJWSRS256Const =
         """
         eyJhbGciOiJSUzI1NiJ9.VGhlIHRydWUgc2lnbiBvZiBpbnRlbGxpZ2VuY2UgaXMgbm90IGtub3dsZWRnZSBidXQgaW1hZ2luYXRpb24u.Cx2UI\
