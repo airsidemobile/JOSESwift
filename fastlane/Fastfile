@@ -75,10 +75,8 @@ lane :prepare do |options|
   sh("git diff-index --quiet HEAD || git commit -am 'Automatically format code'")
   ensure_git_status_clean
 
-  # Update license header year
-  sh "scripts/update-license-year.sh"
-  sh("git diff-index --quiet HEAD || git commit -am 'Update license header year - happy new year'")
-  ensure_git_status_clean
+  # Update copyright year if needed
+  copyright
 
   # Run tests
   test
@@ -144,4 +142,16 @@ lane :sonarqube do |options|
     project_version: get_version_number,
     sonar_runner_args: runner_args
   )
+end
+
+desc "Updates the copyright year of license headers in source files if needed"
+lane :copyright do |options|
+  ensure_git_status_clean
+
+  Dir.chdir("..") do
+    sh("scripts/update-license-year.sh"
+  end
+
+  sh("git diff-index --quiet HEAD || git commit -am 'Update license header year - happy new year'")
+  ensure_git_status_clean
 end
