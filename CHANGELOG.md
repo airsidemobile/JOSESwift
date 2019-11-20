@@ -24,6 +24,22 @@ so they can be moved to a respective version upon release.
 
 Add your changes here.
 
+## [2.0.0] - 2019-11-20
+
+- Fixes copyright update in prepare lane ([(#191)](https://github.com/airsidemobile/JOSESwift/pull/191)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Updates travis build environment ([(#190)](https://github.com/airsidemobile/JOSESwift/pull/190)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds support for RSA PSS and RS384 signatures ([(#188)](https://github.com/airsidemobile/JOSESwift/pull/188)) via [@JohanObrink](https://github.com/JohanObrink)
+- Removes twitter handle from readme again ([(#187)](https://github.com/airsidemobile/JOSESwift/pull/187)) via [@carol-mohemian](https://github.com/carol-mohemian)
+- Removes .swift-version file ([(#185)](https://github.com/airsidemobile/JOSESwift/pull/185)) via [@carol-mohemian](https://github.com/carol-mohemian)
+- Adds Ivans twitter handle ([(#184)](https://github.com/airsidemobile/JOSESwift/pull/184)) via [@carol-mohemian](https://github.com/carol-mohemian)
+- Updates fastlane ([(#182)](https://github.com/airsidemobile/JOSESwift/pull/182)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds missing license headers and automate their yearly updates ([(#179)](https://github.com/airsidemobile/JOSESwift/pull/179)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Extends JOSESwift Errors with localAuthentication ([(#173)](https://github.com/airsidemobile/JOSESwift/pull/173)) via [@Niklas01](https://github.com/Niklas01)
+- Bumps swift version in podspec and version file ([(#167)](https://github.com/airsidemobile/JOSESwift/pull/167)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Bumps fastlane to resolve mini_magic dependency warning ([(#164)](https://github.com/airsidemobile/JOSESwift/pull/164)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds security policy ([(#159)](https://github.com/airsidemobile/JOSESwift/pull/159)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Adds simple Sonarqube setup ([(#158)](https://github.com/airsidemobile/JOSESwift/pull/158)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+
 ## [1.8.1] - 2019-06-27
 
 - Adds tests for conversion from ASN.1 encoded EC signatures to raw EC signatures ([#160](https://github.com/airsidemobile/JOSESwift/pull/160)) via [@mschwaig](https://github.com/mschwaig)
