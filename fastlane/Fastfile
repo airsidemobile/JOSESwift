@@ -132,8 +132,8 @@ lane :sonarqube do |options|
   sq_coverage_report = "#{TEST_OUTPUT}/sonarqube-coverage.xml"
   Dir.chdir("..") do
     sh "rm  #{sq_coverage_report}"
-    xccov_reports = Dir["#{DERIVED_DATA_PATH}/Logs/Test/**/*.xccovarchive"].join(" ")
-    sh "scripts/xccov-to-sonarqube.sh #{xccov_reports} > #{sq_coverage_report}"
+    cov_reports = Dir["#{DERIVED_DATA_PATH}/Logs/Test/**/*.xcresult"].join(" ")
+    sh "scripts/xccov-to-sonarqube.sh #{cov_reports} > #{sq_coverage_report}"
   end
 
   # Run Sonarqube analysis
