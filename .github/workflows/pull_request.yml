@@ -36,7 +36,7 @@ jobs:
         bundle exec fastlane test
 
   danger:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
       - name: danger
