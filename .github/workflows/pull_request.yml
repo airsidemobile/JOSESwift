@@ -34,3 +34,13 @@ jobs:
       run: |
         bundle config path cache/bundle
         bundle exec fastlane test
+
+  danger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        uses: danger/swift@2.0.3
+        with:
+            args: --failOnErrors --no-publish-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
