@@ -86,3 +86,6 @@ fastlane/test_output
 
 # Sonarqube
 .scannerwork
+
+# SPM
+.build/

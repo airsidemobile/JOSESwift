@@ -39,8 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: danger/swift@2.0.3
-        with:
-            args: --failOnErrors --no-publish-check
+      - name: danger
+        run: swift run danger-swift ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
