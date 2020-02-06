@@ -11,14 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
-      id: homebrew-cache
-      with:
-        path: /usr/local/Cellar
-        key: ${{ runner.os }}-homebrew-${{ hashFiles('**/Brewfile.lock.json') }}
-    - name: Install homebrew dependencies
-      if: steps.homebrew-cache.outputs.cache-hit != 'true'
-      run: brew bundle
-    - uses: actions/cache@v1
       id: gems-cache
       with:
         path: cache/bundle
@@ -36,10 +28,6 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
       with:
-        path: /usr/local/Cellar
-        key: ${{ runner.os }}-homebrew-${{ hashFiles('**/Brewfile.lock.json') }}
-    - uses: actions/cache@v1
-      with:
         path: cache/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Test
@@ -52,10 +40,6 @@ jobs:
     needs: install_dependendies
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path: /usr/local/Cellar
-        key: ${{ runner.os }}-homebrew-${{ hashFiles('**/Brewfile.lock.json') }}
     - uses: actions/cache@v1
       with:
         path: cache/bundle
