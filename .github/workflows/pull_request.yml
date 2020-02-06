@@ -26,6 +26,10 @@ jobs:
     needs: install_dependendies
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Test
       run: |
         bundle config path cache/bundle
