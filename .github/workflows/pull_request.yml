@@ -11,12 +11,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
+      id: brew-cache
+      with:
+        path: /usr/local/Cellar
+        key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
+    - name: Install homebrew dependencies
+      if: steps.brew-cache.outputs.cache-hit != 'true'
+      run: brew bundle
+    - uses: actions/cache@v1
       id: gems-cache
       with:
         path: cache/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-    - name: Install homebrew dependencies
-      run: brew bundle
     - name: Install ruby dependencies
       if: steps.gems-cache.outputs.cache-hit != 'true'
       run: |
@@ -28,6 +34,11 @@ jobs:
     needs: install_dependendies
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      id: brew-cache
+      with:
+        path: /usr/local/Cellar
+        key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
     - uses: actions/cache@v1
       with:
         path: cache/bundle
@@ -42,5 +53,14 @@ jobs:
     needs: install_dependendies
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      id: brew-cache
+      with:
+        path: /usr/local/Cellar
+        key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Danger
       run: bundle exec danger
