@@ -14,3 +14,17 @@ jobs:
       run: brew bundle
     - name: Install ruby dependencies
       run: bundle install
+  test:
+    runs-on: macOS-latest
+    needs: install_dependendies
+    steps:
+    - uses: actions/checkout@v2
+    - name: Test
+      run: bundle exec fastlane test
+  danger:
+    runs-on: macOS-latest
+    needs: install_dependendies
+    steps:
+    - uses: actions/checkout@v2
+    - name: Danger
+      run: bundle exec danger
