@@ -7,7 +7,6 @@ on:
 
 jobs:
   install_dependendies:
-    name: Dependencies
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +22,6 @@ jobs:
         bundle install --jobs 4 --retry 3
 
   test:
-    name: Unit tests
     runs-on: macOS-latest
     needs: install_dependendies
     steps:
@@ -36,13 +34,3 @@ jobs:
       run: |
         bundle config path cache/bundle
         bundle exec fastlane test
-
-  sonarcloud:
-    name: SonarCloud
-    runs-on: macOS-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
