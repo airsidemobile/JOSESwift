@@ -2,8 +2,6 @@
 # Do you have style?
 # ------------------------------------------------------------------------------
 
-message("Danger works! :tada:")
-
 swiftlint.config_file = '.swiftlint.yml'
 
 has_linting_violations = false
