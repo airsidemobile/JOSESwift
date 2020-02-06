@@ -35,7 +35,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
-      id: brew-cache
       with:
         path: /usr/local/Cellar
         key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
@@ -54,7 +53,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
-      id: brew-cache
       with:
         path: /usr/local/Cellar
         key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
