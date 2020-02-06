@@ -37,9 +37,14 @@ jobs:
 
   danger:
     runs-on: macOS-latest
+    needs: install_dependendies
     steps:
-      - uses: actions/checkout@v1
-      - name: danger
-        run: swift run danger-swift ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+    - name: Test
+      run: |
+        bundle config path cache/bundle
+        bundle exec danger
