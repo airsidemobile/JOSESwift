@@ -15,10 +15,10 @@ jobs:
     - name: Install ruby dependencies
       run: bundle install
   test:
-    needs: install_dependendies
+    - needs: install_dependendies
     - name: Test
       run: bundle exec fastlane test
   danger:
-    needs: install_dependendies
+    - needs: install_dependendies
     - name: Danger
       run: bundle exec danger
