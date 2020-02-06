@@ -6,15 +6,19 @@ on:
       - master
 
 jobs:
-  test:
+  install_dependendies:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        brew bundle
-        bundle install
+    - name: Install homebrew dependencies
+      run: brew bundle
+    - name: Install ruby dependencies
+      run: bundle install
+  test:
+    needs: install_dependendies
     - name: Test
       run: bundle exec fastlane test
-    - run: Danger
+  danger:
+    needs: install_dependendies
+    - name: Danger
       run: bundle exec danger
