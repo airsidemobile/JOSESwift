@@ -34,19 +34,3 @@ jobs:
       run: |
         bundle config path cache/bundle
         bundle exec fastlane test
-
-  danger:
-    runs-on: macOS-latest
-    needs: install_dependendies
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path: cache/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-    - name: Danger
-        uses: danger/danger
-        with:
-            args: --failOnErrors --no-publish-check
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
