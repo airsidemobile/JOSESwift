@@ -2,7 +2,7 @@ name: Pull Request
 
 on:
   pull_request:
-    branches: 
+    branches:
       - master
 
 jobs:
@@ -14,4 +14,7 @@ jobs:
       run: |
         brew bundle
         bundle install
-        
+    - name: Test
+      run: bundle exec fastlane test
+    - run: Danger
+      run: bundle exec danger
