@@ -1,0 +1,57 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  install_dependendies:
+    name: Install Dependencies
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      id: gems-cache
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+    - name: Bundler
+      if: steps.gems-cache.outputs.cache-hit != 'true'
+      run: |
+        bundle config path cache/bundle
+        bundle install --jobs 4 --retry 3
+
+  test:
+    name: Unit Tests
+    runs-on: macOS-latest
+    needs: install_dependendies
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+    - name: Test
+      run: |
+        bundle config path cache/bundle
+        bundle exec fastlane test
+
+  danger:
+    name: Danger
+    runs-on: macOS-latest
+    needs: install_dependendies
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+    - name: Danger
+      env:
+        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+      run: |
+        bundle config path cache/bundle
+        bundle exec danger
