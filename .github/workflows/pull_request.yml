@@ -7,6 +7,7 @@ on:
 
 jobs:
   install_dependendies:
+    name: Install Dependencies
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,6 +23,7 @@ jobs:
         bundle install --jobs 4 --retry 3
 
   test:
+    name: Unit Tests
     runs-on: macOS-latest
     needs: install_dependendies
     steps:
@@ -36,6 +38,7 @@ jobs:
         bundle exec fastlane test
 
   danger:
+    name: Danger
     runs-on: macOS-latest
     needs: install_dependendies
     steps:
