@@ -11,12 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
+      id: gems-cache
       with:
         path: cache/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Install homebrew dependencies
       run: brew bundle
     - name: Install ruby dependencies
+      if: steps.gems-cache.outputs.cache-hit != 'true'
       run: |
         bundle config path cache/bundle
         bundle install --jobs 4 --retry 3
