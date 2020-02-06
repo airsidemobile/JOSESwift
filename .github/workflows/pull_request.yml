@@ -45,4 +45,6 @@ jobs:
         path: cache/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Danger
-      run: bundle exec danger
+      run: |
+        bundle config path cache/bundle
+        bundle exec danger
