@@ -20,6 +20,11 @@ jobs:
       run: |
         bundle config path cache/bundle
         bundle install --jobs 4 --retry 3
+    - name: Install brew dependencies
+      - run: |
+        brew bundle
+        du -h /usr/local/Cellar
+        ls /usr/local/Cellar
 
   test:
     runs-on: macOS-latest
