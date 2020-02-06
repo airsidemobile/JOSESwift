@@ -45,8 +45,8 @@ jobs:
         path: cache/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Danger
-      env:
-        DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
-      run: |
-        bundle config path cache/bundle
-        bundle exec danger
+        uses: danger/danger
+        with:
+            args: --failOnErrors --no-publish-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
