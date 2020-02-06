@@ -10,17 +10,27 @@ jobs:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: cache/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
     - name: Install homebrew dependencies
       run: brew bundle
     - name: Install ruby dependencies
-      run: bundle install
+      run: |
+        bundle config path cache/bundle
+        bundle install --jobs 4 --retry 3
+
   test:
     runs-on: macOS-latest
     needs: install_dependendies
     steps:
     - uses: actions/checkout@v2
     - name: Test
-      run: bundle exec fastlane test
+      run: |
+        bundle config path cache/bundle
+        bundle exec fastlane test
+
   danger:
     runs-on: macOS-latest
     needs: install_dependendies
