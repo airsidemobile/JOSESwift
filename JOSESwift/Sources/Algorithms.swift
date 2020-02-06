@@ -22,7 +22,7 @@
 //  ---------------------------------------------------------------------------
 //
 
-import Foundation
+import Foundation 
 
 /// An algorithm for signing and verifying.
 ///
