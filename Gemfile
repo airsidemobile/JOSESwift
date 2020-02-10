@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'cocoapods'
-gem 'fastlane', '>= 2.127.2'
+gem 'fastlane'
 gem 'xcpretty'
 gem 'danger'
-gem 'danger-swiftlint', '>=0.20.0'
+gem 'danger-swiftlint'
