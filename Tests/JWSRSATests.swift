@@ -128,20 +128,21 @@ class JWSRSATests: RSACryptoTestCase {
         let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
 
         XCTAssertTrue(secondJWS.isValid(for: verifier!))
-        if withKid {
-            let algKidHeader = "{\"alg\":\"\(algorithm.rawValue)\",\"kid\":\"kid\"}"
-            let kidAlgHeader = "{\"kid\":\"kid\",\"alg\":\"\(algorithm.rawValue)\"}"
+        XCTAssertEqual(String(data: secondJWS.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
-            let headerString = String(data: jws.header.data(), encoding: .utf8)
-
-            if headerString != algKidHeader && headerString != kidAlgHeader {
-                XCTFail("Incorrect header")
-            }
-        } else {
+        guard withKid else {
             XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
+            return
         }
 
-        XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
-    }
+        let algKidHeader = "{\"alg\":\"\(algorithm.rawValue)\",\"kid\":\"kid\"}"
+        let kidAlgHeader = "{\"kid\":\"kid\",\"alg\":\"\(algorithm.rawValue)\"}"
 
+        let headerString = String(data: jws.header.data(), encoding: .utf8)
+
+        guard headerString == algKidHeader || headerString == kidAlgHeader else {
+            XCTFail("Incorrect header")
+            return
+        }
+    }
 }
