@@ -76,9 +76,9 @@ class JWERSATests: RSACryptoTestCase {
 
     lazy var compactSerializedData: [String: Data] = {
         [
-            AsymmetricKeyAlgorithm.RSA1_5.rawValue: compactSerializedJWERSHA1,
-            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: compactSerializedJWERSAOAEPSHA1,
-            AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256
+            KeyManagementAlgorithm.RSA1_5.rawValue: compactSerializedJWERSHA1,
+            KeyManagementAlgorithm.RSAOAEP.rawValue: compactSerializedJWERSAOAEPSHA1,
+            KeyManagementAlgorithm.RSAOAEP256.rawValue: compactSerializedJWERSAOAEPSHA256
         ]
     }()
 
@@ -93,7 +93,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -111,7 +111,7 @@ class JWERSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -136,7 +136,7 @@ class JWERSATests: RSACryptoTestCase {
             XCTFail("privateKeyAlice2048 was nil.")
             return
         }
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -160,7 +160,7 @@ class JWERSATests: RSACryptoTestCase {
             ]
         ]
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -189,7 +189,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -208,7 +208,7 @@ class JWERSATests: RSACryptoTestCase {
 
     func testDecryptWithExplicitDecrypterWrongAlgInHeader() {
         // Replaces alg "RSA1_5" with alg "RSA-OAEP" in header
-        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[KeyManagementAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0",
             with: "eyJhbGciOiAiUlNBLU9BRVAiLCJlbmMiOiAiQTI1NkNCQy1IUzUxMiJ9"
             ).data(using: .utf8)!
@@ -228,7 +228,7 @@ class JWERSATests: RSACryptoTestCase {
 
     func testDecryptWithExplicitDecrypterWrongAlgInHeaderRSAOAEPSHA256() {
         // Replaces alg "RSA-OAEP-256" with alg "RSA-OAEP" in header
-        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[KeyManagementAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
             with: "eyJhbGciOiAiUlNBLU9BRVAiLCJlbmMiOiAiQTI1NkNCQy1IUzUxMiJ9"
             ).data(using: .utf8)!
@@ -248,7 +248,7 @@ class JWERSATests: RSACryptoTestCase {
 
     func testDecryptWithExplicitDecrypterWrongEncInHeader() {
         // Replaces enc "A256CBC-HS512" with enc "A128GCM" in header
-        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[KeyManagementAlgorithm.RSA1_5.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0",
             with: "eyJhbGciOiAiUlNBMV81IiwiZW5jIjogIkExMjhHQ00ifQ"
             ).data(using: .utf8)!
@@ -268,7 +268,7 @@ class JWERSATests: RSACryptoTestCase {
 
     func testDecryptWithExplicitDecrypterWrongEncInHeaderRSAOAEPSHA256() {
         // Replaces enc "A256CBC-HS512" with enc "A128GCM" in header
-        let malformedSerialization = String(data: compactSerializedData[AsymmetricKeyAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
+        let malformedSerialization = String(data: compactSerializedData[KeyManagementAlgorithm.RSAOAEP256.rawValue]!, encoding: .utf8)!.replacingOccurrences(
             of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0",
             with: "eyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0="
             ).data(using: .utf8)!
@@ -303,7 +303,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }

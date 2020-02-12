@@ -27,10 +27,10 @@ import Foundation
 internal struct RSAEncrypter: AsymmetricEncrypter {
     typealias KeyType = RSA.KeyType
 
-    let algorithm: AsymmetricKeyAlgorithm
+    let algorithm: KeyManagementAlgorithm
     let publicKey: KeyType?
 
-    init(algorithm: AsymmetricKeyAlgorithm, publicKey: KeyType? = nil) {
+    init(algorithm: KeyManagementAlgorithm, publicKey: KeyType? = nil) {
         self.algorithm = algorithm
         self.publicKey = publicKey
     }

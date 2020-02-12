@@ -58,7 +58,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -88,7 +88,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -118,7 +118,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
                 return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -143,7 +143,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
                 return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -173,7 +173,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -192,7 +192,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue
@@ -214,7 +214,7 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             // Skip over direct type
             guard algorithm != .direct else {
                 continue

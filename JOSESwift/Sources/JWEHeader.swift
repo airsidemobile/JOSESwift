@@ -64,7 +64,7 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init(algorithm: KeyManagementAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
         let parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
@@ -89,11 +89,11 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    var algorithm: AsymmetricKeyAlgorithm? {
+    var algorithm: KeyManagementAlgorithm? {
         // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
-        return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
+        return KeyManagementAlgorithm(rawValue: parameters["alg"] as! String)
     }
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext

@@ -29,7 +29,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testEncrypterDeprecatedRSAInitialization() {
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -41,7 +41,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
     }
 
     func testEncrypterNewRSAInitialization() {
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -72,7 +72,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testDecrypterDeprecatedRSAInitialization() {
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -84,7 +84,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
     }
 
     func testDecrypterNewRSAInitialization() {
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }

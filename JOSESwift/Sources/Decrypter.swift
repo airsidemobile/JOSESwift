@@ -24,7 +24,7 @@
 import Foundation
 
 internal protocol AsymmetricDecrypter {
-    var algorithm: AsymmetricKeyAlgorithm { get }
+    var algorithm: KeyManagementAlgorithm { get }
 
     /// Decrypts a cipher text using a given `AsymmetricKeyAlgorithm` and the corresponding private key.
     ///
@@ -77,7 +77,7 @@ public struct Decrypter {
     ///           details.
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: KeyManagementAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyDecryptionAlgorithm, contentDecryptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A128CBCHS256), (.RSAOAEP, .A128CBCHS256), (.RSAOAEP256, .A128CBCHS256):
@@ -107,7 +107,7 @@ public struct Decrypter {
     ///   - contentDecryptionAlgorithm: The algorithm used to decrypt the JWE's payload.
     /// - Returns: A fully initialized `Decrypter` or `nil` if provided key is of the wrong type.
     @available(*, deprecated, message: "Use `init?(keyDecryptionAlgorithm:decryptionKey:contentDecyptionAlgorithm:)` instead")
-    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: KeyManagementAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         self.init(keyDecryptionAlgorithm: keyDecryptionAlgorithm, decryptionKey: kdk, contentDecryptionAlgorithm: contentDecryptionAlgorithm)
     }
 
