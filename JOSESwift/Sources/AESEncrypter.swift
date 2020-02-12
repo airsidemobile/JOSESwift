@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `SymmetricEncrypter` to encrypt plaintext with an `AES` algorithm.
-internal struct AESEncrypter: SymmetricEncrypter {
+internal struct AESEncrypter {
     typealias KeyType = AES.KeyType
 
     let algorithm: ContentEncryptionAlgorithm
@@ -35,7 +35,7 @@ internal struct AESEncrypter: SymmetricEncrypter {
         self.symmetricKey = symmetricKey
     }
 
-    func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext {
+    func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         // Generate random intitialization vector.
         let iv = try SecureRandom.generate(count: algorithm.initializationVectorLength)
 
@@ -57,7 +57,7 @@ internal struct AESEncrypter: SymmetricEncrypter {
         let hmacOutput = try HMAC.calculate(from: concatData, with: hmacKey, using: algorithm.hmacAlgorithm)
         let authenticationTag = algorithm.authenticationTag(for: hmacOutput)
 
-        return SymmetricEncryptionContext(
+        return ContentEncryptionContext(
             ciphertext: cipherText,
             authenticationTag: authenticationTag,
             initializationVector: iv

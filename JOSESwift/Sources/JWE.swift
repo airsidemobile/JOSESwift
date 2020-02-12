@@ -24,7 +24,7 @@
 import Foundation
 
 internal enum JWEError: Error {
-    case keyEncryptionAlgorithmMismatch
+    case keyManagementAlgorithmMismatch
     case contentEncryptionAlgorithmMismatch
     case keyLengthNotSatisfied
     case hmacNotAuthenticated

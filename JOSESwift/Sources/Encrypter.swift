@@ -23,34 +23,6 @@
 
 import Foundation
 
-internal protocol AsymmetricEncrypter {
-    /// The algorithm used to encrypt plaintext.
-    var algorithm: KeyManagementAlgorithm { get }
-
-    /// Encrypts a plain text using a given `AsymmetricKeyAlgorithm` and the corresponding public key.
-    ///
-    /// - Parameter plaintext: The plain text to encrypt.
-    /// - Returns: The cipher text (encrypted plain text).
-    /// - Throws: `JWEError` if any error occured during encryption.
-    func encrypt(_ plaintext: Data) throws -> Data
-}
-
-internal protocol SymmetricEncrypter {
-    /// The algorithm used to encrypt plaintext.
-    var algorithm: ContentEncryptionAlgorithm { get }
-    var symmetricKey: Data? { get }
-
-    /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
-    ///
-    /// - Parameters:
-    ///   - plaintext: The plain text to encrypt.
-    ///   - symmetricKey: The key which contains the HMAC and encryption key.
-    ///   - additionalAuthenticatedData: The data used for integrity protection.
-    /// - Returns: The a `SymmetricEncryptionContext` containing the ciphertext, the authentication tag and the initialization vector.
-    /// - Throws: `JWEError` if any error occured during encryption.
-    func encrypt(_ plaintext: Data, with symmetricKey: Data, additionalAuthenticatedData: Data) throws -> SymmetricEncryptionContext
-}
-
 public struct EncryptionContext {
     let encryptedKey: Data
     let ciphertext: Data
@@ -58,82 +30,60 @@ public struct EncryptionContext {
     let initializationVector: Data
 }
 
-public struct SymmetricEncryptionContext {
-    let ciphertext: Data
-    let authenticationTag: Data
-    let initializationVector: Data
-}
-
 public struct Encrypter<KeyType> {
-    let asymmetric: AsymmetricEncrypter
-    let symmetric: SymmetricEncrypter
+    let keyManagementAlgorithm: KeyManagementAlgorithm
+    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
-    /// Constructs an encrypter used to encrypt a JWE.
-    ///
-    /// - Parameters:
-    ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
-    ///   - key: The key used to perform the encryption. If the `keyEncryptionAlgorithm` is `.direct`, the
-    ///          `encryptionKey` is the shared symmetric content encryption key. Otherwise the `encryptionKey` is the
-    ///           public key of the receiver. See [RFC-7516](https://tools.ietf.org/html/rfc7516#section-5.1) for
-    ///           details.
-    ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
-    /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
-        // TODO: This switch won't scale. We need to refactor it. (#141)
-        switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
-        case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A128CBCHS256), (.RSAOAEP, .A128CBCHS256), (.RSAOAEP256, .A128CBCHS256):
-            guard type(of: key) is RSAEncrypter.KeyType.Type else {
-                return nil
-            }
-            // swiftlint:disable:next force_cast
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm, publicKey: (key as! RSAEncrypter.KeyType))
-            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm)
-        case (.direct, .A256CBCHS512), (.direct, .A128CBCHS256):
-            guard type(of: key) is AESEncrypter.KeyType.Type else {
-                return nil
-            }
+    let keyManagementMode: KeyManagementModeImplementation
 
-            self.asymmetric = RSAEncrypter(algorithm: keyEncryptionAlgorithm)
-            // swiftlint:disable:next force_cast
-            self.symmetric = AESEncrypter(algorithm: contentEncyptionAlgorithm, symmetricKey: (key as! AESEncrypter.KeyType))
+    // Todo: parameter naming
+    init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
+        self.keyManagementAlgorithm = keyEncryptionAlgorithm
+        self.contentEncryptionAlgorithm = contentEncyptionAlgorithm
+
+        guard let keyManagementMode = KeyManagementMode.makeImplementation(keyManagementAlgorithm: keyManagementAlgorithm, contentEncryptionAlgorithm: contentEncryptionAlgorithm, encryptionKey: encryptionKey) else {
+            return nil
         }
+
+        self.keyManagementMode = keyManagementMode
     }
 
-    /// Constructs an encrypter used to encrypt a JWE.
-    ///
-    /// - Parameters:
-    ///   - keyEncryptionAlgorithm: The algorithm used to encrypt the shared content encryption key.
-    ///   - kek: The public key of the receiver used to encrypt the shared content encryption key.
-    ///          Currently supported key types are: `SecKey`.
-    ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
-    /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
     public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
         self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
 
-    internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        guard let alg = header.algorithm, alg == asymmetric.algorithm else {
-            throw JWEError.keyEncryptionAlgorithmMismatch
-        }
-        guard let enc = header.encryptionAlgorithm, enc == symmetric.algorithm else {
-            throw JWEError.contentEncryptionAlgorithmMismatch
+    func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
+        try ensureAlgorithmsMatch(with: header)
+
+        let (contentEncryptionKey, encryptedKey) = try keyManagementMode.determineContentEncryptionKey()
+
+        guard let contentEncryption = ContentEncryption.makeImplementation(contentEncryptionAlgorithm: contentEncryptionAlgorithm, contentEncryptionKey: contentEncryptionKey) else {
+            // Todo: Error
+            throw JOSESwiftError.compressionFailed
         }
 
-        let cek = try symmetric.symmetricKey ?? SecureRandom.generate(count: enc.keyLength)
-
-        let encryptedKey = try asymmetric.encrypt(cek)
-        let symmetricContext = try symmetric.encrypt(
-            payload.data(),
-            with: cek,
-            additionalAuthenticatedData: header.data().base64URLEncodedData()
-        )
+        let contentEncryptionContext = try contentEncryption.encrypt(header: header, payload: payload, with: contentEncryptionKey)
 
         return EncryptionContext(
             encryptedKey: encryptedKey,
-            ciphertext: symmetricContext.ciphertext,
-            authenticationTag: symmetricContext.authenticationTag,
-            initializationVector: symmetricContext.initializationVector
+            ciphertext: contentEncryptionContext.ciphertext,
+            authenticationTag: contentEncryptionContext.authenticationTag,
+            initializationVector: contentEncryptionContext.initializationVector
         )
     }
+}
+
+private extension Encrypter {
+    func ensureAlgorithmsMatch(with header: JWEHeader) throws {
+        guard let alg = header.algorithm, alg == keyManagementAlgorithm else {
+            throw JWEError.keyManagementAlgorithmMismatch
+        }
+
+        guard let enc = header.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
+    }
+
+
 }
