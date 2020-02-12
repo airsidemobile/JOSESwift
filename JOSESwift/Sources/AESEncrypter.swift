@@ -27,10 +27,10 @@ import Foundation
 internal struct AESEncrypter: SymmetricEncrypter {
     typealias KeyType = AES.KeyType
 
-    let algorithm: SymmetricKeyAlgorithm
+    let algorithm: ContentEncryptionAlgorithm
     let symmetricKey: KeyType?
 
-    init(algorithm: SymmetricKeyAlgorithm, symmetricKey: KeyType? = nil) {
+    init(algorithm: ContentEncryptionAlgorithm, symmetricKey: KeyType? = nil) {
         self.algorithm = algorithm
         self.symmetricKey = symmetricKey
     }

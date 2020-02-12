@@ -37,7 +37,7 @@ internal protocol AsymmetricEncrypter {
 
 internal protocol SymmetricEncrypter {
     /// The algorithm used to encrypt plaintext.
-    var algorithm: SymmetricKeyAlgorithm { get }
+    var algorithm: ContentEncryptionAlgorithm { get }
     var symmetricKey: Data? { get }
 
     /// Encrypts a plain text using the corresponding symmetric key and additional authenticated data.
@@ -78,7 +78,7 @@ public struct Encrypter<KeyType> {
     ///           details.
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
-    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
         // TODO: This switch won't scale. We need to refactor it. (#141)
         switch (keyEncryptionAlgorithm, contentEncyptionAlgorithm) {
         case (.RSA1_5, .A256CBCHS512), (.RSAOAEP, .A256CBCHS512), (.RSAOAEP256, .A256CBCHS512), (.RSA1_5, .A128CBCHS256), (.RSAOAEP, .A128CBCHS256), (.RSAOAEP256, .A128CBCHS256):
@@ -108,7 +108,7 @@ public struct Encrypter<KeyType> {
     ///   - contentEncyptionAlgorithm: The algorithm used to encrypt the JWE's payload.
     /// - Returns: A fully initialized `Encrypter` or `nil` if provided key is of the wrong type.
     @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
-    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
         self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
 

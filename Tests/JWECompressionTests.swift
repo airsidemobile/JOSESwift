@@ -39,7 +39,7 @@ class JWECompressionTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testRoundtripWithLegacyDecrypter() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
@@ -54,7 +54,7 @@ class JWECompressionTests: RSACryptoTestCase {
     }
 
     func testRoundtrip() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
@@ -72,7 +72,7 @@ class JWECompressionTests: RSACryptoTestCase {
 
     // Note this test only works as long as the compression factory is invoked before the acutal decryption
     func testDecryptWithNotSupportedZipHeaderValue() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         let jwe = try! JWE(compactSerialization: jweSerializedNotSupportedZipHeaderValue)
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
@@ -83,7 +83,7 @@ class JWECompressionTests: RSACryptoTestCase {
 
     // Note this test only works as long as the compression factory is invoked before the acutal encryption
     func testEncryptWithNotSupportedZipHeaderValue() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "GZIP"

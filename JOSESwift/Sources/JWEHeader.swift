@@ -64,7 +64,7 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: KeyManagementAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
+    public init(algorithm: KeyManagementAlgorithm, encryptionAlgorithm: ContentEncryptionAlgorithm) {
         let parameters = [
             "alg": algorithm.rawValue,
             "enc": encryptionAlgorithm.rawValue
@@ -98,11 +98,11 @@ public extension JWEHeader {
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    var encryptionAlgorithm: SymmetricKeyAlgorithm? {
+    var encryptionAlgorithm: ContentEncryptionAlgorithm? {
         // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
-        return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
+        return ContentEncryptionAlgorithm(rawValue: parameters["enc"] as! String)
     }
     /// The compression algorithm applied to the plaintext before encryption. If no compression is applied, the `.NONE` algorithm is returned.
     var compressionAlgorithm: CompressionAlgorithm? {
