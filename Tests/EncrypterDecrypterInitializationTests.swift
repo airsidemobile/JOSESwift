@@ -28,7 +28,7 @@ import XCTest
 class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
 
     @available(*, deprecated)
-    func testEncrypterDeprecatedRSAInitialization() {
+    func testEncrypterDeprecated1RSAInitialization() {
         for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
@@ -40,7 +40,8 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
         }
     }
 
-    func testEncrypterNewRSAInitialization() {
+    @available(*, deprecated)
+    func testEncrypterDeprecated2RSAInitialization() {
         for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
@@ -52,21 +53,33 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
         }
     }
 
-    func testEncrypterRSAInitializationWrongAlgorithm() {
+    func testEncrypterNewRSAInitialization() {
+        for algorithm in KeyManagementAlgorithm.allCases {
+            guard algorithm != .direct else {
+                continue
+            }
+
+            XCTAssertNotNil(
+                Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
+            )
+        }
+    }
+
+    func testEncrypterRSAKeyInitializationWrongAlgorithm() {
         XCTAssertNil(
-            Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
+            Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)
         )
     }
 
-    func testEncrypterRSAInitializationWrongKeyType() {
+    func testEncrypterRSAAlgorithmInitializationWrongKeyType() {
         XCTAssertNil(
-            Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: Data(), contentEncyptionAlgorithm: .A256CBCHS512)
+            Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: Data())
         )
     }
 
     func testEncrypterDirectInitializationWrongKeyType() {
         XCTAssertNil(
-            Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
+            Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)
         )
     }
 
