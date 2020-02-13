@@ -23,47 +23,43 @@
 
 import Foundation
 
-public struct EncryptionContext {
-    let encryptedKey: Data
-    let ciphertext: Data
-    let authenticationTag: Data
-    let initializationVector: Data
-}
-
-public struct Encrypter<KeyType> {
+public struct Encrypter {
+    let keyManagementMode: KeyManagementMode
     let keyManagementAlgorithm: KeyManagementAlgorithm
     let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
-    let keyManagementMode: KeyManagementModeImplementation
+    public init?<KeyType>(
+        keyManagementAlgorithm: KeyManagementAlgorithm,
+        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+        encryptionKey: KeyType
+    ) {
+        self.keyManagementAlgorithm = keyManagementAlgorithm
+        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
 
-    // Todo: parameter naming
-    init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
-        self.keyManagementAlgorithm = keyEncryptionAlgorithm
-        self.contentEncryptionAlgorithm = contentEncyptionAlgorithm
-
-        guard let keyManagementMode = KeyManagementMode.makeImplementation(keyManagementAlgorithm: keyManagementAlgorithm, contentEncryptionAlgorithm: contentEncryptionAlgorithm, encryptionKey: encryptionKey) else {
+        do {
+            self.keyManagementMode = try keyManagementAlgorithm.makeKeyManagementMode(
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                encryptionKey: encryptionKey
+            )
+        } catch {
             return nil
         }
-
-        self.keyManagementMode = keyManagementMode
-    }
-
-    @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
-    public init?(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
-        self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        try ensureAlgorithmsMatch(with: header)
+        guard let alg = header.algorithm, alg == keyManagementAlgorithm else {
+            throw JWEError.keyManagementAlgorithmMismatch
+        }
+
+        guard let enc = header.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
 
         let (contentEncryptionKey, encryptedKey) = try keyManagementMode.determineContentEncryptionKey()
 
-        guard let contentEncryption = ContentEncryption.makeImplementation(contentEncryptionAlgorithm: contentEncryptionAlgorithm, contentEncryptionKey: contentEncryptionKey) else {
-            // Todo: Error
-            throw JOSESwiftError.compressionFailed
-        }
-
-        let contentEncryptionContext = try contentEncryption.encrypt(header: header, payload: payload, with: contentEncryptionKey)
+        let contentEncryptionContext = try contentEncryptionAlgorithm
+            .makeContentEncrypter(contentEncryptionKey: contentEncryptionKey)
+            .encrypt(header: header, payload: payload)
 
         return EncryptionContext(
             encryptedKey: encryptedKey,
@@ -74,16 +70,23 @@ public struct Encrypter<KeyType> {
     }
 }
 
-private extension Encrypter {
-    func ensureAlgorithmsMatch(with header: JWEHeader) throws {
-        guard let alg = header.algorithm, alg == keyManagementAlgorithm else {
-            throw JWEError.keyManagementAlgorithmMismatch
-        }
+extension Encrypter {
+    struct EncryptionContext {
+        let encryptedKey: Data
+        let ciphertext: Data
+        let authenticationTag: Data
+        let initializationVector: Data
+    }
+}
 
-        guard let enc = header.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
-            throw JWEError.contentEncryptionAlgorithmMismatch
-        }
+extension Encrypter {
+    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
+    public init?<KeyType>(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
+        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: encryptionKey)
     }
 
-
+    @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
+    public init?<KeyType>(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
+        self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
+    }
 }

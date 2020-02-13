@@ -23,9 +23,11 @@
 
 import Foundation
 
+// Todo: All of this
+
 /// A key management mode in which the content encryption key value is encrypted to the
 /// intended recipient using a symmetric key wrapping algorithm.
-struct KeyWrapping: KeyManagementModeImplementation {
+struct KeyWrapping: KeyManagementMode {
     typealias KeyType = AES.KeyType
 
     let keyManagementAlgorithm: KeyManagementAlgorithm
@@ -39,10 +41,10 @@ struct KeyWrapping: KeyManagementModeImplementation {
         self.sharedSymmetricKey = sharedSymmetricKey
     }
 
-    func determineContentEncryptionKey() throws -> (plaintextKey: Data, encryptedKey: Data) {
+    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         // Todo: Fix iv.
-        let wrappedContenEncryptionKey = try AES.encrypt(plaintext: contentEncryptionKey, with: sharedSymmetricKey, using: contentEncryptionAlgorithm, and: Data())
+        let wrappedContenEncryptionKey = try AES.encrypt(contentEncryptionKey, with: sharedSymmetricKey, using: contentEncryptionAlgorithm, and: Data())
 
         return (contentEncryptionKey, wrappedContenEncryptionKey)
     }

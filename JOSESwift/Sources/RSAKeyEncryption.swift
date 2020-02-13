@@ -23,26 +23,32 @@
 
 import Foundation
 
-/// A key management mode in which the content encryption key value is encrypted to the
-/// intended recipient using an asymmetric encryption algorithm.
-struct RSAKeyEncryption: KeyManagementModeImplementation {
+/// A key management mode in which a randomly generated content encryption key value is encrypted to the intended
+/// recipient using an asymmetric RSA encryption algorithm. For key encryption the resulting ciphertext is the JWE
+/// encrypted key.
+struct RSAKeyEncryption {
     typealias KeyType = RSA.KeyType
 
     let keyManagementAlgorithm: KeyManagementAlgorithm
     let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
     let recipientPublicKey: KeyType
 
-    init(keyManagementAlgorithm: KeyManagementAlgorithm, contentEncryptionAlgorithm: ContentEncryptionAlgorithm, recipientPublicKey: KeyType) {
-        // Todo: Check if algorithm is correct
+    init(
+        keyManagementAlgorithm: KeyManagementAlgorithm,
+        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+        recipientPublicKey: KeyType
+    ) {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
         self.recipientPublicKey = recipientPublicKey
     }
+}
 
-    func determineContentEncryptionKey() throws -> (plaintextKey: Data, encryptedKey: Data) {
+extension RSAKeyEncryption: KeyManagementMode {
+    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
-        let encryptedContenEncryptionKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
+        let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
 
-        return (contentEncryptionKey, encryptedContenEncryptionKey)
+        return (contentEncryptionKey, encryptedKey)
     }
 }

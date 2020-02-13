@@ -65,7 +65,7 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `AESError` if any error occurs during encryption.
-    static func encrypt(plaintext: Data, with encryptionKey: KeyType, using algorithm: ContentEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
+    static func encrypt(_ plaintext: Data, with encryptionKey: KeyType, using algorithm: ContentEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512, .A128CBCHS256:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {

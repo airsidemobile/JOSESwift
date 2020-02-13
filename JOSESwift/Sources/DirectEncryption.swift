@@ -7,19 +7,20 @@
 
 import Foundation
 
-/// A key management mode in which the content encryption key value used is the secret
-/// symmetric key value shared between the parties.
-struct DirectEncryption: KeyManagementModeImplementation {
+/// A key management mode in which the content encryption key value used is a given secret symmetric key value shared
+/// between the parties. For direct encryption the JWE encrypted key is the empty octet sequence.
+struct DirectEncryption {
     typealias KeyType = Data
 
     let sharedSymmetricKey: KeyType
 
     init(sharedSymmetricKey: KeyType) {
-        // Todo: Check if algorithm is correct
         self.sharedSymmetricKey = sharedSymmetricKey
     }
+}
 
-    func determineContentEncryptionKey() throws -> (plaintextKey: Data, encryptedKey: Data) {
+extension DirectEncryption: KeyManagementMode {
+    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         return (sharedSymmetricKey, KeyType())
     }
 }

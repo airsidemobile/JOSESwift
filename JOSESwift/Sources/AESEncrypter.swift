@@ -45,7 +45,7 @@ internal struct AESEncrypter {
         let encryptionKey = keys.encryptionKey
 
         // Encrypt the plaintext with a symmetric encryption key, a symmetric encryption algorithm and an initialization vector.
-        let cipherText = try AES.encrypt(plaintext: plaintext, with: encryptionKey, using: algorithm, and: iv)
+        let cipherText = try AES.encrypt(plaintext, with: encryptionKey, using: algorithm, and: iv)
 
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
