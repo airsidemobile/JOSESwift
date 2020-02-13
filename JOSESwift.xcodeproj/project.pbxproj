@@ -119,7 +119,7 @@
 		C86B876D203D857B00208387 /* JOSESwiftError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86B876C203D857B00208387 /* JOSESwiftError.swift */; };
 		C8A592401FC71586009CEFA6 /* RSADecrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */; };
 		C8EE14541FAC797500A616E4 /* RSAVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */; };
-		C8F096501FC56B25000BEE4D /* RSAEncrypterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */; };
+		C8F096501FC56B25000BEE4D /* RSAEncryptionTestsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F0964F1FC56B25000BEE4D /* RSAEncryptionTestsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -248,7 +248,7 @@
 		C86B876C203D857B00208387 /* JOSESwiftError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSESwiftError.swift; sourceTree = "<group>"; };
 		C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSADecrypterTests.swift; sourceTree = "<group>"; };
 		C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAVerifierTests.swift; sourceTree = "<group>"; };
-		C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAEncrypterTests.swift; sourceTree = "<group>"; };
+		C8F0964F1FC56B25000BEE4D /* RSAEncryptionTestsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSAEncryptionTestsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -302,13 +302,13 @@
 		65125A2F1FBF6BAC007CF3AE /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */,
 				C81DD9291FD7096B00026024 /* HMACTests.swift */,
 				C86AC8CA1FCEC20F0007E611 /* AESEncrypterTests.swift */,
-				C83070041FD1B7390068C5CB /* AESDecrypterTests.swift */,
 				C84BDE181FAB44BE0002B5D0 /* CryptoTestCase.swift */,
 				C84BDE161FAB1CB60002B5D0 /* RSASignerTests.swift */,
 				C8EE14531FAC797500A616E4 /* RSAVerifierTests.swift */,
-				C8F0964F1FC56B25000BEE4D /* RSAEncrypterTests.swift */,
+				C8F0964F1FC56B25000BEE4D /* RSAEncryptionTestsTests.swift */,
 				C8A5923F1FC71586009CEFA6 /* RSADecrypterTests.swift */,
 				5FB7683476B521915FDB2248 /* RSACryptoTestCase.swift */,
 				5FB76BD4F46045BF2B182483 /* ECCryptoTestCase.swift */,
@@ -749,7 +749,7 @@
 				C84BDE191FAB44BE0002B5D0 /* CryptoTestCase.swift in Sources */,
 				6514ADCB2031DD27008A4DD3 /* ASN1DEREncodingTests.swift in Sources */,
 				C803EFED1FA8849C00B71335 /* JWERSATests.swift in Sources */,
-				C8F096501FC56B25000BEE4D /* RSAEncrypterTests.swift in Sources */,
+				C8F096501FC56B25000BEE4D /* RSAEncryptionTestsTests.swift in Sources */,
 				65125A321FBF85FA007CF3AE /* JWSDeserializationTests.swift in Sources */,
 				65A103A3202B0CDF00D22BF5 /* DataRSAPublicKeyTests.swift in Sources */,
 				C84BDE171FAB1CB60002B5D0 /* RSASignerTests.swift in Sources */,

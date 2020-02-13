@@ -1,6 +1,6 @@
 // swiftlint:disable force_unwrapping
 //
-//  RSAEncrypterTests.swift
+//  RSAEncryptionTests.swift
 //  Tests
 //
 //  Created by Carol Capek on 22.11.17.
@@ -40,15 +40,8 @@ extension RSAError: Equatable {
     }
 }
 
-class RSAEncrypterTests: RSACryptoTestCase {
-
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
+class RSAEncryptionTests: RSACryptoTestCase {
+    let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
 
     func testEncryptingWithAliceKey() {
         guard
@@ -58,18 +51,13 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
+        for algorithm in keyManagementModeAlgorithms {
             guard
-                let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!),
-                let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
-                    XCTFail()
-                    return
+                let cipherText = try? RSA.encrypt(message.data(using: .utf8)!, with: publicKeyAlice2048, and: algorithm),
+                let secKeyAlgorithm = algorithm.secKeyAlgorithm
+            else {
+                XCTFail()
+                return
             }
 
             var decryptionError: Unmanaged<CFError>?
@@ -88,19 +76,13 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            guard let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+        for algorithm in keyManagementModeAlgorithms {
+            guard let cipherText = try? RSA.encrypt(message.data(using: .utf8)!, with: publicKeyAlice2048, and: algorithm) else {
                 XCTFail()
                 return
             }
 
-            guard let cipherText2 = try? encrypter.encrypt(message.data(using: .utf8)!) else {
+            guard let cipherText2 = try? RSA.encrypt(message.data(using: .utf8)!, with: publicKeyAlice2048, and: algorithm) else {
                 XCTFail()
                 return
             }
@@ -118,17 +100,9 @@ class RSAEncrypterTests: RSACryptoTestCase {
                 return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
-            let encrypterAlice = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            let encrypterBob = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyBob2048)
-
-            let cipherTextAlice = try encrypterAlice.encrypt(message.data(using: .utf8)!)
-            let cipherTextBob = try encrypterBob.encrypt(message.data(using: .utf8)!)
+        for algorithm in keyManagementModeAlgorithms {
+            let cipherTextAlice = try RSA.encrypt(message.data(using: .utf8)!, with: publicKeyAlice2048, and: algorithm)
+            let cipherTextBob = try RSA.encrypt(message.data(using: .utf8)!, with: publicKeyBob2048, and: algorithm)
 
             // Cipher texts have to differ (different keys)
             XCTAssertNotEqual(cipherTextAlice, cipherTextBob)
@@ -143,15 +117,9 @@ class RSAEncrypterTests: RSACryptoTestCase {
                 return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyBob2048)
+        for algorithm in keyManagementModeAlgorithms {
             guard
-                let cipherText = try? encrypter.encrypt(message.data(using: .utf8)!),
+                let cipherText = try? RSA.encrypt(message.data(using: .utf8)!, with: publicKeyBob2048, and: algorithm),
                 let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
                     XCTFail()
                     return
@@ -173,14 +141,8 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            XCTAssertThrowsError(try encrypter.encrypt(Data(count: 300))) { (error: Error) in
+        for algorithm in keyManagementModeAlgorithms {
+            XCTAssertThrowsError(try RSA.encrypt(Data(count: 300), with: publicKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
             }
         }
@@ -192,19 +154,13 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
             // See https://tools.ietf.org/html/rfc3447#section-7.2
             let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
             let testMessage = Data(count: maxMessageLengthInBytes)
 
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            XCTAssertNoThrow(try encrypter.encrypt(testMessage), "using algorithm: \(algorithm)")
+            XCTAssertNoThrow(try RSA.encrypt(testMessage, with: publicKeyAlice2048, and: algorithm), "using algorithm: \(algorithm)")
         }
     }
 
@@ -214,20 +170,13 @@ class RSAEncrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            // Skip over direct type
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
             let testMessage = Data(count: maxMessageLengthInBytes + 1)
 
-            let encrypter = RSAEncrypter(algorithm: algorithm, publicKey: publicKeyAlice2048)
-            XCTAssertThrowsError(try encrypter.encrypt(testMessage)) { (error: Error) in
+            XCTAssertThrowsError(try RSA.encrypt(testMessage, with: publicKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.plainTextLengthNotSatisfied)
             }
         }
     }
-
 }
