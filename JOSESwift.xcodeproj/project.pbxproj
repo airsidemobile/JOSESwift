@@ -52,7 +52,6 @@
 		6546D606203580C6007217FB /* JWKRSADecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6546D605203580C6007217FB /* JWKRSADecodingTests.swift */; };
 		6546FB0F2029DD10002E421F /* SecKeyRSAPublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */; };
 		6558164423F44E8D00EA5FEC /* DirectEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558164323F44E8C00EA5FEC /* DirectEncryption.swift */; };
-		6558164823F454C500EA5FEC /* KeyWrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558164723F454C500EA5FEC /* KeyWrapping.swift */; };
 		6558164A23F456F700EA5FEC /* KeyManaggementMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558164923F456F700EA5FEC /* KeyManaggementMode.swift */; };
 		6558164D23F45CC200EA5FEC /* ContentEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558164C23F45CC200EA5FEC /* ContentEncryption.swift */; };
 		6558165023F463C200EA5FEC /* AESCBCEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */; };
@@ -177,7 +176,6 @@
 		6546D605203580C6007217FB /* JWKRSADecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKRSADecodingTests.swift; sourceTree = "<group>"; };
 		6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecKeyRSAPublicKey.swift; sourceTree = "<group>"; };
 		6558164323F44E8C00EA5FEC /* DirectEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectEncryption.swift; sourceTree = "<group>"; };
-		6558164723F454C500EA5FEC /* KeyWrapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyWrapping.swift; sourceTree = "<group>"; };
 		6558164923F456F700EA5FEC /* KeyManaggementMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManaggementMode.swift; sourceTree = "<group>"; };
 		6558164C23F45CC200EA5FEC /* ContentEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentEncryption.swift; sourceTree = "<group>"; };
 		6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESCBCEncryption.swift; sourceTree = "<group>"; };
@@ -356,19 +354,10 @@
 			isa = PBXGroup;
 			children = (
 				6558164923F456F700EA5FEC /* KeyManaggementMode.swift */,
-				6558164623F44ED800EA5FEC /* KeyWrapping */,
 				6558164123F4390D00EA5FEC /* KeyEncryption */,
 				6558164223F44E4700EA5FEC /* DirectEncryption */,
 			);
 			name = KeyManagementMode;
-			sourceTree = "<group>";
-		};
-		6558164623F44ED800EA5FEC /* KeyWrapping */ = {
-			isa = PBXGroup;
-			children = (
-				6558164723F454C500EA5FEC /* KeyWrapping.swift */,
-			);
-			name = KeyWrapping;
 			sourceTree = "<group>";
 		};
 		6558164B23F45CAC00EA5FEC /* ContentEncryption */ = {
@@ -832,7 +821,6 @@
 				C85B1EF2204D82640026BDCB /* JWS.swift in Sources */,
 				5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */,
 				6558165023F463C200EA5FEC /* AESCBCEncryption.swift in Sources */,
-				6558164823F454C500EA5FEC /* KeyWrapping.swift in Sources */,
 				5FB764055756A9190628BDDE /* ECKeyCodable.swift in Sources */,
 				8A4B08B22213FF0600828536 /* Compressor.swift in Sources */,
 				5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */,
