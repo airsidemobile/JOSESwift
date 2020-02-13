@@ -44,9 +44,7 @@ extension ContentEncryptionAlgorithm {
 
        var initializationVectorLength: Int {
            switch self {
-           case .A256CBCHS512:
-               return 16
-           case .A128CBCHS256:
+           case .A128CBCHS256, .A256CBCHS512:
                return 16
            }
        }

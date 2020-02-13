@@ -59,7 +59,7 @@ extension KeyManagementAlgorithm {
 
 private func cast<GivenType, ExpectedType>(
     _ something: GivenType,
-    to expectedType: ExpectedType.Type
+    to _: ExpectedType.Type
 ) -> ExpectedType? {
     // A conditional downcast to the CoreFoundation type SecKey will always succeed.
     // Therfore we perform runtime type checking to guarantee that the given encryption key's type
