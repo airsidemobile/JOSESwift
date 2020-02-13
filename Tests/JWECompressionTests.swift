@@ -53,19 +53,34 @@ class JWECompressionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
     }
 
-    func testRoundtrip() {
+    func testRoundtripDirectEncryption() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
 
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: symmetricKey)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
+    }
+
+    func testRoundtripKeyEncryption() {
+        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        header.zip = "DEF"
+
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
+
+        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        let serialization = jwe.compactSerializedString
+
+        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)!
 
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
@@ -89,7 +104,7 @@ class JWECompressionTests: RSACryptoTestCase {
         header.zip = "GZIP"
 
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: symmetricKey)!
         try XCTAssertThrowsError(JWE(header: header, payload: payload, encrypter: encrypter)) { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.compressionAlgorithmNotSupported)
         }
