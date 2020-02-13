@@ -36,6 +36,13 @@ jobs:
       run: |
         bundle config path cache/bundle
         bundle exec fastlane test
+    - name: Sonarqube
+      env:
+        FL_SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        bundle config path cache/bundle
+        bundle exec fastlane sonarqube
 
   danger:
     name: Danger
