@@ -24,7 +24,7 @@
 import Foundation
 
 /// An `AsymmetricEncrypter` to encrypt plain text with an `RSA` algorithm.
-internal struct RSAEncrypter: AsymmetricEncrypter {
+internal struct RSAEncrypter {
     typealias KeyType = RSA.KeyType
 
     let algorithm: KeyManagementAlgorithm

@@ -22,7 +22,7 @@ extension KeyManagementAlgorithm {
     ) throws -> KeyManagementMode {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPublicKey = cast(encryptionKey, to: RSAEncrypter.KeyType.self) else {
+            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else {
                 throw KeyManagementModeError.wrongKeyTypeForAlgorithm(algorithm: self)
             }
 
