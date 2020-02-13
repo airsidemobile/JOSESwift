@@ -17,9 +17,13 @@ struct AESCBCEncryption: ContentEncrypter {
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> ContentEncryptionContext {
-        let additionalAuthenticatedData = header.data().base64URLEncodedData()
         let plaintext = payload.data()
+        let additionalAuthenticatedData = header.data().base64URLEncodedData()
 
+        return try encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData)
+    }
+
+    func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         let iv = try SecureRandom.generate(count: contentEncryptionAlgorithm.initializationVectorLength)
 
         let keys = try contentEncryptionAlgorithm.retrieveKeys(from: contentEncryptionKey)
