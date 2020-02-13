@@ -108,6 +108,32 @@ class JWERSATests: RSACryptoTestCase {
         }
     }
 
+    func testJWEEncryptionWithMismatchingHeaderAlg() {
+        guard let publicKeyAlice2048 = publicKeyAlice2048  else {
+            XCTFail("publicKeyAlice2048 was nil.")
+            return
+        }
+
+        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        let payload = Payload(message.data(using: .utf8)!)
+        let encrypter = Encrypter(keyManagementAlgorithm: .RSAOAEP, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048)!
+
+        XCTAssertThrowsError(try JWE(header: header, payload: payload, encrypter: encrypter))
+    }
+
+    func testJWEEncryptionWithMismatchingHeaderEnc() {
+        guard let publicKeyAlice2048 = publicKeyAlice2048  else {
+            XCTFail("publicKeyAlice2048 was nil.")
+            return
+        }
+
+        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A128CBCHS256)
+        let payload = Payload(message.data(using: .utf8)!)
+        let encrypter = Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048)!
+
+        XCTAssertThrowsError(try JWE(header: header, payload: payload, encrypter: encrypter))
+    }
+
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
         for algorithm in KeyManagementAlgorithm.allCases {
