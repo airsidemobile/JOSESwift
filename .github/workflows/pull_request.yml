@@ -41,7 +41,6 @@ jobs:
         FL_SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        ls fastlane/test_output
         bundle config path cache/bundle
         bundle exec fastlane sonarqube
 
