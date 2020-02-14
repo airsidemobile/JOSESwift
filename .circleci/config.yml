@@ -3,16 +3,43 @@
 
 version: 2.1
 
-jobs:
-  build:
-
+executors:
+  mac-executor:
     macos:
-      xcode: 11.0.0 # Specify the Xcode version to use
+      xcode: "11.2.1"
+    working_directory: ~/code
 
+jobs:
+  install_dependendies:
+    executor: mac-executor
     steps:
       - checkout
-      - run: fastlane scan # Run tests using Fastlane
-
+      - run:
+          name: Bundler
+          command: |
+            gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+            bundle config --local path vendor/bundle
+            bundle install --jobs 4 --retry
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  test:
+    executor: mac-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/code
+      - run:
+          name: Test
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec fastlane test
+      - run:
+          name: Sonarqube
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec fastlane sonarqube
       # Collect XML test results data to show in the UI, and save the same XML
       # files under test-results folder in the Artifacts tab
       - store_test_results:
@@ -20,3 +47,27 @@ jobs:
       - store_artifacts:
           path: test_output
           destination: scan-output
+
+  danger:
+    executor: mac-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/code
+      - run:
+          name: Danger
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec danger
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - install_dependendies
+      - test:
+          requires:
+            - install_dependendies
+      - danger:
+          requires:
+            - install_dependendies
