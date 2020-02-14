@@ -11,7 +11,6 @@ jobs:
 
     steps:
       - checkout
-      - run: pod install # Install CocoaPods dependencies
       - run: fastlane scan # Run tests using Fastlane
 
       # Collect XML test results data to show in the UI, and save the same XML
