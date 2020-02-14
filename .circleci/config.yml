@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Bundler
           command: |
-            gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+            gem install bundler
             bundle config --local path vendor/bundle
             bundle install --jobs 4 --retry
       - persist_to_workspace:
