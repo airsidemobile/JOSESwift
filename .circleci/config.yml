@@ -18,7 +18,7 @@ jobs:
           name: Bundler
           command: |
             bundle config --local path vendor/bundle
-            bundle install --jobs 4 --retry
+            bundle install --jobs 4 --retry 3
       - persist_to_workspace:
           root: .
           paths:
