@@ -31,7 +31,7 @@ internal enum AESError: Error {
     case cannotPerformOperationOnEmptyDataBuffer
 }
 
-fileprivate extension SymmetricKeyAlgorithm {
+fileprivate extension ContentEncryptionAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
         case .A256CBCHS512:
@@ -65,7 +65,7 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `AESError` if any error occurs during encryption.
-    static func encrypt(plaintext: Data, with encryptionKey: KeyType, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+    static func encrypt(_ plaintext: Data, with encryptionKey: KeyType, using algorithm: ContentEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512, .A128CBCHS256:
             guard algorithm.checkAESKeyLength(for: encryptionKey) else {
@@ -97,7 +97,7 @@ internal struct AES {
     ///   - initializationVector: The initial block.
     /// - Returns: The plain text (decrypted cipher text).
     /// - Throws: `AESError` if any error occurs during decryption.
-    static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: SymmetricKeyAlgorithm, and initializationVector: Data) throws -> Data {
+    static func decrypt(cipherText: Data, with decryptionKey: Data, using algorithm: ContentEncryptionAlgorithm, and initializationVector: Data) throws -> Data {
         switch algorithm {
         case .A256CBCHS512, .A128CBCHS256:
             guard algorithm.checkAESKeyLength(for: decryptionKey) else {

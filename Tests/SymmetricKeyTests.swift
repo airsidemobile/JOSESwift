@@ -36,7 +36,7 @@ class SymmetricKeyTests: XCTestCase {
 
         let jwk = SymmetricKey(
             key: key,
-            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+            additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
         )
 
         XCTAssertEqual(jwk.key, "GawgguFyGrWKav7AX4VKUg")
@@ -56,7 +56,7 @@ class SymmetricKeyTests: XCTestCase {
 
         let json = SymmetricKey(
             key: key,
-            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+            additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
         ).jsonData()!
 
         let jwk = try! SymmetricKey(data: json)
@@ -78,7 +78,7 @@ class SymmetricKeyTests: XCTestCase {
 
         let json = try! SymmetricKey(
             key: key,
-            additionalParameters: [ "alg": SymmetricKeyAlgorithm.A256CBCHS512.rawValue ]
+            additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
         ).jsonData()!
 
         let jwk = try! SymmetricKey(data: json)

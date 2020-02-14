@@ -69,7 +69,7 @@ fileprivate extension SignatureAlgorithm {
     }
 }
 
-internal extension AsymmetricKeyAlgorithm {
+internal extension KeyManagementAlgorithm {
     /// Mapping of `AsymmetricKeyAlgorithm` to Security Framework's `SecKeyAlgorithm`.
     var secKeyAlgorithm: SecKeyAlgorithm? {
         switch self {
@@ -114,7 +114,7 @@ internal extension AsymmetricKeyAlgorithm {
     }
 }
 
-fileprivate extension AsymmetricKeyAlgorithm {
+fileprivate extension KeyManagementAlgorithm {
     /// Checks if the plain text length does not exceed the maximum
     /// for the chosen algorithm and the corresponding public key.
     /// This length checking is just for usability reasons.
@@ -228,7 +228,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to encrypt the plain text.
     /// - Returns: The cipher text (encrypted plain text).
     /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
-    static func encrypt(_ plaintext: Data, with publicKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func encrypt(_ plaintext: Data, with publicKey: KeyType, and algorithm: KeyManagementAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to encrypt with a given public key.
         guard
@@ -265,7 +265,7 @@ internal struct RSA {
     ///   - algorithm: The algorithm used to decrypt the cipher text.
     /// - Returns: The plain text.
     /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
-    static func decrypt(_ ciphertext: Data, with privateKey: KeyType, and algorithm: AsymmetricKeyAlgorithm) throws -> Data {
+    static func decrypt(_ ciphertext: Data, with privateKey: KeyType, and algorithm: KeyManagementAlgorithm) throws -> Data {
         // Check if `AsymmetricKeyAlgorithm` supports a `SecKeyAlgorithm` and
         // if the algorithm is supported to decrypt with a given private key.
         guard

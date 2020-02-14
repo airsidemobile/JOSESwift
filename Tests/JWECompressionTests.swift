@@ -39,7 +39,7 @@ class JWECompressionTests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testRoundtripWithLegacyDecrypter() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
@@ -53,14 +53,14 @@ class JWECompressionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
     }
 
-    func testRoundtrip() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+    func testRoundtripDirectEncryption() {
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
 
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: symmetricKey)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
@@ -70,9 +70,24 @@ class JWECompressionTests: RSACryptoTestCase {
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
 
+    func testRoundtripKeyEncryption() {
+        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        header.zip = "DEF"
+
+        let payload = Payload(data)
+        let encrypter = Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
+
+        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
+        let serialization = jwe.compactSerializedString
+
+        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)!
+
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
+    }
+
     // Note this test only works as long as the compression factory is invoked before the acutal decryption
     func testDecryptWithNotSupportedZipHeaderValue() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         let jwe = try! JWE(compactSerialization: jweSerializedNotSupportedZipHeaderValue)
         let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
@@ -83,13 +98,13 @@ class JWECompressionTests: RSACryptoTestCase {
 
     // Note this test only works as long as the compression factory is invoked before the acutal encryption
     func testEncryptWithNotSupportedZipHeaderValue() {
-        let symmetricKey = try! SecureRandom.generate(count: SymmetricKeyAlgorithm.A256CBCHS512.keyLength)
+        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
         header.zip = "GZIP"
 
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: symmetricKey)!
         try XCTAssertThrowsError(JWE(header: header, payload: payload, encrypter: encrypter)) { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.compressionAlgorithmNotSupported)
         }

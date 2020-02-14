@@ -92,27 +92,27 @@ class RSADecrypterTests: RSACryptoTestCase {
     /// Dictionary of decryption errors for each available Asymmetric key algorithm
     lazy var decryptionErrors: [String: RSAError] = {
         [
-            AsymmetricKeyAlgorithm.RSA1_5.rawValue: self.rsa1DecryptionError,
-            AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: self.rsaOAEPDecryptionError,
-            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: self.rsaOAEPDecryptionError
+            KeyManagementAlgorithm.RSA1_5.rawValue: self.rsa1DecryptionError,
+            KeyManagementAlgorithm.RSAOAEP256.rawValue: self.rsaOAEPDecryptionError,
+            KeyManagementAlgorithm.RSAOAEP.rawValue: self.rsaOAEPDecryptionError
         ]
     }()
 
     /// Dictionary of ciphertexts for each available Asymmetric key algorithm generate via openssl with Alice's public key
     lazy var aliceCipherTextDict: [String: String] = {
         [
-            AsymmetricKeyAlgorithm.RSA1_5.rawValue: self.cipherTextWithAliceKeyBase64,
-            AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: self.cipherTextWithAliceOAEPSHA256Base64,
-            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: self.cipherTextWithAliceOAEPSHA1Base64
+            KeyManagementAlgorithm.RSA1_5.rawValue: self.cipherTextWithAliceKeyBase64,
+            KeyManagementAlgorithm.RSAOAEP256.rawValue: self.cipherTextWithAliceOAEPSHA256Base64,
+            KeyManagementAlgorithm.RSAOAEP.rawValue: self.cipherTextWithAliceOAEPSHA1Base64
         ]
     }()
 
     /// Dictionary of ciphertexts for each available Asymmetric algorithm generate via openssl with Bob's public key
     lazy var bobCipherTextDict: [String: String] = {
         [
-            AsymmetricKeyAlgorithm.RSA1_5.rawValue: self.cipherTextWithBobKeyBase64,
-            AsymmetricKeyAlgorithm.RSAOAEP256.rawValue: self.cipherTextWithBobKeyOAEPSHA256Base64,
-            AsymmetricKeyAlgorithm.RSAOAEP.rawValue: self.cipherTextWithBobKeyOAEPSHA1Base64
+            KeyManagementAlgorithm.RSA1_5.rawValue: self.cipherTextWithBobKeyBase64,
+            KeyManagementAlgorithm.RSAOAEP256.rawValue: self.cipherTextWithBobKeyOAEPSHA256Base64,
+            KeyManagementAlgorithm.RSAOAEP.rawValue: self.cipherTextWithBobKeyOAEPSHA1Base64
 
         ]
     }()
@@ -131,7 +131,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -150,7 +150,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -169,7 +169,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -189,7 +189,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -209,7 +209,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -227,7 +227,7 @@ class RSADecrypterTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -248,7 +248,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         let secKeyBlockSize = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: secKeyBlockSize)
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -272,7 +272,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes + 1)
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }
@@ -293,7 +293,7 @@ class RSADecrypterTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes - 1)
 
-        for algorithm in AsymmetricKeyAlgorithm.allCases {
+        for algorithm in KeyManagementAlgorithm.allCases {
             guard algorithm != .direct else {
                 continue
             }

@@ -1,11 +1,11 @@
 //
-//  AESEncrypter.swift
+//  DirectEncryptionMode.swift
 //  JOSESwift
 //
-//  Created by Daniel Egger on 13/10/2017.
+//  Created by Daniel Egger on 12.02.20.
 //
 //  ---------------------------------------------------------------------------
-//  Copyright 2019 Airside Mobile Inc.
+//  Copyright 2020 Airside Mobile Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -23,24 +23,20 @@
 
 import Foundation
 
-/// An `AsymmetricEncrypter` to encrypt plain text with an `RSA` algorithm.
-internal struct RSAEncrypter: AsymmetricEncrypter {
-    typealias KeyType = RSA.KeyType
+/// A key management mode in which the content encryption key value used is a given secret symmetric key value shared
+/// between the parties. For direct encryption the JWE encrypted key is the empty octet sequence.
+struct DirectEncryptionMode {
+    typealias KeyType = Data
 
-    let algorithm: AsymmetricKeyAlgorithm
-    let publicKey: KeyType?
+    let sharedSymmetricKey: KeyType
 
-    init(algorithm: AsymmetricKeyAlgorithm, publicKey: KeyType? = nil) {
-        self.algorithm = algorithm
-        self.publicKey = publicKey
+    init(sharedSymmetricKey: KeyType) {
+        self.sharedSymmetricKey = sharedSymmetricKey
     }
+}
 
-    func encrypt(_ plaintext: Data) throws -> Data {
-        guard let publicKey = publicKey else {
-            // If no key is set, we're using direct encryption so the encrypted key is empty.
-            return Data()
-        }
-
-        return try RSA.encrypt(plaintext, with: publicKey, and: algorithm)
+extension DirectEncryptionMode: KeyManagementMode {
+    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
+        return (sharedSymmetricKey, KeyType())
     }
 }
