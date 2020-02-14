@@ -1,4 +1,3 @@
-// swiftlint:disable force_unwrapping
 //
 //  RSAKeyManagementModeTests.swift
 //  Tests
@@ -21,6 +20,8 @@
 //  limitations under the License.
 //  ---------------------------------------------------------------------------
 //
+
+// swiftlint:disable force_unwrapping
 
 import XCTest
 @testable import JOSESwift

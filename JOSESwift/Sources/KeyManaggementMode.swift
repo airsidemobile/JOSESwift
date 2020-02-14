@@ -47,7 +47,7 @@ extension KeyManagementAlgorithm {
             guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryptionMode.KeyType.self) else {
                 return nil
             }
-            
+
             return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
         }
     }
