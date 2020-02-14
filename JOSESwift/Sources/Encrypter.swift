@@ -24,7 +24,7 @@
 import Foundation
 
 public struct Encrypter {
-    let keyManagementMode: KeyManagementMode
+    let keyManagementMode: EncryptionKeyManagementMode
     let keyManagementAlgorithm: KeyManagementAlgorithm
     let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
@@ -36,7 +36,7 @@ public struct Encrypter {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
 
-        let mode = keyManagementAlgorithm.makeKeyManagementMode(
+        let mode = keyManagementAlgorithm.makeEncryptionKeyManagementMode(
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             encryptionKey: encryptionKey
         )

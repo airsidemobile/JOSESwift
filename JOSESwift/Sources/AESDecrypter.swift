@@ -24,7 +24,7 @@
 import Foundation
 
 /// A `SymmetricDecrypter` to decrypt a cipher text with an `AES` algorithm.
-internal struct AESDecrypter: SymmetricDecrypter {
+internal struct AESDecrypter {
     typealias KeyType = AES.KeyType
 
     let algorithm: ContentEncryptionAlgorithm

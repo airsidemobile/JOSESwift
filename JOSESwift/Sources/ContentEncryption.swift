@@ -29,12 +29,30 @@ struct ContentEncryptionContext {
     let initializationVector: Data
 }
 
+struct ContentDecryptionContext {
+    let ciphertext: Data
+    let initializationVector: Data
+    let additionalAuthenticatedData: Data
+    let authenticationTag: Data
+}
+
 protocol ContentEncrypter {
     func encrypt(header: JWEHeader, payload: Payload) throws -> ContentEncryptionContext
 }
 
+protocol ContentDecrypter {
+    func decrypt(decryptionContext: ContentDecryptionContext) throws -> Data
+}
+
 extension ContentEncryptionAlgorithm {
     func makeContentEncrypter(contentEncryptionKey: Data) -> ContentEncrypter {
+        switch self {
+        case .A128CBCHS256, .A256CBCHS512:
+            return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+        }
+    }
+
+    func makeContentDecrypter(contentEncryptionKey: Data) -> ContentDecrypter {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
             return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)

@@ -143,8 +143,8 @@ public struct JWE {
     /// - Throws: A `JOSESwiftError` indicating any errors.
     @available(*, deprecated, message: "Use `decrypt(using decrypter:)` instead")
     public func decrypt<KeyType>(with key: KeyType) throws -> Payload {
-        let context = DecryptionContext(
-            header: header,
+        let context = Decrypter.DecryptionContext(
+            protectedHeader: header,
             encryptedKey: encryptedKey,
             initializationVector: initializationVector,
             ciphertext: ciphertext,
@@ -179,8 +179,8 @@ public struct JWE {
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public func decrypt(using decrypter: Decrypter) throws -> Payload {
-        let context = DecryptionContext(
-            header: header,
+        let context = Decrypter.DecryptionContext(
+            protectedHeader: header,
             encryptedKey: encryptedKey,
             initializationVector: initializationVector,
             ciphertext: ciphertext,
@@ -188,8 +188,8 @@ public struct JWE {
         )
 
         guard
-            decrypter.asymmetric.algorithm == header.algorithm,
-            decrypter.symmetric.algorithm == header.encryptionAlgorithm
+            decrypter.keyManagementAlgorithm == header.algorithm,
+            decrypter.contentEncryptionAlgorithm == header.encryptionAlgorithm
         else {
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }

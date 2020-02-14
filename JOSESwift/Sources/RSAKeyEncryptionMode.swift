@@ -31,7 +31,7 @@ struct RSAKeyEncryptionMode {
 
     let keyManagementAlgorithm: KeyManagementAlgorithm
     let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    let recipientPublicKey: KeyType
+    let encryptionKey: KeyType
 
     init(
         keyManagementAlgorithm: KeyManagementAlgorithm,
@@ -40,15 +40,46 @@ struct RSAKeyEncryptionMode {
     ) {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-        self.recipientPublicKey = recipientPublicKey
+        encryptionKey = recipientPublicKey
+    }
+
+    init(
+        keyManagementAlgorithm: KeyManagementAlgorithm,
+        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+        recipientPrivateKey: KeyType
+    ) {
+        self.keyManagementAlgorithm = keyManagementAlgorithm
+        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
+        encryptionKey = recipientPrivateKey
     }
 }
 
-extension RSAKeyEncryptionMode: KeyManagementMode {
+extension RSAKeyEncryptionMode: EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
-        let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
+        let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: encryptionKey, and: keyManagementAlgorithm)
 
         return (contentEncryptionKey, encryptedKey)
+    }
+}
+
+extension RSAKeyEncryptionMode: DecryptionKeyManagementMode {
+    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+        // Generate a random CEK to substitue in case we fail to decrypt the CEK.
+        // This is to prevent the MMA (Million Message Attack) against RSA.
+        // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),
+        // RFC-5246 (https://tools.ietf.org/html/rfc5246#appendix-F.1.1.2),
+        // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html.
+        let randomContentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
+
+        guard
+            let contentEncryptionKey = try? RSA.decrypt(encryptedKey, with: encryptionKey, and: keyManagementAlgorithm),
+            contentEncryptionKey.count == contentEncryptionAlgorithm.keyLength
+        else {
+            // Todo: Check where to generate the random key
+            return randomContentEncryptionKey
+        }
+
+        return contentEncryptionKey
     }
 }
