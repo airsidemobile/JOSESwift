@@ -34,15 +34,21 @@ extension KeyManagementAlgorithm {
     ) -> KeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else { return nil }
-            return RSAKeyEncryption(
+            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryptionMode.KeyType.self) else {
+                return nil
+            }
+
+            return RSAKeyEncryptionMode(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPublicKey: recipientPublicKey
             )
         case .direct:
-            guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryption.KeyType.self) else { return nil }
-            return DirectEncryption(sharedSymmetricKey: sharedSymmetricKey)
+            guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryptionMode.KeyType.self) else {
+                return nil
+            }
+            
+            return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
         }
     }
 }

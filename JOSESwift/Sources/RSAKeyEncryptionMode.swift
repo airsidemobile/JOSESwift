@@ -1,5 +1,5 @@
 //
-//  RSAKeyEncryption.swift
+//  RSAKeyEncryptionMode.swift
 //  JOSESwift
 //
 //  Created by Daniel Egger on 13/10/2017.
@@ -26,7 +26,7 @@ import Foundation
 /// A key management mode in which a randomly generated content encryption key value is encrypted to the intended
 /// recipient using an asymmetric RSA encryption algorithm. For key encryption the resulting ciphertext is the JWE
 /// encrypted key.
-struct RSAKeyEncryption {
+struct RSAKeyEncryptionMode {
     typealias KeyType = RSA.KeyType
 
     let keyManagementAlgorithm: KeyManagementAlgorithm
@@ -44,7 +44,7 @@ struct RSAKeyEncryption {
     }
 }
 
-extension RSAKeyEncryption: KeyManagementMode {
+extension RSAKeyEncryptionMode: KeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)

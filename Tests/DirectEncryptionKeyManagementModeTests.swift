@@ -29,7 +29,7 @@ class DirectEncryptionKeyManagementModeTests: XCTestCase {
     let sharedSymmetricKey = "secret".data(using: .utf8)!
 
     func testReturnsSharedSymmeyricKeyAsContentEncryptionKey() throws {
-        let keyEncryption = DirectEncryption(sharedSymmetricKey: sharedSymmetricKey)
+        let keyEncryption = DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
 
         let (cek1, _) = try keyEncryption.determineContentEncryptionKey()
         let (cek2, _) = try keyEncryption.determineContentEncryptionKey()
@@ -40,7 +40,7 @@ class DirectEncryptionKeyManagementModeTests: XCTestCase {
     }
 
     func testEncryptedKeyIsEmpty() throws {
-        let keyEncryption = DirectEncryption(sharedSymmetricKey: sharedSymmetricKey)
+        let keyEncryption = DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
 
         let (_, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
 
