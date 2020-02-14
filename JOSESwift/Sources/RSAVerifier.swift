@@ -30,7 +30,6 @@ internal struct RSAVerifier: VerifierProtocol {
     let algorithm: SignatureAlgorithm
     let publicKey: KeyType
 
-    
     func verify(_ verifyingInput: Data, against signature: Data) throws -> Bool {
         return try RSA.verify(verifyingInput, against: signature, with: publicKey, and: algorithm)
     }
