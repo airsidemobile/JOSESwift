@@ -37,12 +37,12 @@ class JWSRSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testSignAndSerializeRS256() {
-        self.performTestRSASign(algorithm: .RS256)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS256)
     }
 
     @available(*, deprecated)
     func testSignAndVerifyRS256WithNonRequiredHeaderParameter() {
-        self.performTestRSASign(algorithm: .RS256, withKid: true)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS256, withKid: true)
     }
 
     func testDeserializeFromCompactSerializationRS256() {
@@ -51,12 +51,12 @@ class JWSRSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testSignAndSerializeRS384() {
-        self.performTestRSASign(algorithm: .RS384)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS384)
     }
 
     @available(*, deprecated)
     func testSignAndVerifyRS384WithNonRequiredHeaderParameter() {
-        self.performTestRSASign(algorithm: .RS384, withKid: true)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS384, withKid: true)
     }
 
     func testDeserializeFromCompactSerializationRS384() {
@@ -65,12 +65,12 @@ class JWSRSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testSignAndSerializeRS512() {
-        self.performTestRSASign(algorithm: .RS512)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS512)
     }
 
     @available(*, deprecated)
     func testSignAndVerifyRS512WithNonRequiredHeaderParameter() {
-        self.performTestRSASign(algorithm: .RS512, withKid: true)
+        self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS512, withKid: true)
     }
 
     func testDeserializeFromCompactSerializationRS512() {
@@ -94,30 +94,6 @@ class JWSRSATests: RSACryptoTestCase {
 
     // MARK: - RSA Tests
 
-    @available(*, deprecated)
-    private func performTestRSASign(algorithm: SignatureAlgorithm, withKid: Bool? = false) {
-        guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
-            XCTFail()
-            return
-        }
-
-        var header = JWSHeader(algorithm: algorithm)
-        if withKid ?? false {
-            header.kid = "kid"
-        }
-
-        let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
-        let jws = try! JWS(header: header, payload: payload, signer: signer)
-        let compactSerializedJWS = jws.compactSerializedString
-
-        XCTAssertEqual(compactSerializedJWS, compactSerializedJWS)
-
-        let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
-
-        XCTAssertTrue(secondJWS.isValid(for: publicKeyAlice2048!))
-    }
-
     private func performTestRSADeserialization(algorithm: SignatureAlgorithm, compactSerializedJWS: String) {
         guard privateKeyAlice2048 != nil else {
             XCTFail()
@@ -133,13 +109,16 @@ class JWSRSATests: RSACryptoTestCase {
         XCTAssertEqual(jws.signature.data(), signature)
     }
 
-    private func performTestRSASerializationValidationAndDeserialization(algorithm: SignatureAlgorithm) {
+    private func performTestRSASerializationValidationAndDeserialization(algorithm: SignatureAlgorithm, withKid: Bool = false) {
         guard publicKeyAlice2048 != nil, privateKeyAlice2048 != nil else {
             XCTFail()
             return
         }
 
-        let header = JWSHeader(algorithm: algorithm)
+        var header = JWSHeader(algorithm: algorithm)
+        if withKid {
+            header.kid = "kid"
+        }
         let payload = Payload(message.data(using: .utf8)!)
         let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
@@ -149,8 +128,21 @@ class JWSRSATests: RSACryptoTestCase {
         let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
 
         XCTAssertTrue(secondJWS.isValid(for: verifier!))
-        XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
-        XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
-    }
+        XCTAssertEqual(String(data: secondJWS.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
+        guard withKid else {
+            XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
+            return
+        }
+
+        let algKidHeader = "{\"alg\":\"\(algorithm.rawValue)\",\"kid\":\"kid\"}"
+        let kidAlgHeader = "{\"kid\":\"kid\",\"alg\":\"\(algorithm.rawValue)\"}"
+
+        let headerString = String(data: jws.header.data(), encoding: .utf8)
+
+        guard headerString == algKidHeader || headerString == kidAlgHeader else {
+            XCTFail("Incorrect header")
+            return
+        }
+    }
 }
