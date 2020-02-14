@@ -36,14 +36,12 @@ public struct Encrypter {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
 
-        do {
-            self.keyManagementMode = try keyManagementAlgorithm.makeKeyManagementMode(
-                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
-                encryptionKey: encryptionKey
-            )
-        } catch {
-            return nil
-        }
+        let mode = keyManagementAlgorithm.makeKeyManagementMode(
+            contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+            encryptionKey: encryptionKey
+        )
+        guard let keyManagementMode = mode else { return nil }
+        self.keyManagementMode = keyManagementMode
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {

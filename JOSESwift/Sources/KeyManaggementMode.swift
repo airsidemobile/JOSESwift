@@ -28,30 +28,20 @@ protocol KeyManagementMode {
 }
 
 extension KeyManagementAlgorithm {
-    private enum KeyManagementModeError: Error {
-        case wrongKeyTypeForAlgorithm(algorithm: KeyManagementAlgorithm)
-    }
-
     func makeKeyManagementMode<KeyType>(
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType
-    ) throws -> KeyManagementMode {
+    ) -> KeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else {
-                throw KeyManagementModeError.wrongKeyTypeForAlgorithm(algorithm: self)
-            }
-
+            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else { return nil }
             return RSAKeyEncryption(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPublicKey: recipientPublicKey
             )
         case .direct:
-            guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryption.KeyType.self) else {
-                throw KeyManagementModeError.wrongKeyTypeForAlgorithm(algorithm: self)
-            }
-
+            guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryption.KeyType.self) else { return nil }
             return DirectEncryption(sharedSymmetricKey: sharedSymmetricKey)
         }
     }
