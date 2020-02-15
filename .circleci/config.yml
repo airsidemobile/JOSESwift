@@ -43,8 +43,6 @@ jobs:
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
-      # Collect XML test results data to show in the UI, and save the same XML
-      # files under test-results folder in the Artifacts tab
       - store_test_results:
           path: fastlane/test_output
 
