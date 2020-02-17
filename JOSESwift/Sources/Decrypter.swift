@@ -25,8 +25,9 @@ import Foundation
 
 public struct Decrypter {
     private let keyManagementMode: DecryptionKeyManagementMode
-    private let keyManagementAlgorithm: KeyManagementAlgorithm
-    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+
+    let keyManagementAlgorithm: KeyManagementAlgorithm
+    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
     /// Constructs a decrypter that can be used to decrypt a JWE.
     ///
