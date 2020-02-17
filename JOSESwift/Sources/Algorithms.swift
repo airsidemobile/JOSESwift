@@ -52,13 +52,13 @@ public enum SignatureAlgorithm: String {
 ///
 /// See [RFC 7518, Section 4](https://tools.ietf.org/html/rfc7518#section-4).
 public enum KeyManagementAlgorithm: String, CaseIterable {
-    /// RSAES-PKCS1-v1_5
+    /// Key encryption using RSAES-PKCS1-v1_5
     case RSA1_5 = "RSA1_5"
-    /// RSAES OAEP using SHA-1 and MGF1 with SHA-1
+    /// Key encryption using RSAES OAEP using SHA-1 and MGF1 with SHA-1
     case RSAOAEP = "RSA-OAEP"
-    /// RSAES OAEP using SHA-256 and MGF1 with SHA-256
+    /// Key encryption using RSAES OAEP using SHA-256 and MGF1 with SHA-256
     case RSAOAEP256 = "RSA-OAEP-256"
-    /// Direct use of a shared symmetric key as the content encryption key
+    /// Direct encryption using a shared symmetric key as the content encryption key
     case direct = "dir"
 }
 
@@ -66,9 +66,9 @@ public enum KeyManagementAlgorithm: String, CaseIterable {
 ///
 /// See [RFC 7518, Section 5](https://tools.ietf.org/html/rfc7518#section-5).
 public enum ContentEncryptionAlgorithm: String {
-    /// AES_256_CBC_HMAC_SHA_512
+    /// Content encryption using AES_256_CBC_HMAC_SHA_512
     case A256CBCHS512 = "A256CBC-HS512"
-    /// AES_128_CBC_HMAC_SHA_256
+    /// Content encryption using AES_128_CBC_HMAC_SHA_256
     case A128CBCHS256 = "A128CBC-HS256"
 }
 
