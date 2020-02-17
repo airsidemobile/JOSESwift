@@ -1,6 +1,6 @@
 // swiftlint:disable force_unwrapping
 //
-//  RSADecrypterTests.swift
+//  RSADecryptionTests.swift
 //  Tests
 //
 //  Created by Carol Capek on 23.11.17.
@@ -25,8 +25,7 @@
 import XCTest
 @testable import JOSESwift
 
-class RSADecrypterTests: RSACryptoTestCase {
-
+class RSADecryptionTests: RSACryptoTestCase {
     // Cipher texts are generated with `openssl rsautl`.
     // `printf` is used because `echo` appends a newline at the end of the string.
 
@@ -117,14 +116,6 @@ class RSADecrypterTests: RSACryptoTestCase {
         ]
     }()
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testDecryptingWithAliceKey() {
         guard let privateKeyAlice2048 = privateKeyAlice2048 else {
             XCTFail()
@@ -136,9 +127,9 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            let decryptedData = try? decrypter.decrypt(Data(base64Encoded: aliceCipherTextDict[algorithm.rawValue]!)!)
-            let decryptedMessage = String(data: decryptedData ?? Data(count: 10), encoding: String.Encoding.utf8)
+            let ciphertext = Data(base64Encoded: aliceCipherTextDict[algorithm.rawValue]!)!
+            let decryptedData = try! RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)
+            let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
 
             XCTAssertEqual(decryptedMessage, message)
         }
@@ -155,8 +146,8 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyBob2048!)
-            let decryptedData = try! decrypter.decrypt(Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!)
+            let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
+            let decryptedData = try! RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)
             let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
 
             XCTAssertEqual(decryptedMessage, message)
@@ -174,10 +165,9 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyBob2048!)
-
             // Decrypting with the wrong key should throw an error
-            XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!)) { (error: Error) in
+            let ciphertext = Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!
+            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
             }
         }
@@ -194,10 +184,9 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-
             // Decrypting with the wrong key should throw an error
-            XCTAssertThrowsError(try decrypter.decrypt(Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!)) { (error: Error) in
+            let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
+            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
             }
         }
@@ -214,8 +203,8 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            XCTAssertThrowsError(try decrypter.decrypt(Data(count: 300))) { (error: Error) in
+            let ciphertext = Data(count: 300)
+            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }
         }
@@ -232,8 +221,8 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            XCTAssertThrowsError(try decrypter.decrypt(Data(count: 0))) { (error: Error) in
+            let ciphertext = Data(count: 0)
+            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }
         }
@@ -253,9 +242,7 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-
-            XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 // Should throw "decryption failed", but
                 // should _not_ throw cipherTextLenghtNotSatisfied
                 XCTAssertNotEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -277,8 +264,7 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }
         }
@@ -298,8 +284,7 @@ class RSADecrypterTests: RSACryptoTestCase {
                 continue
             }
 
-            let decrypter = RSADecrypter(algorithm: algorithm, privateKey: privateKeyAlice2048)
-            XCTAssertThrowsError(try decrypter.decrypt(testMessage)) { (error: Error) in
+            XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }
         }

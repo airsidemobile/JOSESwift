@@ -23,13 +23,6 @@
 
 import Foundation
 
-public struct SymmetricDecryptionContext {
-    let ciphertext: Data
-    let initializationVector: Data
-    let additionalAuthenticatedData: Data
-    let authenticationTag: Data
-}
-
 public struct Decrypter {
     let keyManagementMode: DecryptionKeyManagementMode
     let keyManagementAlgorithm: KeyManagementAlgorithm
