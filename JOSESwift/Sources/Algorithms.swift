@@ -40,6 +40,7 @@ public enum SignatureAlgorithm: String {
     case ES512
 }
 
+
 /// An algorithm for asymmetric encryption and decryption.
 ///
 /// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
