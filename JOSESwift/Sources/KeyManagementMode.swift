@@ -26,6 +26,7 @@ import Foundation
 protocol EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data)
 }
+
 protocol DecryptionKeyManagementMode {
     func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data
 }
@@ -37,11 +38,11 @@ extension KeyManagementAlgorithm {
     ) -> EncryptionKeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryptionMode.KeyType.self) else {
+            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else {
                 return nil
             }
 
-            return RSAKeyEncryptionMode(
+            return RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPublicKey: recipientPublicKey
@@ -61,11 +62,11 @@ extension KeyManagementAlgorithm {
     ) -> DecryptionKeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPrivateKey = cast(decryptionKey, to: RSAKeyEncryptionMode.KeyType.self) else {
+            guard let recipientPrivateKey = cast(decryptionKey, to: RSAKeyEncryption.KeyType.self) else {
                 return nil
             }
 
-            return RSAKeyEncryptionMode(
+            return RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPrivateKey: recipientPrivateKey

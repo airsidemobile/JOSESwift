@@ -31,7 +31,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testGeneratesRandomContentEncryptionKeyOnEachCall() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -46,7 +46,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testEncryptsContentEncryptionKey() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -73,7 +73,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testEncryptsContentEncryptionKeyOnlyForProvidedKey() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -101,7 +101,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
         for alg in keyManagementModeAlgorithms {
             for enc in contentEncryptionAlgorithms {
-                let keyEncryption = RSAKeyEncryptionMode(
+                let keyEncryption = RSAKeyEncryption.EncryptionMode(
                     keyManagementAlgorithm: alg,
                     contentEncryptionAlgorithm: enc,
                     recipientPublicKey: publicKeyAlice2048!
@@ -117,7 +117,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDecryptsContentEncryptionKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
-            let keyDecryption = RSAKeyEncryptionMode(
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPrivateKey: privateKeyAlice2048!
@@ -141,7 +141,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDoesNotThrowForDecryptionError() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
-            let keyDecryption = RSAKeyEncryptionMode(
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPrivateKey: privateKeyBob2048!
@@ -163,7 +163,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testGeneratesRandomContentEncryptionKeyForMalformedEncryptedKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
-            let keyDecryption = RSAKeyEncryptionMode(
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPrivateKey: privateKeyAlice2048!

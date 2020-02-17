@@ -24,46 +24,53 @@
 import Foundation
 
 /// A key management mode in which a randomly generated content encryption key value is encrypted to the intended
-/// recipient using an asymmetric RSA encryption algorithm. For key encryption the resulting ciphertext is the JWE
-/// encrypted key.
-struct RSAKeyEncryptionMode {
+/// recipient using an asymmetric RSA encryption algorithm. The resulting ciphertext is the JWE encrypted key.
+enum RSAKeyEncryption {
     typealias KeyType = RSA.KeyType
 
-    let keyManagementAlgorithm: KeyManagementAlgorithm
-    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    let encryptionKey: KeyType
+    struct EncryptionMode {
+        private let keyManagementAlgorithm: KeyManagementAlgorithm
+        private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+        private let recipientPublicKey: KeyType
 
-    init(
-        keyManagementAlgorithm: KeyManagementAlgorithm,
-        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
-        recipientPublicKey: KeyType
-    ) {
-        self.keyManagementAlgorithm = keyManagementAlgorithm
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-        encryptionKey = recipientPublicKey
+        init(
+            keyManagementAlgorithm: KeyManagementAlgorithm,
+            contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+            recipientPublicKey: KeyType
+        ) {
+            self.keyManagementAlgorithm = keyManagementAlgorithm
+            self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
+            self.recipientPublicKey = recipientPublicKey
+        }
     }
 
-    init(
-        keyManagementAlgorithm: KeyManagementAlgorithm,
-        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
-        recipientPrivateKey: KeyType
-    ) {
-        self.keyManagementAlgorithm = keyManagementAlgorithm
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-        encryptionKey = recipientPrivateKey
+    struct DecryptionMode {
+        private let keyManagementAlgorithm: KeyManagementAlgorithm
+        private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+        private let recipientPrivateKey: KeyType
+
+        init(
+            keyManagementAlgorithm: KeyManagementAlgorithm,
+            contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+            recipientPrivateKey: KeyType
+        ) {
+            self.keyManagementAlgorithm = keyManagementAlgorithm
+            self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
+            self.recipientPrivateKey = recipientPrivateKey
+        }
     }
 }
 
-extension RSAKeyEncryptionMode: EncryptionKeyManagementMode {
+extension RSAKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
-        let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: encryptionKey, and: keyManagementAlgorithm)
+        let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
 
         return (contentEncryptionKey, encryptedKey)
     }
 }
 
-extension RSAKeyEncryptionMode: DecryptionKeyManagementMode {
+extension RSAKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
     func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
         // Generate a random CEK to substitue in case we fail to decrypt the CEK.
         // This is to prevent the MMA (Million Message Attack) against RSA.
@@ -72,8 +79,10 @@ extension RSAKeyEncryptionMode: DecryptionKeyManagementMode {
         // and http://www.ietf.org/mail-archive/web/jose/current/msg01832.html.
         let randomContentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
 
+        let decryptedKey = try? RSA.decrypt(encryptedKey, with: recipientPrivateKey, and: keyManagementAlgorithm)
+
         guard
-            let contentEncryptionKey = try? RSA.decrypt(encryptedKey, with: encryptionKey, and: keyManagementAlgorithm),
+            let contentEncryptionKey = decryptedKey,
             contentEncryptionKey.count == contentEncryptionAlgorithm.keyLength
         else {
             // Todo: Check where to generate the random key
