@@ -61,7 +61,7 @@ jobs:
 
 workflows:
   version: 2
-  workflow:
+  test_and_lint:
     jobs:
       - install_dependendies
       - test:
