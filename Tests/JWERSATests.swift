@@ -222,9 +222,9 @@ class JWERSATests: RSACryptoTestCase {
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(
-                keyDecryptionAlgorithm: algorithm,
-                decryptionKey: privateKeyAlice2048,
-                contentDecryptionAlgorithm: .A256CBCHS512
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: .A256CBCHS512,
+                decryptionKey: privateKeyAlice2048
             )!
 
             XCTAssertEqual(try! jwe.decrypt(using: decrypter).data(), plaintext)
@@ -241,9 +241,9 @@ class JWERSATests: RSACryptoTestCase {
         let jwe = try! JWE(compactSerialization: malformedSerialization)
 
         let decrypter = Decrypter(
-            keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKeyAlice2048!,
-            contentDecryptionAlgorithm: .A256CBCHS512
+            keyManagementAlgorithm: .RSA1_5,
+            contentEncryptionAlgorithm: .A256CBCHS512,
+            decryptionKey: privateKeyAlice2048!
         )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header") { error in
@@ -261,9 +261,9 @@ class JWERSATests: RSACryptoTestCase {
         let jwe = try! JWE(compactSerialization: malformedSerialization)
 
         let decrypter = Decrypter(
-            keyDecryptionAlgorithm: .RSAOAEP256,
-            decryptionKey: privateKeyAlice2048!,
-            contentDecryptionAlgorithm: .A256CBCHS512
+            keyManagementAlgorithm: .RSAOAEP256,
+            contentEncryptionAlgorithm: .A256CBCHS512,
+            decryptionKey: privateKeyAlice2048!
         )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header with RSA-OAEP-256 algorithm") { error in
@@ -281,10 +281,10 @@ class JWERSATests: RSACryptoTestCase {
         let jwe = try! JWE(compactSerialization: malformedSerialization)
 
         let decrypter = Decrypter(
-            keyDecryptionAlgorithm: .RSA1_5,
-            decryptionKey: privateKeyAlice2048!,
-            contentDecryptionAlgorithm: .A256CBCHS512
-            )!
+            keyManagementAlgorithm: .RSA1_5,
+            contentEncryptionAlgorithm: .A256CBCHS512,
+            decryptionKey: privateKeyAlice2048!
+        )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong enc in header") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
@@ -316,10 +316,10 @@ class JWERSATests: RSACryptoTestCase {
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(
-                keyDecryptionAlgorithm: algorithm,
-                decryptionKey: key,
-                contentDecryptionAlgorithm: .A256CBCHS512
-                )!
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: .A256CBCHS512,
+                decryptionKey: key
+            )!
 
             XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
        }

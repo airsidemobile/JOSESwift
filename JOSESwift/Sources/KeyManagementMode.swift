@@ -23,28 +23,56 @@
 
 import Foundation
 
-protocol KeyManagementMode {
+protocol EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data)
 }
 
+protocol DecryptionKeyManagementMode {
+    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data
+}
+
 extension KeyManagementAlgorithm {
-    func makeKeyManagementMode<KeyType>(
+    func makeEncryptionKeyManagementMode<KeyType>(
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType
-    ) -> KeyManagementMode? {
+    ) -> EncryptionKeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryptionMode.KeyType.self) else {
+            guard let recipientPublicKey = cast(encryptionKey, to: RSAKeyEncryption.KeyType.self) else {
                 return nil
             }
 
-            return RSAKeyEncryptionMode(
+            return RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPublicKey: recipientPublicKey
             )
         case .direct:
             guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryptionMode.KeyType.self) else {
+                return nil
+            }
+
+            return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+        }
+    }
+
+    func makeDecryptionKeyManagementMode<KeyType>(
+        contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+        decryptionKey: KeyType
+    ) -> DecryptionKeyManagementMode? {
+        switch self {
+        case .RSA1_5, .RSAOAEP, .RSAOAEP256:
+            guard let recipientPrivateKey = cast(decryptionKey, to: RSAKeyEncryption.KeyType.self) else {
+                return nil
+            }
+
+            return RSAKeyEncryption.DecryptionMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                recipientPrivateKey: recipientPrivateKey
+            )
+        case .direct:
+            guard let sharedSymmetricKey = cast(decryptionKey, to: DirectEncryptionMode.KeyType.self) else {
                 return nil
             }
 
