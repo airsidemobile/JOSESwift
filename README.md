@@ -5,7 +5,7 @@
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
 As of now, its usage is limited to iOS because it relies on the iOS cryptography frameworks.
 
-[![Build Status](https://travis-ci.org/airsidemobile/JOSESwift.svg?branch=master)](https://travis-ci.org/airsidemobile/JOSESwift)
+[![CircleCI](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master.svg?style=svg)](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master)
 
 > :bulb: Please note that this implementation of the JOSE standards is not fully complete yet. For example, there is only a limited set of supported algorithms available at the moment. Moreover we currently only support compact serialization of JOSE types. If you are missing a specific feature, algorithm, or serialization, feel free to [submit a pull request](#contributing).
 

@@ -1,0 +1,72 @@
+version: 2.1
+
+executors:
+  mac-executor:
+    macos:
+      xcode: "11.2.1"
+    working_directory: ~/joseswift
+
+jobs:
+  install_dependendies:
+    executor: mac-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v2
+      - run:
+          name: Bundler
+          command: |
+            bundle install --path vendor/bundle --jobs 4 --retry 3
+      - save_cache:
+          key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+  test:
+    executor: mac-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v2
+      - run:
+          name: Test
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec fastlane test
+      - run:
+          name: Sonarqube
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec fastlane sonarqube
+      - store_test_results:
+          path: fastlane/test_output
+
+  danger:
+    executor: mac-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v2
+      - run:
+          name: Danger
+          command: |
+            bundle config --local path vendor/bundle
+            bundle exec danger
+
+workflows:
+  version: 2
+  test_and_lint:
+    jobs:
+      - install_dependendies
+      - test:
+          requires:
+            - install_dependendies
+      - danger:
+          requires:
+            - install_dependendies
