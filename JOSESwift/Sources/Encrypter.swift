@@ -33,7 +33,7 @@ public struct Encrypter {
     /// - Parameters:
     ///   - keyManagementAlgorithm: The algorithm used to encrypt the content encryption key.
     ///   - contentEncryptionAlgorithm: The algorithm used to encrypt the JWE's payload.
-    ///   - encryptionKey: The key used to perform the encryption. The function of the key depends upon the chosen key
+    ///   - encryptionKey: The key used to perform the encryption. The function of the key depends on the chosen key
     ///                    management algorithm.
     ///     - For _key encryption_ it is the public key of the recipient to which the JWE should be encrypted.
     ///     - For _direct encryption_ it is the secret symmetric key shared between the sender and the recipient.

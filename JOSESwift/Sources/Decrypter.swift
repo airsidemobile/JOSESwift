@@ -28,12 +28,12 @@ public struct Decrypter {
     private let keyManagementAlgorithm: KeyManagementAlgorithm
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
-    /// Constructs an decrypter that can be used to decrypt a JWE.
+    /// Constructs a decrypter that can be used to decrypt a JWE.
     ///
     /// - Parameters:
     ///   - keyManagementAlgorithm: The algorithm that was used to encrypt the content encryption key.
     ///   - contentEncryptionAlgorithm: The algorithm that was used to encrypt the JWE's payload.
-    ///   - encryptionKey: The key used to perform the decryption. The function of the key depends upon the chosen key
+    ///   - decryptionKey: The key used to perform the decryption. The function of the key depends on the chosen key
     ///                    management algorithm.
     ///     - For _key encryption_ it is the private key of the recipient to which the JWE was encrypted.
     ///     - For _direct encryption_ it is the secret symmetric key shared between the sender and the recipient.
