@@ -4,7 +4,7 @@ executors:
   mac-executor:
     macos:
       xcode: "11.2.1"
-    working_directory: ~/code
+    working_directory: ~/joseswift
 
 jobs:
   install_dependendies:
@@ -23,16 +23,15 @@ jobs:
           key: gem-cache-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+
   test:
     executor: mac-executor
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/code
+      - restore_cache:
+          keys:
+            - gem-cache-v1-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v1
       - run:
           name: Test
           command: |
@@ -50,8 +49,10 @@ jobs:
     executor: mac-executor
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/code
+      - restore_cache:
+          keys:
+            - gem-cache-v1-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v1
       - run:
           name: Danger
           command: |
