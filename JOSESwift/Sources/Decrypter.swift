@@ -35,8 +35,9 @@ public struct Decrypter {
     ///   - contentEncryptionAlgorithm: The algorithm that was used to encrypt the JWE's payload.
     ///   - decryptionKey: The key used to perform the decryption. The function of the key depends on the chosen key
     ///                    management algorithm.
-    ///     - For _key encryption_ it is the private key of the recipient to which the JWE was encrypted.
-    ///     - For _direct encryption_ it is the secret symmetric key shared between the sender and the recipient.
+    ///     - For _key encryption_ it is the private key (`SecKey`) of the recipient to which the JWE was encrypted.
+    ///     - For _direct encryption_ it is the secret symmetric key (`Data`) shared between the sender and the
+    ///       recipient.
     public init?<KeyType>(
         keyManagementAlgorithm: KeyManagementAlgorithm,
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
