@@ -35,8 +35,18 @@ struct DirectEncryptionMode {
     }
 }
 
-extension DirectEncryptionMode: KeyManagementMode {
+extension DirectEncryptionMode: EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         return (sharedSymmetricKey, KeyType())
+    }
+}
+
+extension DirectEncryptionMode: DecryptionKeyManagementMode {
+    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+        guard encryptedKey == Data() else {
+            throw JOSESwiftError.decryptingFailed(description: "Direct encryption does not expect an encrypted key.")
+        }
+
+        return sharedSymmetricKey
     }
 }

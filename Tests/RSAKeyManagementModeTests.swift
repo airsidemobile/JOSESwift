@@ -31,7 +31,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testGeneratesRandomContentEncryptionKeyOnEachCall() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -46,7 +46,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testEncryptsContentEncryptionKey() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -73,7 +73,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testEncryptsContentEncryptionKeyOnlyForProvidedKey() throws {
         for algorithm in keyManagementModeAlgorithms {
-            let keyEncryption = RSAKeyEncryptionMode(
+            let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
@@ -101,7 +101,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
         for alg in keyManagementModeAlgorithms {
             for enc in contentEncryptionAlgorithms {
-                let keyEncryption = RSAKeyEncryptionMode(
+                let keyEncryption = RSAKeyEncryption.EncryptionMode(
                     keyManagementAlgorithm: alg,
                     contentEncryptionAlgorithm: enc,
                     recipientPublicKey: publicKeyAlice2048!
@@ -111,6 +111,70 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
                 XCTAssertEqual(cek.count, enc.keyLength)
             }
+        }
+    }
+
+    func testDecryptsContentEncryptionKey() throws {
+        let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
+        for algorithm in keyManagementModeAlgorithms {
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                recipientPrivateKey: privateKeyAlice2048!
+            )
+
+            let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
+            let encryptedKey = try RSA.encrypt(
+                contentEncryptionKey,
+                with: publicKeyAlice2048!,
+                and: algorithm
+            )
+
+            let decryptedKey = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+
+            XCTAssertEqual(contentEncryptionKey, decryptedKey)
+        }
+    }
+
+    // MMA mitigation.
+    // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2)
+    func testDoesNotThrowForDecryptionError() throws {
+        let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
+        for algorithm in keyManagementModeAlgorithms {
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                recipientPrivateKey: privateKeyBob2048!
+            )
+
+            let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
+            let encryptedKey = try RSA.encrypt(
+                contentEncryptionKey,
+                with: publicKeyAlice2048!,
+                and: algorithm
+            )
+
+            XCTAssertNoThrow(try keyDecryption.determineContentEncryptionKey(from: encryptedKey))
+        }
+    }
+
+    // MMA mitigation.
+    // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2)
+    func testGeneratesRandomContentEncryptionKeyForMalformedEncryptedKey() throws {
+        let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
+        for algorithm in keyManagementModeAlgorithms {
+            let keyDecryption = RSAKeyEncryption.DecryptionMode(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                recipientPrivateKey: privateKeyAlice2048!
+            )
+
+            let encryptedKey = Data(count: algorithm.maxMessageLength(for: publicKeyAlice2048!) - 10)
+
+            let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+            let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+
+            XCTAssertNotEqual(randomContentEncryptionKey1, randomContentEncryptionKey2)
         }
     }
 }

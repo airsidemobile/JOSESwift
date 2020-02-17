@@ -65,7 +65,7 @@ class JWECompressionTests: RSACryptoTestCase {
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
-        let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
 
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
@@ -80,7 +80,7 @@ class JWECompressionTests: RSACryptoTestCase {
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
-        let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)!
+        let decrypter = Decrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)!
 
         try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
@@ -90,7 +90,7 @@ class JWECompressionTests: RSACryptoTestCase {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         let jwe = try! JWE(compactSerialization: jweSerializedNotSupportedZipHeaderValue)
-        let decrypter = Decrypter(keyDecryptionAlgorithm: .direct, decryptionKey: symmetricKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
         try XCTAssertThrowsError(jwe.decrypt(using: decrypter)) { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.compressionAlgorithmNotSupported)
         }
