@@ -24,105 +24,52 @@
 
 import Foundation
 
-/// An algorithm for signing and verifying.
+/// Cryptographic algorithms for digital signatures and MACs.
 ///
-/// - RS512: [RSASSA-PKCS1-v1_5 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.3)
-/// - ES512: [ECDSA P-521 using SHA-512](https://tools.ietf.org/html/rfc7518#section-3.4)
+/// See [RFC 7518, Section 3](https://tools.ietf.org/html/rfc7518#section-3).
 public enum SignatureAlgorithm: String {
+    /// RSASSA-PKCS1-v1_5 using SHA-256
     case RS256
+    /// RSASSA-PKCS1-v1_5 using SHA-384
     case RS384
+    /// RSASSA-PKCS1-v1_5 using SHA-256
     case RS512
+    /// RSASSA-PSS using SHA-256 and MGF1 with SHA-256
     @available(iOS 11, *) case PS256
+    /// RSASSA-PSS using SHA-384 and MGF1 with SHA-384
     @available(iOS 11, *) case PS384
+    /// RSASSA-PSS using SHA-512 and MGF1 with SHA-512
     @available(iOS 11, *) case PS512
+    /// ECDSA P-256 using SHA-256
     case ES256
+    /// ECDSA P-384 using SHA-384
     case ES384
+    /// ECDSA P-521 using SHA-512
     case ES512
 }
 
-/// An algorithm for asymmetric encryption and decryption.
+/// Cryptographic algorithms for key management.
 ///
-/// - RSA1_5: [RSAES-PKCS1-v1_5](https://tools.ietf.org/html/rfc7518#section-4.2)
-/// - RSAOAEP: [RSAES OAEP using SHA-1 and MGF1 with SHA-1](https://tools.ietf.org/html/rfc7518#section-4.3)
-/// - RSAOAEP256: [RSAES OAEP using SHA-256 and MGF1 with SHA-256](https://tools.ietf.org/html/rfc7518#section-4.3)
-/// - direct: [Direct Encryption with a Shared Symmetric Key](https://tools.ietf.org/html/rfc7518#section-4.5)
-public enum AsymmetricKeyAlgorithm: String, CaseIterable {
-    // swiftlint:disable:next identifier_name
+/// See [RFC 7518, Section 4](https://tools.ietf.org/html/rfc7518#section-4).
+public enum KeyManagementAlgorithm: String, CaseIterable {
+    /// Key encryption using RSAES-PKCS1-v1_5
     case RSA1_5 = "RSA1_5"
+    /// Key encryption using RSAES OAEP using SHA-1 and MGF1 with SHA-1
     case RSAOAEP = "RSA-OAEP"
+    /// Key encryption using RSAES OAEP using SHA-256 and MGF1 with SHA-256
     case RSAOAEP256 = "RSA-OAEP-256"
+    /// Direct encryption using a shared symmetric key as the content encryption key
     case direct = "dir"
 }
 
-/// An algorithm for symmetric encryption and decryption.
+/// Cryptographic algorithms for content encryption.
 ///
-/// - A256CBCHS512: [AES_256_CBC_HMAC_SHA_512](https://tools.ietf.org/html/rfc7518#section-5.2.5)
-/// - A128CBCHS256: [AES_128_CBC_HMAC_SHA_256](https://tools.ietf.org/html/rfc7518#section-5.2.3)
-public enum SymmetricKeyAlgorithm: String {
+/// See [RFC 7518, Section 5](https://tools.ietf.org/html/rfc7518#section-5).
+public enum ContentEncryptionAlgorithm: String {
+    /// Content encryption using AES_256_CBC_HMAC_SHA_512
     case A256CBCHS512 = "A256CBC-HS512"
+    /// Content encryption using AES_128_CBC_HMAC_SHA_256
     case A128CBCHS256 = "A128CBC-HS256"
-
-    var hmacAlgorithm: HMACAlgorithm {
-        switch self {
-        case .A256CBCHS512:
-            return .SHA512
-        case .A128CBCHS256:
-            return .SHA256
-        }
-    }
-
-    var keyLength: Int {
-        switch self {
-        case .A256CBCHS512:
-            return 64
-        case .A128CBCHS256:
-            return 32
-        }
-    }
-
-    var initializationVectorLength: Int {
-        switch self {
-        case .A256CBCHS512:
-            return 16
-        case .A128CBCHS256:
-            return 16
-        }
-    }
-
-    func checkKeyLength(for key: Data) -> Bool {
-        switch self {
-        case .A256CBCHS512:
-            return key.count == 64
-        case .A128CBCHS256:
-            return key.count == 32
-        }
-    }
-
-    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
-        switch self {
-        case .A256CBCHS512:
-            guard checkKeyLength(for: inputKey) else {
-                throw JWEError.keyLengthNotSatisfied
-            }
-
-            return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
-
-        case .A128CBCHS256:
-            guard checkKeyLength(for: inputKey) else {
-                throw JWEError.keyLengthNotSatisfied
-            }
-            return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
-        }
-    }
-
-    func authenticationTag(for hmac: Data) -> Data {
-        switch self {
-        case .A256CBCHS512:
-            return hmac.subdata(in: 0..<32)
-        case .A128CBCHS256:
-            return hmac.subdata(in: 0..<16)
-        }
-    }
 }
 
 /// An algorithm for HMAC calculation.
