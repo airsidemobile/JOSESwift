@@ -85,8 +85,6 @@ extension RSAKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
             let contentEncryptionKey = decryptedKey,
             contentEncryptionKey.count == contentEncryptionAlgorithm.keyLength
         else {
-            // Todo: Check where to generate the random key
-            // Todo: Only use MMA mitigation for RSA1_5
             return randomContentEncryptionKey
         }
 
