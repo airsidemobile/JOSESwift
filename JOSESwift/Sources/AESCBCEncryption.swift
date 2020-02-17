@@ -24,8 +24,8 @@
 import Foundation
 
 struct AESCBCEncryption {
-    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    let contentEncryptionKey: Data
+    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentEncryptionKey: Data
 
     init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, contentEncryptionKey: Data) {
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm

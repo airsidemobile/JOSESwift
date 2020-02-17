@@ -28,7 +28,7 @@ import Foundation
 struct DirectEncryptionMode {
     typealias KeyType = Data
 
-    let sharedSymmetricKey: KeyType
+    private let sharedSymmetricKey: KeyType
 
     init(sharedSymmetricKey: KeyType) {
         self.sharedSymmetricKey = sharedSymmetricKey
