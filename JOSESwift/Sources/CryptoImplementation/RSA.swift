@@ -79,7 +79,7 @@ internal extension KeyManagementAlgorithm {
             return .rsaEncryptionOAEPSHA1
         case .RSAOAEP256:
             return .rsaEncryptionOAEPSHA256
-        case .direct:
+        default:
             return nil
         }
     }
@@ -94,7 +94,7 @@ internal extension KeyManagementAlgorithm {
     /// please refer to [RFC-3447, Section 7.1](https://tools.ietf.org/html/rfc3447#section-7.1).
     /// - RSAOAEP256: For detailed information about the allowed plain text length for RSAES-OAEP-256,
     /// please refer to [RFC-3447, Section 7.1](https://tools.ietf.org/html/rfc3447#section-7.1).
-    func maxMessageLength(for publicKey: SecKey) -> Int {
+    func maxMessageLength(for publicKey: SecKey) -> Int? {
         let k = SecKeyGetBlockSize(publicKey)
         switch self {
         case .RSA1_5:
@@ -109,7 +109,7 @@ internal extension KeyManagementAlgorithm {
             // the hash length of SHA-256.
             let hLen = 256 / 8
             return (k - 2 * hLen - 2)
-        case .direct: return 0
+        default: return nil
         }
     }
 }
@@ -120,14 +120,15 @@ fileprivate extension KeyManagementAlgorithm {
     /// This length checking is just for usability reasons.
     /// Proper length checking is done in the implementation of iOS'
     /// `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
-    func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool {
+    func isPlainTextLengthSatisfied(_ plainText: Data, for publicKey: SecKey) -> Bool? {
         let mLen = plainText.count
 
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
-            return mLen <= maxMessageLength(for: publicKey)
-        case .direct:
-            return false
+            guard let maxMessageLength = maxMessageLength(for: publicKey) else { return nil }
+            return mLen <= maxMessageLength
+        default:
+            return nil
         }
     }
 
@@ -136,7 +137,7 @@ fileprivate extension KeyManagementAlgorithm {
     /// This length checking is just for usability reasons.
     /// Proper length checking is done in the implementation of iOS'
     /// `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
-    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool {
+    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool? {
         switch self {
         case .RSA1_5:
             // For detailed information about the allowed cipher length for RSAES-PKCS1-v1_5,
@@ -150,8 +151,8 @@ fileprivate extension KeyManagementAlgorithm {
             // where k is the length in octets of the RSA modulus,
             // and k >= 2hLen + 2
             return cipherText.count == SecKeyGetBlockSize(privateKey)
-        case .direct:
-            return false
+        default:
+            return nil
         }
     }
 }
@@ -240,7 +241,10 @@ internal struct RSA {
 
         // Check if the plain text length does not exceed the maximum.
         // e.g. for RSA1_5 the plaintext must be 11 bytes smaller than the public key's modulus.
-        guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) else {
+        guard
+            let plaintextLengthOk = algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey),
+            plaintextLengthOk
+        else {
             throw RSAError.plainTextLengthNotSatisfied
         }
 
@@ -277,7 +281,10 @@ internal struct RSA {
 
         // Check if the cipher text length does not exceed the maximum.
         // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
-        guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) else {
+        guard
+            let ciphertextLengthOk = algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey),
+            ciphertextLengthOk
+        else {
             throw RSAError.cipherTextLenghtNotSatisfied
         }
 

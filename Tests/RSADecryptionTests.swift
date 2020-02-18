@@ -26,6 +26,8 @@ import XCTest
 @testable import JOSESwift
 
 class RSADecryptionTests: RSACryptoTestCase {
+    let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+
     // Cipher texts are generated with `openssl rsautl`.
     // `printf` is used because `echo` appends a newline at the end of the string.
 
@@ -122,7 +124,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -141,7 +143,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -160,7 +162,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -179,7 +181,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -198,7 +200,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -216,7 +218,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -237,7 +239,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let secKeyBlockSize = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: secKeyBlockSize)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -259,7 +261,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes + 1)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -279,7 +281,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes - 1)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }

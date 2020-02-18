@@ -157,7 +157,7 @@ class RSAEncryptionTests: RSACryptoTestCase {
         for algorithm in keyManagementModeAlgorithms {
             // RSAES-PKCS1-v1_5 can operate on messages of length up to k - 11 octets (k = octet length of the RSA modulus)
             // See https://tools.ietf.org/html/rfc3447#section-7.2
-            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)!
             let testMessage = Data(count: maxMessageLengthInBytes)
 
             XCTAssertNoThrow(try RSA.encrypt(testMessage, with: publicKeyAlice2048, and: algorithm), "using algorithm: \(algorithm)")
@@ -171,7 +171,7 @@ class RSAEncryptionTests: RSACryptoTestCase {
         }
 
         for algorithm in keyManagementModeAlgorithms {
-            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)
+            let maxMessageLengthInBytes = algorithm.maxMessageLength(for: publicKeyAlice2048)!
             let testMessage = Data(count: maxMessageLengthInBytes + 1)
 
             XCTAssertThrowsError(try RSA.encrypt(testMessage, with: publicKeyAlice2048, and: algorithm)) { (error: Error) in

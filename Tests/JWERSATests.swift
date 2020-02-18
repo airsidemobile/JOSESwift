@@ -26,6 +26,8 @@ import XCTest
 @testable import JOSESwift
 
 class JWERSATests: RSACryptoTestCase {
+    let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+
     // The JWE serializations below are generated using the Java library Nimbus JOSE + JWT.
     // The key used to encrypt the JWEs in Nimbus is the JWK representation of `publicKeyAlice2048`.
     // That way we can decrypt them using the corresponding `privateKeyAlice2048`.
@@ -92,7 +94,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -136,7 +138,7 @@ class JWERSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -161,7 +163,7 @@ class JWERSATests: RSACryptoTestCase {
             XCTFail("privateKeyAlice2048 was nil.")
             return
         }
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -185,7 +187,7 @@ class JWERSATests: RSACryptoTestCase {
             ]
         ]
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -214,7 +216,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
@@ -308,7 +310,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
+        for algorithm in keyManagementModeAlgorithms {
             guard algorithm != .direct else {
                 continue
             }
