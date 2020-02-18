@@ -38,7 +38,7 @@ jobs:
             bundle config --local path vendor/bundle
             bundle exec fastlane test
       - persist_to_workspace:
-          root: circle_workspace
+          root: .
           paths:
             - fastlane/test_output/derived_data/Logs/Test/
 
@@ -47,7 +47,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: fastlane/test_output/derived_data/Logs/Test/
+          at: ~/joseswift
       - run:
           name: Sonarqube
           command: |
