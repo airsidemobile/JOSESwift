@@ -24,13 +24,19 @@ jobs:
           paths:
             - vendor/bundle
       - run:
-          name: Homebrew
+          name: Sonarqube
           command: |
-            brew bundle --no-lock
+            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-macosx.zip
+            unzip -qq -o sonar-scanner-cli-4.2.0.1873-macosx.zip -d vendor/sonarqube
+      - save_cache:
+          key: sonarqube-cache-v1-{{ 4.2.0.1873 }}
+          paths:
+            - vendor/bundle
       - persist_to_workspace:
           root: .
           paths:
             - vendor/bundle/
+            - vendor/sonarqube/
 
   test:
     executor: mac-executor
@@ -59,7 +65,6 @@ jobs:
       - run:
           name: Sonarqube
           command: |
-            brew install sonar-scanner
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
