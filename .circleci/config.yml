@@ -23,20 +23,23 @@ jobs:
           key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - persist_to_workspace:
+          root: .
+          paths: vendor/bundle
 
   test:
     executor: mac-executor
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2
+      - attach_workspace:
+          at: ~/joseswift
       - run:
           name: Test
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane test
+      - store_test_results:
+          path: fastlane/test_output
       - persist_to_workspace:
           root: .
           paths:
@@ -53,8 +56,6 @@ jobs:
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
-      - store_test_results:
-          path: fastlane/test_output
 
 workflows:
   version: 2
