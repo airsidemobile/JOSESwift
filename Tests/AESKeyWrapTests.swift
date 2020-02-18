@@ -77,4 +77,76 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(unwrappedKey, rawKey)
     }
+
+    func testKeyWrapWithTooLargeKey() throws {
+        let rawKey = Data(count: 16)
+        let tooLargeKeyEncryptionKey = Data(count: (128 / 8) + 1)
+
+        XCTAssertThrowsError(
+            try AES.keyWrap(rawKey: rawKey, keyEncryptionKey: tooLargeKeyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
+        }
+    }
+
+    func testKeyWrapWithTooSmallKey() throws {
+        let rawKey = Data(count: 16)
+        let tooLargeKeyEncryptionKey = Data(count: (128 / 8) - 1)
+
+        XCTAssertThrowsError(
+            try AES.keyWrap(rawKey: rawKey, keyEncryptionKey: tooLargeKeyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
+        }
+    }
+
+    func testKeyUnwrapWithTooLargeKey() throws {
+        let wrappedKey = Data(count: 16)
+        let tooLargeKeyEncryptionKey = Data(count: (128 / 8) + 1)
+
+        XCTAssertThrowsError(
+            try AES.keyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: tooLargeKeyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
+        }
+    }
+
+    func testKeyUnwrapWithTooSmallKey() throws {
+        let wrappedKey = Data(count: 16)
+        let tooSmallKeyEncryptionKey = Data(count: (128 / 8) - 1)
+
+        XCTAssertThrowsError(
+            try AES.keyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: tooSmallKeyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
+        }
+    }
+
+    func testKeyWrapEmptyKey() throws {
+        let rawKey = Data()
+        let keyEncryptionKey = Data(count: 128 / 8)
+
+        XCTAssertThrowsError(
+            try AES.keyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.encryptingFailed(description: ""))
+        }
+    }
+
+    func testKeyUnwrapEmptyKey() throws {
+        let wrappedKey = Data()
+        let keyEncryptionKey = Data(count: 128 / 8)
+
+        XCTAssertThrowsError(
+            try AES.keyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey, algorithm: .A128KW),
+            "Invalid keysize"
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.decryptingFailed(description: ""))
+        }
+    }
 }

@@ -50,7 +50,6 @@ extension AESKeyWrappingMode: DecryptionKeyManagementMode {
         )
 
         guard contentEncryptionKey.count == contentEncryptionAlgorithm.keyLength else {
-            // Todo: Make more precise
             throw AESError.keyLengthNotSatisfied
         }
 

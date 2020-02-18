@@ -11,6 +11,23 @@ import XCTest
 import CommonCrypto
 @testable import JOSESwift
 
+extension AESError: Equatable {
+    public static func == (lhs: AESError, rhs: AESError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidAlgorithm, .invalidAlgorithm):
+            return true
+        case (.keyLengthNotSatisfied, .keyLengthNotSatisfied):
+            return true
+        case (.encryptingFailed(description: _), .encryptingFailed(description: _)):
+            return true
+        case (.decryptingFailed(description: _), .decryptingFailed(description: _)):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 class AESKeyWrapKeyManagementModeTests: XCTestCase {
     let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
 
@@ -35,7 +52,7 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
         }
     }
 
-    func testFailsForWrongKeySiye() throws {
+    func testFailsForWrongKeySize() throws {
         for algorithm in keyManagementModeAlgorithms {
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
@@ -44,6 +61,21 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
             )
 
             XCTAssertThrowsError(try keyEncryption.determineContentEncryptionKey())
+        }
+    }
+
+    func testEncryptingFailsForWrongAlgorithm() throws {
+        let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+        for algorithm in rsaKeyManagementModeAlgorithms {
+            let keyEncryption = AESKeyWrappingMode(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: .A128CBCHS256,
+                sharedSymmetricKey: symmetricKeys[.A128KW]!
+            )
+
+            XCTAssertThrowsError(try keyEncryption.determineContentEncryptionKey(), "Invalid algorithm") { error in
+                XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
+            }
         }
     }
 
@@ -111,45 +143,78 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
         }
     }
 
+    func testDecryptingFailsForWrongAlgorithm() throws {
+        let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+        for algorithm in rsaKeyManagementModeAlgorithms {
+            let keyEncryption = AESKeyWrappingMode(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: .A128CBCHS256,
+                sharedSymmetricKey: symmetricKeys[.A128KW]!
+            )
+
+            XCTAssertThrowsError(
+                try keyEncryption.determineContentEncryptionKey(from: Data()), "Invalid algorithm"
+            ) { error in
+                XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
+            }
+        }
+    }
+
+    // Test data taken from RFC-3394, 4 (https://tools.ietf.org/html/rfc3394#section-4).
+    func testDecryptsContentEncryptionKeyAndChecksLengthForContentEncryption() throws {
+        let keyEncryption = AESKeyWrappingMode(
+            keyManagementAlgorithm: .A128KW,
+            contentEncryptionAlgorithm: .A128CBCHS256,
+            sharedSymmetricKey: "000102030405060708090A0B0C0D0E0F".hexadecimalToData()!
+        )
+
+        XCTAssertThrowsError(
+            try keyEncryption.determineContentEncryptionKey(
+                from: "1FA68B0A8112B447AEF34BD8FB5A7B829D3E862371D2CFE5".hexadecimalToData()!
+            )
+        ) { error in
+            XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
+        }
+    }
 }
 
 private func ccAESKeyUnwrap(
-       wrappedKey: Data,
-       keyEncryptionKey: Data,
-       iv: Data
-   ) -> (data: Data, status: Int32) {
-       let alg = CCWrappingAlgorithm(kCCWRAPAES)
+    wrappedKey: Data,
+    keyEncryptionKey: Data,
+    iv: Data
+) -> (data: Data, status: Int32) {
+    let alg = CCWrappingAlgorithm(kCCWRAPAES)
 
-       var rawKeyLength: size_t = CCSymmetricUnwrappedSize(alg, wrappedKey.count)
-       var rawKey = Data(count: rawKeyLength)
+    var rawKeyLength: size_t = CCSymmetricUnwrappedSize(alg, wrappedKey.count)
+    var rawKey = Data(count: rawKeyLength)
 
-       let status = rawKey.withUnsafeMutableBytes { rawKeyBytes in
-           wrappedKey.withUnsafeBytes { wrappedKeyBytes in
-               iv.withUnsafeBytes { ivBytes in
-                   keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
-                       guard
-                           let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                           let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                           let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
-                           let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
-                       else {
-                           return Int32(kCCMemoryFailure)
-                       }
-                       return CCSymmetricKeyUnwrap(
-                           alg,
-                           ivBytes, iv.count,
-                           keyEncryptionKeyBytes, keyEncryptionKey.count,
-                           wrappedKeyBytes, wrappedKey.count,
-                           rawKeyBytes, &rawKeyLength
-                       )
-                   }
-               }
-           }
-       }
+    let status = rawKey.withUnsafeMutableBytes { rawKeyBytes in
+        wrappedKey.withUnsafeBytes { wrappedKeyBytes in
+            iv.withUnsafeBytes { ivBytes in
+                keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
+                    guard
+                        let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
+                        else {
+                            return Int32(kCCMemoryFailure)
+                    }
+                    return CCSymmetricKeyUnwrap(
+                        alg,
+                        ivBytes, iv.count,
+                        keyEncryptionKeyBytes, keyEncryptionKey.count,
+                        wrappedKeyBytes, wrappedKey.count,
+                        rawKeyBytes, &rawKeyLength
+                    )
+                }
+            }
+        }
+    }
 
-       if status == kCCSuccess {
-           rawKey.removeSubrange(rawKeyLength..<rawKey.count)
-       }
+    if status == kCCSuccess {
+        rawKey.removeSubrange(rawKeyLength..<rawKey.count)
+    }
 
-       return (rawKey, status)
-   }
+    return (rawKey, status)
+}
