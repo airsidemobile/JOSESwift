@@ -1,4 +1,12 @@
 # ------------------------------------------------------------------------------
+# Say thanks!
+# ------------------------------------------------------------------------------
+
+unless github.api.organization_member?('airsidemobile', github.pr_author)
+  message "Thanks for your contribution @#{github.pr_author}! :tada: You'll hear back from us soon."
+end
+
+# ------------------------------------------------------------------------------
 # Do you have style?
 # ------------------------------------------------------------------------------
 
