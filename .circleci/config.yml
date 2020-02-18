@@ -29,7 +29,10 @@ jobs:
             brew bundle --no-lock
       - persist_to_workspace:
           root: .
-          paths: vendor/bundle
+          paths:
+            - vendor/bundle/
+            - /usr/local/Cellar/
+            - /usr/local/bin/
 
   test:
     executor: mac-executor
