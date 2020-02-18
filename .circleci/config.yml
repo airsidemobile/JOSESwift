@@ -31,8 +31,6 @@ jobs:
           root: .
           paths:
             - vendor/bundle/
-            - /usr/local/Cellar/
-            - /usr/local/bin/
 
   test:
     executor: mac-executor
@@ -61,6 +59,7 @@ jobs:
       - run:
           name: Sonarqube
           command: |
+            brew install sonar-scanner
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
