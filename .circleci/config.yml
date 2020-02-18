@@ -23,6 +23,10 @@ jobs:
           key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - run:
+          name: Homebrew
+          command: |
+            brew bundle --no-lock
       - persist_to_workspace:
           root: .
           paths: vendor/bundle
