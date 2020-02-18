@@ -15,6 +15,10 @@ jobs:
           keys:
             - gem-cache-v2-{{ checksum "Gemfile.lock" }}
             - gem-cache-v2
+      - restore_cache:
+          keys:
+            - homebrew-cache-v1-{{ checksum Brewfile }}
+            - homebrew-cache-v1
       - run:
           name: Bundler
           command: |
@@ -24,14 +28,13 @@ jobs:
           paths:
             - vendor/bundle
       - run:
-          name: Sonarqube
+          name: Homebrew 
           command: |
-            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-macosx.zip
-            unzip -qq -o sonar-scanner-cli-4.2.0.1873-macosx.zip -d vendor/sonarqube
+            bundle bundle check || brew bundle install --no-lock
       - save_cache:
-          key: sonarqube-cache-v1-4.2.0.1873
+          key: homebrew-cache-v1-{{ checksum Brewfile }}
           paths:
-            - vendor/bundle
+            - ~/Library/Caches/Homebrew
       - persist_to_workspace:
           root: .
           paths:
@@ -62,9 +65,14 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/joseswift
+      - restore_cache:
+          keys:
+            - homebrew-cache-v1-{{ checksum Brewfile }}
+            - homebrew-cache-v1
       - run:
           name: Sonarqube
           command: |
+            brew bundle check || brew bundle install --no-lock
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
