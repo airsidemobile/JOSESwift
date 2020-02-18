@@ -69,14 +69,6 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr>                                                       <td><code>PBES2-HS512+A256KW</code></td><td></td></tr>
 </table>
 
-### Compression Algorithms
-
-JOSESwift supports the [DEFLATE](https://tools.ietf.org/html/rfc1951) compression algorithm [for JWE](https://tools.ietf.org/html/rfc7516#section-4.1.3).
-
-| DEF                   |
-| :-------------------: |
-| :white_check_mark:    |
-
 ### Serializations
 
 For interchangeability JOSESwift currently supports compact serialization [for JWS](https://tools.ietf.org/html/rfc7515#section-3.1) and [for JWE](https://tools.ietf.org/html/rfc7516#section-3.1).
@@ -84,6 +76,10 @@ For interchangeability JOSESwift currently supports compact serialization [for J
 | Compact Serialization | JSON Serialization |		
 | :-------------------: | :----------------: |		
 | :white_check_mark:    |                    |
+
+### Compression Algorithms
+
+JOSESwift supports the [DEFLATE](https://tools.ietf.org/html/rfc1951) compression algorithm [for JWE](https://tools.ietf.org/html/rfc7516#section-4.1.3).
 
 ## Installation
 
