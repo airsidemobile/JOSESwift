@@ -37,6 +37,17 @@ jobs:
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane test
+      - persist_to_workspace:
+          root: circle_workspace
+          paths:
+            - fastlane/test_output/derived_data/Logs/Test/
+
+  sonarqube:
+    executor: mac-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: fastlane/test_output/derived_data/Logs/Test/
       - run:
           name: Sonarqube
           command: |
@@ -45,28 +56,14 @@ jobs:
       - store_test_results:
           path: fastlane/test_output
 
-  danger:
-    executor: mac-executor
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2
-      - run:
-          name: Danger
-          command: |
-            bundle config --local path vendor/bundle
-            bundle exec danger
-
 workflows:
   version: 2
-  test_and_lint:
+  test:
     jobs:
       - install_dependendies
       - test:
           requires:
             - install_dependendies
-      - danger:
+      - sonarqube:
           requires:
-            - install_dependendies
+            - test
