@@ -81,8 +81,15 @@ extension KeyManagementAlgorithm {
                 recipientPrivateKey: recipientPrivateKey
             )
         case .A128KW, .A192KW, .A256KW:
-            // Todo: Implement
-            return nil
+            guard let sharedSymmetricKey = cast(decryptionKey, to: AESKeyWrappingMode.KeyType.self) else {
+                return nil
+            }
+
+            return AESKeyWrappingMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                sharedSymmetricKey: sharedSymmetricKey
+            )
         case .direct:
             guard let sharedSymmetricKey = cast(decryptionKey, to: DirectEncryptionMode.KeyType.self) else {
                 return nil

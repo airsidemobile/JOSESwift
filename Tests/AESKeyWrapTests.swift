@@ -29,7 +29,9 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        // Todo: Decrypt
+        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A128KW)
+
+        XCTAssertEqual(unwrappedKey, rawKey)
     }
 
     func testA192KW() {
@@ -49,7 +51,9 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        // Todo: Decrypt
+        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A192KW)
+
+        XCTAssertEqual(unwrappedKey, rawKey)
     }
 
     func testA256KW() {
@@ -69,6 +73,8 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        // Todo: Decrypt
+        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A256KW)
+
+        XCTAssertEqual(unwrappedKey, rawKey)
     }
 }

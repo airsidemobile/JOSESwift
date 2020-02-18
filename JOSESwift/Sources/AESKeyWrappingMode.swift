@@ -40,3 +40,20 @@ extension AESKeyWrappingMode: EncryptionKeyManagementMode {
         return (contentEncryptionKey, encryptedKey)
     }
 }
+
+extension AESKeyWrappingMode: DecryptionKeyManagementMode {
+    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+        let contentEncryptionKey = try AES.keyUnwrap(
+            wrappedKey: encryptedKey,
+            keyEncryptionKey: sharedSymmetricKey,
+            algorithm: keyManagementAlgorithm
+        )
+
+        guard contentEncryptionKey.count == contentEncryptionAlgorithm.keyLength else {
+            // Todo: Make more precise
+            throw AESError.keyLengthNotSatisfied
+        }
+
+        return contentEncryptionKey
+    }
+}

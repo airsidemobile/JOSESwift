@@ -180,10 +180,32 @@ enum AES {
             let wrapped = try ccAESKeyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
 
             guard wrapped.status == kCCSuccess else {
-                throw AESError.encryptingFailed(description: "Key wrap failed with CryptoStatus: \(wrapped.status).")
+                throw AESError.encryptingFailed(description: "Key wrap failed with status: \(wrapped.status).")
             }
 
             return wrapped.data
+        default:
+            throw AESError.invalidAlgorithm
+        }
+    }
+
+    static func keyUnwrap(wrappedKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
+        switch algorithm {
+        case .A128KW, .A192KW, .A256KW:
+            // Todo: Better solve this invalid algorithm problem
+            guard algorithm.checkAESKeyLength(for: keyEncryptionKey)! else {
+                throw AESError.keyLengthNotSatisfied
+            }
+
+            let iv = algorithm.iv!
+
+            let unwrapped = try ccAESKeyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
+
+            guard unwrapped.status == kCCSuccess else {
+                throw AESError.decryptingFailed(description: "Key unwrap failed with status: \(unwrapped.status).")
+            }
+
+            return unwrapped.data
         default:
             throw AESError.invalidAlgorithm
         }
@@ -244,6 +266,7 @@ extension AES {
 }
 
 extension AES {
+    // Todo: Throws?
     private static func ccAESKeyWrap(
         rawKey: Data,
         keyEncryptionKey: Data,
@@ -253,10 +276,6 @@ extension AES {
 
         var wrappedKeyLength: size_t = CCSymmetricWrappedSize(alg, rawKey.count)
         var wrappedKey = Data(count: wrappedKeyLength)
-
-        guard wrappedKey.count > 0, rawKey.count > 0, iv.count > 0, keyEncryptionKey.count > 0 else {
-            throw AESError.cannotPerformOperationOnEmptyDataBuffer
-        }
 
         let status = wrappedKey.withUnsafeMutableBytes { wrappedKeyBytes in
             rawKey.withUnsafeBytes { rawKeyBytes in
@@ -287,5 +306,46 @@ extension AES {
         }
 
         return (wrappedKey, status)
+    }
+
+    private static func ccAESKeyUnwrap(
+        wrappedKey: Data,
+        keyEncryptionKey: Data,
+        iv: Data
+    ) throws -> (data: Data, status: Int32) {
+        let alg = CCWrappingAlgorithm(kCCWRAPAES)
+
+        var rawKeyLength: size_t = CCSymmetricUnwrappedSize(alg, wrappedKey.count)
+        var rawKey = Data(count: rawKeyLength)
+
+        let status = rawKey.withUnsafeMutableBytes { rawKeyBytes in
+            wrappedKey.withUnsafeBytes { wrappedKeyBytes in
+                iv.withUnsafeBytes { ivBytes in
+                    keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
+                        guard
+                            let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
+                            let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
+                        else {
+                            return Int32(kCCMemoryFailure)
+                        }
+                        return CCSymmetricKeyUnwrap(
+                            alg,
+                            ivBytes, iv.count,
+                            keyEncryptionKeyBytes, keyEncryptionKey.count,
+                            wrappedKeyBytes, wrappedKey.count,
+                            rawKeyBytes, &rawKeyLength
+                        )
+                    }
+                }
+            }
+        }
+
+        if status == kCCSuccess {
+            rawKey.removeSubrange(rawKeyLength..<rawKey.count)
+        }
+
+        return (rawKey, status)
     }
 }

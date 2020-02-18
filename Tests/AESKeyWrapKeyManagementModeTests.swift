@@ -8,6 +8,7 @@
 // swiftlint:disable force_unwrapping
 
 import XCTest
+import CommonCrypto
 @testable import JOSESwift
 
 class AESKeyWrapKeyManagementModeTests: XCTestCase {
@@ -58,7 +59,13 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
             XCTAssertNotEqual(cek, encryptedKey)
 
-            // Todo: Decypt
+            let decryptedKey = ccAESKeyUnwrap(
+                wrappedKey: encryptedKey,
+                keyEncryptionKey: symmetricKeys[algorithm]!,
+                iv: Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+            )
+
+            XCTAssertEqual(decryptedKey.data, cek)
         }
     }
 
@@ -74,7 +81,15 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
             XCTAssertNotEqual(cek, encryptedKey)
 
-            // Todo: Try to decrypt with wrong key
+            let wrongKey = Data(repeating: 1, count: symmetricKeys[algorithm]!.count)
+
+            let decryptedKey = ccAESKeyUnwrap(
+                wrappedKey: encryptedKey,
+                keyEncryptionKey: wrongKey,
+                iv: Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+            )
+
+            XCTAssertNotEqual(decryptedKey.data, cek)
         }
     }
 
@@ -97,3 +112,44 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
     }
 
 }
+
+private func ccAESKeyUnwrap(
+       wrappedKey: Data,
+       keyEncryptionKey: Data,
+       iv: Data
+   ) -> (data: Data, status: Int32) {
+       let alg = CCWrappingAlgorithm(kCCWRAPAES)
+
+       var rawKeyLength: size_t = CCSymmetricUnwrappedSize(alg, wrappedKey.count)
+       var rawKey = Data(count: rawKeyLength)
+
+       let status = rawKey.withUnsafeMutableBytes { rawKeyBytes in
+           wrappedKey.withUnsafeBytes { wrappedKeyBytes in
+               iv.withUnsafeBytes { ivBytes in
+                   keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
+                       guard
+                           let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                           let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                           let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
+                           let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
+                       else {
+                           return Int32(kCCMemoryFailure)
+                       }
+                       return CCSymmetricKeyUnwrap(
+                           alg,
+                           ivBytes, iv.count,
+                           keyEncryptionKeyBytes, keyEncryptionKey.count,
+                           wrappedKeyBytes, wrappedKey.count,
+                           rawKeyBytes, &rawKeyLength
+                       )
+                   }
+               }
+           }
+       }
+
+       if status == kCCSuccess {
+           rawKey.removeSubrange(rawKeyLength..<rawKey.count)
+       }
+
+       return (rawKey, status)
+   }
