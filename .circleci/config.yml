@@ -71,6 +71,10 @@ jobs:
       - run:
           name: Sonarqube
           command: |
+            if [ -z "$FL_SONAR_LOGIN" ]; then
+              echo "No Sonarcloud token is set. Failing."
+              exit 1;
+            fi
             HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install sonar-scanner --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
@@ -89,3 +93,6 @@ workflows:
       - sonarqube:
           requires:
             - test
+          filters:
+            branches:
+              ignore: /pull\/[0-9]+/ # Forked pull requests
