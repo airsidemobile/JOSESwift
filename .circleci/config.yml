@@ -78,7 +78,9 @@ workflows:
   test_and_lint:
     jobs:
       - install_dependendies
-      - lint
+      - lint:
+          requires:
+            -install_dependendies
       - test:
           requires:
             - install_dependendies
