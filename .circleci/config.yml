@@ -55,9 +55,11 @@ jobs:
       - run:
           name: Lint
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint --display-times || true
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane lint strict:true
+      - store_test_results:
+          path: fastlane/test_output
 
 
   sonarqube:
@@ -69,7 +71,7 @@ jobs:
       - run:
           name: Sonarqube
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install sonar-scanner --display-times || true
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP =1 brew install sonar-scanner --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
