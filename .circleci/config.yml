@@ -17,7 +17,7 @@ jobs:
             - gem-cache-v2
       - restore_cache:
           keys:
-            - homebrew-cache-v1-{{ checksum Brewfile }}
+            - homebrew-cache-v1-{{ checksum "Brewfile" }}
             - homebrew-cache-v1
       - run:
           name: Bundler
@@ -32,7 +32,7 @@ jobs:
           command: |
             bundle bundle check || brew bundle install --no-lock
       - save_cache:
-          key: homebrew-cache-v1-{{ checksum Brewfile }}
+          key: homebrew-cache-v1-{{ checksum "Brewfile" }}
           paths:
             - ~/Library/Caches/Homebrew
       - persist_to_workspace:
@@ -67,7 +67,7 @@ jobs:
           at: ~/joseswift
       - restore_cache:
           keys:
-            - homebrew-cache-v1-{{ checksum Brewfile }}
+            - homebrew-cache-v1-{{ checksum "Brewfile" }}
             - homebrew-cache-v1
       - run:
           name: Sonarqube
