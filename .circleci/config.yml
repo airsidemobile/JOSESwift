@@ -39,11 +39,6 @@ jobs:
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane test
-      - run:
-          name: Sonarqube
-          command: |
-            bundle config --local path vendor/bundle
-            bundle exec fastlane sonarqube
       - store_test_results:
           path: fastlane/test_output
       - persist_to_workspace:
@@ -64,9 +59,6 @@ jobs:
       - run:
           name: Sonarqube
           command: |
-            date
-            brew bundle check || brew bundle install --no-lock
-            date
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
@@ -76,5 +68,6 @@ workflows:
     jobs:
       - install_dependendies
       - test:
-          requires:
-            - install_dependendies
+          requires: install_dependendies
+      - sonarqube:
+          requires: test
