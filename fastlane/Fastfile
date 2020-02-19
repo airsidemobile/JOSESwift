@@ -15,8 +15,9 @@ lane :test do
 end
 
 desc "Lint Swift files"
-lane :lint do
-  swiftlint
+lane :lint do |options|
+  strict = options.fetch(:strict, false)
+  swiftlint(strict: strict, reporter: "junit", output_file: "#{TEST_OUTPUT}/swiftlint.result.junit")
 end
 
 desc "Format Swift files"
@@ -116,9 +117,6 @@ lane :release do
   pod_push(path: "JOSESwift.podspec")
 
   ensure_git_status_clean
-
-  # Sonarqube
-  sonarqube
 end
 
 desc "Run Sonarqube analysis after running the test lane"
