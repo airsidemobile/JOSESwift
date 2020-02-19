@@ -80,7 +80,7 @@ workflows:
       - install_dependendies
       - lint:
           requires:
-            -install_dependendies
+            - install_dependendies
       - test:
           requires:
             - install_dependendies
