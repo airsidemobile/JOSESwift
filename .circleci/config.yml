@@ -68,6 +68,8 @@ workflows:
     jobs:
       - install_dependendies
       - test:
-          requires: install_dependendies
+          requires:
+            - install_dependendies
       - sonarqube:
-          requires: test
+          requires:
+            - test
