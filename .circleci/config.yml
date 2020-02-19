@@ -34,7 +34,7 @@ jobs:
       - save_cache:
           key: homebrew-cache-v1-{{ checksum "Brewfile" }}
           paths:
-            - ~/Library/Caches/Homebrew
+            - /usr/local/Cellar
       - persist_to_workspace:
           root: .
           paths:
