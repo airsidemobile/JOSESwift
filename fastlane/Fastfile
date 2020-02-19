@@ -11,12 +11,14 @@ lane :test do
   sh "rm -rf ../#{DERIVED_DATA_PATH}"
 
   UI.message "Testing"
-  scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true)
+  scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true, output_directory: "#{TEST_OUTPUT}/xctest/")
 end
 
 desc "Lint Swift files"
-lane :lint do
-  swiftlint
+lane :lint do |options|
+  strict = options.fetch(:strict, false)
+  sh "mkdir -p ../#{TEST_OUTPUT}/swiftlint/"
+  swiftlint(strict: strict, reporter: "junit", output_file: "#{TEST_OUTPUT}/swiftlint/results.junit")
 end
 
 desc "Format Swift files"
@@ -116,9 +118,6 @@ lane :release do
   pod_push(path: "JOSESwift.podspec")
 
   ensure_git_status_clean
-
-  # Sonarqube
-  sonarqube
 end
 
 desc "Run Sonarqube analysis after running the test lane"
