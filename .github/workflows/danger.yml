@@ -25,5 +25,5 @@ jobs:
       env:
         DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN}}
       run: |
-        bundle config path cache/bundle
+        bundle config path vendor/bundle
         bundle exec danger  
