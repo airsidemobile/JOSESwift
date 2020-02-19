@@ -72,7 +72,9 @@ jobs:
       - run:
           name: Sonarqube
           command: |
+            date
             brew bundle check || brew bundle install --no-lock
+            date
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
