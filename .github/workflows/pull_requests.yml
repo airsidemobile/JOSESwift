@@ -22,10 +22,10 @@ jobs:
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3
     - name: Upload dependencies
-        uses: actions/upload-artifact@v1
-        with:
-          name: bundler
-          path: vendor/bundle
+      uses: actions/upload-artifact@v1
+      with:
+        name: bundler
+        path: vendor/bundle
 
 
   danger:
@@ -37,9 +37,9 @@ jobs:
       with:
         fetch-depth: 0
     - name: Download dependencies
-         uses: actions/download-artifact@v1
-         with:
-           name: bundler
+      uses: actions/download-artifact@v1
+      with:
+        name: bundler
     - name: Danger
       env:
         DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN}}
