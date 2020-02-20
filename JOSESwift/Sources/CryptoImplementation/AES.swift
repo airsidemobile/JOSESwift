@@ -36,12 +36,10 @@ fileprivate extension ContentEncryptionAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
         case .A256CBCHS512:
-            // 128 referes to the block size in this case.
-            return CCAlgorithm(kCCAlgorithmAES128)
+            return CCAlgorithm(kCCAlgorithmAES)
 
         case .A128CBCHS256:
-            // 128 referes to the block size in this case.
-            return CCAlgorithm(kCCAlgorithmAES128)
+            return CCAlgorithm(kCCAlgorithmAES)
         }
     }
 
