@@ -79,8 +79,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: Data()
                     )
                 )
-            default:
-                // .direct
+            case .direct:
                 XCTAssertNotNil(
                     Encrypter(
                         keyManagementAlgorithm: algorithm,
@@ -88,6 +87,8 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: Data()
                     )
                 )
+            default:
+                XCTFail()
             }
         }
     }
@@ -111,8 +112,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: publicKeyAlice2048!
                     )
                 )
-            default:
-                // .direct
+            case .direct:
                 XCTAssertNil(
                     Encrypter(
                         keyManagementAlgorithm: algorithm,
@@ -120,6 +120,8 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: publicKeyAlice2048!
                     )
                 )
+            default:
+                XCTFail()
             }
         }
     }
@@ -169,8 +171,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: Data()
                     )
                 )
-            default:
-                // .direct
+            case .direct:
                 XCTAssertNotNil(
                     Decrypter(
                         keyManagementAlgorithm: algorithm,
@@ -178,6 +179,8 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: Data()
                     )
                 )
+            default:
+                XCTFail()
             }
         }
     }
@@ -201,8 +204,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: publicKeyAlice2048!
                     )
                 )
-            default:
-                // .direct
+            case .direct:
                 XCTAssertNil(
                     Decrypter(
                         keyManagementAlgorithm: algorithm,
@@ -210,6 +212,8 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: publicKeyAlice2048!
                     )
                 )
+            default:
+                XCTFail()
             }
         }
     }
