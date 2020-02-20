@@ -103,6 +103,7 @@ extension Encrypter {
     }
 }
 
+@available(*, deprecated, message: "This type will be removed with the next major release.")
 public struct EncryptionContext {
     let encryptedKey: Data
     let ciphertext: Data
@@ -110,6 +111,7 @@ public struct EncryptionContext {
     let initializationVector: Data
 }
 
+@available(*, deprecated, message: "This type will be removed with the next major release.")
 public struct SymmetricEncryptionContext {
     let ciphertext: Data
     let authenticationTag: Data

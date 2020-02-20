@@ -104,6 +104,7 @@ extension Decrypter {
     }
 }
 
+@available(*, deprecated, message: "This type will be removed with the next major release.")
 public struct DecryptionContext {
     let header: JWEHeader
     let encryptedKey: Data
@@ -112,7 +113,8 @@ public struct DecryptionContext {
     let authenticationTag: Data
 }
 
- public struct SymmetricDecryptionContext {
+@available(*, deprecated, message: "This type will be removed with the next major release.")
+public struct SymmetricDecryptionContext {
     let ciphertext: Data
     let initializationVector: Data
     let additionalAuthenticatedData: Data
