@@ -47,6 +47,15 @@ extension KeyManagementAlgorithm {
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPublicKey: recipientPublicKey
             )
+        case .A128KW, .A192KW, .A256KW:
+            guard let sharedSymmetricKey = cast(encryptionKey, to: AESKeyWrappingMode.KeyType.self) else {
+                return nil
+            }
+
+            return AESKeyWrappingMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                sharedSymmetricKey: sharedSymmetricKey)
         case .direct:
             guard let sharedSymmetricKey = cast(encryptionKey, to: DirectEncryptionMode.KeyType.self) else {
                 return nil
@@ -70,6 +79,16 @@ extension KeyManagementAlgorithm {
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                 recipientPrivateKey: recipientPrivateKey
+            )
+        case .A128KW, .A192KW, .A256KW:
+            guard let sharedSymmetricKey = cast(decryptionKey, to: AESKeyWrappingMode.KeyType.self) else {
+                return nil
+            }
+
+            return AESKeyWrappingMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                sharedSymmetricKey: sharedSymmetricKey
             )
         case .direct:
             guard let sharedSymmetricKey = cast(decryptionKey, to: DirectEncryptionMode.KeyType.self) else {

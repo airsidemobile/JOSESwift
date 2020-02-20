@@ -26,6 +26,8 @@ import XCTest
 @testable import JOSESwift
 
 class JWERSATests: RSACryptoTestCase {
+    let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+
     // The JWE serializations below are generated using the Java library Nimbus JOSE + JWT.
     // The key used to encrypt the JWEs in Nimbus is the JWK representation of `publicKeyAlice2048`.
     // That way we can decrypt them using the corresponding `privateKeyAlice2048`.
@@ -92,11 +94,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048)!
@@ -136,11 +134,7 @@ class JWERSATests: RSACryptoTestCase {
 
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             var header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             header.kid = "kid"
 
@@ -161,11 +155,7 @@ class JWERSATests: RSACryptoTestCase {
             XCTFail("privateKeyAlice2048 was nil.")
             return
         }
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
             let payload = try! jwe.decrypt(with: privateKeyAlice2048).data()
 
@@ -185,11 +175,7 @@ class JWERSATests: RSACryptoTestCase {
             ]
         ]
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
@@ -214,11 +200,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(
@@ -308,11 +290,7 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(

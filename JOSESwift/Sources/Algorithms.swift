@@ -58,6 +58,12 @@ public enum KeyManagementAlgorithm: String, CaseIterable {
     case RSAOAEP = "RSA-OAEP"
     /// Key encryption using RSAES OAEP using SHA-256 and MGF1 with SHA-256
     case RSAOAEP256 = "RSA-OAEP-256"
+    // Key wrapping using AES Key Wrap with default initial value using 128-bit key
+    case A128KW
+    // Key wrapping using AES Key Wrap with default initial value using 192-bit key
+    case A192KW
+    // Key wrapping using AES Key Wrap with default initial value using 1256-bit key
+    case A256KW
     /// Direct encryption using a shared symmetric key as the content encryption key
     case direct = "dir"
 }

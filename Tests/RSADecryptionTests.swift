@@ -26,6 +26,8 @@ import XCTest
 @testable import JOSESwift
 
 class RSADecryptionTests: RSACryptoTestCase {
+    let keyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+
     // Cipher texts are generated with `openssl rsautl`.
     // `printf` is used because `echo` appends a newline at the end of the string.
 
@@ -122,11 +124,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(base64Encoded: aliceCipherTextDict[algorithm.rawValue]!)!
             let decryptedData = try! RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)
             let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
@@ -141,11 +139,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
             let decryptedData = try! RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)
             let decryptedMessage = String(data: decryptedData, encoding: String.Encoding.utf8)
@@ -160,11 +154,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             // Decrypting with the wrong key should throw an error
             let ciphertext = Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)) { (error: Error) in
@@ -179,11 +169,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             // Decrypting with the wrong key should throw an error
             let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
@@ -198,11 +184,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(count: 300)
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -216,11 +198,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(count: 0)
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
@@ -237,11 +215,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let secKeyBlockSize = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: secKeyBlockSize)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 // Should throw "decryption failed", but
                 // should _not_ throw cipherTextLenghtNotSatisfied
@@ -259,11 +233,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes + 1)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }
@@ -279,11 +249,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         let cipherTextLengthInBytes = SecKeyGetBlockSize(privateKeyAlice2048)
         let testMessage = Data(count: cipherTextLengthInBytes - 1)
 
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+        for algorithm in keyManagementModeAlgorithms {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
             }

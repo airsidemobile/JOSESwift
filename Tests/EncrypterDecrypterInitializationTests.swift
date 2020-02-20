@@ -25,131 +25,196 @@
 import XCTest
 @testable import JOSESwift
 
+// https://stackoverflow.com/a/38725560/5233456
+private func ~= <T: Equatable>(array: [T], value: T) -> Bool {
+    return array.contains(value)
+}
+
 class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
+    let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
+    let aesKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
 
     @available(*, deprecated)
-    func testEncrypterDeprecated1RSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+    func testEncrypterDeprecated1Initialization() {
+        for algorithm in rsaKeyManagementModeAlgorithms {
             XCTAssertNotNil(
-                Encrypter(keyEncryptionAlgorithm: algorithm, keyEncryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
-            )
-        }
-    }
-
-    @available(*, deprecated)
-    func testEncrypterDeprecated2RSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
-            XCTAssertNotNil(
-                Encrypter(keyEncryptionAlgorithm: algorithm, encryptionKey: publicKeyAlice2048!, contentEncyptionAlgorithm: .A256CBCHS512)
-            )
-        }
-    }
-
-    func testEncrypterNewRSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
-            XCTAssertNotNil(
-                Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
-            )
-        }
-    }
-
-    func testEncrypterRSAKeyInitializationWrongAlgorithm() {
-        XCTAssertNil(
-            Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)
-        )
-    }
-
-    func testEncrypterRSAAlgorithmInitializationWrongKeyType() {
-        XCTAssertNil(
-            Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: Data())
-        )
-    }
-
-    func testEncrypterDirectInitializationWrongKeyType() {
-        XCTAssertNil(
-            Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)
-        )
-    }
-
-    @available(*, deprecated)
-    func testDecrypterDeprecatedRSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
-            XCTAssertNotNil(
-                Decrypter(keyDecryptionAlgorithm: algorithm, keyDecryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+                Encrypter(
+                    keyEncryptionAlgorithm: algorithm,
+                    keyEncryptionKey: publicKeyAlice2048!,
+                    contentEncyptionAlgorithm: .A256CBCHS512
+                )
             )
         }
     }
 
     @available(*, deprecated)
-    func testDecrypterDeprecated1RSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+    func testEncrypterDeprecated2Initialization() {
+        for algorithm in rsaKeyManagementModeAlgorithms {
             XCTAssertNotNil(
-                Decrypter(keyDecryptionAlgorithm: algorithm, keyDecryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+                Encrypter(
+                    keyEncryptionAlgorithm: algorithm,
+                    encryptionKey: publicKeyAlice2048!,
+                    contentEncyptionAlgorithm: .A256CBCHS512
+                )
+            )
+        }
+    }
+
+    func testSuccessfulEncrypterInitialization() {
+        for algorithm in KeyManagementAlgorithm.allCases {
+            switch algorithm {
+            case rsaKeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case aesKeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: Data()
+                    )
+                )
+            case .direct:
+                XCTAssertNotNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: Data()
+                    )
+                )
+            default:
+                XCTFail()
+            }
+        }
+    }
+
+    func testWrongKeyTypeEncrypterInitialization() {
+        for algorithm in KeyManagementAlgorithm.allCases {
+            switch algorithm {
+            case rsaKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: Data()
+                    )
+                )
+            case aesKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case .direct:
+                XCTAssertNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        encryptionKey: publicKeyAlice2048!
+                    )
+                )
+            default:
+                XCTFail()
+            }
+        }
+    }
+
+    @available(*, deprecated)
+    func testDecrypterDeprecated1Initialization() {
+        for algorithm in rsaKeyManagementModeAlgorithms {
+            XCTAssertNotNil(
+                Decrypter(
+                    keyDecryptionAlgorithm: algorithm,
+                    keyDecryptionKey: privateKeyAlice2048!,
+                    contentDecryptionAlgorithm: .A256CBCHS512
+                )
             )
         }
     }
 
     @available(*, deprecated)
-    func testDecrypterDeprecated2RSAInitialization() {
-        for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
-            }
-
+    func testDecrypterDeprecated2Initialization() {
+        for algorithm in rsaKeyManagementModeAlgorithms {
             XCTAssertNotNil(
-                Decrypter(keyDecryptionAlgorithm: algorithm, decryptionKey: privateKeyAlice2048!, contentDecryptionAlgorithm: .A256CBCHS512)
+                Decrypter(
+                    keyDecryptionAlgorithm: algorithm,
+                    decryptionKey: privateKeyAlice2048!,
+                    contentDecryptionAlgorithm: .A256CBCHS512
+                )
             )
         }
     }
 
-    func testDecrypterNewRSAInitialization() {
+    func testDecrypterEncrypterInitialization() {
         for algorithm in KeyManagementAlgorithm.allCases {
-            guard algorithm != .direct else {
-                continue
+            switch algorithm {
+            case rsaKeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case aesKeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: Data()
+                    )
+                )
+            case .direct:
+                XCTAssertNotNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: Data()
+                    )
+                )
+            default:
+                XCTFail()
             }
-
-            XCTAssertNotNil(
-                Decrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)
-            )
         }
     }
 
-    func testDecrypterRSAInitializationWrongAlgorithm() {
-        XCTAssertNil(
-            Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)
-        )
+    func testWrongKeyTypeDecrypterInitialization() {
+        for algorithm in KeyManagementAlgorithm.allCases {
+            switch algorithm {
+            case rsaKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: Data()
+                    )
+                )
+            case aesKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case .direct:
+                XCTAssertNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: publicKeyAlice2048!
+                    )
+                )
+            default:
+                XCTFail()
+            }
+        }
     }
-
-    func testDecrypterRSAInitializationWrongKeyType() {
-        XCTAssertNil(
-            Decrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: Data())
-        )
-    }
-
-    func testDecrypterDirectInitializationWrongKeyType() {
-        XCTAssertNil(
-            Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)
-        )
-    }
-
 }

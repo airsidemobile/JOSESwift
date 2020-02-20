@@ -169,7 +169,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 recipientPrivateKey: privateKeyAlice2048!
             )
 
-            let encryptedKey = Data(count: algorithm.maxMessageLength(for: publicKeyAlice2048!) - 10)
+            let encryptedKey = Data(count: algorithm.maxMessageLength(for: publicKeyAlice2048!)! - 10)
 
             let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
             let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)

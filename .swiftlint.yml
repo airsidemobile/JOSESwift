@@ -23,3 +23,9 @@ opt_in_rules:
 
 line_length:
   ignores_comments: true
+
+included:
+  - JOSESwift/Sources
+  - Tests
+excluded:
+  - vendor

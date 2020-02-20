@@ -23,50 +23,76 @@ jobs:
           key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - persist_to_workspace:
+          root: .
+          paths:
+            - vendor/bundle
 
   test:
     executor: mac-executor
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2
+      - attach_workspace:
+          at: ~/joseswift
       - run:
           name: Test
           command: |
             bundle config --local path vendor/bundle
             bundle exec fastlane test
-      - run:
-          name: Sonarqube
-          command: |
-            bundle config --local path vendor/bundle
-            bundle exec fastlane sonarqube
       - store_test_results:
           path: fastlane/test_output
+      - persist_to_workspace:
+          root: .
+          paths:
+            - fastlane/test_output/derived_data/Logs/Test/
 
-  danger:
+  lint:
     executor: mac-executor
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2
+      - attach_workspace:
+          at: ~/joseswift
       - run:
-          name: Danger
+          name: Lint
           command: |
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint --display-times || true
             bundle config --local path vendor/bundle
-            bundle exec danger
+            bundle exec fastlane lint strict:true
+      - store_test_results:
+          path: fastlane/test_output
+
+
+  sonarqube:
+    executor: mac-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/joseswift
+      - run:
+          name: Sonarqube
+          command: |
+            if [ -z "$FL_SONAR_LOGIN" ]; then
+              echo "No Sonarcloud token is set. Failing."
+              exit 1;
+            fi
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install sonar-scanner --display-times || true
+            bundle config --local path vendor/bundle
+            bundle exec fastlane sonarqube
 
 workflows:
   version: 2
   test_and_lint:
     jobs:
       - install_dependendies
+      - lint:
+          requires:
+            - install_dependendies
       - test:
           requires:
             - install_dependendies
-      - danger:
+      - sonarqube:
           requires:
-            - install_dependendies
+            - test
+          filters:
+            branches:
+              ignore: /pull\/[0-9]+/ # Forked pull requests
