@@ -95,10 +95,6 @@ class JWERSATests: RSACryptoTestCase {
         }
 
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048)!
@@ -139,10 +135,6 @@ class JWERSATests: RSACryptoTestCase {
     @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             var header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             header.kid = "kid"
 
@@ -164,10 +156,6 @@ class JWERSATests: RSACryptoTestCase {
             return
         }
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
             let payload = try! jwe.decrypt(with: privateKeyAlice2048).data()
 
@@ -188,10 +176,6 @@ class JWERSATests: RSACryptoTestCase {
         ]
 
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
@@ -217,10 +201,6 @@ class JWERSATests: RSACryptoTestCase {
         }
 
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(
@@ -311,10 +291,6 @@ class JWERSATests: RSACryptoTestCase {
         }
 
         for algorithm in keyManagementModeAlgorithms {
-            guard algorithm != .direct else {
-                continue
-            }
-
             let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
 
             let decrypter = Decrypter(
