@@ -158,32 +158,27 @@ enum AES {
     ///   - keyEncryptionKey: The key used to encypt the raw key
     ///   - algorithm: The algorithm to use for AES key wrap
     static func wrap(rawKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
-        switch algorithm {
-        case .A128KW, .A192KW, .A256KW:
-            guard
-                let keyLengthOk = algorithm.checkAESKeyLength(for: keyEncryptionKey),
-                keyLengthOk
-            else {
-                throw AESError.keyLengthNotSatisfied
-            }
+        let keyWrapAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
 
-            // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
-            // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
-            let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
-
-            let wrapped = ccAESKeyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
-
-            guard
-                let wrappedKey = wrapped.data,
-                wrapped.status == kCCSuccess
-            else {
-                throw AESError.encryptingFailed(description: "Key wrap failed with status: \(wrapped.status).")
-            }
-
-            return wrappedKey
-        default:
+        guard keyWrapAlgorithms.contains(algorithm) else {
             throw AESError.invalidAlgorithm
         }
+
+        guard algorithm.checkAESKeyLength(for: keyEncryptionKey) == true else {
+            throw AESError.keyLengthNotSatisfied
+        }
+
+        // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
+        // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
+        let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+
+        let wrapped = ccAESKeyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
+
+        guard let wrappedKey = wrapped.data, wrapped.status == kCCSuccess else {
+            throw AESError.encryptingFailed(description: "Key wrap failed with status: \(wrapped.status).")
+        }
+
+        return wrappedKey
     }
 
     /// Decrypts the given raw key using AES key wrap.
@@ -192,32 +187,27 @@ enum AES {
     ///   - keyEncryptionKey: The key that was used to encrypt the raw key
     ///   - algorithm: The algorithm to use for AES key wrap
     static func unwrap(wrappedKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
-        switch algorithm {
-        case .A128KW, .A192KW, .A256KW:
-            guard
-                let keyLengthOk = algorithm.checkAESKeyLength(for: keyEncryptionKey),
-                keyLengthOk
-            else {
-                throw AESError.keyLengthNotSatisfied
-            }
+        let keyWrapAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
 
-            // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
-            // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
-            let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
-
-            let unwrapped = ccAESKeyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
-
-            guard
-                let unwrappedKey = unwrapped.data,
-                unwrapped.status == kCCSuccess
-            else {
-                throw AESError.decryptingFailed(description: "Key unwrap failed with status: \(unwrapped.status).")
-            }
-
-            return unwrappedKey
-        default:
+        guard keyWrapAlgorithms.contains(algorithm) else {
             throw AESError.invalidAlgorithm
         }
+
+        guard algorithm.checkAESKeyLength(for: keyEncryptionKey) == true else {
+            throw AESError.keyLengthNotSatisfied
+        }
+
+        // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
+        // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
+        let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
+
+        let unwrapped = ccAESKeyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
+
+        guard let unwrappedKey = unwrapped.data, unwrapped.status == kCCSuccess else {
+            throw AESError.decryptingFailed(description: "Key unwrap failed with status: \(unwrapped.status).")
+        }
+
+        return unwrappedKey
     }
 }
 

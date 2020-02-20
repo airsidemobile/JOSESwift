@@ -241,10 +241,7 @@ internal struct RSA {
 
         // Check if the plain text length does not exceed the maximum.
         // e.g. for RSA1_5 the plaintext must be 11 bytes smaller than the public key's modulus.
-        guard
-            let plaintextLengthOk = algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey),
-            plaintextLengthOk
-        else {
+        guard algorithm.isPlainTextLengthSatisfied(plaintext, for: publicKey) == true else {
             throw RSAError.plainTextLengthNotSatisfied
         }
 
@@ -281,9 +278,7 @@ internal struct RSA {
 
         // Check if the cipher text length does not exceed the maximum.
         // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
-        guard
-            let ciphertextLengthOk = algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey),
-            ciphertextLengthOk
+        guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) == true
         else {
             throw RSAError.cipherTextLenghtNotSatisfied
         }

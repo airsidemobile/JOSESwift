@@ -45,7 +45,7 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A128KW)
+        let unwrappedKey = try! AES.unwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A128KW)
 
         XCTAssertEqual(unwrappedKey, rawKey)
     }
@@ -67,7 +67,7 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A192KW)
+        let unwrappedKey = try! AES.unwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A192KW)
 
         XCTAssertEqual(unwrappedKey, rawKey)
     }
@@ -89,7 +89,7 @@ class AESKeyWrapTests: XCTestCase {
 
         XCTAssertEqual(ciphertext, expectedCiphertext)
 
-        let unwrappedKey = try! AES.keyUnwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A256KW)
+        let unwrappedKey = try! AES.unwrap(wrappedKey: ciphertext, keyEncryptionKey: kek, algorithm: .A256KW)
 
         XCTAssertEqual(unwrappedKey, rawKey)
     }
