@@ -23,7 +23,8 @@
 
 import Foundation
 
-public struct Encrypter {
+// Todo [#214]: Move generic type to initializer in next major release.
+public struct Encrypter<KeyType> {
     private let keyManagementMode: EncryptionKeyManagementMode
     private let keyManagementAlgorithm: KeyManagementAlgorithm
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
@@ -39,7 +40,7 @@ public struct Encrypter {
     ///       encrypted.
     ///     - For _direct encryption_ it is the secret symmetric key (`Data`) shared between the sender and the
     ///       recipient.
-    public init?<KeyType>(
+    public init?(
         keyManagementAlgorithm: KeyManagementAlgorithm,
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType
@@ -56,11 +57,11 @@ public struct Encrypter {
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        guard let alg = header.algorithm, alg == keyManagementAlgorithm else {
+        guard let alg = header.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = header.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard let enc = header.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -88,14 +89,31 @@ extension Encrypter {
     }
 }
 
+// MARK: - Deprecated API
+
 extension Encrypter {
     @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
-    public init?<KeyType>(keyEncryptionAlgorithm: KeyManagementAlgorithm, encryptionKey: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
-        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: encryptionKey)
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: key)
     }
 
-    @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
-    public init?<KeyType>(keyEncryptionAlgorithm: KeyManagementAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: ContentEncryptionAlgorithm) {
+    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
+}
+
+@available(*, deprecated, message: "This type will be removed with the next major release.")
+public struct EncryptionContext {
+    let encryptedKey: Data
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
+}
+
+@available(*, deprecated, message: "This type will be removed with the next major release.")
+public struct SymmetricEncryptionContext {
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
 }

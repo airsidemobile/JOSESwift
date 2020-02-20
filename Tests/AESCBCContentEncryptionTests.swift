@@ -167,7 +167,7 @@ class AESCBCContentEncryptionTests: XCTestCase {
 
     func testEncrypterHeaderPayloadInterfaceEncryptsData() throws {
         let plaintext = "Live long and prosper.".data(using: .ascii)!
-        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A128CBCHS256)
+        let header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A128CBCHS256)
 
         let cek = Data([UInt8]([
             4, 211, 31, 197, 84, 157, 252, 254, 11, 100, 157, 250, 63, 170, 106,

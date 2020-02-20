@@ -64,10 +64,13 @@ public struct JWEHeader: JOSEHeader {
     }
 
     /// Initializes a `JWEHeader` with the specified algorithm and signing algorithm.
-    public init(algorithm: KeyManagementAlgorithm, encryptionAlgorithm: ContentEncryptionAlgorithm) {
+    public init(
+        keyManagementAlgorithm: KeyManagementAlgorithm,
+        contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    ) {
         let parameters = [
-            "alg": algorithm.rawValue,
-            "enc": encryptionAlgorithm.rawValue
+            "alg": keyManagementAlgorithm.rawValue,
+            "enc": contentEncryptionAlgorithm.rawValue
         ]
 
         // Forcing the try is ok here, since [String: String] can be converted to JSON.
@@ -89,7 +92,7 @@ public struct JWEHeader: JOSEHeader {
 // Header parameters that are specific to a JWE Header.
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    var algorithm: KeyManagementAlgorithm? {
+    var keyManagementAlgorithm: KeyManagementAlgorithm? {
         // Forced cast is ok here since we checked both that "alg" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
@@ -98,7 +101,7 @@ public extension JWEHeader {
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
     /// to produce the ciphertext and the Authentication Tag.
-    var encryptionAlgorithm: ContentEncryptionAlgorithm? {
+    var contentEncryptionAlgorithm: ContentEncryptionAlgorithm? {
         // Forced cast is ok here since we checked both that "enc" exists
         // and holds a `String` value in `init(parameters:)`.
         // swiftlint:disable:next force_cast
@@ -236,5 +239,33 @@ extension JWEHeader: CommonHeaderParameterSpace {
         get {
             return parameters["crit"] as? [String]
         }
+    }
+}
+
+// MARK: - Deprecated API
+
+public extension JWEHeader {
+    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
+    @available(*, deprecated, message: "Use `JWEHeader.keyManagementAlgorithm` instead")
+    var algorithm: AsymmetricKeyAlgorithm? {
+        // Forced cast is ok here since we checked both that "alg" exists
+        // and holds a `String` value in `init(parameters:)`.
+        // swiftlint:disable:next force_cast
+        return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
+    }
+
+    /// The encryption algorithm used to perform authenticated encryption of the plaintext
+    /// to produce the ciphertext and the Authentication Tag.
+    @available(*, deprecated, message: "Use `JWEHeader.contentEncryptionAlgorithm` instead")
+    var encryptionAlgorithm: SymmetricKeyAlgorithm? {
+        // Forced cast is ok here since we checked both that "enc" exists
+        // and holds a `String` value in `init(parameters:)`.
+        // swiftlint:disable:next force_cast
+        return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
+    }
+
+    @available(*, deprecated, message: "Use `init(keyManagementAlgorithm:contentEncryptionAlgorithm` instead")
+    init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
+        self.init(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: encryptionAlgorithm)
     }
 }
