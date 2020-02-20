@@ -104,3 +104,10 @@ public enum CompressionAlgorithm: String {
     case DEFLATE = "DEF"
     case NONE = "NONE"
 }
+
+// MARK: - Deprecated API
+
+@available(*, deprecated, message: "Use `KeyManagementAlgorithm` instead")
+public typealias AsymmetricKeyAlgorithm = KeyManagementAlgorithm
+@available(*, deprecated, message: "Use `ContentEncryptionAlgorithm` instead")
+public typealias SymmetricKeyAlgorithm = ContentEncryptionAlgorithm
