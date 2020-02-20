@@ -109,5 +109,6 @@ public enum CompressionAlgorithm: String {
 
 @available(*, deprecated, message: "Use `KeyManagementAlgorithm` instead")
 public typealias AsymmetricKeyAlgorithm = KeyManagementAlgorithm
+
 @available(*, deprecated, message: "Use `ContentEncryptionAlgorithm` instead")
 public typealias SymmetricKeyAlgorithm = ContentEncryptionAlgorithm
