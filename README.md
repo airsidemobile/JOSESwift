@@ -2,7 +2,7 @@
 
 <br>
 
-**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift. 
+**JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift.
 As of now, its usage is limited to iOS because it relies on the iOS cryptography frameworks.
 
 [![CircleCI](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master.svg?style=svg)](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master)
@@ -73,8 +73,8 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 
 For interchangeability JOSESwift currently supports compact serialization [for JWS](https://tools.ietf.org/html/rfc7515#section-3.1) and [for JWE](https://tools.ietf.org/html/rfc7516#section-3.1).
 
-| Compact Serialization | JSON Serialization |		
-| :-------------------: | :----------------: |		
+| Compact Serialization | JSON Serialization |
+| :-------------------: | :----------------: |
 | :white_check_mark:    |                    |
 
 ### Compression Algorithms
@@ -177,7 +177,7 @@ The JWS compact serialization is a URL-safe string that can easily be transmitte
 guard let jws = try? JWS(header: header, payload: payload, signer: signer) else { ... }
 
 print(jws.compactSerializedString) // ey (...) J9.U3 (...) LU.na (...) 1A
-```  
+```
 
 More details about constructing a JWS can be found [in the wiki](../../wiki/jws).
 
@@ -219,7 +219,7 @@ In order to construct a JWE we need to provide the following parts:
 ##### Header
 
 ``` swift
-let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+let header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
 ```
 
 Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7516#section-4.1):
@@ -245,8 +245,20 @@ The encrypter algorithms must match the header algorithms.
 ``` swift
 let publicKey: SecKey = /* ... */
 
-let encrypter = Encrypter(keyEncryptionAlgorithm: .RSA1_5, encryptionKey: publicKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+let encrypter = Encrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKey)!
 ```
+
+Note that the type of the provided encryption key must match the specified key management algorithm as shown in the following table.
+
+| Key Management Algorithm | Encryption Key Type |
+|:-------------------------|:--------------------|
+| RSA1_5                   | `SecKey`            |
+| RSAOAEP                  | `SecKey`            |
+| RSAOAEP256               | `SecKey`            |
+| A128KW                   | `Data`              |
+| A192KW                   | `Data`              |
+| A256KW                   | `Data`              |
+| direct                   | `Data`              |
 
 ##### Serialization
 
@@ -256,7 +268,7 @@ The JWE compact serialization is a URL-safe string that can easily be transmitte
 guard let jwe = try? JWE(header: header, payload: payload, encrypter: encrypter) else { ... }
 
 print(jwe.compactSerializedString) // ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w
-```  
+```
 
 More details about constructing a JWE can be found [in the wiki](../../wiki/jwe).
 
@@ -271,7 +283,7 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jwe = try JWE(compactSerialization: serialization)
-    let decrypter = Decrypter(keyDecryptionAlgorithm: .RSA1_5, decryptionKey: privateKey, contentDecryptionAlgorithm: .A256CBCHS512)!
+    let decrypter = Decrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKey)!
     let payload = try jwe.decrypt(using: decrypter)
     let message = String(data: payload.data(), encoding: .utf8)!
 
@@ -280,6 +292,18 @@ do {
 ```
 
 More details about decrypting an existing, serialized JWE can be found [in the wiki](../../wiki/jwe).
+
+Note that the type of the provided decryption key must match the specified key management algorithm as shown in the following table.
+
+| Key Management Algorithm | Decryption Key Type |
+|:-------------------------|:--------------------|
+| RSA1_5                   | `SecKey`            |
+| RSAOAEP                  | `SecKey`            |
+| RSAOAEP256               | `SecKey`            |
+| A128KW                   | `Data`              |
+| A192KW                   | `Data`              |
+| A256KW                   | `Data`              |
+| direct                   | `Data`              |
 
 ****
 
@@ -325,7 +349,7 @@ See our [security policy](SECURITY.md) for more information.
 
 Contributions to the project are encouraged and more than welcome. :nerd_face:
 
-If you want to contribute, please submit a pull request. 
+If you want to contribute, please submit a pull request.
 For feature requests, discussions, or bug reports, just open an issue.
 
 See our [contributing guidelines](.github/CONTRIBUTING.md) for more information.
