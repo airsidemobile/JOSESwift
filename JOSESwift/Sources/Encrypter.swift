@@ -57,11 +57,11 @@ public struct Encrypter<KeyType> {
     }
 
     func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
-        guard let alg = header.algorithm, alg == keyManagementAlgorithm else {
+        guard let alg = header.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = header.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard let enc = header.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -93,12 +93,25 @@ extension Encrypter {
 
 extension Encrypter {
     @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
-    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: encryptionKey)
+    public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
+        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: key)
     }
 
-    @available(*, deprecated, message: "Use `init?(keyEncryptionAlgorithm:encryptionKey:contentEncyptionAlgorithm:)` instead")
+    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
     public init?(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
         self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
     }
+}
+
+public struct EncryptionContext {
+    let encryptedKey: Data
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
+}
+
+public struct SymmetricEncryptionContext {
+    let ciphertext: Data
+    let authenticationTag: Data
+    let initializationVector: Data
 }

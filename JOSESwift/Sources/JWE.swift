@@ -188,8 +188,8 @@ public struct JWE {
         )
 
         guard
-            decrypter.keyManagementAlgorithm == header.algorithm,
-            decrypter.contentEncryptionAlgorithm == header.encryptionAlgorithm
+            decrypter.keyManagementAlgorithm == header.keyManagementAlgorithm,
+            decrypter.contentEncryptionAlgorithm == header.contentEncryptionAlgorithm
         else {
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         }

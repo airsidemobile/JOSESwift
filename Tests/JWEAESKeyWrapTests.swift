@@ -30,7 +30,7 @@ class JWEAESKeyWrapTests: XCTestCase {
     func testRoundtrip() throws {
         let symmetricKey = Data(base64URLEncoded: "GawgguFyGrWKav7AX4VKUg")!
 
-        let header = JWEHeader(algorithm: .A128KW, encryptionAlgorithm: .A128CBCHS256)
+        let header = JWEHeader(keyManagementAlgorithm: .A128KW, contentEncryptionAlgorithm: .A128CBCHS256)
         let payload = Payload("Live long and prosper.".data(using: .ascii)!)
         let encrypter = Encrypter(
             keyManagementAlgorithm: .A128KW,
@@ -55,7 +55,7 @@ class JWEAESKeyWrapTests: XCTestCase {
         let symmetricKey = Data(base64URLEncoded: "GawgguFyGrWKav7AX4VKUg")!
         let wrongSymmetricKey = Data(base64URLEncoded: "WRONGuFyGrWKav7AX4VKUg")!
 
-        let header = JWEHeader(algorithm: .A128KW, encryptionAlgorithm: .A128CBCHS256)
+        let header = JWEHeader(keyManagementAlgorithm: .A128KW, contentEncryptionAlgorithm: .A128CBCHS256)
         let payload = Payload("Live long and prosper.".data(using: .ascii)!)
         let encrypter = Encrypter(
             keyManagementAlgorithm: .A128KW,

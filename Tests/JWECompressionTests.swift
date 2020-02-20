@@ -56,7 +56,7 @@ class JWECompressionTests: RSACryptoTestCase {
     func testRoundtripDirectEncryption() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
-        var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
+        var header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
 
         let payload = Payload(data)
@@ -71,7 +71,7 @@ class JWECompressionTests: RSACryptoTestCase {
     }
 
     func testRoundtripKeyEncryption() {
-        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        var header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
         header.zip = "DEF"
 
         let payload = Payload(data)
@@ -100,7 +100,7 @@ class JWECompressionTests: RSACryptoTestCase {
     func testEncryptWithNotSupportedZipHeaderValue() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
-        var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
+        var header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512)
         header.zip = "GZIP"
 
         let payload = Payload(data)
