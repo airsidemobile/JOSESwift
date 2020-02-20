@@ -47,7 +47,7 @@ extension AESKeyWrappingMode: EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
 
-        let encryptedKey = try AES.keyWrap(
+        let encryptedKey = try AES.wrap(
             rawKey: contentEncryptionKey,
             keyEncryptionKey: sharedSymmetricKey,
             algorithm: keyManagementAlgorithm
@@ -59,7 +59,7 @@ extension AESKeyWrappingMode: EncryptionKeyManagementMode {
 
 extension AESKeyWrappingMode: DecryptionKeyManagementMode {
     func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
-        let contentEncryptionKey = try AES.keyUnwrap(
+        let contentEncryptionKey = try AES.unwrap(
             wrappedKey: encryptedKey,
             keyEncryptionKey: sharedSymmetricKey,
             algorithm: keyManagementAlgorithm

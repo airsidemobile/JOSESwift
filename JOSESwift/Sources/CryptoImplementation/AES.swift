@@ -157,7 +157,7 @@ enum AES {
     ///   - rawKey: The raw key to encrypt
     ///   - keyEncryptionKey: The key used to encypt the raw key
     ///   - algorithm: The algorithm to use for AES key wrap
-    static func keyWrap(rawKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
+    static func wrap(rawKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
         switch algorithm {
         case .A128KW, .A192KW, .A256KW:
             guard
@@ -191,7 +191,7 @@ enum AES {
     ///   - rawKey: The raw key to decrypt
     ///   - keyEncryptionKey: The key that was used to encrypt the raw key
     ///   - algorithm: The algorithm to use for AES key wrap
-    static func keyUnwrap(wrappedKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
+    static func unwrap(wrappedKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
         switch algorithm {
         case .A128KW, .A192KW, .A256KW:
             guard
