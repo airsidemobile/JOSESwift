@@ -115,42 +115,42 @@ class JWEHeaderTests: XCTestCase {
     }
 
     func testInitWithAlgAndEncRSA1() {
-        let header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        let header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
 
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSA, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.RSA1_5.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
 
-        XCTAssertNotNil(header.algorithm)
-        XCTAssertNotNil(header.encryptionAlgorithm)
-        XCTAssertEqual(header.algorithm!, .RSA1_5)
-        XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
+        XCTAssertNotNil(header.keyManagementAlgorithm)
+        XCTAssertNotNil(header.contentEncryptionAlgorithm)
+        XCTAssertEqual(header.keyManagementAlgorithm!, .RSA1_5)
+        XCTAssertEqual(header.contentEncryptionAlgorithm!, .A256CBCHS512)
     }
 
     func testInitWithAlgAndEncRSAOAEP() {
-        let header = JWEHeader(algorithm: .RSAOAEP, encryptionAlgorithm: .A256CBCHS512)
+        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP, contentEncryptionAlgorithm: .A256CBCHS512)
 
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.RSAOAEP.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
 
-        XCTAssertNotNil(header.algorithm)
-        XCTAssertNotNil(header.encryptionAlgorithm)
-        XCTAssertEqual(header.algorithm!, .RSAOAEP)
-        XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
+        XCTAssertNotNil(header.keyManagementAlgorithm)
+        XCTAssertNotNil(header.contentEncryptionAlgorithm)
+        XCTAssertEqual(header.keyManagementAlgorithm!, .RSAOAEP)
+        XCTAssertEqual(header.contentEncryptionAlgorithm!, .A256CBCHS512)
     }
 
     func testInitWithAlgAndEncRSAOAEP256() {
-        let header = JWEHeader(algorithm: .RSAOAEP256, encryptionAlgorithm: .A256CBCHS512)
+        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A256CBCHS512)
 
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
         XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
 
-        XCTAssertNotNil(header.algorithm)
-        XCTAssertNotNil(header.encryptionAlgorithm)
-        XCTAssertEqual(header.algorithm!, .RSAOAEP256)
-        XCTAssertEqual(header.encryptionAlgorithm!, .A256CBCHS512)
+        XCTAssertNotNil(header.keyManagementAlgorithm)
+        XCTAssertNotNil(header.contentEncryptionAlgorithm)
+        XCTAssertEqual(header.keyManagementAlgorithm!, .RSAOAEP256)
+        XCTAssertEqual(header.contentEncryptionAlgorithm!, .A256CBCHS512)
     }
 
     func testInitWithMissingRequiredEncParameter() {
@@ -218,7 +218,7 @@ class JWEHeaderTests: XCTestCase {
         let crit = ["crit1", "crit2"]
         let zip = "DEF"
 
-        var header = JWEHeader(algorithm: .RSA1_5, encryptionAlgorithm: .A256CBCHS512)
+        var header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
         header.jku = jku
         header.jwk = jwk
         header.kid = kid
@@ -272,5 +272,14 @@ class JWEHeaderTests: XCTestCase {
 
         header.zip = "GZIP"
         XCTAssertEqual(header.compressionAlgorithm, nil)
+    }
+
+    @available(*, deprecated)
+    func testDeprecatedAPI() {
+        let header1 = JWEHeader(algorithm: .A128KW, encryptionAlgorithm: .A128CBCHS256)
+        let header2 = JWEHeader(keyManagementAlgorithm: .A128KW, contentEncryptionAlgorithm: .A128CBCHS256)
+
+        XCTAssertEqual(header1.algorithm, header1.keyManagementAlgorithm)
+        XCTAssertEqual(header2.encryptionAlgorithm, header1.contentEncryptionAlgorithm)
     }
 }

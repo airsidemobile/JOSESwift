@@ -57,11 +57,11 @@ public struct Decrypter {
     }
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
-        guard let alg = context.protectedHeader.algorithm, alg == keyManagementAlgorithm else {
+        guard let alg = context.protectedHeader.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = context.protectedHeader.encryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard let enc = context.protectedHeader.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -90,14 +90,33 @@ extension Decrypter {
     }
 }
 
+// MARK: - Deprecated API
+
 extension Decrypter {
     @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:decryptionKey:)` instead")
-    public init?<KeyType>(keyDecryptionAlgorithm: KeyManagementAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: ContentEncryptionAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         self.init(keyManagementAlgorithm: keyDecryptionAlgorithm, contentEncryptionAlgorithm: contentDecryptionAlgorithm, decryptionKey: key)
     }
 
     @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:decryptionKey:)` instead")
-    public init?<KeyType>(keyDecryptionAlgorithm: KeyManagementAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: ContentEncryptionAlgorithm) {
+    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
         self.init(keyDecryptionAlgorithm: keyDecryptionAlgorithm, decryptionKey: kdk, contentDecryptionAlgorithm: contentDecryptionAlgorithm)
     }
+}
+
+@available(*, deprecated, message: "This type will be removed with the next major release.")
+public struct DecryptionContext {
+    let header: JWEHeader
+    let encryptedKey: Data
+    let initializationVector: Data
+    let ciphertext: Data
+    let authenticationTag: Data
+}
+
+@available(*, deprecated, message: "This type will be removed with the next major release.")
+public struct SymmetricDecryptionContext {
+    let ciphertext: Data
+    let initializationVector: Data
+    let additionalAuthenticatedData: Data
+    let authenticationTag: Data
 }
