@@ -2,27 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-[PSPDFKit's Changelog Format](https://pspdfkit.com/blog/2018/the-challenges-of-changelogs/)
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-If applicable, start each entry with one of the following keywords: 
-
-- *API*: For highlighting breaking API changes that require people to change their implementations
-- *Adds*: For listing new features
-- *Fixes*: For listing bugfixes
-- *Changes*: For listing improvements and other changes
-- *Deprecates*: For listing API deprecations
-- *Security*: For highlighting changes related to security vulnerabilities
-
 Include references to issue- or pull-request numbers.
-Use active language and present tense.
-For convenience, please track any of your changes in the *Unreleased* section 
-so they can be moved to a respective version upon release.
+Please track any of your changes in the *Unreleased* section so they can be moved to a respective version upon release.
 
 ## Unreleased
 
 Add your changes here.
+
+## [2.1.0] - 2020-02-24
+
+- Deprecated old encrypter and decrypter APIs ([#216](https://github.com/airsidemobile/JOSESwift/pull/216)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Added A128KW, A192KW, and A256KW algorithms ([#211](https://github.com/airsidemobile/JOSESwift/pull/211)) via [@mtamu](https://github.com/mtamu)
+- Changed internal JWE encryption and decryption flows ([#210](https://github.com/airsidemobile/JOSESwift/pull/210)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Changed CI to CircleCI ([#205](https://github.com/airsidemobile/JOSESwift/pull/205)) via [@haeser](https://github.com/haeser)
+- Dried up signing roundtrip tests ([#198](https://github.com/airsidemobile/JOSESwift/pull/198)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Added full Sonarqube analysis to pull requests ([#201](https://github.com/airsidemobile/JOSESwift/pull/201)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Updated Sonarqube lane to work with the Xcode 11 coverage report format ([#193](https://github.com/airsidemobile/JOSESwift/pull/193)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 
 ## [2.0.0] - 2019-11-20
 
