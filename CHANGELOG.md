@@ -27,12 +27,12 @@ Add your changes here.
 ## [2.1.0] - 2020-02-24
 
 - Fine tune API changes ([#216](https://github.com/airsidemobile/JOSESwift/pull/216)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
-- Adds: A128KW, A192KW, and A256KW algorithms ([#211](https://github.com/airsidemobile/JOSESwift/pull/211))  via [@mtamu](https://github.com/mtamu)
+- Adds: A128KW, A192KW, and A256KW algorithms ([#211](https://github.com/airsidemobile/JOSESwift/pull/211)) via [@mtamu](https://github.com/mtamu)
 - Changes JWE encryption and decryption flow ([#210](https://github.com/airsidemobile/JOSESwift/pull/210)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 - Changes CI to CircleCI ([#205](https://github.com/airsidemobile/JOSESwift/pull/205)) via [@haeser](https://github.com/haeser)
-- Dry up signing roundtrip tests ([#198](https://github.com/airsidemobile/JOSESwift/pull/198))  via [@daniel-mohemian](https://github.com/daniel-mohemian)
-- Do full Sonarqube analysis in pull requests ([#201](https://github.com/airsidemobile/JOSESwift/pull/201))  via [@daniel-mohemian](https://github.com/daniel-mohemian)
-- Update sonarqube lane to work with Xcode11 coverage report format ([#193](https://github.com/airsidemobile/JOSESwift/pull/193)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Dry up signing roundtrip tests ([#198](https://github.com/airsidemobile/JOSESwift/pull/198)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Do full Sonarqube analysis in pull requests ([#201](https://github.com/airsidemobile/JOSESwift/pull/201)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
+- Update Sonarqube lane to work with Xcode11 coverage report format ([#193](https://github.com/airsidemobile/JOSESwift/pull/193)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
 
 ## [2.0.0] - 2019-11-20
 
