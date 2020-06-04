@@ -122,4 +122,28 @@ class JWKRSAKeysTests: RSACryptoTestCase {
 
         XCTAssertEqual(jwk.parameters.count, 6)
     }
+
+    @available(iOS 11.0, *)
+    func testThumbprintPublicKey() {
+        let jwk = RSAPublicKey(modulus: "n", exponent: "e")
+        XCTAssertEqual(try? jwk.thumbprint(), "lPd1Hx7fpYY23pQVKnFvOEtk_jFe5EV8ZISUGTSGA_U")
+    }
+
+    @available(iOS 11.0, *)
+    func testThumbprintPrivateKey() {
+        let jwk = RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C")
+        XCTAssertEqual(try? jwk.thumbprint(), "slXDutAKWp8bubkrYoqeq5EwSQDtZdooHiG4TVQUptY")
+    }
+
+    @available(iOS 11.0, *)
+    func testAddPublicThumbprintToJWK() throws {
+        let jwk = try RSAPublicKey(modulus: "n", exponent: "e").withKeyIdFromThumbprint()
+        XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "lPd1Hx7fpYY23pQVKnFvOEtk_jFe5EV8ZISUGTSGA_U")
+    }
+
+    @available(iOS 11.0, *)
+    func testAddPrivateThumbprintToJWK() throws {
+        let jwk = try RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C").withKeyIdFromThumbprint()
+        XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "slXDutAKWp8bubkrYoqeq5EwSQDtZdooHiG4TVQUptY")
+    }
 }

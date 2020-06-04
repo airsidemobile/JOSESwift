@@ -59,6 +59,14 @@ public struct SymmetricKey: JWK {
     /// The JWK parameters.
     public let parameters: [String: String]
 
+    /// The symmetric key required parameters
+    public var requiredParamters: [String: String] {
+        [
+            JWKParameter.keyType.rawValue: self.keyType.rawValue,
+            SymmetricKeyParameter.key.rawValue: self.key
+        ]
+    }
+
     /// The symmetric key represented as
     /// base64url encoding of the octet sequence containing the key data.
     public let key: String
@@ -117,5 +125,13 @@ public struct SymmetricKey: JWK {
             throw JOSESwiftError.symmetricKeyNotBase64URLEncoded
         }
         return try T.representing(symmetricKeyComponents: (keyData))
+    }
+
+    @available(iOS 11.0, *)
+    public func withKeyIdFromThumbprint() throws -> Self {
+        let keyId = try thumbprint()
+        return .init(key: try converted(to: Data.self), additionalParameters: [
+            JWKParameter.keyIdentifier.rawValue: keyId
+        ])
     }
 }

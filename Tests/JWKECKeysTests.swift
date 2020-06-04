@@ -174,4 +174,58 @@ class JWKECKeysTests: ECCryptoTestCase {
 
         XCTFail()
     }
+
+    @available(iOS 11.0, *)
+    func testThumbprintPublicKey() {
+        allTestData.forEach { keyData in
+            let key = ECPublicKey(
+                    crv: ECCurveType(rawValue: keyData.expectedCurveType)!,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url
+            )
+
+            XCTAssertEqual(try? key.thumbprint(), keyData.expectedThumbprint)
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func testThumbprintPrivateKey() {
+        allTestData.forEach { keyData in
+            let key = try! ECPrivateKey(
+                    crv: keyData.expectedCurveType,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url,
+                    privateKey: keyData.expectedPrivateBase64Url
+            )
+
+            XCTAssertEqual(try? key.thumbprint(), keyData.expectedThumbprint)
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func testAddPublicThumbprintToJWK() throws {
+        try allTestData.forEach { keyData in
+            let key = try ECPublicKey(
+                    crv: ECCurveType(rawValue: keyData.expectedCurveType)!,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url
+            ).withKeyIdFromThumbprint()
+
+            XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func testAddPrivateThumbprintToJWK() throws {
+        try allTestData.forEach { keyData in
+            let key = try ECPrivateKey(
+                    crv: keyData.expectedCurveType,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url,
+                    privateKey: keyData.expectedPrivateBase64Url
+            ).withKeyIdFromThumbprint()
+
+            XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
+        }
+    }
 }

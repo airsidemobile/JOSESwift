@@ -57,6 +57,8 @@ public protocol JWK: Codable {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: String] { get }
 
+    var requiredParamters: [String: String] { get }
+
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
@@ -83,4 +85,25 @@ public protocol JWK: Codable {
     /// - Returns: The JSON representation of the JWK as `Data` or
     ///            `nil` if the encoding failed.
     func jsonData() -> Data?
+
+    /// Generate the thumbprint based on hash function SHA256
+    ///  See [RFC-7638, Section 3.2](https://tools.ietf.org/html/rfc7638#section-3.2)
+    ///
+    /// - Returns: The thumbprint from the required members of the JWK key.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
+    @available(iOS 11.0, *)
+    func thumbprint() throws -> String
+
+    @available(iOS 11.0, *)
+    func withKeyIdFromThumbprint() throws -> Self
+}
+
+extension JWK {
+    @available(iOS 11.0, *)
+    public func thumbprint() throws -> String {
+        guard let json = try? JSONSerialization.data(withJSONObject: requiredParamters, options: .sortedKeys) else {
+            throw JOSESwiftError.thumbprintSerialization
+        }
+        return json.sha256
+    }
 }

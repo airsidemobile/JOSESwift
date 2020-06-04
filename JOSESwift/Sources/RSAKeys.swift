@@ -96,6 +96,15 @@ public struct RSAPublicKey: JWK {
     /// The JWK parameters.
     public let parameters: [String: String]
 
+    /// The RSA required parameters
+    public var requiredParamters: [String: String] {
+        [
+            JWKParameter.keyType.rawValue: self.keyType.rawValue,
+            RSAParameter.modulus.rawValue: self.modulus,
+            RSAParameter.exponent.rawValue: self.exponent
+        ]
+    }
+
     /// The modulus value for the RSA public key.
     public let modulus: String
 
@@ -174,6 +183,14 @@ public struct RSAPublicKey: JWK {
 
         return try T.representing(rsaPublicKeyComponents: (modulusData, exponentData))
     }
+
+    @available(iOS 11.0, *)
+    public func withKeyIdFromThumbprint() throws -> Self {
+        let keyId = try thumbprint()
+        return .init(modulus: modulus, exponent: exponent, additionalParameters: [
+            JWKParameter.keyIdentifier.rawValue: keyId
+        ])
+    }
 }
 
 // MARK: Private Key
@@ -185,6 +202,15 @@ public struct RSAPrivateKey: JWK {
 
     /// The JWK parameters.
     public let parameters: [String: String]
+
+    /// The RSA required parameters
+    public var requiredParamters: [String: String] {
+        [
+            JWKParameter.keyType.rawValue: self.keyType.rawValue,
+            RSAParameter.modulus.rawValue: self.modulus,
+            RSAParameter.exponent.rawValue: self.exponent
+        ]
+    }
 
     /// The modulus value for the RSA private key.
     public let modulus: String
@@ -272,6 +298,14 @@ public struct RSAPrivateKey: JWK {
         }
 
         return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData))
+    }
+
+    @available(iOS 11.0, *)
+    public func withKeyIdFromThumbprint() throws -> Self {
+        let keyId = try thumbprint()
+        return .init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: [
+            JWKParameter.keyIdentifier.rawValue: keyId
+        ])
     }
 }
 
