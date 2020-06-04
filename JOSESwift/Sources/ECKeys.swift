@@ -99,7 +99,7 @@ public struct ECPublicKey: JWK {
     public let parameters: [String: String]
 
     /// The EC public key required parameters
-    public var requiredParamters: [String: String] {
+    public var requiredParameters: [String: String] {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             ECParameter.curve.rawValue: self.crv.rawValue,
@@ -218,7 +218,7 @@ public struct ECPrivateKey: JWK {
     public let parameters: [String: String]
 
     /// The EC private key required parameters
-    public var requiredParamters: [String: String] {
+    public var requiredParameters: [String: String] {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             ECParameter.curve.rawValue: self.crv.rawValue,

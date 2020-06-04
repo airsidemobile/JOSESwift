@@ -97,7 +97,7 @@ public struct RSAPublicKey: JWK {
     public let parameters: [String: String]
 
     /// The RSA required parameters
-    public var requiredParamters: [String: String] {
+    public var requiredParameters: [String: String] {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             RSAParameter.modulus.rawValue: self.modulus,
@@ -204,7 +204,7 @@ public struct RSAPrivateKey: JWK {
     public let parameters: [String: String]
 
     /// The RSA required parameters
-    public var requiredParamters: [String: String] {
+    public var requiredParameters: [String: String] {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             RSAParameter.modulus.rawValue: self.modulus,

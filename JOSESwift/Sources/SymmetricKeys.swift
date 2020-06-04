@@ -60,7 +60,7 @@ public struct SymmetricKey: JWK {
     public let parameters: [String: String]
 
     /// The symmetric key required parameters
-    public var requiredParamters: [String: String] {
+    public var requiredParameters: [String: String] {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             SymmetricKeyParameter.key.rawValue: self.key

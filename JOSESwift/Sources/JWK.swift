@@ -57,7 +57,7 @@ public protocol JWK: Codable {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: String] { get }
 
-    var requiredParamters: [String: String] { get }
+    var requiredParameters: [String: String] { get }
 
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
@@ -101,7 +101,7 @@ public protocol JWK: Codable {
 extension JWK {
     @available(iOS 11.0, *)
     public func thumbprint() throws -> String {
-        guard let json = try? JSONSerialization.data(withJSONObject: requiredParamters, options: .sortedKeys) else {
+        guard let json = try? JSONSerialization.data(withJSONObject: requiredParameters, options: .sortedKeys) else {
             throw JOSESwiftError.thumbprintSerialization
         }
         return json.sha256
