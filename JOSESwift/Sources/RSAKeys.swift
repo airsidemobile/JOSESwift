@@ -185,8 +185,8 @@ public struct RSAPublicKey: JWK {
     }
 
     @available(iOS 11.0, *)
-    public func withKeyIdFromThumbprint() throws -> Self {
-        let keyId = try thumbprint()
+    public func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> Self {
+        let keyId = try thumbprint(algorithm: algorithm)
         return .init(modulus: modulus, exponent: exponent, additionalParameters: [
             JWKParameter.keyIdentifier.rawValue: keyId
         ])
@@ -301,8 +301,8 @@ public struct RSAPrivateKey: JWK {
     }
 
     @available(iOS 11.0, *)
-    public func withKeyIdFromThumbprint() throws -> Self {
-        let keyId = try thumbprint()
+    public func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> Self {
+        let keyId = try thumbprint(algorithm: algorithm)
         return .init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: [
             JWKParameter.keyIdentifier.rawValue: keyId
         ])

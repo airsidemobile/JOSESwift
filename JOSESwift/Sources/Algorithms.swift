@@ -96,6 +96,13 @@ public enum HMACAlgorithm: String {
     }
 }
 
+/// An algorithm for Thumbprint calculation.
+///
+/// - SHA256
+public enum ThumbprintAlgorithm: String {
+    case SHA256
+}
+
 /// An algorithm for compressing the plain text before encryption.
 /// List of [supported compression algorithms](https://www.iana.org/assignments/jose/jose.xhtml#web-encryption-compression-algorithms)
 ///

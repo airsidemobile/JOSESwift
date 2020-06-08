@@ -92,18 +92,18 @@ public protocol JWK: Codable {
     /// - Returns: The thumbprint from the required members of the JWK key.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     @available(iOS 11.0, *)
-    func thumbprint() throws -> String
+    func thumbprint(algorithm: ThumbprintAlgorithm) throws -> String
 
     @available(iOS 11.0, *)
-    func withKeyIdFromThumbprint() throws -> Self
+    func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm) throws -> Self
 }
 
 extension JWK {
     @available(iOS 11.0, *)
-    public func thumbprint() throws -> String {
+    public func thumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> String {
         guard let json = try? JSONSerialization.data(withJSONObject: requiredParameters, options: .sortedKeys) else {
             throw JOSESwiftError.thumbprintSerialization
         }
-        return json.sha256
+        return try Thumbprint.calculate(from: json, algorithm: algorithm)
     }
 }

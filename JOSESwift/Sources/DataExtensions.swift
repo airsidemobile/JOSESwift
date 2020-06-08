@@ -121,16 +121,3 @@ extension Data: DataConvertible {
         return self
     }
 }
-
-extension Data {
-    var sha256: String {
-        let hashBytes = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(CC_SHA256_DIGEST_LENGTH))
-        defer { hashBytes.deallocate() }
-
-        withUnsafeBytes { (buffer) -> Void in
-            CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), hashBytes)
-        }
-
-        return Data(bytes: hashBytes, count: Int(CC_SHA256_DIGEST_LENGTH)).base64URLEncodedString()
-    }
-}
