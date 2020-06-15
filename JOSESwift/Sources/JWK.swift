@@ -86,21 +86,23 @@ public protocol JWK: Codable {
     ///            `nil` if the encoding failed.
     func jsonData() -> Data?
 
-    /// Generate the thumbprint based on hash function SHA256
+    /// Generate the key's thumbprint.
     ///  See [RFC-7638, Section 3.2](https://tools.ietf.org/html/rfc7638#section-3.2)
     ///
-    /// - Returns: The thumbprint from the required members of the JWK key.
+    /// - Parameters:
+    ///   - algorithm: The hash algorithm to use for the thumbprint calculation.
+    /// - Returns: he base64url encoded thumbprint of the required members of the JWK key.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     @available(iOS 11.0, *)
-    func thumbprint(algorithm: ThumbprintAlgorithm) throws -> String
+    func thumbprint(algorithm: JWKThumbprintAlgorithm) throws -> String
 
     @available(iOS 11.0, *)
-    func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm) throws -> Self
+    func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm) throws -> Self
 }
 
 extension JWK {
     @available(iOS 11.0, *)
-    public func thumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> String {
+    public func thumbprint(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> String {
         guard let json = try? JSONSerialization.data(withJSONObject: requiredParameters, options: .sortedKeys) else {
             throw JOSESwiftError.thumbprintSerialization
         }

@@ -209,7 +209,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: ECCurveType(rawValue: keyData.expectedCurveType)!,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url
-            ).withKeyIdFromThumbprint()
+            ).withThumbprintAsKeyId()
 
             XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
         }
@@ -223,7 +223,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
                     privateKey: keyData.expectedPrivateBase64Url
-            ).withKeyIdFromThumbprint()
+            ).withThumbprintAsKeyId()
 
             XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
         }

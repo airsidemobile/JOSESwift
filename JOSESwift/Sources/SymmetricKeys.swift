@@ -128,7 +128,7 @@ public struct SymmetricKey: JWK {
     }
 
     @available(iOS 11.0, *)
-    public func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> Self {
+    public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
         return .init(key: try converted(to: Data.self), additionalParameters: [
             JWKParameter.keyIdentifier.rawValue: keyId

@@ -199,7 +199,7 @@ public struct ECPublicKey: JWK {
     }
 
     @available(iOS 11.0, *)
-    public func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> Self {
+    public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
         return .init(crv: crv, x: x, y: y, additionalParameters: [
             JWKParameter.keyIdentifier.rawValue: keyId
@@ -331,7 +331,7 @@ public struct ECPrivateKey: JWK {
     }
 
     @available(iOS 11.0, *)
-    public func withKeyIdFromThumbprint(algorithm: ThumbprintAlgorithm = .SHA256) throws -> Self {
+    public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
         return try .init(crv: crv.rawValue, x: x, y: y, privateKey: privateKey, additionalParameters: [
             JWKParameter.keyIdentifier.rawValue: keyId

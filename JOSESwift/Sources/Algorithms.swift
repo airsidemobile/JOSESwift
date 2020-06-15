@@ -96,10 +96,10 @@ public enum HMACAlgorithm: String {
     }
 }
 
-/// An algorithm for Thumbprint calculation.
+/// An algorithm for JWK Thumbprint calculation.
 ///
 /// - SHA256
-public enum ThumbprintAlgorithm: String {
+public enum JWKThumbprintAlgorithm: String {
     case SHA256
 }
 

@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import CommonCrypto
 
 extension Data {
     /// Creates a new data buffer from a base64url encoded string.

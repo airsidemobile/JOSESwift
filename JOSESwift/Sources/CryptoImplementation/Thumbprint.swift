@@ -28,7 +28,7 @@ enum ThumbprintError: Error {
     case inputMustBeGreaterThanZero
 }
 
-fileprivate extension ThumbprintAlgorithm {
+fileprivate extension JWKThumbprintAlgorithm {
     var outputLenght: Int {
         switch self {
         case .SHA256:
@@ -49,9 +49,9 @@ internal struct Thumbprint {
     ///
     /// - Parameters:
     ///   - input: The input to calculate a hash for.
-    ///   - algorithm: The algorithm used to calculate the HMAC.
+    ///   - algorithm: The algorithm used to calculate the hash.
     /// - Returns: The calculated hash in base64URLEncoding.
-    static func calculate(from input: Data, algorithm: ThumbprintAlgorithm) throws -> String {
+    static func calculate(from input: Data, algorithm: JWKThumbprintAlgorithm) throws -> String {
         guard input.count > 0 else {
             throw ThumbprintError.inputMustBeGreaterThanZero
         }
@@ -59,7 +59,7 @@ internal struct Thumbprint {
         let hashBytes = UnsafeMutablePointer<UInt8>.allocate(capacity: algorithm.outputLenght)
         defer { hashBytes.deallocate() }
 
-        input.withUnsafeBytes { (buffer) -> Void in
+        input.withUnsafeBytes { buffer in
             algorithm.calculate(input: buffer, output: hashBytes)
         }
 

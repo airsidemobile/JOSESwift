@@ -137,13 +137,13 @@ class JWKRSAKeysTests: RSACryptoTestCase {
 
     @available(iOS 11.0, *)
     func testAddPublicThumbprintToJWK() throws {
-        let jwk = try RSAPublicKey(modulus: "n", exponent: "e").withKeyIdFromThumbprint()
+        let jwk = try RSAPublicKey(modulus: "n", exponent: "e").withThumbprintAsKeyId()
         XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "lPd1Hx7fpYY23pQVKnFvOEtk_jFe5EV8ZISUGTSGA_U")
     }
 
     @available(iOS 11.0, *)
     func testAddPrivateThumbprintToJWK() throws {
-        let jwk = try RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C").withKeyIdFromThumbprint()
+        let jwk = try RSAPrivateKey(modulus: "A", exponent: "B", privateExponent: "C").withThumbprintAsKeyId()
         XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "slXDutAKWp8bubkrYoqeq5EwSQDtZdooHiG4TVQUptY")
     }
 }

@@ -146,7 +146,7 @@ class SymmetricKeyTests: XCTestCase {
         let jwk = try SymmetricKey(
             key: key,
             additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
-        ).withKeyIdFromThumbprint()
+        ).withThumbprintAsKeyId()
 
         XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "k1JnWRfC-5zzmL72vXIuBgTLfVROXBakS4OmGcrMCoc")
     }
