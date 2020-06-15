@@ -40,6 +40,7 @@ struct ECTestKeyData {
     let expectedXCoordinateBase64Url: String
     let expectedYCoordinate: Data
     let expectedYCoordinateBase64Url: String
+    let expectedThumbprint: String
     let privateKey: SecKey
     let privateKeyData: Data
     let publicKey: SecKey
@@ -61,6 +62,7 @@ struct ECTestKeyData {
             expectedYCoordinate: Data,
             expectedYCoordinateBase64Url: String,
             expectedCurveType: String,
+            expectedThumbprint: String,
             signatureAlgorithm: String) {
 
         self.privateKeyTag = privateKeyTag
@@ -80,6 +82,7 @@ struct ECTestKeyData {
         self.expectedYCoordinate = expectedYCoordinate
         self.expectedYCoordinateBase64Url = expectedYCoordinateBase64Url
         self.expectedCurveType = expectedCurveType
+        self.expectedThumbprint = expectedThumbprint
         self.signatureAlgorithm = signatureAlgorithm
 
         let keyData: Data = ECTestKeyData.createKeyData(
@@ -157,6 +160,7 @@ class ECCryptoTestCase: CryptoTestCase {
                 ]),
                 expectedYCoordinateBase64Url: "saNr4hM3qrojSoY4eaO1WGVna5yW_I4EqdFQ4TRl8iQ",
                 expectedCurveType: "P-256",
+                expectedThumbprint: "2i6Yjdy_beRJCkTcJbKmHT4L7LtVWdm5gYw9573NMHo",
                 signatureAlgorithm: "ES256"
         )
 
@@ -189,6 +193,7 @@ class ECCryptoTestCase: CryptoTestCase {
                 ]),
                 expectedYCoordinateBase64Url: "h3zkf9eaHcJ7Dw7SMPfKwJ2PEgHYeZ-P-vOxlBS_OsBx7RFz-yNan1e_P0hS-LgN",
                 expectedCurveType: "P-384",
+                expectedThumbprint: "1Njn97uiY347iWNFsvjS0fOATTHhdp8pDzSkb0FCYzo",
                 signatureAlgorithm: "ES384"
         )
 
@@ -230,6 +235,7 @@ class ECCryptoTestCase: CryptoTestCase {
                 expectedYCoordinateBase64Url:
                 "ASeWzvPD_vogLYkT1GkyXEpwR3V94hKVCrWGNLFvlAJ-CpgGO2XA_MnvjwoCNzV8kElKz2G7K3thxzamfJot-lYh",
                 expectedCurveType: "P-521",
+                expectedThumbprint: "UV9y65LDwmzpVq7JFYfMwsuoumxTJhjeZyZtnISsPao",
                 signatureAlgorithm: "ES512"
         )
     }

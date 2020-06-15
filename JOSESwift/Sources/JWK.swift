@@ -57,6 +57,8 @@ public protocol JWK: Codable {
     /// [RFC 7518, Section 6](https://tools.ietf.org/html/rfc7518#section-6) for possible parameters.
     var parameters: [String: String] { get }
 
+    var requiredParameters: [String: String] { get }
+
     /// Accesses the specified parameter.
     /// The parameters of the JWK representing the properties of the key(s), including the value(s).
     /// Check [RFC 7517, Section 4](https://tools.ietf.org/html/rfc7517#section-4) and
@@ -83,4 +85,39 @@ public protocol JWK: Codable {
     /// - Returns: The JSON representation of the JWK as `Data` or
     ///            `nil` if the encoding failed.
     func jsonData() -> Data?
+
+    /// Generate the key's thumbprint.
+    ///  See [RFC-7638, Section 3.2](https://tools.ietf.org/html/rfc7638#section-3.2)
+    ///
+    /// - Parameters:
+    ///   - algorithm: The hash algorithm to use for the thumbprint calculation.
+    /// - Returns: he base64url encoded thumbprint of the required members of the JWK key.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
+    @available(iOS 11.0, *)
+    func thumbprint(algorithm: JWKThumbprintAlgorithm) throws -> String
+
+    /// Use the thumbprint as the keyId.
+    ///  See [RFC-7638, Section 3.2](https://tools.ietf.org/html/rfc7638#section-3.2)
+    ///
+    /// - Parameters:
+    ///   - algorithm: The hash algorithm to use for the thumbprint calculation.
+    /// - Returns: The JWK key with the thumbprint as keyId.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
+    @available(iOS 11.0, *)
+    func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm) throws -> Self
+}
+
+extension JWK {
+    @available(iOS 11.0, *)
+    public func thumbprint(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> String {
+        guard let json = try? JSONSerialization.data(withJSONObject: requiredParameters, options: .sortedKeys) else {
+            throw JOSESwiftError.thumbprintSerialization
+        }
+        return try Thumbprint.calculate(from: json, algorithm: algorithm)
+    }
+
+    @available(iOS 11.0, *)
+    func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
+        return try withThumbprintAsKeyId(algorithm: algorithm)
+    }
 }

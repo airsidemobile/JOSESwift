@@ -60,4 +60,7 @@ public enum JOSESwiftError: Error {
     case compressionAlgorithmNotSupported
     case rawDataMustBeGreaterThanZero
     case compressedDataMustBeGreaterThanZero
+
+    // Thumprint computation
+    case thumbprintSerialization
 }
