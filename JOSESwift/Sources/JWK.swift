@@ -96,6 +96,13 @@ public protocol JWK: Codable {
     @available(iOS 11.0, *)
     func thumbprint(algorithm: JWKThumbprintAlgorithm) throws -> String
 
+    /// Use the thumbprint as the keyId.
+    ///  See [RFC-7638, Section 3.2](https://tools.ietf.org/html/rfc7638#section-3.2)
+    ///
+    /// - Parameters:
+    ///   - algorithm: The hash algorithm to use for the thumbprint calculation.
+    /// - Returns: The JWK key with the thumbprint as keyId.
+    /// - Throws: A `JOSESwiftError` indicating any errors.
     @available(iOS 11.0, *)
     func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm) throws -> Self
 }
@@ -107,5 +114,10 @@ extension JWK {
             throw JOSESwiftError.thumbprintSerialization
         }
         return try Thumbprint.calculate(from: json, algorithm: algorithm)
+    }
+
+    @available(iOS 11.0, *)
+    func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
+        return try withThumbprintAsKeyId(algorithm: algorithm)
     }
 }
