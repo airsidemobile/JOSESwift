@@ -9,6 +9,11 @@ Please track any of your changes in the *Unreleased* section so they can be move
 
 Add your changes here.
 
+## [2.2.0] - 2020-06-17
+
+- Swift package support ([#221](https://github.com/airsidemobile/JOSESwift/pull/221)) via [@rogermadsen](https://github.com/rogermadsen)
+- Added JWK thumbprint computation ([#220](https://github.com/airsidemobile/JOSESwift/pull/220)) via [@Torsph](https://github.com/Torsph)
+
 ## [2.1.0] - 2020-02-24
 
 - Deprecated old encrypter and decrypter APIs ([#216](https://github.com/airsidemobile/JOSESwift/pull/216)) via [@daniel-mohemian](https://github.com/daniel-mohemian)
