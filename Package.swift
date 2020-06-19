@@ -5,16 +5,10 @@ let package = Package(
     name: "JOSESwift",
     platforms: [.iOS(.v10)],
     products: [
-        .library(
-            name: "JOSESwift",
-            targets: ["JOSESwift"])
+        .library(name: "JOSESwift", targets: ["JOSESwift"])
     ],
-    dependencies: [
-    ],
+    dependencies: [],
     targets: [
-        .target(
-            name: "JOSESwift",
-            path: "JOSESwift"
-        )
+        .target(name: "JOSESwift", path: "JOSESwift")
     ],
     swiftLanguageVersions: [.v5])
