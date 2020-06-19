@@ -109,6 +109,10 @@ github "airsidemobile/JOSESwift"
 
 Then build it by running `carthage update` and drag the built framework into your Xcode project. More documentation on using Carthage can be found [here](https://github.com/Carthage/Carthage).
 
+### Swift Package Manager
+
+To integrate JOSESwift in your Xcode project as a Swfit package, follow Apple's article on how to [add package dependencies to your app](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
+
 ## Usage
 
 JOSESwift covers three functional aspects:
