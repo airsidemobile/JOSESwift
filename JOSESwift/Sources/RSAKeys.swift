@@ -187,9 +187,9 @@ public struct RSAPublicKey: JWK {
     @available(iOS 11.0, *)
     public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
-        return .init(modulus: modulus, exponent: exponent, additionalParameters: [
+        return .init(modulus: modulus, exponent: exponent, additionalParameters: parameters.merging([
             JWKParameter.keyIdentifier.rawValue: keyId
-        ])
+        ], uniquingKeysWith: { (_, new) in new }))
     }
 }
 
@@ -303,9 +303,9 @@ public struct RSAPrivateKey: JWK {
     @available(iOS 11.0, *)
     public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
-        return .init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: [
+        return .init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters.merging([
             JWKParameter.keyIdentifier.rawValue: keyId
-        ])
+        ], uniquingKeysWith: { (_, new) in new }))
     }
 }
 
