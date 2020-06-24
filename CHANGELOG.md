@@ -3,11 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
-Please track any of your changes in the *Unreleased* section so they can be moved to a respective version upon release.
 
-## Unreleased
+## [2.2.1] - 2020-06-24
 
-Add your changes here.
+- Copy additional parameters when updating JWT with keyId (#225)
+- Add SPM installation to readme (#224)
 
 ## [2.2.0] - 2020-06-17
 
