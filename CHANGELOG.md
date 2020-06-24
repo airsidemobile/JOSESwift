@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
 
+## [2.2.0] - 2020-06-24
+
+- Copy additional parameters when updating JWT with keyId (#225)
+- Add SPM installation to readme (#224)
+
 ## [2.2.0] - 2020-06-17
 
 - Swift package support ([#221](https://github.com/airsidemobile/JOSESwift/pull/221)) via [@rogermadsen](https://github.com/rogermadsen)
