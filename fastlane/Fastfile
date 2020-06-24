@@ -62,10 +62,12 @@ end
 desc "Get all pull requests since the last release"
 lane :pr_commits do
   # Only include squashed pull requests which end with something like "(#123)".
-  changelog_from_git_commits(pretty:"- %s")
-    .split("\n")
-    .grep(/\(#[0-9]*\)$/)
-    .join("\n")
+  changelog = changelog_from_git_commits(pretty:"- %s")
+  changelog = changelog.split("\n")
+  changelog = changelog.grep(/\(#[0-9]*\)$/)
+  changelog = changelog.join("\n")
+
+  changelog
 end
 
 lane :update_changelog do
