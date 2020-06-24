@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
 
-## [2.2.0] - 2020-06-24
+## [2.2.1] - 2020-06-24
 
 - Copy additional parameters when updating JWT with keyId (#225)
 - Add SPM installation to readme (#224)
