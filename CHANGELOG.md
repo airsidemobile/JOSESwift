@@ -3,11 +3,6 @@
 All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
-Please track any of your changes in the *Unreleased* section so they can be moved to a respective version upon release.
-
-## Unreleased
-
-Add your changes here.
 
 ## [2.2.0] - 2020-06-17
 
