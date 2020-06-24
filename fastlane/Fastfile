@@ -106,10 +106,9 @@ lane :prepare do |options|
   # Update copyright year if needed
   copyright
 
-  # Run tests
   test
 
-  # Update the changelog
+  update_changelog
 
   # Prompt for confimation
   promt_text = "Version #{version} has been prepared for release. "\
