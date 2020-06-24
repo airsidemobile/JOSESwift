@@ -79,7 +79,7 @@ lane :update_changelog do
   changelog = changelog.sub(/##/, "#{changelog_additions}\n\n\\0")
   File.write(changelog_path, changelog)
 
-  git_commit(path: changelog_path, message: "Update changelog")
+  sh("git commit -am 'Update changelog'")
   ensure_git_status_clean
 end
 
