@@ -131,7 +131,7 @@ class SymmetricKeyTests: XCTestCase {
 
         let jwk = SymmetricKey(
             key: key,
-            additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
+            additionalParameters: [ JWKParameter.algorithm.rawValue: ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
         )
 
         XCTAssertEqual(try? jwk.thumbprint(), "k1JnWRfC-5zzmL72vXIuBgTLfVROXBakS4OmGcrMCoc")
@@ -145,9 +145,24 @@ class SymmetricKeyTests: XCTestCase {
 
         let jwk = try SymmetricKey(
             key: key,
-            additionalParameters: [ "alg": ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
+            additionalParameters: [ JWKParameter.algorithm.rawValue: ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
         ).withThumbprintAsKeyId()
 
         XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "k1JnWRfC-5zzmL72vXIuBgTLfVROXBakS4OmGcrMCoc")
+    }
+
+    @available(iOS 11.0, *)
+    func testAddThumbprintToJWKCopyParameters() throws {
+        let key = Data([
+            0x19, 0xac, 0x20, 0x82, 0xe1, 0x72, 0x1a, 0xb5, 0x8a, 0x6a, 0xfe, 0xc0, 0x5f, 0x85, 0x4a, 0x52
+        ])
+
+        let jwk = try SymmetricKey(
+            key: key,
+            additionalParameters: [ JWKParameter.algorithm.rawValue: ContentEncryptionAlgorithm.A256CBCHS512.rawValue ]
+        ).withThumbprintAsKeyId()
+
+        XCTAssertEqual(jwk.parameters[JWKParameter.keyIdentifier.rawValue], "k1JnWRfC-5zzmL72vXIuBgTLfVROXBakS4OmGcrMCoc")
+        XCTAssertEqual(jwk.parameters[JWKParameter.algorithm.rawValue], ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
     }
 }

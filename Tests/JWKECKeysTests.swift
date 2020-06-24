@@ -216,6 +216,22 @@ class JWKECKeysTests: ECCryptoTestCase {
     }
 
     @available(iOS 11.0, *)
+    func testAddPublicThumbprintToJWKCopyParameters() throws {
+        let useKey = "sig"
+        try allTestData.forEach { keyData in
+            let key = try ECPublicKey(
+                    crv: ECCurveType(rawValue: keyData.expectedCurveType)!,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url,
+                    additionalParameters: [JWKParameter.keyUse.rawValue: useKey]
+            ).withThumbprintAsKeyId()
+
+            XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
+            XCTAssertEqual(key.parameters[JWKParameter.keyUse.rawValue], useKey)
+        }
+    }
+
+    @available(iOS 11.0, *)
     func testAddPrivateThumbprintToJWK() throws {
         try allTestData.forEach { keyData in
             let key = try ECPrivateKey(
@@ -226,6 +242,23 @@ class JWKECKeysTests: ECCryptoTestCase {
             ).withThumbprintAsKeyId()
 
             XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
+        }
+    }
+
+    @available(iOS 11.0, *)
+    func testAddPrivateThumbprintToJWKCopyParameters() throws {
+        let useKey = "sig"
+        try allTestData.forEach { keyData in
+            let key = try ECPrivateKey(
+                    crv: keyData.expectedCurveType,
+                    x: keyData.expectedXCoordinateBase64Url,
+                    y: keyData.expectedYCoordinateBase64Url,
+                    privateKey: keyData.expectedPrivateBase64Url,
+                    additionalParameters: [JWKParameter.keyUse.rawValue: useKey]
+            ).withThumbprintAsKeyId()
+
+            XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
+            XCTAssertEqual(key.parameters[JWKParameter.keyUse.rawValue], useKey)
         }
     }
 }
