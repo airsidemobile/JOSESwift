@@ -15,6 +15,7 @@ As of now, its usage is limited to iOS because it relies on the iOS cryptography
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
+	- [Swift Package Manager](#swift-package-manager)
 - [Usage](#usage)
 	- [JWS: Digital Signatures](#jws-digital-signatures)
 	- [JWE: Encryption and Decryption](#jwe-encryption-and-decryption)
