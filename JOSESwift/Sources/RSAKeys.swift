@@ -214,6 +214,7 @@ public struct RSAPrivateKey: JWK {
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             RSAParameter.modulus.rawValue: self.modulus,
             RSAParameter.exponent.rawValue: self.exponent,
+            RSAParameter.privateExponent.rawValue: self.privateExponent,
             RSAParameter.prime1.rawValue: self.prime1,
             RSAParameter.prime2.rawValue: self.prime2,
             RSAParameter.exponent1.rawValue: self.exponent1,
