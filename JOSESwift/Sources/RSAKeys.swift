@@ -229,13 +229,22 @@ public struct RSAPrivateKey: JWK {
     /// The exponent value for the RSA private key.
     public let exponent: String
 
-    /// The private exponent value for the RSA private key.
+    /// The private exponent (d) value for the RSA private key.
     public let privateExponent: String
 
+    /// The prime1 (p) value for the RSA private key.
     public let prime1: String
+
+    /// The prime2 (q) value for the RSA private key.
     public let prime2: String
+
+    /// The exponent1, used for CRT, (𝑑 mod 𝑝−1) value for the RSA private key.
     public let exponent1: String
+
+    /// The exponent2, used for CRT, (𝑑 mod 𝑞−1) value for the RSA private key.
     public let exponent2: String
+
+    /// The coefficient, used for CRT, (𝑞⁻¹ mod 𝑝) value for the RSA private key.
     public let coefficient: String
 
     /// Initializes a JWK containing an RSA private key.
