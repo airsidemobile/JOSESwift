@@ -45,7 +45,12 @@ public typealias RSAPublicKeyComponents = (
 public typealias RSAPrivateKeyComponents = (
     modulus: Data,
     exponent: Data,
-    privateExponent: Data
+    privateExponent: Data,
+    prime1: Data,
+    prime2: Data,
+    exponent1: Data,
+    exponent2: Data,
+    coefficient: Data
 )
 
 /// A type that represents an RSA public key.
@@ -208,7 +213,12 @@ public struct RSAPrivateKey: JWK {
         [
             JWKParameter.keyType.rawValue: self.keyType.rawValue,
             RSAParameter.modulus.rawValue: self.modulus,
-            RSAParameter.exponent.rawValue: self.exponent
+            RSAParameter.exponent.rawValue: self.exponent,
+            RSAParameter.prime1.rawValue: self.prime1,
+            RSAParameter.prime2.rawValue: self.prime2,
+            RSAParameter.exponent1.rawValue: self.exponent1,
+            RSAParameter.exponent2.rawValue: self.exponent2,
+            RSAParameter.coefficient.rawValue: self.coefficient
         ]
     }
 
@@ -221,6 +231,12 @@ public struct RSAPrivateKey: JWK {
     /// The private exponent value for the RSA private key.
     public let privateExponent: String
 
+    public let prime1: String
+    public let prime2: String
+    public let exponent1: String
+    public let exponent2: String
+    public let coefficient: String
+
     /// Initializes a JWK containing an RSA private key.
     ///
     /// - Parameters:
@@ -231,11 +247,24 @@ public struct RSAPrivateKey: JWK {
     //    - privateExponent: The private exponent value for the RSA private key in `base64urlUInt` encoding
     ///               as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(modulus: String, exponent: String, privateExponent: String, additionalParameters parameters: [String: String] = [:]) {
+    public init(modulus: String,
+                exponent: String,
+                privateExponent: String,
+                prime1: String,
+                prime2: String,
+                exponent1: String,
+                exponent2: String,
+                coefficient: String,
+                additionalParameters parameters: [String: String] = [:]) {
         self.keyType = .RSA
         self.modulus = modulus
         self.exponent = exponent
         self.privateExponent = privateExponent
+        self.prime1 = prime1
+        self.prime2 = prime2
+        self.exponent1 = exponent1
+        self.exponent2 = exponent2
+        self.coefficient = coefficient
 
         self.parameters = parameters.merging(
             [
@@ -255,7 +284,7 @@ public struct RSAPrivateKey: JWK {
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public init(privateKey: ExpressibleAsRSAPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (modulus, exponent, privateExponent) = try? privateKey.rsaPrivateKeyComponents() else {
+        guard let (modulus, exponent, privateExponent, prime1, prime2, exponent1, exponent2, coefficient) = try? privateKey.rsaPrivateKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
 
@@ -266,6 +295,11 @@ public struct RSAPrivateKey: JWK {
             modulus: modulus.base64URLEncodedString(),
             exponent: exponent.base64URLEncodedString(),
             privateExponent: privateExponent.base64URLEncodedString(),
+            prime1: prime1.base64URLEncodedString(),
+            prime2: prime2.base64URLEncodedString(),
+            exponent1: exponent1.base64URLEncodedString(),
+            exponent2: exponent2.base64URLEncodedString(),
+            coefficient: coefficient.base64URLEncodedString(),
             additionalParameters: parameters
         )
     }
@@ -289,23 +323,52 @@ public struct RSAPrivateKey: JWK {
             throw JOSESwiftError.modulusNotBase64URLUIntEncoded
         }
 
-        guard let exponentData = Data(base64Encoded: self.exponent) else {
+        guard let exponentData = Data(base64URLEncoded: self.exponent) else {
             throw JOSESwiftError.exponentNotBase64URLUIntEncoded
         }
 
-        guard let privateExponentData = Data(base64Encoded: self.exponent) else {
+        guard let privateExponentData = Data(base64URLEncoded: self.privateExponent) else {
             throw JOSESwiftError.privateExponentNotBase64URLUIntEncoded
         }
 
-        return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData))
+        guard let prime1Data = Data(base64URLEncoded: self.prime1) else {
+            throw JOSESwiftError.prime1NotBase64URLEncoded
+        }
+        guard let prime2Data = Data(base64URLEncoded: self.prime2) else {
+            throw JOSESwiftError.prime2NotBase64URLEncoded
+        }
+
+        guard let exponent1Data = Data(base64URLEncoded: self.exponent1) else {
+            throw JOSESwiftError.exponent1NotBase64URLEncoded
+        }
+
+        guard let exponent2Data = Data(base64URLEncoded: self.exponent2) else {
+            throw JOSESwiftError.exponent2NotBase64URLEncoded
+        }
+
+        guard let coefficientData = Data(base64URLEncoded: self.coefficient) else {
+            throw JOSESwiftError.coefficientNotBase64URLEncoded
+        }
+
+        return try T.representing(rsaPrivateKeyComponents: (modulusData, exponentData, privateExponentData, prime1Data, prime2Data, exponent1Data, exponent2Data, coefficientData))
     }
 
     @available(iOS 11.0, *)
     public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
-        return .init(modulus: modulus, exponent: exponent, privateExponent: privateExponent, additionalParameters: parameters.merging([
-            JWKParameter.keyIdentifier.rawValue: keyId
-        ], uniquingKeysWith: { (_, new) in new }))
+
+        return .init(
+            modulus: modulus,
+            exponent: exponent,
+            privateExponent: privateExponent,
+            prime1: prime1,
+            prime2: prime2,
+            exponent1: exponent1,
+            exponent2: exponent2,
+            coefficient: coefficient,
+            additionalParameters: parameters.merging([
+                JWKParameter.keyIdentifier.rawValue: keyId
+            ], uniquingKeysWith: { (_, new) in new }))
     }
 }
 

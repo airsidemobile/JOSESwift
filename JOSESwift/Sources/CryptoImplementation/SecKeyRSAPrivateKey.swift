@@ -36,15 +36,17 @@ extension SecKey: ExpressibleAsRSAPrivateKeyComponents {
         // RSA key size is the number of bits of the modulus.
         let keySize = (components.modulus.count * 8)
 
-        let attributes: [String: Any] = [
-            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
-            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
-            kSecAttrKeySizeInBits as String: keySize,
-            kSecAttrIsPermanent as String: false
+        let attributes: [CFString: Any] = [
+            kSecAttrKeyType: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits: NSNumber(value: keySize),
+            kSecReturnPersistentRef: true
         ]
 
         var error: Unmanaged<CFError>?
-        guard let keyReference = SecKeyCreateWithData(keyData as CFData, attributes as CFDictionary, &error) else {
+        guard let keyReference = SecKeyCreateWithData(keyData as CFData,
+                                                      attributes as CFDictionary,
+                                                      &error) else {
             // swiftlint:disable:next force_unwrapping
             throw error!.takeRetainedValue() as Error
         }
@@ -64,7 +66,7 @@ extension SecKey: ExpressibleAsRSAPrivateKeyComponents {
             // swiftlint:disable:next force_cast
             keyClass as! CFString == kSecAttrKeyClassPrivate
         else {
-            throw JWKError.notAPublicKey
+            throw JWKError.notAPrivateKey
         }
 
         var error: Unmanaged<CFError>?

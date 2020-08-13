@@ -49,6 +49,11 @@ public enum RSAParameter: String, CodingKey {
     case modulus = "n"
     case exponent = "e"
     case privateExponent = "d"
+    case prime1 = "p"
+    case prime2 = "q"
+    case exponent1 = "dp"
+    case exponent2 = "dq"
+    case coefficient = "qi"
 }
 
 /// Symmetric key specific JWK parameters.

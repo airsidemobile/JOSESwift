@@ -128,11 +128,21 @@ extension RSAPrivateKey: Decodable {
         let modulus = try rsaParameters.decode(String.self, forKey: .modulus)
         let exponent = try rsaParameters.decode(String.self, forKey: .exponent)
         let privateExponent = try rsaParameters.decode(String.self, forKey: .privateExponent)
+        let prime1 = try rsaParameters.decode(String.self, forKey: .prime1)
+        let prime2 = try rsaParameters.decode(String.self, forKey: .prime2)
+        let exponent1 = try rsaParameters.decode(String.self, forKey: .exponent1)
+        let exponent2 = try rsaParameters.decode(String.self, forKey: .exponent2)
+        let coefficient = try rsaParameters.decode(String.self, forKey: .coefficient)
 
         self.init(
             modulus: modulus,
             exponent: exponent,
             privateExponent: privateExponent,
+            prime1: prime1,
+            prime2: prime2,
+            exponent1: exponent1,
+            exponent2: exponent2,
+            coefficient: coefficient,
             additionalParameters: parameters
         )
     }
