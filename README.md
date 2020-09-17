@@ -83,7 +83,7 @@ JOSESwift supports the [DEFLATE](https://tools.ietf.org/html/rfc1951) compressio
 
 ## Installation
 
-JOSESwift integrates nicely into your and macOS projects. We support the following package managers:
+JOSESwift integrates nicely into your iOS and macOS projects. We support the following package managers:
 
 ### CocoaPods
 
