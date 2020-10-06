@@ -3,7 +3,6 @@
 <br>
 
 **JOSESwift** is a modular and extensible framework for the [JOSE](https://datatracker.ietf.org/wg/jose/about/) standards [**JWS**](https://tools.ietf.org/html/rfc7515), [**JWE**](https://tools.ietf.org/html/rfc7516), and [**JWK**](https://tools.ietf.org/html/rfc7517) written in Swift.
-As of now, its usage is limited to iOS because it relies on the iOS cryptography frameworks.
 
 [![CircleCI](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master.svg?style=svg)](https://circleci.com/gh/airsidemobile/JOSESwift/tree/master)
 
@@ -84,6 +83,8 @@ JOSESwift supports the [DEFLATE](https://tools.ietf.org/html/rfc1951) compressio
 
 ## Installation
 
+JOSESwift integrates nicely into your iOS and macOS projects. We support the following package managers:
+
 ### CocoaPods
 
 To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
@@ -112,7 +113,11 @@ Then build it by running `carthage update` and drag the built framework into you
 
 ### Swift Package Manager
 
-To integrate JOSESwift in your Xcode project as a Swift package, follow Apple's article on how to [add package dependencies to your app](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
+To integrate JOSESwift in your Xcode project as a Swift package, follow Apple's article on how to [add package dependencies to your app](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). In short, include the following dependency in your `Package.swift` file:
+
+``` swift
+.package(url: "https://github.com/airsidemobile/JOSESwift.git")
+```
 
 ## Usage
 
@@ -344,7 +349,7 @@ More details about decoding RSA public keys can be found [in the wiki](../../wik
 
 ## Security
 
-JOSESwift uses the [iOS Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
+JOSESwift uses [Apple's Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
 
 For security disclosures or related matters, please contact <joseswift@airsidemobile.com>.
 
