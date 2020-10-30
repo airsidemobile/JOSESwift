@@ -145,12 +145,13 @@ extension JWEHeader: CommonHeaderParameterSpace {
     }
 
     /// The JSON Web key corresponding to the key used to encrypt the JWE.
-    public var jwk: String? {
+    public var jwk: JWK? {
         set {
-            parameters["jwk"] = newValue
+            parameters["jwk"] = newValue?.parameters
         }
         get {
-            return parameters["jwk"] as? String
+            // FIXME
+            return nil
         }
     }
 

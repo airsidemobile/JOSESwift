@@ -25,7 +25,7 @@
 import XCTest
 @testable import JOSESwift
 
-class JWSHeaderTests: XCTestCase {
+class JWSHeaderTests: ECCryptoTestCase {
     let parameterDict = ["alg": "\(SignatureAlgorithm.RS512.rawValue)"]
     let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SignatureAlgorithm.RS512.rawValue)"], options: [])
 
@@ -103,7 +103,7 @@ class JWSHeaderTests: XCTestCase {
 
     func testSetNonRequiredHeaderParametersInJWSHeader() {
         let jku: URL? = nil
-        let jwk = "jwk"
+//        let jwk = "jwk"
         let kid = "kid"
         let x5u: URL? = nil
         let x5c = ["key1", "key2"]
@@ -115,7 +115,7 @@ class JWSHeaderTests: XCTestCase {
 
         var header = JWSHeader(algorithm: .RS512)
         header.jku = jku
-        header.jwk = jwk
+//        header.jwk = jwk
         header.kid = kid
         header.x5u = x5u
         header.x5c = x5c
@@ -130,8 +130,8 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)
 
-        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
-        XCTAssertEqual(header.jwk, jwk)
+//        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
+//        XCTAssertEqual(header.jwk, jwk)
 
         XCTAssertEqual(header.parameters["kid"] as? String, kid)
         XCTAssertEqual(header.kid, kid)
@@ -156,6 +156,22 @@ class JWSHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["crit"] as? [String], crit)
         XCTAssertEqual(header.crit, crit)
+    }
+    
+    func testJWKHeaderParam() throws {
+        let publicKey = p256.publicKey
+        let jwk = try ECPublicKey(publicKey: publicKey)
+        
+        var header = JWSHeader(algorithm: .ES256)
+        
+        header.jwk = jwk
+        
+        let jwkParam = header.parameters["jwk"] as? ECPublicKey
+        XCTAssertNotNil(jwkParam)
+        
+        let compact = header.data().base64EncodedString()
+        print(compact)
+        XCTAssertNotNil(compact)
     }
 
 }

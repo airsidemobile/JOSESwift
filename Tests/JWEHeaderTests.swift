@@ -207,7 +207,7 @@ class JWEHeaderTests: XCTestCase {
 
     func testSetNonRequiredHeaderParametersInJWEHeader() {
         let jku: URL? = nil
-        let jwk = "jwk"
+//        let jwk = "jwk"
         let kid = "kid"
         let x5u: URL? = nil
         let x5c = ["key1", "key2"]
@@ -220,7 +220,7 @@ class JWEHeaderTests: XCTestCase {
 
         var header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
         header.jku = jku
-        header.jwk = jwk
+//        header.jwk = jwk
         header.kid = kid
         header.x5u = x5u
         header.x5c = x5c
@@ -236,8 +236,8 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)
 
-        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
-        XCTAssertEqual(header.jwk, jwk)
+//        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
+//        XCTAssertEqual(header.jwk, jwk)
 
         XCTAssertEqual(header.parameters["kid"] as? String, kid)
         XCTAssertEqual(header.kid, kid)

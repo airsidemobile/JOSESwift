@@ -105,12 +105,13 @@ extension JWSHeader: CommonHeaderParameterSpace {
     }
 
     /// The JSON Web key corresponding to the key used to digitally sign the JWS.
-    public var jwk: String? {
+    public var jwk: JWK? {
         set {
-            parameters["jwk"] = newValue
+            parameters["jwk"] = newValue?.parameters
         }
         get {
-            return parameters["jwk"] as? String
+            // FIXME
+            return nil
         }
     }
 
