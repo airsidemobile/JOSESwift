@@ -166,12 +166,15 @@ class JWSHeaderTests: ECCryptoTestCase {
         
         header.jwk = jwk
         
-        let jwkParam = header.parameters["jwk"] as? ECPublicKey
+        let jwkParam = header.parameters["jwk"]
         XCTAssertNotNil(jwkParam)
         
-        let compact = header.data().base64EncodedString()
-        print(compact)
-        XCTAssertNotNil(compact)
+        let headerJwk = header.jwk as? ECPublicKey
+        XCTAssertNotNil(headerJwk)
+        XCTAssertEqual(jwk.keyType, headerJwk?.keyType)
+        XCTAssertEqual(jwk.crv, headerJwk?.crv)
+        XCTAssertEqual(jwk.x, headerJwk?.x)
+        XCTAssertEqual(jwk.y, headerJwk?.y)
     }
 
 }

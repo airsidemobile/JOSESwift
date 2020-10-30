@@ -150,8 +150,27 @@ extension JWEHeader: CommonHeaderParameterSpace {
             parameters["jwk"] = newValue?.parameters
         }
         get {
-            // FIXME
-            return nil
+            guard let jwkParameters = parameters["jwk"] as? [String: String] else {
+                return nil
+            }
+            
+            guard let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
+                  let keyType = JWKKeyType(rawValue: keyTypeString) else {
+                return nil
+            }
+            
+            guard let json = try? JSONEncoder().encode(jwkParameters) else {
+                return nil
+            }
+            
+            switch keyType {
+            case JWKKeyType.EC:
+                return try? ECPublicKey(data: json)
+            case JWKKeyType.OCT:
+                return try? SymmetricKey(data: json)
+            case JWKKeyType.RSA:
+                return try? RSAPublicKey(data: json)
+            }
         }
     }
 
