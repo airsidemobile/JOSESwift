@@ -103,7 +103,7 @@ extension JWSHeader: CommonHeaderParameterSpace {
             return URL(string: parameter)
         }
     }
-    
+
     /// The JSON Web key corresponding to the key used to digitally sign the JWS, as a String.
     public var jwk: String? {
         set {
@@ -123,16 +123,18 @@ extension JWSHeader: CommonHeaderParameterSpace {
             guard let jwkParameters = parameters["jwk"] as? [String: String] else {
                 return nil
             }
-            
-            guard let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
-                  let keyType = JWKKeyType(rawValue: keyTypeString) else {
+
+            guard
+                let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
+                let keyType = JWKKeyType(rawValue: keyTypeString)
+            else {
                 return nil
             }
-            
+
             guard let json = try? JSONEncoder().encode(jwkParameters) else {
                 return nil
             }
-            
+
             switch keyType {
             case JWKKeyType.EC:
                 return try? ECPublicKey(data: json)

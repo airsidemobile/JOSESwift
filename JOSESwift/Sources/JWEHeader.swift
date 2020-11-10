@@ -143,7 +143,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
             return URL(string: parameter)
         }
     }
-    
+
     /// The JSON Web key corresponding to the key used to encrypt the JWE, as a String.
     public var jwk: String? {
         set {
@@ -154,7 +154,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
     }
 
-    /// The JSON Web key corresponding to the key used to encrypt the JWE, as a JWK..
+    /// The JSON Web key corresponding to the key used to encrypt the JWE, as a JWK.
     public var jwkTyped: JWK? {
         set {
             parameters["jwk"] = newValue?.parameters
@@ -163,16 +163,18 @@ extension JWEHeader: CommonHeaderParameterSpace {
             guard let jwkParameters = parameters["jwk"] as? [String: String] else {
                 return nil
             }
-            
-            guard let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
-                  let keyType = JWKKeyType(rawValue: keyTypeString) else {
+
+            guard
+                let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
+                let keyType = JWKKeyType(rawValue: keyTypeString)
+            else {
                 return nil
             }
-            
+
             guard let json = try? JSONEncoder().encode(jwkParameters) else {
                 return nil
             }
-            
+
             switch keyType {
             case JWKKeyType.EC:
                 return try? ECPublicKey(data: json)
