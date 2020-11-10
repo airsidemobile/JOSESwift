@@ -103,7 +103,7 @@ class JWSHeaderTests: ECCryptoTestCase {
 
     func testSetNonRequiredHeaderParametersInJWSHeader() {
         let jku: URL? = nil
-//        let jwk = "jwk"
+        let jwk = "jwk"
         let kid = "kid"
         let x5u: URL? = nil
         let x5c = ["key1", "key2"]
@@ -115,7 +115,7 @@ class JWSHeaderTests: ECCryptoTestCase {
 
         var header = JWSHeader(algorithm: .RS512)
         header.jku = jku
-//        header.jwk = jwk
+        header.jwk = jwk
         header.kid = kid
         header.x5u = x5u
         header.x5c = x5c
@@ -130,8 +130,8 @@ class JWSHeaderTests: ECCryptoTestCase {
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)
 
-//        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
-//        XCTAssertEqual(header.jwk, jwk)
+        XCTAssertEqual(header.parameters["jwk"] as? String, jwk)
+        XCTAssertEqual(header.jwk, jwk)
 
         XCTAssertEqual(header.parameters["kid"] as? String, kid)
         XCTAssertEqual(header.kid, kid)
@@ -164,12 +164,12 @@ class JWSHeaderTests: ECCryptoTestCase {
         
         var header = JWSHeader(algorithm: .ES256)
         
-        header.jwk = jwk
+        header.jwkTyped = jwk
         
-        let jwkParam = header.parameters["jwk"]
+        let jwkParam = header.parameters["jwk"] as? [String: String]
         XCTAssertNotNil(jwkParam)
         
-        let headerJwk = header.jwk as? ECPublicKey
+        let headerJwk = header.jwkTyped as? ECPublicKey
         XCTAssertNotNil(headerJwk)
         XCTAssertEqual(jwk.keyType, headerJwk?.keyType)
         XCTAssertEqual(jwk.crv, headerJwk?.crv)

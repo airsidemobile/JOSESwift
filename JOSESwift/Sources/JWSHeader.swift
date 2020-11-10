@@ -103,9 +103,19 @@ extension JWSHeader: CommonHeaderParameterSpace {
             return URL(string: parameter)
         }
     }
+    
+    /// The JSON Web key corresponding to the key used to digitally sign the JWS, as a String.
+    public var jwk: String? {
+        set {
+            parameters["jwk"] = newValue
+        }
+        get {
+            return parameters["jwk"] as? String
+        }
+    }
 
-    /// The JSON Web key corresponding to the key used to digitally sign the JWS.
-    public var jwk: JWK? {
+    /// The JSON Web key corresponding to the key used to digitally sign the JWS, as a JWK.
+    public var jwkTyped: JWK? {
         set {
             parameters["jwk"] = newValue?.parameters
         }

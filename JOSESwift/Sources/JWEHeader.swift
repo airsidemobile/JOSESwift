@@ -143,9 +143,19 @@ extension JWEHeader: CommonHeaderParameterSpace {
             return URL(string: parameter)
         }
     }
+    
+    /// The JSON Web key corresponding to the key used to encrypt the JWE, as a String.
+    public var jwk: String? {
+        set {
+            parameters["jwk"] = newValue
+        }
+        get {
+            return parameters["jwk"] as? String
+        }
+    }
 
-    /// The JSON Web key corresponding to the key used to encrypt the JWE.
-    public var jwk: JWK? {
+    /// The JSON Web key corresponding to the key used to encrypt the JWE, as a JWK..
+    public var jwkTyped: JWK? {
         set {
             parameters["jwk"] = newValue?.parameters
         }
