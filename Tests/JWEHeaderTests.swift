@@ -282,4 +282,77 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header1.algorithm, header1.keyManagementAlgorithm)
         XCTAssertEqual(header2.encryptionAlgorithm, header1.contentEncryptionAlgorithm)
     }
+    
+    func testJwkTypedHeaderParamEC() throws {
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeEC,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 256,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+
+        guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print(error!)
+            return
+        }
+
+        let publicKey = SecKeyCopyPublicKey(privateKey)!
+
+        let jwk = try ECPublicKey(publicKey: publicKey)
+
+        var header = JWSHeader(algorithm: .ES256)
+
+        header.jwkTyped = jwk
+
+        // The actual 'jwk' parameter is expected to be a dictionary
+        let jwkParam = header.parameters["jwk"] as? [String: String]
+        XCTAssertNotNil(jwkParam)
+
+        let headerJwk = header.jwkTyped as? ECPublicKey
+        XCTAssertNotNil(headerJwk)
+        XCTAssertEqual(jwk.keyType, headerJwk?.keyType)
+        XCTAssertEqual(jwk.crv, headerJwk?.crv)
+        XCTAssertEqual(jwk.x, headerJwk?.x)
+        XCTAssertEqual(jwk.y, headerJwk?.y)
+    }
+
+    func testJwkTypedHeaderParamRSA() throws {
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+
+        guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print(error!)
+            return
+        }
+
+        let publicKey = SecKeyCopyPublicKey(privateKey)!
+
+        let jwk = try RSAPublicKey(publicKey: publicKey)
+
+        var header = JWSHeader(algorithm: .ES256)
+
+        header.jwkTyped = jwk
+
+        // The actual 'jwk' parameter is expected to be a dictionary
+        let jwkParam = header.parameters["jwk"] as? [String: String]
+        XCTAssertNotNil(jwkParam)
+
+        let headerJwk = header.jwkTyped as? RSAPublicKey
+        XCTAssertNotNil(headerJwk)
+        XCTAssertEqual(jwk.keyType, headerJwk?.keyType)
+        XCTAssertEqual(jwk.exponent, headerJwk?.exponent)
+        XCTAssertEqual(jwk.modulus, headerJwk?.modulus)
+    }
 }
