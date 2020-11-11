@@ -7,7 +7,6 @@ Include references to issue- or pull-request numbers.
 ## [2.3.0] - 2020-11-11
 
 - Add parsed JWK header parameter (#240)
-- Update readme to mention macOS support (#234)
 - Apply Xcode12 recommended settings (#236)
 - Add macOS to platforms (#233)
 - Update danger (#232)
