@@ -282,4 +282,40 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header1.algorithm, header1.keyManagementAlgorithm)
         XCTAssertEqual(header2.encryptionAlgorithm, header1.contentEncryptionAlgorithm)
     }
+
+    func testJwkTypedHeaderParamRSA() throws {
+        let attributes: [String: Any] = [
+            kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass as String: kSecAttrKeyClassPrivate,
+            kSecAttrKeySizeInBits as String: 2048,
+            kSecPrivateKeyAttrs as String: [
+                kSecAttrIsPermanent as String: false
+            ]
+        ]
+
+        var error: Unmanaged<CFError>?
+
+        guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
+            print(error!)
+            return
+        }
+
+        let publicKey = SecKeyCopyPublicKey(privateKey)!
+
+        let jwk = try RSAPublicKey(publicKey: publicKey)
+
+        var header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
+
+        header.jwkTyped = jwk
+
+        // The actual 'jwk' parameter is expected to be a dictionary
+        let jwkParam = header.parameters["jwk"] as? [String: String]
+        XCTAssertNotNil(jwkParam)
+
+        let headerJwk = header.jwkTyped as? RSAPublicKey
+        XCTAssertNotNil(headerJwk)
+        XCTAssertEqual(jwk.keyType, headerJwk?.keyType)
+        XCTAssertEqual(jwk.exponent, headerJwk?.exponent)
+        XCTAssertEqual(jwk.modulus, headerJwk?.modulus)
+    }
 }
