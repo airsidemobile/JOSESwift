@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
 
+## [2.3.0] - 2020-11-11
+
+- Add parsed JWK header parameter (#240)
+- Update readme to mention macOS support (#234)
+- Apply Xcode12 recommended settings (#236)
+- Adding macos to platforms (#233)
+- Update danger (#232)
+
 ## [2.2.1] - 2020-06-24
 
 - Copy additional parameters when updating JWT with keyId (#225)
