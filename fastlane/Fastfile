@@ -120,6 +120,9 @@ lane :prepare do |options|
   # Commit changes and push release branch
   sh("git diff-index --quiet HEAD || git commit -am 'Prepare #{version} for release'")
   sh("git push --set-upstream origin #{branch_name}")
+
+  release_pr
+
   UI.important "#{branch_name} has been pushed and a pull request created"
 end
 
