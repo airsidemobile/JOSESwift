@@ -117,14 +117,14 @@ public extension JWEHeader {
 
     /// The zip header parameter indicates that the content has been compressed before encryption. If no compression is applied, the `zip` parameter is `nil`.
     var zip: String? {
-        set {
-            parameters["zip"] = newValue
-        }
         get {
             guard let compressionAlgorithm = parameters["zip"] as? String else {
                 return nil
             }
             return compressionAlgorithm
+        }
+        set {
+            parameters["zip"] = newValue
         }
     }
 }
@@ -133,32 +133,29 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// The JWK Set URL which refers to a resource for a set of JSON-encoded public keys,
     /// one of which corresponds to the key used to encrypt the JWE.
     public var jku: URL? {
-        set {
-            parameters["jku"] = newValue?.absoluteString
-        }
         get {
             guard let parameter = parameters["jku"] as? String else {
                 return nil
             }
             return URL(string: parameter)
         }
+        set {
+            parameters["jku"] = newValue?.absoluteString
+        }
     }
 
     /// The JSON Web key corresponding to the key used to encrypt the JWE, as a String.
     public var jwk: String? {
-        set {
-            parameters["jwk"] = newValue
-        }
         get {
             return parameters["jwk"] as? String
+        }
+        set {
+            parameters["jwk"] = newValue
         }
     }
 
     /// The JSON Web key corresponding to the key used to encrypt the JWE, as a JWK.
     public var jwkTyped: JWK? {
-        set {
-            parameters["jwk"] = newValue?.parameters
-        }
         get {
             guard let jwkParameters = parameters["jwk"] as? [String: String] else {
                 return nil
@@ -184,92 +181,95 @@ extension JWEHeader: CommonHeaderParameterSpace {
                 return try? RSAPublicKey(data: json)
             }
         }
+        set {
+            parameters["jwk"] = newValue?.parameters
+        }
     }
 
     /// The Key ID indicates the key which was used to encrypt the JWE.
     public var kid: String? {
-        set {
-            parameters["kid"] = newValue
-        }
         get {
             return parameters["kid"] as? String
+        }
+        set {
+            parameters["kid"] = newValue
         }
     }
 
     /// The X.509 URL that referes to a resource for the X.509 public key certificate
     /// or certificate chain corresponding to the key used to encrypt the JWE.
     public var x5u: URL? {
-        set {
-            parameters["x5u"] = newValue?.absoluteString
-        }
         get {
             guard let parameter = parameters["x5u"] as? String else {
                 return nil
             }
             return URL(string: parameter)
         }
+        set {
+            parameters["x5u"] = newValue?.absoluteString
+        }
     }
 
     /// The X.509 certificate chain contains the X.509 public key certificate or
     /// certificate chain corresponding to the key used to encrypt the JWE.
     public var x5c: [String]? {
-        set {
-            parameters["x5c"] = newValue
-        }
         get {
             return parameters["x5c"] as? [String]
+        }
+        set {
+            parameters["x5c"] = newValue
         }
     }
 
     /// The X.509 certificate SHA-1 thumbprint of the DER encoding of the X.509 certificate
     /// corresponding to the key used to encrypt the JWE.
     public var x5t: String? {
-        set {
-            parameters["x5t"] = newValue
-        }
         get {
             return parameters["x5t"] as? String
+        }
+        set {
+            parameters["x5t"] = newValue
         }
     }
 
     /// The X.509 certificate SHA-256 thumbprint of the DER encoding of the X.509 certificate
     /// corresponding to the key used to encrypt the JWE.
     public var x5tS256: String? {
-        set {
-            parameters["x5tS256"] = newValue
-        }
         get {
             return parameters["x5tS256"] as? String
+        }
+        set {
+            parameters["x5tS256"] = newValue
         }
     }
 
     /// The type to declare the media type of the JWE object.
     public var typ: String? {
-        set {
-            parameters["typ"] = newValue
-        }
         get {
             return parameters["typ"] as? String
+        }
+        set {
+            parameters["typ"] = newValue
         }
     }
 
     /// The content type to declare the media type of the secured content (payload).
     public var cty: String? {
-        set {
-            parameters["cty"] = newValue
-        }
         get {
             return parameters["cty"] as? String
+        }
+        set {
+            parameters["cty"] = newValue
         }
     }
 
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
-        set {
-            parameters["crit"] = newValue
-        }
         get {
             return parameters["crit"] as? [String]
+        }
+        set {
+            parameters["crit"] = newValue
         }
     }
 }
