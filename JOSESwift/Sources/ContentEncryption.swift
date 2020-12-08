@@ -37,7 +37,7 @@ struct ContentDecryptionContext {
 }
 
 protocol ContentEncrypter {
-    func encrypt(header: JWEHeader, payload: Payload) throws -> ContentEncryptionContext
+    func encrypt(headerData: Data, payload: Payload) throws -> ContentEncryptionContext
 }
 
 protocol ContentDecrypter {

@@ -174,7 +174,7 @@ class AESCBCContentEncryptionTests: XCTestCase {
         ]))
 
         let symmetricEncryptionContext = try AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, secretKey: secretKey)
-            .encrypt(header: header, payload: Payload(plaintext))
+            .encrypt(headerData: header.headerData, payload: Payload(plaintext))
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let hmacKey = secretKey.subdata(in: 0..<16)
