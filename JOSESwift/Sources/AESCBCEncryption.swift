@@ -106,9 +106,9 @@ struct AESCBCEncryption {
 }
 
 extension AESCBCEncryption: ContentEncrypter {
-    func encrypt(header: JWEHeader, payload: Payload) throws -> ContentEncryptionContext {
+    func encrypt(headerData: Data, payload: Payload) throws -> ContentEncryptionContext {
         let plaintext = payload.data()
-        let additionalAuthenticatedData = header.data().base64URLEncodedData()
+        let additionalAuthenticatedData = headerData.base64URLEncodedData()
 
         return try encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData)
     }
