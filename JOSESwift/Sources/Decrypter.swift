@@ -65,7 +65,14 @@ public struct Decrypter {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        let contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey)
+        var contentEncryptionKey = Data()
+
+        if alg.shouldContainEphemeralPublicKey {
+            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey,
+                                                                                       header: context.protectedHeader)
+        } else {
+            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey)
+        }
 
         let contentDecryptionContext = ContentDecryptionContext(
             ciphertext: context.ciphertext,
