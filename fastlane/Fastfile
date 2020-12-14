@@ -137,7 +137,8 @@ lane :release_pr do
 
   gh_command = "gh pr create"\
                " --title 'Prepare #{version}'"\
-               " --body '#{pr_body}'"
+               " --body '#{pr_body}'"\
+               " --reviewer 'airsidemobile/ios'"
 
   system(gh_command)
 end
