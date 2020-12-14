@@ -1,4 +1,5 @@
-require 'fileutils'
+require "fileutils"
+require "tempfile"
 
 fastlane_version "2.63.0"
 
@@ -162,7 +163,25 @@ lane :release do
   # Puplish pod
   pod_push(path: "JOSESwift.podspec")
 
+  # Publish release
+  publish_release
+
   ensure_git_status_clean
+end
+
+desc "Publishes the release on GitHub"
+lane :publish_release do
+  version = get_version_number(target: "JOSESwift")
+
+  changelog = File.read("../CHANGELOG.md")
+  changes = changelog[/(- .+\(#.+\)\n)+/]
+  tmp_changelog = Tempfile.new("jose-changelog")
+  tmp_changelog.write(changes)
+  tmp_changelog.close
+
+  system("gh release create #{version} --title v#{version} --notes-file #{tmp_changelog.path}")
+
+  tmp_changelog.unlink
 end
 
 desc "Run Sonarqube analysis after running the test lane"
