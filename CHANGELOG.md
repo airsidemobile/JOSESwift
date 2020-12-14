@@ -7,7 +7,6 @@ Include references to issue- or pull-request numbers.
 ## [2.3.1] - 2020-12-14
 
 - Stop installing SwiftLint when it's not installed (#246)
-- Build maintenance (#243)
 
 ## [2.3.0] - 2020-11-11
 
