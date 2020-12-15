@@ -87,5 +87,3 @@ fastlane/test_output
 # Sonarqube
 .scannerwork
 
-# Vi
-.swp
