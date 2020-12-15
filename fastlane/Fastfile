@@ -174,7 +174,7 @@ lane :publish_release do
   version = get_version_number(target: "JOSESwift")
 
   changelog = File.read("../CHANGELOG.md")
-  changes = changelog[/(- .+\(#.+\)\n)+/]
+  changes = changelog[/(- .+\(#.+\)\n)+/] # Filter latest change set (e.g. "- Add some feature (#123)\n...").
   tmp_changelog = Tempfile.new("jose-changelog")
   tmp_changelog.write(changes)
   tmp_changelog.close
