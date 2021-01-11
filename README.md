@@ -118,7 +118,7 @@ To integrate JOSESwift in your Xcode project as a Swift package, follow Apple's 
 Alternatively, when using Swift Package Manager manually include the following dependency in your `Package.swift` file. See [Apple's documentation](https://developer.apple.com/documentation/swift_packages/package/dependency) for more details on specifying dependency version requirements.
 
 ``` swift
-.package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3")
+.package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3.0")
 ```
 
 ## Usage
