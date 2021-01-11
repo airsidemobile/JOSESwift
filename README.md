@@ -115,7 +115,7 @@ Then build it by running `carthage update` and drag the built framework into you
 
 To integrate JOSESwift in your Xcode project as a Swift package, follow Apple's article on how to [add package dependencies to your app](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
 
-Alternatively, when using Swift Package Manager manually include the following dependency in your `Package.swift` file:
+Alternatively, when using Swift Package Manager manually include the following dependency in your `Package.swift` file. See [Apple's documentation](https://developer.apple.com/documentation/swift_packages/package/dependency) for more details on specifying dependency version requirements.
 
 ``` swift
 .package(url: "https://github.com/airsidemobile/JOSESwift.git", .branch("master"))
