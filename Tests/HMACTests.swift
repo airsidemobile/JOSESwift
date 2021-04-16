@@ -25,41 +25,70 @@
 import XCTest
 @testable import JOSESwift
 
-class HMACTests: RSACryptoTestCase {
-    let testKey = "0102030405060708090a0b0c0d0e0f10111213141516171819".hexadecimalToData()!
-    let testData = "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd".hexadecimalToData()!
-    let hmacTestOutput = "b0ba465637458c6990e5a8c5f61d4af7e576d97ff94b872de76f8050361ee3dba91ca5c11aa25eb4d679275cc5788063a5f19741120c4f2de2adebeb10a298dd".hexadecimalToData()!
+class HMACTests: HMACCryptoTestCase {
+    func testHMAC256Calculation() {
+        let hmacOutput = try! HMAC.calculate(from: testData, with: testKey, using: .SHA256)
 
-    override func setUp() {
-        super.setUp()
+        XCTAssertEqual(hmacOutput, hmac256TestOutput)
     }
 
-    override func tearDown() {
-        super.tearDown()
+    func testHMAC256CalculationWithFalseKey() {
+        let falseKey = "abcdefg".hexadecimalToData()!
+
+        let hmacOutput = try! HMAC.calculate(from: testData, with: falseKey, using: .SHA256)
+
+        XCTAssertNotEqual(hmacOutput, hmac256TestOutput)
     }
 
-    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
-    func testHMACCalculation() {
+    func testHMAC256CalculationWithFalseData() {
+        let falseData = "abcdefg".hexadecimalToData()!
+
+        let hmacOutput = try! HMAC.calculate(from: falseData, with: testKey, using: .SHA256)
+
+        XCTAssertNotEqual(hmacOutput, hmac256TestOutput)
+    }
+
+    func testHMAC384Calculation() {
+        let hmacOutput = try! HMAC.calculate(from: testData, with: testKey, using: .SHA384)
+
+        XCTAssertEqual(hmacOutput, hmac384TestOutput)
+    }
+
+    func testHMAC384CalculationWithFalseKey() {
+        let falseKey = "abcdefg".hexadecimalToData()!
+
+        let hmacOutput = try! HMAC.calculate(from: testData, with: falseKey, using: .SHA384)
+
+        XCTAssertNotEqual(hmacOutput, hmac384TestOutput)
+    }
+
+    func testHMAC384CalculationWithFalseData() {
+        let falseData = "abcdefg".hexadecimalToData()!
+
+        let hmacOutput = try! HMAC.calculate(from: falseData, with: testKey, using: .SHA384)
+
+        XCTAssertNotEqual(hmacOutput, hmac384TestOutput)
+    }
+
+    func testHMAC512Calculation() {
         let hmacOutput = try! HMAC.calculate(from: testData, with: testKey, using: .SHA512)
 
-        XCTAssertEqual(hmacOutput, hmacTestOutput)
+        XCTAssertEqual(hmacOutput, hmac512TestOutput)
     }
 
-    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
-    func testHMACCalculationWithFalseKey() {
+    func testHMAC512CalculationWithFalseKey() {
         let falseKey = "abcdefg".hexadecimalToData()!
 
         let hmacOutput = try! HMAC.calculate(from: testData, with: falseKey, using: .SHA512)
 
-        XCTAssertNotEqual(hmacOutput, hmacTestOutput)
+        XCTAssertNotEqual(hmacOutput, hmac512TestOutput)
     }
 
-    /// Tests the HMAC calculation implementation for HMAC_SHA_512 with the test data provided in the [RFC-4231](https://tools.ietf.org/html/rfc4231).
-    func testHMACCalculationWithFalseData() {
+    func testHMAC512CalculationWithFalseData() {
         let falseData = "abcdefg".hexadecimalToData()!
 
         let hmacOutput = try! HMAC.calculate(from: falseData, with: testKey, using: .SHA512)
 
-        XCTAssertNotEqual(hmacOutput, hmacTestOutput)
+        XCTAssertNotEqual(hmacOutput, hmac512TestOutput)
     }
 }
