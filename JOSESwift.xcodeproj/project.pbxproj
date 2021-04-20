@@ -95,7 +95,6 @@
 		65FBFDE71F45CC7C005C7D68 /* JOSESwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 65FBFDE51F45CC7C005C7D68 /* JOSESwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7402BE932626FC4A0012801E /* HMACSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BE922626FC4A0012801E /* HMACSigner.swift */; };
 		7402BE972626FC610012801E /* HMACVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BE962626FC610012801E /* HMACVerifier.swift */; };
-		7402BE9F26271EC20012801E /* DataTimingSafeCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BE9E26271EC20012801E /* DataTimingSafeCompare.swift */; };
 		7402BEA726274D390012801E /* HMACSignerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEA626274D390012801E /* HMACSignerTests.swift */; };
 		7402BEAB26274D430012801E /* HMACVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEAA26274D430012801E /* HMACVerifierTests.swift */; };
 		7402BEAF26274DA40012801E /* HMACCryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEAE26274DA40012801E /* HMACCryptoTestCase.swift */; };
@@ -231,7 +230,6 @@
 		65FBFDE61F45CC7C005C7D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7402BE922626FC4A0012801E /* HMACSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACSigner.swift; sourceTree = "<group>"; };
 		7402BE962626FC610012801E /* HMACVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACVerifier.swift; sourceTree = "<group>"; };
-		7402BE9E26271EC20012801E /* DataTimingSafeCompare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTimingSafeCompare.swift; sourceTree = "<group>"; };
 		7402BEA626274D390012801E /* HMACSignerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACSignerTests.swift; sourceTree = "<group>"; };
 		7402BEAA26274D430012801E /* HMACVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACVerifierTests.swift; sourceTree = "<group>"; };
 		7402BEAE26274DA40012801E /* HMACCryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACCryptoTestCase.swift; sourceTree = "<group>"; };
@@ -596,7 +594,6 @@
 				C8610F0A2029D21800859FCC /* RSA.swift */,
 				5FB760DB390F90F91102DB74 /* EC.swift */,
 				5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */,
-				7402BE9E26271EC20012801E /* DataTimingSafeCompare.swift */,
 				5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */,
 				5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */,
 				5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */,
@@ -818,7 +815,6 @@
 				653656092035D86E00A3AC3B /* JWKSet.swift in Sources */,
 				65D1D0671F7A878D006377CD /* Deserializer.swift in Sources */,
 				65F44EB11FE2D941000C5EA0 /* JWK.swift in Sources */,
-				7402BE9F26271EC20012801E /* DataTimingSafeCompare.swift in Sources */,
 				6582614F2029F2D100B594ED /* ASN1DERParsing.swift in Sources */,
 				C85012E31FE04E0C00EC49FA /* SecureRandom.swift in Sources */,
 				6514ADC92031DD15008A4DD3 /* ASN1DEREncoding.swift in Sources */,
