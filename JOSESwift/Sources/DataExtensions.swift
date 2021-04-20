@@ -109,6 +109,32 @@ extension Data {
 
         return Data(dataLengthBytes)
     }
+
+    /// Compares data in constant-time.
+    ///
+    /// The running time of this method is independent of the data compared, making it safe to use for comparing secret values such as cryptographic MACs.
+    ///
+    /// The number of bytes of both data are expected to be of same length.
+    ///
+    /// - Parameter other: Other data for comparison.
+    /// - Returns: `true` if both data are equal, otherwise `false`.
+    func timingSafeCompare(with other: Data) -> Bool {
+        assert(self.count == other.count, "parameters should be of same length")
+        if #available(iOS 10.1, *) {
+            return timingsafe_bcmp([UInt8](self), [UInt8](other), self.count) == 0
+        } else {
+            return _timingSafeCompare(with: other)
+        }
+    }
+
+    func _timingSafeCompare(with other: Data) -> Bool {
+        assert(self.count == other.count, "parameters should be of same length")
+        var diff: UInt8 = 0
+        for i in 0 ..< self.count {
+            diff |= self[i] ^ other[i]
+        }
+        return diff == 0
+    }
 }
 
 extension Data: DataConvertible {

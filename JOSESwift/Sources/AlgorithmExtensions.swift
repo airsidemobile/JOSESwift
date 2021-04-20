@@ -84,3 +84,18 @@ extension ContentEncryptionAlgorithm {
            }
        }
 }
+
+extension SignatureAlgorithm {
+    var hmacAlgorithm: HMACAlgorithm? {
+        switch self {
+        case .HS256:
+            return .SHA256
+        case .HS384:
+            return .SHA384
+        case .HS512:
+            return .SHA512
+        default:
+            return nil
+        }
+    }
+}

@@ -44,10 +44,16 @@ public struct Verifier {
     ///
     /// - Parameters:
     ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
-    ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey`.
+    ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey` and `Data`.
     /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
     public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
         switch verifyingAlgorithm {
+        case .HS256, .HS384, .HS512:
+            guard type(of: publicKey) is HMACVerifier.KeyType.Type else {
+                return nil
+            }
+            // swiftlint:disable:next force_cast
+            self.verifier = HMACVerifier(algorithm: verifyingAlgorithm, key: publicKey as! HMACVerifier.KeyType)
         case .RS256, .RS384, .RS512, .PS256, .PS384, .PS512:
             guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
                 return nil
