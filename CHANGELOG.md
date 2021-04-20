@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
 
+## [2.4.0] - 2021-04-20
+
+- Use timing safe byte comparison for AES CBC MAC checks (#259)
+- Add support for JWS HS256, HS384, and HS512 algorithms (#258)
+- Bump kramdown from 2.3.0 to 2.3.1 (#255)
+- Update SPM installation instructions (#252)
+- Automate publishing releases on GitHub (#249)
+
 ## [2.3.1] - 2020-12-14
 
 - Stop installing SwiftLint when it's not installed (#246)

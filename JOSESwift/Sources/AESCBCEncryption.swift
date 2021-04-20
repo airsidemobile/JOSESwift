@@ -86,7 +86,9 @@ struct AESCBCEncryption {
             using: contentEncryptionAlgorithm.hmacAlgorithm
         )
 
-        guard authenticationTag == contentEncryptionAlgorithm.authenticationTag(for: hmacOutput) else {
+        guard
+            authenticationTag.timingSafeCompare(with: contentEncryptionAlgorithm.authenticationTag(for: hmacOutput))
+        else {
             throw JWEError.hmacNotAuthenticated
         }
 
