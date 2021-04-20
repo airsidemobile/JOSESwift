@@ -84,8 +84,11 @@ end
 
 desc "Prepares a release by bumping version, formatting code, running tests, setting up a release preparation branch"
 lane :prepare do |options|
-  # Ensure we prepare from current master
-  ensure_git_branch(branch: "master")
+  unless options[:force]
+    # Ensure we prepare from current master
+    ensure_git_branch(branch: "master") 
+  end
+
   ensure_git_status_clean
 
   # Bump version
