@@ -43,28 +43,33 @@ public struct Verifier {
     /// Constructs a verifyer used to verify a JWS.
     ///
     /// - Parameters:
-    ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
-    ///   - privateKey: The public key used to verify the JWS's signature. Currently supported key types are: `SecKey` and `Data`.
+    ///   - verifyingAlgorithm: The desired `SignatureAlgorithm`.
+    ///   - key: The key used to verify the JWS's signature or message authentication code (MAC).
+    ///     Currently supported key types are: `SecKey` and `Data`.
+    ///     - For _digital signature algorithms_ it is the sender's public key (`SecKey`)
+    ///       with which the JWS signature should be verified.
+    ///     - For _MAC algorithms_ it is the secret symmetric key (`Data`)
+    ///       shared between the sender and the recipient.
     /// - Returns: A fully initialized `Verifier` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
+    public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, key: KeyType) {
         switch verifyingAlgorithm {
         case .HS256, .HS384, .HS512:
-            guard type(of: publicKey) is HMACVerifier.KeyType.Type else {
+            guard type(of: key) is HMACVerifier.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.verifier = HMACVerifier(algorithm: verifyingAlgorithm, key: publicKey as! HMACVerifier.KeyType)
+            self.verifier = HMACVerifier(algorithm: verifyingAlgorithm, key: key as! HMACVerifier.KeyType)
         case .RS256, .RS384, .RS512, .PS256, .PS384, .PS512:
-            guard type(of: publicKey) is RSAVerifier.KeyType.Type else {
+            guard type(of: key) is RSAVerifier.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey as! RSAVerifier.KeyType)
+            self.verifier = RSAVerifier(algorithm: verifyingAlgorithm, publicKey: key as! RSAVerifier.KeyType)
         case .ES256, .ES384, .ES512:
-            guard type(of: publicKey) is ECVerifier.KeyType.Type else {
+            guard type(of: key) is ECVerifier.KeyType.Type else {
                 return nil
             }
-            self.verifier = ECVerifier(algorithm: verifyingAlgorithm, publicKey: publicKey as! ECVerifier.KeyType)
+            self.verifier = ECVerifier(algorithm: verifyingAlgorithm, publicKey: key as! ECVerifier.KeyType)
         }
     }
 
@@ -78,5 +83,14 @@ public struct Verifier {
         }
 
         return try verifier.verify(signingInput, against: signature)
+    }
+}
+
+// MARK: - Deprecated API
+
+extension Verifier {
+    @available(*, deprecated, message: "Use `init?(verifyingAlgorithm: SignatureAlgorithm, key: KeyType)` instead")
+    public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
+        self.init(verifyingAlgorithm: verifyingAlgorithm, key: publicKey)
     }
 }

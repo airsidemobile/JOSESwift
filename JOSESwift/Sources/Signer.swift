@@ -41,29 +41,34 @@ public struct Signer<KeyType> {
     /// Constructs a signer used to sign a JWS.
     ///
     /// - Parameters:
-    ///   - signingAlgorithm: A desired `SignatureAlgorithm`.
-    ///   - privateKey: The private key used to sign the JWS. Currently supported key types are: `SecKey` and `Data`.
+    ///   - signingAlgorithm: The desired `SignatureAlgorithm`.
+    ///   - key: The key used to compute the JWS's signature or message authentication code (MAC).
+    ///     Currently supported key types are: `SecKey` and `Data`.
+    ///     - For _digital signature algorithms_ it is the sender's private key (`SecKey`)
+    ///       with which the JWS should be signed.
+    ///     - For _MAC algorithms_ it is the secret symmetric key (`Data`)
+    ///       shared between the sender and the recipient.
     /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
-    public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
+    public init?(signingAlgorithm: SignatureAlgorithm, key: KeyType) {
         switch signingAlgorithm {
         case .HS256, .HS384, .HS512:
-            guard type(of: privateKey) is HMACSigner.KeyType.Type else {
+            guard type(of: key) is HMACSigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = HMACSigner(algorithm: signingAlgorithm, key: privateKey as! HMACSigner.KeyType)
+            self.signer = HMACSigner(algorithm: signingAlgorithm, key: key as! HMACSigner.KeyType)
         case .RS256, .RS384, .RS512, .PS256, .PS384, .PS512:
-            guard type(of: privateKey) is RSASigner.KeyType.Type else {
+            guard type(of: key) is RSASigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: privateKey as! RSASigner.KeyType)
+            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: key as! RSASigner.KeyType)
         case .ES256, .ES384, .ES512:
-            guard type(of: privateKey) is ECSigner.KeyType.Type else {
+            guard type(of: key) is ECSigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: privateKey as! ECSigner.KeyType)
+            self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: key as! ECSigner.KeyType)
         }
     }
 
@@ -87,5 +92,14 @@ extension Array where Element == DataConvertible {
         }
 
         return encoded.joined(separator: ".").data(using: .ascii)
+    }
+}
+
+// MARK: - Deprecated API
+
+extension Signer {
+    @available(*, deprecated, message: "Use `init?(signingAlgorithm: SignatureAlgorithm, key: KeyType)` instead")
+    public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
+        self.init(signingAlgorithm: signingAlgorithm, key: privateKey)
     }
 }
