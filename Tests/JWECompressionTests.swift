@@ -123,9 +123,9 @@ class JWECompressionTests: RSACryptoTestCase {
     func testNoneCompressor() throws {
         let noneCompressor = try CompressorFactory.makeCompressor(algorithm: CompressionAlgorithm.NONE)
         XCTAssert(noneCompressor is NoneCompressor)
-        //test none compress
+        // test none compress
         XCTAssertEqual(try noneCompressor.compress(data: data), data)
-        //test none decompress
+        // test none decompress
         XCTAssertEqual(try noneCompressor.decompress(data: data), data)
     }
 
