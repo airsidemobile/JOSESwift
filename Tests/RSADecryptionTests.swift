@@ -83,21 +83,9 @@ class RSADecryptionTests: RSACryptoTestCase {
         8GmvJ5UwA==
         """
 
-    let rsa1DecryptionError = RSAError.decryptingFailed(description: """
-        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -1))
-        """) // adjusted for RSA-OAEP-256 error having a differe 'err' number
-    let rsaOAEPDecryptionError = RSAError.decryptingFailed(description: """
+    let rsaDecryptionError = RSAError.decryptingFailed(description: """
         The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))
         """)
-
-    /// Dictionary of decryption errors for each available Asymmetric key algorithm
-    lazy var decryptionErrors: [String: RSAError] = {
-        [
-            KeyManagementAlgorithm.RSA1_5.rawValue: self.rsa1DecryptionError,
-            KeyManagementAlgorithm.RSAOAEP256.rawValue: self.rsaOAEPDecryptionError,
-            KeyManagementAlgorithm.RSAOAEP.rawValue: self.rsaOAEPDecryptionError
-        ]
-    }()
 
     /// Dictionary of ciphertexts for each available Asymmetric key algorithm generate via openssl with Alice's public key
     lazy var aliceCipherTextDict: [String: String] = {
@@ -158,7 +146,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             // Decrypting with the wrong key should throw an error
             let ciphertext = Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
+                XCTAssertEqual(error as? RSAError, rsaDecryptionError)
             }
         }
     }
@@ -173,7 +161,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             // Decrypting with the wrong key should throw an error
             let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, decryptionErrors[algorithm.rawValue])
+                XCTAssertEqual(error as? RSAError, rsaDecryptionError)
             }
         }
     }
