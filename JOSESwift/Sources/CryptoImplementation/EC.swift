@@ -24,7 +24,9 @@
 import Foundation
 import Security
 import CommonCrypto
+#if canImport(LocalAuthentication)
 import LocalAuthentication
+#endif
 
 internal enum ECError: Error {
     case algorithmNotSupported
@@ -161,9 +163,11 @@ internal struct EC {
                 let errorDomain = CFErrorGetDomain(cfError)
                 let errorCode = CFErrorGetCode(cfError)
 
+                #if canImport(LocalAuthentication)
                 if errorDomain == LAErrorDomain as CFErrorDomain {
                     throw ECError.localAuthenticationFailed(errorCode: errorCode)
                 }
+                #endif
                 throw ECError.signingFailed(description: "Error creating signature. (CFError: \(cfError))")
             }
             fatalError("SecKeyCreateSignature returned nil but did not set CFError object.")
