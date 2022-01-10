@@ -14,7 +14,7 @@ lane :test do
   sh "rm -rf ../#{DERIVED_DATA_PATH}"
 
   UI.message "Testing"
-  scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true, output_directory: "#{TEST_OUTPUT}/xctest/")
+  scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true, output_directory: "#{TEST_OUTPUT}/xctest/", xcargs: "BUILD_LIBRARY_FOR_DISTRIBUTION=YES")
 end
 
 desc "Lint Swift files"
