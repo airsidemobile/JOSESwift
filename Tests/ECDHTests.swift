@@ -190,7 +190,7 @@ class ECDHTests: XCTestCase {
         let enc = ContentEncryptionAlgorithm.A256CBCHS512
         let apuData = "Alice".data(using: .utf8)!
         let apvData = "Bob".data(using: .utf8)!
-        let expected = Data([86, 170, 141, 234, 248, 35, 109, 32, 92, 34, 40, 205, 113, 167, 16, 26])
+        let expected = Data([57, 134, 170, 121, 246, 57, 100, 32, 229, 128, 229, 211, 137, 15, 98, 63, 238, 93, 69, 34, 48, 121, 41, 235, 153, 238, 52, 37, 160, 1, 236, 193, 117, 177, 117, 78, 63, 182, 68, 206, 130, 80, 52, 181, 98, 82, 62, 154, 136, 6, 188, 168, 215, 106, 250, 134, 30, 155, 121, 81, 88, 3, 34, 93])
         let data = try! keyAgreementCompute(with: alg,
                                             encryption: enc,
                                             privateKey: bobKey.getPrivate(),
