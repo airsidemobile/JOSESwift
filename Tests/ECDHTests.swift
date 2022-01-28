@@ -8,6 +8,8 @@
 import XCTest
 @testable import JOSESwift
 
+// swiftlint:disable force_unwrapping
+
 class ECDHTests: XCTestCase {
 
     override func setUpWithError() throws {

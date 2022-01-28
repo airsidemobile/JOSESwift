@@ -234,4 +234,3 @@ extension JWE: CompactDeserializable {
         self.init(header: header, encryptedKey: encryptedKey, initializationVector: initializationVector, ciphertext: ciphertext, authenticationTag: authenticationTag)
     }
 }
-

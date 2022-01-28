@@ -321,7 +321,9 @@ internal struct EC {
         }
 
         var updatedHeader = header
-        if updatedHeader.epk == nil || !ephemeralKeyPair.getPrivate().isCorrespondWith(updatedHeader.epk!) {
+        if let epk = updatedHeader.epk, !ephemeralKeyPair.getPrivate().isCorrespondWith(epk) {
+            updatedHeader.epk = ephemeralKeyPair.getPublic()
+        } else if updatedHeader.epk == nil {
             updatedHeader.epk = ephemeralKeyPair.getPublic()
         }
 
@@ -370,4 +372,3 @@ internal struct EC {
         }
     }
 }
-
