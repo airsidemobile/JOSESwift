@@ -300,8 +300,8 @@ internal struct EC {
                                           encryption: encryption,
                                           privateKey: ephemeralKeyPair.getPrivate(),
                                           publicKey: publicKey,
-                                          apu: header.apu?.data(using: .utf8) ?? Data(),
-                                          apv: header.apv?.data(using: .utf8) ?? Data())
+                                          apu: Data(base64URLEncoded: header.apu ?? "") ?? Data(),
+                                          apv: Data(base64URLEncoded: header.apv ?? "") ?? Data())
 
         var contentKey: Data, encryptedKey: Data
         if let keyWrapAlgorithm = algorithm.keyWrapAlgorithm {
@@ -353,8 +353,9 @@ internal struct EC {
             throw ECError.invalidJWK(reason: "missing ephemeral public key in header")
         }
 
-        let apu = jweHeader.apu?.data(using: .utf8) ?? Data()
-        let apv = jweHeader.apv?.data(using: .utf8) ?? Data()
+        // apu and apv have to be base64URL encoded as described here : https://datatracker.ietf.org/doc/html/rfc7518#page-17
+        let apu = Data(base64URLEncoded: jweHeader.apu ?? "") ?? Data()
+        let apv = Data(base64URLEncoded: jweHeader.apv ?? "") ?? Data()
         let kek = try keyAgreementCompute(with: algorithm, encryption: encryption, privateKey: privateKey, publicKey: ephemeralPubKey, apu: apu, apv: apv)
 
         if let keyWrapAlgorithm = algorithm.keyWrapAlgorithm {
