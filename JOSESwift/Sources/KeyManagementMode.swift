@@ -142,4 +142,3 @@ private func cast<GivenType, ExpectedType>(
     // matches the type that the respective key management mode expects.
     return (type(of: something) is ExpectedType.Type) ? (something as! ExpectedType) : nil
 }
-

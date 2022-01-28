@@ -364,4 +364,3 @@ public extension JWEHeader {
         self.init(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: encryptionAlgorithm)
     }
 }
-

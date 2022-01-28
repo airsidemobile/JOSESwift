@@ -151,4 +151,3 @@ public struct SymmetricEncryptionContext {
     let authenticationTag: Data
     let initializationVector: Data
 }
-

@@ -278,4 +278,3 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
         }
     }
 }
-

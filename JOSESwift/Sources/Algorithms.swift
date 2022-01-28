@@ -177,4 +177,3 @@ public typealias AsymmetricKeyAlgorithm = KeyManagementAlgorithm
 
 @available(*, deprecated, message: "Use `ContentEncryptionAlgorithm` instead")
 public typealias SymmetricKeyAlgorithm = ContentEncryptionAlgorithm
-

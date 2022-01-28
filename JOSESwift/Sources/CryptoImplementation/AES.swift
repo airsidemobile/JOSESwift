@@ -345,11 +345,10 @@ extension AES {
         }
 
         guard status == kCCSuccess else {
-            return (nil, status) //kCCDecodeError
+            return (nil, status) // kCCDecodeError
         }
 
         rawKey.removeSubrange(rawKeyLength..<rawKey.count)
         return (rawKey, status)
     }
 }
-

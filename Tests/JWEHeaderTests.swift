@@ -385,4 +385,3 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(jwk.modulus, headerJwk?.modulus)
     }
 }
-
