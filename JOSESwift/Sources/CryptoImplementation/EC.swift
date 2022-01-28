@@ -275,7 +275,14 @@ internal struct EC {
 
     /// Encrypts a plain text using a given `EC` algorithm and the corresponding public key.
     ///
-    /// - Parameters: TODO
+    /// - Parameters:
+    ///   - publicKey: The public key.
+    ///   - algorithm: The algorithm used for the key management.
+    ///   - encryption: The algorithm used to encrypt the plain text.
+    ///   - header: The JWE header.
+    ///   - options: The encryption options.
+    /// - Returns: Encrypted data.
+    /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
     static func encryptionContextFor(_ publicKey: PublicKey,
                                      algorithm: KeyManagementAlgorithm,
                                      encryption: ContentEncryptionAlgorithm,
@@ -324,10 +331,12 @@ internal struct EC {
     /// Decrypts a cipher text using a given `EC` algorithm and the corresponding private key.
     ///
     /// - Parameters:
-    ///   - ciphertext: The cipher text to decrypt.
+    ///   - encryptedKey: The cipher text to decrypt.
     ///   - privateKey: The private key.
-    ///   - algorithm: The algorithm used to decrypt the cipher text.
-    /// - Returns: The plain text.
+    ///   - algorithm: The algorithm used for the key management.
+    ///   - encryption: The algorithm used to decrypt the cipher text.
+    ///   - header: The JWE header.
+    /// - Returns: The plain text data.
     /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
     static func decrypt(_ encryptedKey: Data,
                         privateKey: PrivateKey,
