@@ -30,7 +30,8 @@ public extension ECKeyPair {
 public extension ECPrivateKey {
 
     func getPublic() -> ECPublicKey {
-        return ECPublicKey(crv: crv, x: x, y: y, additionalParameters: parameters)
+        let parametersForPublic = parameters.filter { $0.key != ECParameter.privateKey.rawValue }
+        return ECPublicKey(crv: crv, x: x, y: y, additionalParameters: parametersForPublic)
     }
 
     func isCorrespondWith(_ key: ECPublicKey) -> Bool {
