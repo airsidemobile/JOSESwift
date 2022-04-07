@@ -42,8 +42,8 @@ class JWSSigningInputTest: XCTestCase {
         106, 112, 48, 99, 110, 86, 108, 102, 81
     ]
 
-    func testSigningInputComputation() {
-        let signingInput: [UInt8] = Array([header, payload].asJOSESigningInput()!)
+    func testSigningInputComputation() throws {
+        let signingInput: [UInt8] = Array(try JWSSigningInput(header: header, payload: payload).signingInput())
         XCTAssertEqual(signingInput, expectedSigningInput)
     }
 

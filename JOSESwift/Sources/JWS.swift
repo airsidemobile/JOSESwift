@@ -26,6 +26,7 @@ import Foundation
 internal enum JWSError: Error {
     case algorithmMismatch
     case cannotComputeSigningInput
+    case unencodedPayloadOptionMustNotBeUsedWithJWT
 }
 
 /// A JWS object consisting of a header, payload and signature. The three components of a JWS object

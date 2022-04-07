@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C0F564327FF18C8006328D1 /* JWSSigningInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0F564227FF18C8006328D1 /* JWSSigningInput.swift */; };
 		5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76A41AECF99F3673C1C40 /* ECKeys.swift */; };
 		5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */; };
 		5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */; };
@@ -139,6 +140,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C0F564227FF18C8006328D1 /* JWSSigningInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWSSigningInput.swift; sourceTree = "<group>"; };
 		5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPrivateKey.swift; sourceTree = "<group>"; };
 		5FB760DB390F90F91102DB74 /* EC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EC.swift; sourceTree = "<group>"; };
 		5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKECDecodingTests.swift; sourceTree = "<group>"; };
@@ -533,6 +535,7 @@
 			children = (
 				C85B1EF1204D82640026BDCB /* JWS.swift */,
 				6571F6221F7BF786004D53C5 /* JWSHeader.swift */,
+				5C0F564227FF18C8006328D1 /* JWSSigningInput.swift */,
 				C85B1EF3204D82860026BDCB /* Signer.swift */,
 				65D868101F7CEBA200769BBF /* Verifier.swift */,
 			);
@@ -859,6 +862,7 @@
 				5FB7641E9D67F245F52F3A7E /* EC.swift in Sources */,
 				5FB762CE28963B4780B33973 /* SecKeyECPublicKey.swift in Sources */,
 				5FB76E6F2080BEC6B63939D6 /* ECSigner.swift in Sources */,
+				5C0F564327FF18C8006328D1 /* JWSSigningInput.swift in Sources */,
 				5FB76B8D7F1214FF01FA1A8B /* ECVerifier.swift in Sources */,
 				5FB763AFF6BE04E8A6AE4DFC /* DataECPublicKey.swift in Sources */,
 				5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */,
