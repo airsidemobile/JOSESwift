@@ -96,3 +96,5 @@ workflows:
           filters:
             branches:
               ignore: /pull\/[0-9]+/ # Forked pull requests
+          context:
+            - sonarcloud
