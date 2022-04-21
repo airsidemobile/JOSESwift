@@ -27,24 +27,105 @@ import XCTest
 
 class JWSSigningInputTest: XCTestCase {
 
-    let header: JWSHeader = JWSHeader("{\"typ\":\"JWT\",\r\n \"alg\":\"HS256\"}".data(using: .utf8)!)!
-    let payload: Payload = Payload("{\"iss\":\"joe\",\r\n \"exp\":1300819380,\r\n \"http://example.com/is_root\":true}".data(using: .utf8)!)
+    let payload = Payload("{\"iss\":\"joe\",\r\n \"exp\":1300819380,\r\n \"http://example.com/is_root\":true}".data(using: .utf8)!)
 
-    let expectedSigningInput: [UInt8] = [
-        101, 121, 74, 48, 101, 88, 65, 105, 79, 105, 74, 75, 86, 49, 81,
-        105, 76, 65, 48, 75, 73, 67, 74, 104, 98, 71, 99, 105, 79, 105, 74,
-        73, 85, 122, 73, 49, 78, 105, 74, 57, 46, 101, 121, 74, 112, 99, 51,
-        77, 105, 79, 105, 74, 113, 98, 50, 85, 105, 76, 65, 48, 75, 73, 67,
-        74, 108, 101, 72, 65, 105, 79, 106, 69, 122, 77, 68, 65, 52, 77, 84,
-        107, 122, 79, 68, 65, 115, 68, 81, 111, 103, 73, 109, 104, 48, 100,
-        72, 65, 54, 76, 121, 57, 108, 101, 71, 70, 116, 99, 71, 120, 108, 76,
-        109, 78, 118, 98, 83, 57, 112, 99, 49, 57, 121, 98, 50, 57, 48, 73,
-        106, 112, 48, 99, 110, 86, 108, 102, 81
+    let expectedSeparatorBytes: [UInt8] = [46] // "."
+
+    let expectedEncodedPayloadBytes: [UInt8] = [
+        101, 121, 74, 112, 99, 51, 77, 105, 79, 105, 74, 113, 98, 50, 85, 105,
+        76, 65, 48, 75, 73, 67, 74, 108, 101, 72, 65, 105, 79, 106, 69, 122,
+        77, 68, 65, 52, 77, 84, 107, 122, 79, 68, 65, 115, 68, 81, 111, 103,
+        73, 109, 104, 48, 100, 72, 65, 54, 76, 121, 57, 108, 101, 71, 70, 116,
+        99, 71, 120, 108, 76, 109, 78, 118, 98, 83, 57, 112, 99, 49, 57, 121,
+        98, 50, 57, 48, 73, 106, 112, 48, 99, 110, 86, 108, 102, 81
     ]
 
     func testSigningInputComputation() throws {
+        let header: JWSHeader = JWSHeader("{\"typ\":\"JWT\",\r\n \"alg\":\"HS256\"}".data(using: .utf8)!)!
+
+        let expectedHeaderBytes: [UInt8] = [
+            101, 121, 74, 48, 101, 88, 65, 105, 79, 105, 74, 75, 86, 49, 81,
+            105, 76, 65, 48, 75, 73, 67, 74, 104, 98, 71, 99, 105, 79, 105, 74,
+            73, 85, 122, 73, 49, 78, 105, 74, 57
+        ]
+        let expectedSigningInput = expectedHeaderBytes + expectedSeparatorBytes + expectedEncodedPayloadBytes
+
         let signingInput: [UInt8] = Array(try JWSSigningInput(header: header, payload: payload).signingInput())
         XCTAssertEqual(signingInput, expectedSigningInput)
+    }
+
+    func testSigningInputComputationWithUnencodedPayloadOptionDoesNotEncodePayload() throws {
+        let header: JWSHeader = JWSHeader("""
+        {
+          "alg": "HS256",
+          "b64": false,
+          "crit": [
+            "b64"
+          ]
+        }
+        """.data(using: .utf8)!)!
+        let unencodedPayloadBytes: [UInt8] = Array(repeating: 0, count: 32)
+        let unencodedPayload: Payload = Payload(Data(unencodedPayloadBytes))
+
+        let expectedHeaderBytes: [UInt8] = [
+            101, 119, 111, 103, 73, 67, 74, 104, 98, 71, 99, 105, 79, 105, 65, 105,
+            83, 70, 77, 121, 78, 84, 89, 105, 76, 65, 111, 103, 73, 67, 74, 105,
+            78, 106, 81, 105, 79, 105, 66, 109, 89, 87, 120, 122, 90, 83, 119, 75,
+            73, 67, 65, 105, 89, 51, 74, 112, 100, 67, 73, 54, 73, 70, 115, 75,
+            73, 67, 65, 103, 73, 67, 74, 105, 78, 106, 81, 105, 67, 105, 65, 103,
+            88, 81, 112, 57
+        ]
+        let expectedSigningInput = expectedHeaderBytes + expectedSeparatorBytes + unencodedPayloadBytes
+
+        let signingInput: [UInt8] = Array(try JWSSigningInput(header: header, payload: unencodedPayload).signingInput())
+
+        XCTAssertEqual(signingInput, expectedSigningInput)
+    }
+
+    func testSigningInputComputationWithExplicitEncodedPayloadOptionEncodesPayload() throws {
+        let header: JWSHeader = JWSHeader("""
+        {
+          "alg": "HS256",
+          "b64": true,
+          "crit": [
+            "b64"
+          ]
+        }
+        """.data(using: .utf8)!)!
+
+        let expectedHeaderBytes: [UInt8] = [
+            101, 119, 111, 103, 73, 67, 74, 104, 98, 71, 99, 105, 79, 105, 65, 105,
+            83, 70, 77, 121, 78, 84, 89, 105, 76, 65, 111, 103, 73, 67, 74, 105,
+            78, 106, 81, 105, 79, 105, 66, 48, 99, 110, 86, 108, 76, 65, 111, 103,
+            73, 67, 74, 106, 99, 109, 108, 48, 73, 106, 111, 103, 87, 119, 111, 103,
+            73, 67, 65, 103, 73, 109, 73, 50, 78, 67, 73, 75, 73, 67, 66, 100,
+            67, 110, 48
+        ]
+        let expectedSigningInput: [UInt8] = expectedHeaderBytes + expectedSeparatorBytes + expectedEncodedPayloadBytes
+
+        let signingInput: [UInt8] = Array(try JWSSigningInput(header: header, payload: payload).signingInput())
+
+        XCTAssertEqual(signingInput, expectedSigningInput)
+    }
+
+    func testSigningInputComputationWithUnencodedPayloadOptionAndJwtThrows() throws {
+        let header: JWSHeader = JWSHeader("""
+        {
+          "typ": "JWT",
+          "alg": "HS256",
+          "b64": false,
+          "crit": [
+            "b64"
+          ]
+        }
+        """.data(using: .utf8)!)!
+
+        do {
+            _ = try JWSSigningInput(header: header, payload: payload).signingInput()
+            XCTFail("Expected to throw")
+        } catch {
+            XCTAssertEqual(error as? JWSError, JWSError.unencodedPayloadOptionMustNotBeUsedWithJWT)
+        }
     }
 
 }
