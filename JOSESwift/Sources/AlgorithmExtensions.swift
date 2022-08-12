@@ -24,65 +24,65 @@
 import Foundation
 
 extension ContentEncryptionAlgorithm {
-    var hmacAlgorithm: HMACAlgorithm {
-           switch self {
-           case .A256CBCHS512:
-               return .SHA512
-           case .A128CBCHS256:
-               return .SHA256
-           }
-       }
+    var hmacAlgorithm: HMACAlgorithm? {
+        switch self {
+        case .A256CBCHS512:
+            return .SHA512
+        case .A128CBCHS256:
+            return .SHA256
+        case .A256GCM, .A128GCM:
+            return nil
+        }
+    }
 
-       var keyLength: Int {
-           switch self {
-           case .A256CBCHS512:
-               return 64
-           case .A128CBCHS256:
-               return 32
-           }
-       }
+    var keyLength: Int {
+        switch self {
+        case .A256CBCHS512:
+            return 64
+        case .A128CBCHS256, .A256GCM:
+            return 32
+        case .A128GCM:
+            return 16
+        }
+    }
 
-       var initializationVectorLength: Int {
-           switch self {
-           case .A128CBCHS256, .A256CBCHS512:
-               return 16
-           }
-       }
+    var initializationVectorLength: Int {
+        switch self {
+        case .A128CBCHS256, .A256CBCHS512:
+            return 16
+        case .A256GCM, .A128GCM:
+            return 12
+        }
+    }
 
-       func checkKeyLength(for key: Data) -> Bool {
-           switch self {
-           case .A256CBCHS512:
-               return key.count == 64
-           case .A128CBCHS256:
-               return key.count == 32
-           }
-       }
+    func checkKeyLength(for key: Data) -> Bool {
+        return key.count == keyLength
+    }
 
-       func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
-           switch self {
-           case .A256CBCHS512:
-               guard checkKeyLength(for: inputKey) else {
-                   throw JWEError.keyLengthNotSatisfied
-               }
+    func retrieveKeys(from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+        guard checkKeyLength(for: inputKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+        switch self {
+        case .A256CBCHS512:
+            return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
+        case .A128CBCHS256:
+            return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
+    }
 
-               return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
-
-           case .A128CBCHS256:
-               guard checkKeyLength(for: inputKey) else {
-                   throw JWEError.keyLengthNotSatisfied
-               }
-               return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
-           }
-       }
-
-       func authenticationTag(for hmac: Data) -> Data {
-           switch self {
-           case .A256CBCHS512:
-               return hmac.subdata(in: 0..<32)
-           case .A128CBCHS256:
-               return hmac.subdata(in: 0..<16)
-           }
-       }
+    func authenticationTag(for hmac: Data) throws -> Data {
+        switch self {
+        case .A256CBCHS512:
+            return hmac.subdata(in: 0..<32)
+        case .A128CBCHS256:
+            return hmac.subdata(in: 0..<16)
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
+    }
 }
 
 extension SignatureAlgorithm {

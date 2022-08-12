@@ -53,9 +53,9 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr><td><code>HS256</code></td><td>:white_check_mark:</td>                   <td><code>RSA1_5</code></td><td>:white_check_mark:</td>       <td><code>A128CBC-HS256</code></td><td>:white_check_mark:</td> <td><code>RSA</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>HS384</code></td><td>:white_check_mark:</td>                   <td><code>RSA-OAEP</code></td><td>:white_check_mark:</td>     <td><code>A192CBC-HS384</code></td><td></td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>HS512</code></td><td>:white_check_mark:</td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A256CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
-	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td>:white_check_mark:</td>       <td><code>A128GCM</code></td><td></td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
+	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td>:white_check_mark:</td>       <td><code>A128GCM</code></td><td>:white_check_mark:</td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
 	<tr><td><code>RS384</code></td><td>:white_check_mark:</td> <td><code>A192KW</code></td><td>:white_check_mark:</td>       <td><code>A192GCM</code></td><td></td>
-	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td>:white_check_mark:</td>       <td><code>A256GCM</code></td><td></td>
+	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td>:white_check_mark:</td>       <td><code>A256GCM</code></td><td>:white_check_mark:</td>
 	<tr><td><code>ES256</code></td><td>:white_check_mark:</td> <td><code>dir</code></td><td>:white_check_mark:</td>          <th rowspan="11"></th><th rowspan="11"></th></tr>
 	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td></td></tr>
 	<tr><td><code>ES512</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A128KW</code></td><td></td></tr>
@@ -91,7 +91,7 @@ To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
 
 ``` ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '13.0'
 use_frameworks!
 
 target '<Your Target Name>' do
@@ -351,7 +351,7 @@ More details about decoding RSA public keys can be found [in the wiki](../../wik
 
 ## Security
 
-JOSESwift uses [Apple's Security framework](https://developer.apple.com/documentation/security) and [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/) for cryptography.
+JOSESwift uses [Apple's Security framework](https://developer.apple.com/documentation/security), [Apple’s CommonCrypto](https://opensource.apple.com//source/CommonCrypto/), and [Apples's CryptoKit](https://developer.apple.com/documentation/cryptokit/) for cryptography.
 
 For security disclosures or related matters, please contact <joseswift@airsidemobile.com>.
 

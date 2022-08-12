@@ -99,6 +99,8 @@
 		7402BEAB26274D430012801E /* HMACVerifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEAA26274D430012801E /* HMACVerifierTests.swift */; };
 		7402BEAF26274DA40012801E /* HMACCryptoTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEAE26274DA40012801E /* HMACCryptoTestCase.swift */; };
 		7402BEB526288DCD0012801E /* JWSHMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7402BEB426288DCD0012801E /* JWSHMACTests.swift */; };
+		74618E4E28A64EBA0028B066 /* AESGCMEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74618E4D28A64EBA0028B066 /* AESGCMEncryption.swift */; };
+		74618E5028A6A3080028B066 /* AESGCMEncryptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74618E4F28A6A3080028B066 /* AESGCMEncryptionTests.swift */; };
 		8A30B8F822118FD0001834E3 /* DeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */; };
 		8A30B8FA22118FE6001834E3 /* JWECompressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */; };
 		8A4B08B22213FF0600828536 /* Compressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B08B12213FF0600828536 /* Compressor.swift */; };
@@ -234,6 +236,8 @@
 		7402BEAA26274D430012801E /* HMACVerifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACVerifierTests.swift; sourceTree = "<group>"; };
 		7402BEAE26274DA40012801E /* HMACCryptoTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HMACCryptoTestCase.swift; sourceTree = "<group>"; };
 		7402BEB426288DCD0012801E /* JWSHMACTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWSHMACTests.swift; sourceTree = "<group>"; };
+		74618E4D28A64EBA0028B066 /* AESGCMEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESGCMEncryption.swift; sourceTree = "<group>"; };
+		74618E4F28A6A3080028B066 /* AESGCMEncryptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AESGCMEncryptionTests.swift; sourceTree = "<group>"; };
 		8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeflateWrapper.swift; sourceTree = "<group>"; };
 		8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWECompressionTests.swift; sourceTree = "<group>"; };
 		8A4B08B12213FF0600828536 /* Compressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compressor.swift; sourceTree = "<group>"; };
@@ -312,6 +316,7 @@
 				C86AC8CA1FCEC20F0007E611 /* AESCBCContentEncryptionTests.swift */,
 				C83070041FD1B7390068C5CB /* AESCBCContentDecryptionTests.swift */,
 				65B5B93F23F5604A009C8396 /* DirectEncryptionKeyManagementModeTests.swift */,
+				74618E4F28A6A3080028B066 /* AESGCMEncryptionTests.swift */,
 			);
 			name = JWE;
 			sourceTree = "<group>";
@@ -390,17 +395,10 @@
 			isa = PBXGroup;
 			children = (
 				6558164C23F45CC200EA5FEC /* ContentEncryption.swift */,
-				6558164E23F462BC00EA5FEC /* AESCBCEncryption */,
+				6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */,
+				74618E4D28A64EBA0028B066 /* AESGCMEncryption.swift */,
 			);
 			name = ContentEncryption;
-			sourceTree = "<group>";
-		};
-		6558164E23F462BC00EA5FEC /* AESCBCEncryption */ = {
-			isa = PBXGroup;
-			children = (
-				6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */,
-			);
-			name = AESCBCEncryption;
 			sourceTree = "<group>";
 		};
 		657D0F7523FAE4B5004A7975 /* KeyWrapping */ = {
@@ -794,6 +792,7 @@
 				5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */,
 				5FB765B20A256B93440E79E2 /* JWKECEncodingTests.swift in Sources */,
 				5FB7656EDD94AE3620A8C13C /* SecKeyECPrivateKeyTests.swift in Sources */,
+				74618E5028A6A3080028B066 /* AESGCMEncryptionTests.swift in Sources */,
 				65B5B94023F5604A009C8396 /* DirectEncryptionKeyManagementModeTests.swift in Sources */,
 				5FB7656FF300A4A3EF0F3597 /* DataECPrivateKeyTests.swift in Sources */,
 				5FB762ED79A6159B5A9EDECC /* ECPrivateKeyToSecKeyTests.swift in Sources */,
@@ -814,6 +813,7 @@
 				6572C2F21F96428800D4186D /* Decrypter.swift in Sources */,
 				653656092035D86E00A3AC3B /* JWKSet.swift in Sources */,
 				65D1D0671F7A878D006377CD /* Deserializer.swift in Sources */,
+				74618E4E28A64EBA0028B066 /* AESGCMEncryption.swift in Sources */,
 				65F44EB11FE2D941000C5EA0 /* JWK.swift in Sources */,
 				6582614F2029F2D100B594ED /* ASN1DERParsing.swift in Sources */,
 				C85012E31FE04E0C00EC49FA /* SecureRandom.swift in Sources */,
