@@ -93,3 +93,4 @@ class DataRSAPublicKeyTests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

@@ -304,3 +304,4 @@ class JWERSATests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

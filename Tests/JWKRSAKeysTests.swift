@@ -163,3 +163,4 @@ class JWKRSAKeysTests: RSACryptoTestCase {
         XCTAssertEqual(jwk.parameters[JWKParameter.keyUse.rawValue], useKey)
     }
 }
+// swiftlint:enable force_unwrapping

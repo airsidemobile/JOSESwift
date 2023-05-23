@@ -180,3 +180,4 @@ class RSAEncryptionTests: RSACryptoTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping
