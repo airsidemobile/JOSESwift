@@ -48,3 +48,4 @@ class JWSSigningInputTest: XCTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

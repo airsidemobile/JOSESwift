@@ -273,3 +273,4 @@ class ASN1DERParsingTests: XCTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

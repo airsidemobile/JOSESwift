@@ -54,3 +54,4 @@ class RSAPublicKeyToSecKeyTests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping
