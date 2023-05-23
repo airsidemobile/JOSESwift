@@ -288,3 +288,4 @@ class JWKECDecodingTests: ECCryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

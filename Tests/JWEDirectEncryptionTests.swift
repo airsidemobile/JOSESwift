@@ -156,3 +156,4 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

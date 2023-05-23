@@ -178,3 +178,4 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping

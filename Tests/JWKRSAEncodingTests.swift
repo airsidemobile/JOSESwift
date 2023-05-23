@@ -117,3 +117,4 @@ class JWKRSAEncodingTests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

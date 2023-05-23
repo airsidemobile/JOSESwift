@@ -184,3 +184,4 @@ class DataExtensionTests: XCTestCase {
         XCTAssertEqual(false, testData1._timingSafeCompare(with: testData2))
     }
 }
+// swiftlint:enable force_unwrapping
