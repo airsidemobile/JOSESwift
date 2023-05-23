@@ -92,3 +92,4 @@ class HMACTests: HMACCryptoTestCase {
         XCTAssertNotEqual(hmacOutput, hmac512TestOutput)
     }
 }
+// swiftlint:enable force_unwrapping

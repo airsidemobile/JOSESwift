@@ -51,3 +51,4 @@ class RSASignerTests: RSACryptoTestCase {
         XCTAssertEqual(signature.base64URLEncodedString(), signatureBase64URL)
     }
 }
+// swiftlint:enable force_unwrapping

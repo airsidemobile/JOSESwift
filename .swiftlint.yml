@@ -18,6 +18,8 @@ disabled_rules:
   - todo
   - no_space_in_method_call
 
+large_tuple: 5
+
 opt_in_rules:
   - force_unwrapping
 

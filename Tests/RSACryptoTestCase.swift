@@ -187,3 +187,4 @@ class RSACryptoTestCase: CryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

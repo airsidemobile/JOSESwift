@@ -56,3 +56,4 @@ class ECSignerTests: ECCryptoTestCase {
         _testSigning(algorithm: .ES512, keyData: p521)
     }
 }
+// swiftlint:enable force_unwrapping
