@@ -117,3 +117,4 @@ class JWKECEncodingTests: ECCryptoTestCase {
         XCTAssertEqual(dict["y"] as? String ?? "", keyData.expectedYCoordinateBase64Url)
     }
 }
+// swiftlint:enable force_unwrapping

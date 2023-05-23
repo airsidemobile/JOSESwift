@@ -47,3 +47,4 @@ class DirectEncryptionKeyManagementModeTests: XCTestCase {
         XCTAssertEqual(encryptedKey, Data())
     }
 }
+// swiftlint:enable force_unwrapping
