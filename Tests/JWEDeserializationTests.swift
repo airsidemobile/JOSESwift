@@ -125,3 +125,4 @@ class JWEDeserializationTests: XCTestCase {
         XCTFail()
     }
 }
+// swiftlint:enable force_unwrapping

@@ -218,3 +218,4 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping

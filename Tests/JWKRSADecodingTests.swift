@@ -379,3 +379,4 @@ class JWKRSADecodingTests: RSACryptoTestCase {
         XCTAssertNoThrow(try JWKSet(data: json))
     }
 }
+// swiftlint:enable force_unwrapping

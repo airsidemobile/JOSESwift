@@ -73,3 +73,4 @@ class SecKeyECPublicKeyTests: ECCryptoTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping

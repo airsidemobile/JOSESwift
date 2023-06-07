@@ -231,3 +231,4 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(jwk.modulus, headerJwk?.modulus)
     }
 }
+// swiftlint:enable force_unwrapping

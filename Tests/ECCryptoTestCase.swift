@@ -270,3 +270,4 @@ class ECCryptoTestCase: CryptoTestCase {
         // do nothing: setup happens in the construction of the ECTestKeyData instances
     }
 }
+// swiftlint:enable force_unwrapping

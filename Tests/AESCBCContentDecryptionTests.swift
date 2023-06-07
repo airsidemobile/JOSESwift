@@ -151,3 +151,4 @@ class AESCBCContentDecryptionTests: XCTestCase {
         XCTAssertEqual(plaintext, testPlaintext)
     }
 }
+// swiftlint:enable force_unwrapping

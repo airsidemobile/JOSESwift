@@ -428,3 +428,4 @@ class JWKSetCodingTests: XCTestCase {
         XCTAssertEqual(jwkSet.jsonString()!.count, String(data: testDataTwoRSAPublicKeys, encoding: .utf8)!.count)
     }
 }
+// swiftlint:enable force_unwrapping

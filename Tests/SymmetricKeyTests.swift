@@ -166,3 +166,4 @@ class SymmetricKeyTests: XCTestCase {
         XCTAssertEqual(jwk.parameters[JWKParameter.algorithm.rawValue], ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
     }
 }
+// swiftlint:enable force_unwrapping

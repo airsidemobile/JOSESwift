@@ -253,3 +253,4 @@ extension JOSESwiftError: Equatable {
         }
     }
 }
+// swiftlint:enable force_unwrapping
