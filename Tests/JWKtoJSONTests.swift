@@ -68,3 +68,4 @@ class JWKtoJSONTests: RSACryptoTestCase {
         XCTAssertEqual(dict!["e"] as? String ?? "", expectedExponentBase64)
     }
 }
+// swiftlint:enable force_unwrapping

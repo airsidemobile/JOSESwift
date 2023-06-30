@@ -63,3 +63,4 @@ class JWSHMACTests: HMACCryptoTestCase {
         _testHMACSerializationValidationAndDeserialization(algorithm: .HS512)
     }
 }
+// swiftlint:enable force_unwrapping

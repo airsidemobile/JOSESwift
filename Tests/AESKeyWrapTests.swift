@@ -166,3 +166,4 @@ class AESKeyWrapTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping

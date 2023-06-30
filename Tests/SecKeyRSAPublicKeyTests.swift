@@ -123,3 +123,4 @@ class SecKeyRSAPublicKeyTests: RSACryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

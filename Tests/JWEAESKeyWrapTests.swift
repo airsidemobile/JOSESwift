@@ -74,3 +74,4 @@ class JWEAESKeyWrapTests: XCTestCase {
         XCTAssertThrowsError(try jwe.decrypt(using: decyrpter))
     }
 }
+// swiftlint:enable force_unwrapping

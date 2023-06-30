@@ -262,3 +262,4 @@ class JWKECKeysTests: ECCryptoTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping

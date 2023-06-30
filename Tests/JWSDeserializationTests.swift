@@ -106,3 +106,4 @@ class JWSDeserializationTests: XCTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

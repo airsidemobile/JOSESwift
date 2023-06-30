@@ -62,3 +62,4 @@ class ECPublicKeyToSecKeyTests: ECCryptoTestCase {
     }
 
 }
+// swiftlint:enable force_unwrapping

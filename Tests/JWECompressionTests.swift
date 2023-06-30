@@ -140,3 +140,5 @@ class JWECompressionTests: RSACryptoTestCase {
         XCTAssertEqual(try deflateCompressor.decompress(data: compressedData), data)
     }
 }
+// swiftlint:enable force_unwrapping
+// swiftlint:enable force_cast

@@ -67,3 +67,4 @@ class HMACCryptoTestCase: CryptoTestCase {
         // do nothing
     }
 }
+// swiftlint:enable force_unwrapping

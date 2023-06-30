@@ -77,3 +77,4 @@ class JWSECTests: ECCryptoTestCase {
         XCTAssertEqual(payload, plainTextPayload)
     }
 }
+// swiftlint:enable force_unwrapping

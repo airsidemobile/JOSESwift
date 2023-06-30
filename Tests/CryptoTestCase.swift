@@ -88,3 +88,4 @@ extension Data {
             .joined(separator: "")
     }
 }
+// swiftlint:enable force_unwrapping
