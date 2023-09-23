@@ -26,7 +26,7 @@ import Foundation
 /// The header of a `JWE` object.
 public struct JWEHeader: JOSEHeader {
     var headerData: Data
-    var parameters: [String: Any] {
+    public var parameters: [String: Any] {
         didSet {
             guard JSONSerialization.isValidJSONObject(parameters) else {
                 return
