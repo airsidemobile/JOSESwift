@@ -111,7 +111,8 @@ class JWSHeaderTests: XCTestCase {
         let x5tS256 = "x5tS256"
         let typ = "typ"
         let cty = "cty"
-        let crit = ["crit1", "crit2"]
+        let b64 = false
+        let crit = ["crit1", "crit2", "b64"]
 
         var header = JWSHeader(algorithm: .RS512)
         header.jku = jku
@@ -123,6 +124,7 @@ class JWSHeaderTests: XCTestCase {
         header.x5tS256 = x5tS256
         header.typ = typ
         header.cty = cty
+        header.b64 = b64
         header.crit = crit
 
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: header.parameters, options: []).count)
@@ -153,6 +155,9 @@ class JWSHeaderTests: XCTestCase {
 
         XCTAssertEqual(header.parameters["cty"] as? String, cty)
         XCTAssertEqual(header.cty, cty)
+
+        XCTAssertEqual(header.parameters["b64"] as? Bool, b64)
+        XCTAssertEqual(header.b64, b64)
 
         XCTAssertEqual(header.parameters["crit"] as? [String], crit)
         XCTAssertEqual(header.crit, crit)

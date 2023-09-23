@@ -78,9 +78,7 @@ public struct Verifier {
             throw JWSError.algorithmMismatch
         }
 
-        guard let signingInput = [header, payload].asJOSESigningInput() else {
-            throw JWSError.cannotComputeSigningInput
-        }
+        let signingInput = try JWSSigningInput(header: header, payload: payload).signingInput()
 
         return try verifier.verify(signingInput, against: signature)
     }
