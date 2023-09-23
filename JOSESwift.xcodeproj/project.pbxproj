@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		396DD6D1257FB068008353B9 /* ECDHKeyAgreement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396DD6D0257FB068008353B9 /* ECDHKeyAgreement.swift */; };
+		396DD6D5257FB0E8008353B9 /* ECKeyEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396DD6D4257FB0E8008353B9 /* ECKeyEncryption.swift */; };
+		396DD6DF257FB13C008353B9 /* ECKeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396DD6DE257FB13C008353B9 /* ECKeyPair.swift */; };
+		396DD6E3257FB260008353B9 /* ECDHTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396DD6E2257FB260008353B9 /* ECDHTests.swift */; };
+		396DD6E7257FB2B5008353B9 /* JWEECTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396DD6E6257FB2B5008353B9 /* JWEECTests.swift */; };
 		5FB760497BB7711EFB470B5A /* ECKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB76A41AECF99F3673C1C40 /* ECKeys.swift */; };
 		5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */; };
 		5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */; };
@@ -139,6 +144,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		396DD6D0257FB068008353B9 /* ECDHKeyAgreement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECDHKeyAgreement.swift; sourceTree = "<group>"; };
+		396DD6D4257FB0E8008353B9 /* ECKeyEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECKeyEncryption.swift; sourceTree = "<group>"; };
+		396DD6DE257FB13C008353B9 /* ECKeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECKeyPair.swift; sourceTree = "<group>"; };
+		396DD6E2257FB260008353B9 /* ECDHTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECDHTests.swift; sourceTree = "<group>"; };
+		396DD6E6257FB2B5008353B9 /* JWEECTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JWEECTests.swift; sourceTree = "<group>"; };
 		5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataECPrivateKey.swift; sourceTree = "<group>"; };
 		5FB760DB390F90F91102DB74 /* EC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EC.swift; sourceTree = "<group>"; };
 		5FB7625CF5EF5D8F2135967F /* JWKECDecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWKECDecodingTests.swift; sourceTree = "<group>"; };
@@ -303,6 +313,7 @@
 				8A30B8F922118FE6001834E3 /* JWECompressionTests.swift */,
 				65676D8A1FC220C70031B26D /* JWEDeserializationTests.swift */,
 				C803EFEC1FA8849C00B71335 /* JWERSATests.swift */,
+				396DD6E6257FB2B5008353B9 /* JWEECTests.swift */,
 				65F2558D23FBE6E000A3FC44 /* JWEAESKeyWrapTests.swift */,
 				C803EFEE1FA884C100B71335 /* JWEHeaderTests.swift */,
 				653365E420ECCB71002630D7 /* JWEDirectEncryptionTests.swift */,
@@ -333,6 +344,7 @@
 				5FB768A267E1A15571CC58AA /* ECVerifierTests.swift */,
 				5FB76B5896AAA87ACD56D0D0 /* ECSignerTests.swift */,
 				65F2558F23FBE75300A3FC44 /* AESKeyWrapTests.swift */,
+				396DD6E2257FB260008353B9 /* ECDHTests.swift */,
 			);
 			name = Crypto;
 			sourceTree = "<group>";
@@ -363,6 +375,7 @@
 			isa = PBXGroup;
 			children = (
 				65617FCC1F90FB7600D8C743 /* RSAKeyEncryptionMode.swift */,
+				396DD6D4257FB0E8008353B9 /* ECKeyEncryption.swift */,
 			);
 			name = KeyEncryption;
 			sourceTree = "<group>";
@@ -598,6 +611,8 @@
 				5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */,
 				5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */,
 				612B0C93248E1C83009F1929 /* Thumbprint.swift */,
+				396DD6D0257FB068008353B9 /* ECDHKeyAgreement.swift */,
+				396DD6DE257FB13C008353B9 /* ECKeyPair.swift */,
 			);
 			path = CryptoImplementation;
 			sourceTree = "<group>";
@@ -757,6 +772,7 @@
 				6501503723FBDB42000D7D0B /* AESKeyWrapKeyManagementModeTests.swift in Sources */,
 				65684A4D2031935200E56C68 /* RSAPublicKeyToDataTests.swift in Sources */,
 				6575696D203EF9CE004A0EFD /* JWSValidationTests.swift in Sources */,
+				396DD6E3257FB260008353B9 /* ECDHTests.swift in Sources */,
 				65F2559023FBE75300A3FC44 /* AESKeyWrapTests.swift in Sources */,
 				65A103A1202B03BB00D22BF5 /* ASN1DERParsingTests.swift in Sources */,
 				7402BEAF26274DA40012801E /* HMACCryptoTestCase.swift in Sources */,
@@ -790,6 +806,7 @@
 				65F2558E23FBE6E000A3FC44 /* JWEAESKeyWrapTests.swift in Sources */,
 				5FB7692ED087062737C589E2 /* SecKeyECPublicKeyTests.swift in Sources */,
 				5FB76834DC4275C5B7D2F742 /* JWSECTests.swift in Sources */,
+				396DD6E7257FB2B5008353B9 /* JWEECTests.swift in Sources */,
 				5FB76E7A42B44E4F4416CB7F /* JWKECKeysTests.swift in Sources */,
 				5FB76093CE81BF1F8E7C254A /* JWKECDecodingTests.swift in Sources */,
 				5FB765B20A256B93440E79E2 /* JWKECEncodingTests.swift in Sources */,
@@ -809,6 +826,7 @@
 				65617FCD1F90FB7600D8C743 /* RSAKeyEncryptionMode.swift in Sources */,
 				65617FCB1F90F8C700D8C743 /* Encrypter.swift in Sources */,
 				65E733CC1FEBE8320009EAC6 /* JWKExtensions.swift in Sources */,
+				396DD6DF257FB13C008353B9 /* ECKeyPair.swift in Sources */,
 				6536560D2035DF8300A3AC3B /* JWKSetCodable.swift in Sources */,
 				6546FB0F2029DD10002E421F /* SecKeyRSAPublicKey.swift in Sources */,
 				6572C2F21F96428800D4186D /* Decrypter.swift in Sources */,
@@ -833,6 +851,7 @@
 				C8610F092029B15600859FCC /* Algorithms.swift in Sources */,
 				658EE1AF23F4067D00B6E967 /* AlgorithmExtensions.swift in Sources */,
 				65D8E8E820F499EF0059506A /* SymmetricKeys.swift in Sources */,
+				396DD6D5257FB0E8008353B9 /* ECKeyEncryption.swift in Sources */,
 				6558164423F44E8D00EA5FEC /* DirectEncryptionMode.swift in Sources */,
 				65D1D0651F7A4DB3006377CD /* DataConvertible.swift in Sources */,
 				6533552E1F8FB61000A660C6 /* JWE.swift in Sources */,
@@ -862,6 +881,7 @@
 				5FB76B8D7F1214FF01FA1A8B /* ECVerifier.swift in Sources */,
 				5FB763AFF6BE04E8A6AE4DFC /* DataECPublicKey.swift in Sources */,
 				5FB7628EC6EA2C4263853DE9 /* DataECPrivateKey.swift in Sources */,
+				396DD6D1257FB068008353B9 /* ECDHKeyAgreement.swift in Sources */,
 				5FB76BA2D0344083B8F79D53 /* SecKeyECPrivateKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

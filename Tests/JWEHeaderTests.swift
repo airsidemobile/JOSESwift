@@ -38,12 +38,49 @@ class JWEHeaderTests: XCTestCase {
     let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
     let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [])
 
+    let parameterDictECDHES = ["alg": "ECDH-ES", "enc": "A256CBC-HS512", "apu": "QWxpY2U", "apv": "Qm9i", "epk":
+                                 ["kty": "EC", "crv": "P-256", "x": "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0", "y": "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps"]] as [String: Any]
+    let parameterDataECDHES = try! JSONSerialization.data(withJSONObject: ["alg": "ECDH-ES", "enc": "A256CBC-HS512", "apu": "QWxpY2U", "apv": "Qm9i", "epk":
+                                                                             ["kty": "EC", "crv": "P-256", "x": "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0", "y": "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps"]], options: [])
+
+    let ecPublicKey = ECPublicKey(crv: .P256,
+                                  x: "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0",
+                                  y: "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps")
+
     override func setUp() {
         super.setUp()
     }
 
     override func tearDown() {
         super.tearDown()
+    }
+
+    func testInitECDHWithParameters() {
+
+        let header = try! JWEHeader(parameters: parameterDictECDHES)
+
+        XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.ECDH_ES.rawValue)
+        XCTAssertEqual(header.apu, "QWxpY2U")
+        XCTAssertEqual(header.apv, "Qm9i")
+        XCTAssertEqual(header.epk?.jsonString(), ecPublicKey.jsonString())
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictECDHES, options: []).count)
+    }
+
+    func testInitECDHCustomInitWithParameters() {
+
+        let header = JWEHeader(keyManagementAlgorithm: .ECDH_ES,
+                               contentEncryptionAlgorithm: .A256CBCHS512,
+                               agreementPartyUInfo: "QWxpY2U",
+                               agreementPartyVInfo: "Qm9i",
+                               ephemeralPublicKey: ecPublicKey)
+
+        XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.ECDH_ES.rawValue)
+        XCTAssertEqual(header.apu, "QWxpY2U")
+        XCTAssertEqual(header.apv, "Qm9i")
+        XCTAssertEqual(header.epk?.jsonString(), ecPublicKey.jsonString())
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictECDHES, options: []).count)
     }
 
     func testInitRSA1WithParameters() {
@@ -68,6 +105,14 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.RSAOAEP256.rawValue)
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictRSAOAEP256, options: []).count)
+    }
+
+    func testInitECDHESWithParameters() {
+        let header = try! JWEHeader(parameters: parameterDictECDHES)
+
+        XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.ECDH_ES.rawValue)
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictECDHES, options: []).count)
     }
 
     func testInitRSA1WithData() {
@@ -103,6 +148,15 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
         XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.direct.rawValue)
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictDirect, options: []).count)
+    }
+
+    func testInitECDHESWithData() {
+        let data = try! JSONSerialization.data(withJSONObject: parameterDictECDHES, options: [])
+        let header = JWEHeader(data)!
+
+        XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
+        XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.ECDH_ES.rawValue)
+        XCTAssertEqual(header.data(), data)
     }
 
     func testInitDirectWithData() {
@@ -150,6 +204,18 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertNotNil(header.keyManagementAlgorithm)
         XCTAssertNotNil(header.contentEncryptionAlgorithm)
         XCTAssertEqual(header.keyManagementAlgorithm!, .RSAOAEP256)
+        XCTAssertEqual(header.contentEncryptionAlgorithm!, .A256CBCHS512)
+    }
+
+    func testInitWithAlgAndEncECDHES() {
+        let header = JWEHeader(keyManagementAlgorithm: .ECDH_ES, contentEncryptionAlgorithm: .A256CBCHS512)
+
+        XCTAssertEqual(header.parameters["alg"] as? String, KeyManagementAlgorithm.ECDH_ES.rawValue)
+        XCTAssertEqual(header.parameters["enc"] as? String, ContentEncryptionAlgorithm.A256CBCHS512.rawValue)
+
+        XCTAssertNotNil(header.keyManagementAlgorithm)
+        XCTAssertNotNil(header.contentEncryptionAlgorithm)
+        XCTAssertEqual(header.keyManagementAlgorithm!, .ECDH_ES)
         XCTAssertEqual(header.contentEncryptionAlgorithm!, .A256CBCHS512)
     }
 

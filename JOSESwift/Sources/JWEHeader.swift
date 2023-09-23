@@ -82,6 +82,31 @@ public struct JWEHeader: JOSEHeader {
         try! self.init(parameters: parameters, headerData: headerData)
     }
 
+    /// Initializes a `JWEHeader` with the specified algorithm, signing algorithm, agreementPartyUInfo, agreementPartyVInfo and ephemeralPublicKey
+    public init(keyManagementAlgorithm: KeyManagementAlgorithm,
+                contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+                agreementPartyUInfo: String,
+                agreementPartyVInfo: String,
+                ephemeralPublicKey: ECPublicKey
+    ) {
+
+        let parameters = [
+            "alg": keyManagementAlgorithm.rawValue,
+            "enc": contentEncryptionAlgorithm.rawValue,
+            "apu": agreementPartyUInfo,
+            "apv": agreementPartyVInfo,
+            "epk": ephemeralPublicKey.parameters
+        ] as [String: Any]
+
+        // Forcing the try is ok here, since [String: String] can be converted to JSON.
+        // swiftlint:disable:next force_try
+        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+
+        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
+        // swiftlint:disable:next force_try
+        try! self.init(parameters: parameters, headerData: headerData)
+    }
+
     /// Initializes a `JWEHeader` with the specified parameters.
     public init(parameters: [String: Any]) throws {
         let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [])
@@ -270,6 +295,44 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
         set {
             parameters["crit"] = newValue
+        }
+    }
+
+    /// Header Parameters Used for ECDH Key Agreement - Ephemeral Public Key
+    public var epk: ECPublicKey? {
+        get {
+            guard let jwkParameters = parameters["epk"] as? [String: String] else {
+                return nil
+            }
+
+            guard let json = try? JSONEncoder().encode(jwkParameters) else {
+                return nil
+            }
+
+            return try? ECPublicKey(data: json)
+        }
+        set {
+            parameters["epk"] = newValue?.parameters
+        }
+    }
+
+    /// Header Parameters Used for ECDH Key Agreement - Agreement PartyUInfo
+    public var apu: String? {
+        get {
+            return parameters["apu"] as? String
+        }
+        set {
+            parameters["apu"] = newValue
+        }
+    }
+
+    /// Header Parameters Used for ECDH Key Agreement - Agreement PartyVInfo
+    public var apv: String? {
+        get {
+            return parameters["apv"] as? String
+        }
+        set {
+            parameters["apv"] = newValue
         }
     }
 }
