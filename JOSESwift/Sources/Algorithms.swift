@@ -82,6 +82,10 @@ public enum ContentEncryptionAlgorithm: String {
     case A256CBCHS512 = "A256CBC-HS512"
     /// Content encryption using AES_128_CBC_HMAC_SHA_256
     case A128CBCHS256 = "A128CBC-HS256"
+    /// Content encryption using AES GCM with 256-bit key
+    case A256GCM = "A256GCM"
+    /// Content encryption using AES GCM with 128-bit key
+    case A128GCM = "A128GCM"
 }
 
 /// An algorithm for HMAC calculation.
