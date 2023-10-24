@@ -1,4 +1,3 @@
-// swiftlint:disable force_unwrapping
 //
 //  AESGCMEncryptionTests.swift
 //  Tests
