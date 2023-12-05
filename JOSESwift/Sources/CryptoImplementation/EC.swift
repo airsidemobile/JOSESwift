@@ -164,7 +164,7 @@ internal struct EC {
                 let errorCode = CFErrorGetCode(cfError)
 
                 #if !os(tvOS)
-                if #available( macOS 10.11, iOS 8.3, watchOS 3.0, *)  {
+                if #available( macOS 10.11, iOS 8.3, watchOS 3.0, *) {
                     if errorDomain == LAErrorDomain as CFErrorDomain {
                         throw ECError.localAuthenticationFailed(errorCode: errorCode)
                     }
