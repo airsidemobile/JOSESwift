@@ -86,6 +86,16 @@ extension KeyManagementAlgorithm {
                                                   recipientPublicKey: recipientPublicKey,
                                                   agreementPartyUInfo: agreementPartyUInfo ?? Data(),
                                                   agreementPartyVInfo: agreementPartyVInfo ?? Data())
+        case .PBES2_HS256_A128KW, .PBES2_HS384_A192KW, .PBES2_HS512_A256KW:
+            guard let password = cast(encryptionKey, to: PBES2KeyEncryptionMode.KeyType.self) else {
+                return nil
+            }
+
+            return PBES2KeyEncryptionMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                password: password
+            )
         }
     }
 
@@ -128,6 +138,16 @@ extension KeyManagementAlgorithm {
             return ECKeyEncryption.DecryptionMode(keyManagementAlgorithm: self,
                                                   contentEncryptionAlgorithm: contentEncryptionAlgorithm,
                                                   recipientPrivateKey: recipientPrivateKey
+            )
+        case .PBES2_HS256_A128KW, .PBES2_HS384_A192KW, .PBES2_HS512_A256KW:
+            guard let password = cast(decryptionKey, to: PBES2KeyEncryptionMode.KeyType.self) else {
+                return nil
+            }
+
+            return PBES2KeyEncryptionMode(
+                keyManagementAlgorithm: self,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                password: password
             )
         }
     }

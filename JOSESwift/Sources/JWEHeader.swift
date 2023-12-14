@@ -338,6 +338,29 @@ extension JWEHeader: CommonHeaderParameterSpace {
             parameters["apv"] = newValue
         }
     }
+
+    /// Header Parameters used for PBES2 Key Deriviation - PBES2 Salt Input
+    public var p2s: Data? {
+        get {
+            guard let parameter = parameters["p2s"] as? String else {
+                return nil
+            }
+            return Data(base64URLEncoded: parameter)
+        }
+        set {
+            parameters["p2s"] = newValue?.base64URLEncodedString()
+        }
+    }
+
+    /// Header Parameters used for PBES2 Key Deriviation - PBES2 Count
+    public var p2c: Int? {
+        get {
+            return parameters["p2c"] as? Int
+        }
+        set {
+            parameters["p2c"] = newValue
+        }
+    }
 }
 
 // MARK: - Deprecated API

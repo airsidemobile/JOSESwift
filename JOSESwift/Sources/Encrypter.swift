@@ -90,6 +90,28 @@ public struct Encrypter {
                 authenticationTag: contentEncryptionContext.authenticationTag,
                 initializationVector: contentEncryptionContext.initializationVector
             )
+        } else if keyManagementAlgorithm.shouldContainPasswordBasedEncryptionScheme {
+            let encryptedKey = try keyManagementMode.determineContentEncryptionKey(for: header)
+
+            guard let context = try? JSONDecoder().decode(Encrypter.PBES2EncryptionContext.self, from: encryptedKey) else {
+                throw JWEError.hmacNotAuthenticated
+            }
+
+            if let contextHeader = JWEHeader(context.headerData) {
+                header = contextHeader
+            }
+
+            let contentEncryptionContext = try contentEncryptionAlgorithm
+                .makeContentEncrypter(contentEncryptionKey: context.contentKey)
+                .encrypt(headerData: context.headerData,
+                         payload: payload)
+
+            return EncryptionContext(
+                encryptedKey: context.encryptedKey,
+                ciphertext: contentEncryptionContext.ciphertext,
+                authenticationTag: contentEncryptionContext.authenticationTag,
+                initializationVector: contentEncryptionContext.initializationVector
+            )
         } else {
             let (contentEncryptionKey, encryptedKey) = try keyManagementMode.determineContentEncryptionKey()
 
@@ -117,6 +139,12 @@ extension Encrypter {
     }
 
     struct ECEncryptionContext: Codable {
+        let headerData: Data
+        let encryptedKey: Data
+        let contentKey: Data
+    }
+
+    struct PBES2EncryptionContext: Codable {
         let headerData: Data
         let encryptedKey: Data
         let contentKey: Data

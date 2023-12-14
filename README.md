@@ -64,9 +64,9 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr><td><code>PS512</code></td><td>:white_check_mark:</td> <td><code>A128GCMKW</code></td><td></td></tr>
 	<tr><th rowspan="5"></th><th rowspan="5"></th>             <td><code>A192GCMKW</code></td><td></td></tr>
 	<tr>                                                       <td><code>A256GCMKW</code></td><td></td></tr>
-	<tr>                                                       <td><code>PBES2-HS256+A128KW</code></td><td></td></tr>
-	<tr>                                                       <td><code>PBES2-HS384+A192KW</code></td><td></td></tr>
-	<tr>                                                       <td><code>PBES2-HS512+A256KW</code></td><td></td></tr>
+	<tr>                                                       <td><code>PBES2-HS256+A128KW</code></td><td>:white_check_mark:</td></tr>
+	<tr>                                                       <td><code>PBES2-HS384+A192KW</code></td><td>:white_check_mark:</td></tr>
+	<tr>                                                       <td><code>PBES2-HS512+A256KW</code></td><td>:white_check_mark:</td></tr>
 </table>
 
 ### Serializations

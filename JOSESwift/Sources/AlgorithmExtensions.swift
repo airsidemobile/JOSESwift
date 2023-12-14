@@ -22,6 +22,7 @@
 //
 
 import Foundation
+import CommonCrypto
 
 extension ContentEncryptionAlgorithm {
 
@@ -62,6 +63,34 @@ extension SignatureAlgorithm {
             return .SHA512
         default:
             return nil
+        }
+    }
+}
+
+extension KeyManagementAlgorithm {
+    var hmacAlgorithm: HMACAlgorithm? {
+        switch self {
+        case .PBES2_HS256_A128KW:
+            return .SHA256
+        case .PBES2_HS384_A192KW:
+            return .SHA384
+        case .PBES2_HS512_A256KW:
+            return .SHA512
+        default:
+            return nil
+        }
+    }
+
+    var keyLength: Int {
+        switch self {
+        case .PBES2_HS256_A128KW:
+            return kCCKeySizeAES128
+        case .PBES2_HS384_A192KW:
+            return kCCKeySizeAES192
+        case .PBES2_HS512_A256KW:
+            return kCCKeySizeAES256
+        default:
+            return 0
         }
     }
 }
