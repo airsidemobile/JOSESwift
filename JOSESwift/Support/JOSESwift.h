@@ -21,7 +21,9 @@
 //  ---------------------------------------------------------------------------
 //
 
+#if __has_include(<UIKit/UIKit.h>)
 #import <UIKit/UIKit.h>
+#endif
 
 //! Project version number for JOSESwift.
 FOUNDATION_EXPORT double JOSESwiftVersionNumber;
