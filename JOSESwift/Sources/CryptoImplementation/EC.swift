@@ -29,7 +29,12 @@ import LocalAuthentication
 #endif
 
 internal enum ECError: Error {
-    case algorithmNotSupported
+    case unknownOrUnsupportedAlgorithm
+    case invalidKeySize
+    case wrapKeyFail
+    case unwrapKeyFail
+    case invalidJWK(reason: String)
+    case deriveKeyFail(reason: String)
     case signingFailed(description: String)
     case verifyingFailed(description: String)
     case encryptingFailed(description: String)
@@ -139,6 +144,8 @@ public enum ECCompression: UInt8 {
 
 internal struct EC {
     typealias KeyType = SecKey
+    typealias PrivateKey = ECPrivateKey
+    typealias PublicKey = ECPublicKey
 
     ///  Signs input data with a given elliptic curve algorithm and the corresponding private key.
     ///
@@ -153,7 +160,7 @@ internal struct EC {
             throw ECError.invalidCurveDigestAlgorithm
         }
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
-            throw ECError.algorithmNotSupported
+            throw ECError.unknownOrUnsupportedAlgorithm
         }
 
         var cfErrorRef: Unmanaged<CFError>?
@@ -203,7 +210,7 @@ internal struct EC {
             throw ECError.invalidCurveDigestAlgorithm
         }
         guard let secKeyAlgorithm = algorithm.secKeyAlgorithm else {
-            throw ECError.algorithmNotSupported
+            throw ECError.unknownOrUnsupportedAlgorithm
         }
         if signature.count != (curveType.coordinateOctetLength * 2) {
             throw ECError.verifyingFailed(description: "Signature is \(signature.count) bytes long instead of the expected \(curveType.coordinateOctetLength * 2).")
@@ -266,4 +273,98 @@ internal struct EC {
         }
     }
 
+    /// Encrypts a plain text using a given `EC` algorithm and the corresponding public key.
+    ///
+    /// - Parameters:
+    ///   - publicKey: The public key.
+    ///   - algorithm: The algorithm used for the key management.
+    ///   - encryption: The algorithm used to encrypt the plain text.
+    ///   - header: The JWE header.
+    ///   - options: The encryption options.
+    /// - Returns: Encrypted data.
+    /// - Throws: `EncryptionError` if any errors occur while encrypting the plain text.
+    static func encryptionContextFor(_ publicKey: PublicKey,
+                                     algorithm: KeyManagementAlgorithm,
+                                     encryption: ContentEncryptionAlgorithm,
+                                     header: JWEHeader,
+                                     options: [String: Any] = [:]
+    ) throws -> Data {
+        var ephemeralKeyPair: ECKeyPair
+        if let eKeyPair = options["ephemeralKeyPair"] as? ECKeyPair {
+            ephemeralKeyPair = eKeyPair
+        } else {
+            ephemeralKeyPair = try ECKeyPair.generateWith(publicKey.crv)
+        }
+
+        let kek = try keyAgreementCompute(with: algorithm,
+                                          encryption: encryption,
+                                          privateKey: ephemeralKeyPair.getPrivate(),
+                                          publicKey: publicKey,
+                                          apu: Data(base64URLEncoded: header.apu ?? "") ?? Data(),
+                                          apv: Data(base64URLEncoded: header.apv ?? "") ?? Data())
+
+        var contentKey: Data, encryptedKey: Data
+        if let keyWrapAlgorithm = algorithm.keyWrapAlgorithm {
+            if let injectedKey = options["key"] as? Data {
+                contentKey = injectedKey
+            } else {
+                contentKey = randomBytes(size: encryption.keyBitSize / 8)
+            }
+            encryptedKey = try! AES.wrap(rawKey: contentKey, keyEncryptionKey: kek, algorithm: keyWrapAlgorithm)
+        } else {
+            contentKey = kek
+            encryptedKey = Data()
+        }
+
+        var updatedHeader = header
+        if let epk = updatedHeader.epk, !ephemeralKeyPair.getPrivate().isCorrespondWith(epk) {
+            updatedHeader.epk = ephemeralKeyPair.getPublic()
+        } else if updatedHeader.epk == nil {
+            updatedHeader.epk = ephemeralKeyPair.getPublic()
+        }
+
+        let context = Encrypter.ECEncryptionContext(headerData: updatedHeader.headerData,
+                                                    encryptedKey: encryptedKey,
+                                                    contentKey: contentKey)
+        let result = try JSONEncoder().encode(context)
+        return result
+    }
+
+    /// Decrypts a cipher text using a given `EC` algorithm and the corresponding private key.
+    ///
+    /// - Parameters:
+    ///   - encryptedKey: The cipher text to decrypt.
+    ///   - privateKey: The private key.
+    ///   - algorithm: The algorithm used for the key management.
+    ///   - encryption: The algorithm used to decrypt the cipher text.
+    ///   - header: The JWE header.
+    /// - Returns: The plain text data.
+    /// - Throws: `EncryptionError` if any errors occur while decrypting the cipher text.
+    static func decrypt(_ encryptedKey: Data,
+                        privateKey: PrivateKey,
+                        algorithm: KeyManagementAlgorithm,
+                        encryption: ContentEncryptionAlgorithm,
+                        header: JWEHeader?
+    ) throws -> Data {
+
+        guard let jweHeader = header else {
+            throw ECError.invalidJWK(reason: "Missing header")
+        }
+
+        guard let ephemeralPubKey = jweHeader.epk else {
+            throw ECError.invalidJWK(reason: "missing ephemeral public key in header")
+        }
+
+        // apu and apv have to be base64URL encoded as described here : https://datatracker.ietf.org/doc/html/rfc7518#page-17
+        let apu = Data(base64URLEncoded: jweHeader.apu ?? "") ?? Data()
+        let apv = Data(base64URLEncoded: jweHeader.apv ?? "") ?? Data()
+        let kek = try keyAgreementCompute(with: algorithm, encryption: encryption, privateKey: privateKey, publicKey: ephemeralPubKey, apu: apu, apv: apv)
+
+        if let keyWrapAlgorithm = algorithm.keyWrapAlgorithm {
+            let unwrap = try AES.unwrap(wrappedKey: encryptedKey, keyEncryptionKey: kek, algorithm: keyWrapAlgorithm)
+            return unwrap
+        } else {
+            return kek
+        }
+    }
 }
