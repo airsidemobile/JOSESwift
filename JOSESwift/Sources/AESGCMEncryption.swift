@@ -26,16 +26,16 @@ import Foundation
 struct AESGCMEncryption {
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
     private let contentEncryptionKey: Data
-    
+
     init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, contentEncryptionKey: Data) {
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
         self.contentEncryptionKey = contentEncryptionKey
     }
-    
+
     func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         return try encrypt(plaintext, initializationVector: nil, additionalAuthenticatedData: additionalAuthenticatedData)
     }
-    
+
     func encrypt(_ plaintext: Data, initializationVector: Data?, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
         let nonce: CryptoKit.AES.GCM.Nonce
@@ -51,7 +51,7 @@ struct AESGCMEncryption {
             initializationVector: encrypted.nonce.withUnsafeBytes({ Data(Array($0)) })
         )
     }
-    
+
     func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data {
         let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
         let nonce = try CryptoKit.AES.GCM.Nonce(data: initializationVector)
