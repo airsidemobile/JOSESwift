@@ -49,6 +49,8 @@ extension ContentEncryptionAlgorithm {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
             return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+        case .A128GCM, .A256GCM:
+            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
         }
     }
 
@@ -56,6 +58,8 @@ extension ContentEncryptionAlgorithm {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
             return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+        case .A128GCM, .A256GCM:
+            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
         }
     }
 }
