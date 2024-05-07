@@ -7,7 +7,7 @@ executors:
     working_directory: ~/joseswift
 
 jobs:
-  install_dependendies:
+  install_dependencies:
     executor: mac-executor
     steps:
       - checkout
@@ -80,16 +80,15 @@ jobs:
             bundle exec fastlane sonarqube
 
 workflows:
-  version: 2
   test_and_lint:
     jobs:
-      - install_dependendies
+      - install_dependencies
       - lint:
           requires:
-            - install_dependendies
+            - install_dependencies
       - test:
           requires:
-            - install_dependendies
+            - install_dependencies
       - sonarqube:
           requires:
             - test
