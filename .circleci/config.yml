@@ -62,14 +62,14 @@ jobs:
           path: fastlane/test_output
 
 
-  sonarqube:
+  sonarcloud:
     executor: mac-executor
     steps:
       - checkout
       - attach_workspace:
           at: ~/joseswift
       - run:
-          name: Sonarqube
+          name: Sonarcloud
           command: |
             if [ -z "$FL_SONAR_LOGIN" ]; then
               echo "No Sonarcloud token is set. Failing."
@@ -89,7 +89,7 @@ workflows:
       - test:
           requires:
             - install_dependencies
-      - sonarqube:
+      - sonarcloud:
           requires:
             - test
           filters:
