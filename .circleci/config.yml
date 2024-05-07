@@ -7,7 +7,7 @@ executors:
     working_directory: ~/joseswift
 
 jobs:
-  install_dependendies:
+  install_dependencies:
     executor: mac-executor
     steps:
       - checkout
@@ -62,35 +62,34 @@ jobs:
           path: fastlane/test_output
 
 
-  sonarqube:
+  sonarcloud:
     executor: mac-executor
     steps:
       - checkout
       - attach_workspace:
           at: ~/joseswift
       - run:
-          name: Sonarqube
+          name: Sonarcloud
           command: |
             if [ -z "$FL_SONAR_LOGIN" ]; then
               echo "No Sonarcloud token is set. Failing."
               exit 1;
             fi
-            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install sonar-scanner --display-times || true
+            brew install sonar-scanner --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
 workflows:
-  version: 2
   test_and_lint:
     jobs:
-      - install_dependendies
+      - install_dependencies
       - lint:
           requires:
-            - install_dependendies
+            - install_dependencies
       - test:
           requires:
-            - install_dependendies
-      - sonarqube:
+            - install_dependencies
+      - sonarcloud:
           requires:
             - test
           filters:
