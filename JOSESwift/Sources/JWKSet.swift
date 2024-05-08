@@ -49,7 +49,7 @@ public struct JWKSet {
     /// - Returns: The JSON representation of the JWK set as `String` or
     ///            `nil` if the encoding failed.
     public func jsonString() -> String? {
-        guard let json = try? JSONEncoder().encode(self) else {
+        guard let json = jsonData() else {
             return nil
         }
 
@@ -61,7 +61,9 @@ public struct JWKSet {
     /// - Returns: The JSON representation of the JWK set as `Data` or
     ///            `nil` if the encoding failed.
     public func jsonData() -> Data? {
-        return try? JSONEncoder().encode(self)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        return try? encoder.encode(self)
     }
 }
 

@@ -1,9 +1,9 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
     name: "JOSESwift",
-    platforms: [.iOS(.v10), .macOS(.v10_15), .watchOS(.v4)],
+    platforms: [.iOS(.v13), .macOS(.v10_15), .watchOS(.v8), .tvOS(.v15), .visionOS(.v1)],
     products: [
         .library(name: "JOSESwift", targets: ["JOSESwift"])
     ],
