@@ -33,7 +33,7 @@ public struct JWEHeader: JOSEHeader {
             }
             // Forcing the try is ok here, because it is valid JSON.
             // swiftlint:disable:next force_try
-            headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+            headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [.sortedKeys])
         }
     }
 
@@ -73,18 +73,15 @@ public struct JWEHeader: JOSEHeader {
             "enc": contentEncryptionAlgorithm.rawValue
         ]
 
-        // Forcing the try is ok here, since [String: String] can be converted to JSON.
+        // Forcing the try is ok here, since [String: String] can be converted to JSON and "alg" and "enc" are the only required
+        // header parameters, which should pass the guard conditions in the main initializer
         // swiftlint:disable:next force_try
-        let headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-
-        // Forcing the try is ok here, since "alg" and "enc" are the only required header parameters.
-        // swiftlint:disable:next force_try
-        try! self.init(parameters: parameters, headerData: headerData)
+        try! self.init(parameters: parameters)
     }
 
     /// Initializes a `JWEHeader` with the specified parameters.
     public init(parameters: [String: Any]) throws {
-        let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [.sortedKeys])
         try self.init(parameters: parameters, headerData: headerData)
     }
 }

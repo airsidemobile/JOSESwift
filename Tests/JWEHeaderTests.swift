@@ -27,16 +27,16 @@ import XCTest
 
 class JWEHeaderTests: XCTestCase {
     let parameterDictRSA = ["alg": "RSA1_5", "enc": "A256CBC-HS512"]
-    let parameterDataRSA = try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5", "enc": "A256CBC-HS512"], options: [])
+    let parameterDataRSA = try! JSONSerialization.data(withJSONObject: ["alg": "RSA1_5", "enc": "A256CBC-HS512"], options: [.sortedKeys])
 
     let parameterDictRSAOAEP = ["alg": "RSA-OAEP", "enc": "A256CBC-HS512"]
-    let parameterDataRSAOAEP = try! JSONSerialization.data(withJSONObject: ["alg": "RSA-OAEP", "enc": "A256CBC-HS512"], options: [])
+    let parameterDataRSAOAEP = try! JSONSerialization.data(withJSONObject: ["alg": "RSA-OAEP", "enc": "A256CBC-HS512"], options: [.sortedKeys])
 
     let parameterDictRSAOAEP256 = ["alg": "RSA-OAEP-256", "enc": "A256CBC-HS512"]
-    let parameterDataRSAOAEP256 = try! JSONSerialization.data(withJSONObject: ["alg": "RSA-OAEP-256", "enc": "A256CBC-HS512"], options: [])
+    let parameterDataRSAOAEP256 = try! JSONSerialization.data(withJSONObject: ["alg": "RSA-OAEP-256", "enc": "A256CBC-HS512"], options: [.sortedKeys])
 
     let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
-    let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [])
+    let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [.sortedKeys])
 
     override func setUp() {
         super.setUp()

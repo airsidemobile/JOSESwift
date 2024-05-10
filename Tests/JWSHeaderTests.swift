@@ -27,7 +27,7 @@ import XCTest
 
 class JWSHeaderTests: XCTestCase {
     let parameterDict = ["alg": "\(SignatureAlgorithm.RS512.rawValue)"]
-    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SignatureAlgorithm.RS512.rawValue)"], options: [])
+    let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SignatureAlgorithm.RS512.rawValue)"], options: [.sortedKeys])
 
     override func setUp() {
         super.setUp()
@@ -41,11 +41,11 @@ class JWSHeaderTests: XCTestCase {
         let header = try! JWSHeader(parameters: parameterDict, headerData: parameterData)
 
         XCTAssertEqual(header.parameters["alg"] as? String, parameterDict["alg"])
-        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDict, options: []).count)
+        XCTAssertEqual(header.data().count, parameterData.count)
     }
 
     func testInitWithData() {
-        let data = try! JSONSerialization.data(withJSONObject: parameterDict, options: [])
+        let data = parameterData
         let header = JWSHeader(data)!
 
         XCTAssertEqual(header.parameters["alg"] as? String, SignatureAlgorithm.RS512.rawValue)
@@ -55,7 +55,7 @@ class JWSHeaderTests: XCTestCase {
     func testInitWithAlg() {
         let header = JWSHeader(algorithm: .RS512)
 
-        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDict, options: []).count)
+        XCTAssertEqual(header.data().count, parameterData.count)
         XCTAssertEqual(header.parameters["alg"] as? String, SignatureAlgorithm.RS512.rawValue)
 
         XCTAssertNotNil(header.algorithm)
@@ -64,7 +64,10 @@ class JWSHeaderTests: XCTestCase {
 
     func testInitDirectlyWithMissingRequiredParameters() {
         do {
-            _ = try JWSHeader(parameters: ["typ": "JWT"], headerData: try! JSONSerialization.data(withJSONObject: ["typ": "JWT"], options: []))
+            _ = try JWSHeader(
+                parameters: ["typ": "JWT"],
+                headerData: try! JSONSerialization.data(withJSONObject: ["typ": "JWT"], options: [.sortedKeys])
+            )
         } catch HeaderParsingError.requiredHeaderParameterMissing(let parameter) {
             XCTAssertEqual(parameter, "alg")
             return
@@ -125,7 +128,7 @@ class JWSHeaderTests: XCTestCase {
         header.cty = cty
         header.crit = crit
 
-        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: header.parameters, options: []).count)
+        XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: header.parameters, options: [.sortedKeys]).count)
 
         XCTAssertEqual(header.parameters["jku"] as? URL, jku)
         XCTAssertEqual(header.jku, jku)
