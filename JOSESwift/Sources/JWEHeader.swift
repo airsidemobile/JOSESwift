@@ -28,7 +28,9 @@ public struct JWEHeader: JOSEHeader {
     var headerData: Data
     var parameters: [String: Any] {
         didSet {
+            print("update: \(parameters)")
             guard JSONSerialization.isValidJSONObject(parameters) else {
+                assertionFailure("header parameters are invalid json...")
                 return
             }
             // Forcing the try is ok here, because it is valid JSON.
@@ -36,6 +38,8 @@ public struct JWEHeader: JOSEHeader {
             headerData = try! JSONSerialization.data(withJSONObject: parameters, options: [.sortedKeys])
         }
     }
+
+    var requiredParameters = ["alg", "enc"]
 
     /// Initializes a JWE header with given parameters and their original `Data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was

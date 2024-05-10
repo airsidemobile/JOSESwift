@@ -37,6 +37,8 @@ public struct JWSHeader: JOSEHeader {
         }
     }
 
+    var requiredParameters = ["alg"]
+
     /// Initializes a JWS header with given parameters and their original `Data` representation.
     /// Note that this (base64-url decoded) `Data` representation has to be exactly as it was
     /// received from the sender in order to guarantee correctness of signature validations.

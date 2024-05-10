@@ -233,5 +233,108 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(jwk.exponent, headerJwk?.exponent)
         XCTAssertEqual(jwk.modulus, headerJwk?.modulus)
     }
+
+    func testSettingAndGettingPublicPrivateHeaderParameters() throws {
+        var header = JWSHeader(algorithm: .RS512)
+
+        // registered header parameter (RFC-7516, 4.1)
+        try header.set("123", forParameter: "kid")
+
+        // public or private header parameters (RFC-7516, 4.2 and 4.3)
+        try header.set("string", forParameter: "string")
+        try header.set(Float.pi, forParameter: "float")
+        try header.set(Double.pi, forParameter: "double")
+        try header.set(Int.max, forParameter: "int")
+        try header.set(true, forParameter: "bool")
+        try header.set(["one", "two", "three"], forParameter: "arary")
+        try header.set(["one": 1, "two": 2, "three": 3], forParameter: "dict")
+
+        // all parameters can be retrieved
+        XCTAssertEqual(header.get(parameter: "alg") as? String, SignatureAlgorithm.RS512.rawValue)
+        XCTAssertEqual(header.get(parameter: "kid") as? String, "123")
+        XCTAssertEqual(header.get(parameter: "string") as! String, "string")
+        XCTAssertEqual(header.get(parameter: "float") as! Float, Float.pi)
+        XCTAssertEqual(header.get(parameter: "double") as! Double, Double.pi)
+        XCTAssertEqual(header.get(parameter: "int") as! Int, Int.max)
+        XCTAssertEqual(header.get(parameter: "bool") as! Bool, true)
+        XCTAssertEqual(header.get(parameter: "arary") as! [String], ["one", "two", "three"])
+        XCTAssertEqual(header.get(parameter: "dict") as! [String : Int], ["one": 1, "two": 2, "three": 3])
+
+        // backing data representation is as expected
+        var expectedValue = parameterDict as [String: Any]
+        expectedValue["kid"] = "123"
+        expectedValue["string"] = "string"
+        expectedValue["float"] = Float.pi
+        expectedValue["double"] = Double.pi
+        expectedValue["int"] = Int.max
+        expectedValue["bool"] = true
+        expectedValue["arary"] = ["one", "two", "three"]
+        expectedValue["dict"] = ["one": 1, "two": 2, "three": 3]
+        XCTAssertEqual(header.data(), try! JSONSerialization.data(withJSONObject: expectedValue, options: [.sortedKeys]))
+
+        // registered parameters can bre retrieved via typed computed properties
+        XCTAssertNotNil(header.algorithm)
+        XCTAssertNotNil(header.kid)
+        XCTAssertEqual(header.algorithm!, .RS512)
+        XCTAssertEqual(header.kid!, "123")
+    }
+
+    func testSettingInvalidPublicPrivateHeaderParameters() throws {
+        var header = JWSHeader(algorithm: .RS512)
+
+        // valid parameters work
+        try header.set("123", forParameter: "kid")
+        try header.set("string", forParameter: "string")
+
+        XCTAssertEqual(header.get(parameter: "kid") as? String, "123")
+        XCTAssertEqual(header.get(parameter: "string") as! String, "string")
+
+        // invalid parameters don't work and don't interfere with valid parameters
+        XCTAssertThrowsError(try header.set("data".data(using: .utf8)!, forParameter: "data")) { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.invalidHeaderParameterValue)
+        }
+        XCTAssertThrowsError(try header.set(UIImage.checkmark, forParameter: "image")) { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.invalidHeaderParameterValue)
+        }
+
+        XCTAssertNil(header.get(parameter: "data"))
+        XCTAssertNil(header.get(parameter: "image"))
+        XCTAssertFalse(String(data: header.data(), encoding: .utf8)!.contains("data"))
+        XCTAssertFalse(String(data: header.data(), encoding: .utf8)!.contains("image"))
+
+        XCTAssertEqual(header.get(parameter: "kid") as? String, "123")
+        XCTAssertEqual(header.get(parameter: "string") as! String, "string")
+        XCTAssertTrue(String(data: header.data(), encoding: .utf8)!.contains("string"))
+        XCTAssertTrue(String(data: header.data(), encoding: .utf8)!.contains("kid"))
+    }
+
+    func testRemovingPublicPrivateParameters() throws {
+        var header = JWSHeader(algorithm: .RS512)
+
+        // setting parameters
+        try header.set("123", forParameter: "kid")
+        try header.set("string", forParameter: "string")
+
+        XCTAssertEqual(header.get(parameter: "kid") as? String, "123")
+        XCTAssertEqual(header.get(parameter: "string") as! String, "string")
+
+        // and removing them
+        header.remove(parameter: "kid")
+
+        XCTAssertNil(header.get(parameter: "kid"))
+        XCTAssertEqual(header.get(parameter: "string") as! String, "string")
+
+        // but removing required parameters doesn't work
+        XCTAssertNil(header.remove(parameter: "alg"))
+        XCTAssertEqual(header.algorithm, .RS512)
+
+        XCTAssertThrowsError(try header.set("boom", forParameter: "alg")) { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.invalidHeaderParameterValue)
+        }
+        XCTAssertThrowsError(try header.set(Optional<String>.none as Any, forParameter: "alg")) { error in
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.invalidHeaderParameterValue)
+        }
+        XCTAssertEqual(header.algorithm, .RS512)
+    }
 }
 // swiftlint:enable force_unwrapping
