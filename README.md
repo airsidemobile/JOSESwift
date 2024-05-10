@@ -155,7 +155,7 @@ In order to construct a JWS we need to provide the following parts:
 let header = JWSHeader(algorithm: .RS512)
 ```
 
-Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7515#section-4.1):
+Optionally you can set [additional parameters](https://tools.ietf.org/html/rfc7515#section-4.1):
 
 ``` swift
 header.kid = "2018-10-08"
@@ -234,7 +234,7 @@ In order to construct a JWE we need to provide the following parts:
 let header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512)
 ```
 
-Optionally you can set [addtitional parameters](https://tools.ietf.org/html/rfc7516#section-4.1):
+Optionally you can set [additional parameters](https://tools.ietf.org/html/rfc7516#section-4.1):
 
 ``` swift
 header.kid = "2018-10-08"

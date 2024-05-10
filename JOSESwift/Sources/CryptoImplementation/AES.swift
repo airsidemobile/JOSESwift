@@ -167,7 +167,7 @@ enum AES {
     /// Encrypts the given raw key using AES key wrap.
     /// - Parameters:
     ///   - rawKey: The raw key to encrypt
-    ///   - keyEncryptionKey: The key used to encypt the raw key
+    ///   - keyEncryptionKey: The key used to encrypt the raw key
     ///   - algorithm: The algorithm to use for AES key wrap
     static func wrap(rawKey: Data, keyEncryptionKey: Data, algorithm: KeyManagementAlgorithm) throws -> Data {
         let keyWrapAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]

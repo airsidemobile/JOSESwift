@@ -99,7 +99,7 @@ struct AESCBCEncryption {
         }
 
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector,
-        // return the plaintext if no error occured.
+        // return the plaintext if no error occurred.
         let plaintext = try AES.decrypt(
             cipherText: ciphertext,
             with: decryptionKey,
