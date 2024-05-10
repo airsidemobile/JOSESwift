@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  AESGCMEncryptionTests.swift
 //  Tests
@@ -140,3 +141,4 @@ class AESGCMEncryptionTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping
