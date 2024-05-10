@@ -34,17 +34,13 @@ struct AESGCMEncryption {
     }
 
     func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
-        return try encrypt(plaintext, initializationVector: nil, additionalAuthenticatedData: additionalAuthenticatedData)
+        let iv = try SecureRandom.generate(count: contentEncryptionAlgorithm.initializationVectorLength)
+        return try encrypt(plaintext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData)
     }
 
-    func encrypt(_ plaintext: Data, initializationVector: Data?, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
+    func encrypt(_ plaintext: Data, initializationVector: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
-        let nonce: CryptoKit.AES.GCM.Nonce
-        if let initializationVector = initializationVector {
-            nonce = try CryptoKit.AES.GCM.Nonce(data: initializationVector)
-        } else {
-            nonce = CryptoKit.AES.GCM.Nonce()
-        }
+        let nonce = try CryptoKit.AES.GCM.Nonce(data: initializationVector)
         let encrypted = try CryptoKit.AES.GCM.seal(plaintext, using: key, nonce: nonce, authenticating: additionalAuthenticatedData)
         return ContentEncryptionContext(
             ciphertext: encrypted.ciphertext,
