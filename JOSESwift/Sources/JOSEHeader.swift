@@ -43,7 +43,7 @@ protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
 }
 
 extension JOSEHeader {
-    mutating func set(_ value: Any, forParameter parameterName: String) throws {
+    public mutating func set(_ value: Any, forParameter parameterName: String) throws {
         guard !requiredParameters.contains(parameterName) else {
             throw JOSESwiftError.invalidHeaderParameterValue
         }
@@ -55,11 +55,11 @@ extension JOSEHeader {
         parameters[parameterName] = value
     }
 
-    func get(parameter parameterName: String) -> Any? {
+    public func get(parameter parameterName: String) -> Any? {
         return parameters[parameterName]
     }
 
-    @discardableResult mutating func remove(parameter parameterName: String) -> Any? {
+    @discardableResult public mutating func remove(parameter parameterName: String) -> Any? {
         guard !requiredParameters.contains(parameterName) else {
             return nil
         }
