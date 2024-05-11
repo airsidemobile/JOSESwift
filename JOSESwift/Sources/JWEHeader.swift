@@ -38,6 +38,7 @@ public struct JWEHeader: JOSEHeader {
         }
     }
 
+    // See https://www.rfc-editor.org/rfc/rfc7516#section-4.1
     var requiredParameters = ["alg", "enc"]
 
     /// Initializes a JWE header with given parameters and their original `Data` representation.

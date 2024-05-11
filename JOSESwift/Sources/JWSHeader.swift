@@ -37,6 +37,7 @@ public struct JWSHeader: JOSEHeader {
         }
     }
 
+    // See https://www.rfc-editor.org/rfc/rfc7515#section-4.1
     var requiredParameters = ["alg"]
 
     /// Initializes a JWS header with given parameters and their original `Data` representation.
