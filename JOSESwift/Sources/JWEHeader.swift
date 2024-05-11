@@ -28,7 +28,6 @@ public struct JWEHeader: JOSEHeader {
     var headerData: Data
     var parameters: [String: Any] {
         didSet {
-            print("update: \(parameters)")
             guard JSONSerialization.isValidJSONObject(parameters) else {
                 assertionFailure("header parameters are invalid json...")
                 return
