@@ -75,8 +75,10 @@ public struct JWSHeader: JOSEHeader {
 
     /// Initializes a `JWSHeader` with the specified parameters.
     public init(parameters: [String: Any]) throws {
-        let headerData = try JSONSerialization.data(withJSONObject: parameters, options: [.sortedKeys])
-        try self.init(parameters: parameters, headerData: headerData)
+        try self.init(
+            parameters: parameters,
+            headerData: try JSONSerialization.data(withJSONObject: parameters, options: [.sortedKeys])
+        )
     }
 }
 
