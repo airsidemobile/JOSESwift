@@ -7,6 +7,10 @@
     {
       "updateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "automerge": true
     }
   ],
   "lockFileMaintenance": { "enabled": true }

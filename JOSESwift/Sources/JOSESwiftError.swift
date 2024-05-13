@@ -63,4 +63,7 @@ public enum JOSESwiftError: Error {
 
     // Thumprint computation
     case thumbprintSerialization
+
+    // Header errors
+    case invalidHeaderParameterValue
 }
