@@ -48,7 +48,7 @@ extension JOSEHeader {
             throw JOSESwiftError.invalidHeaderParameterValue
         }
 
-        guard JSONSerialization.isValidJSONObject([parameterName: value]) else{
+        guard JSONSerialization.isValidJSONObject([parameterName: value]) else {
             throw JOSESwiftError.invalidHeaderParameterValue
         }
 

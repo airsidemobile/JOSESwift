@@ -345,7 +345,7 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.get(parameter: "int") as! Int, Int.max)
         XCTAssertEqual(header.get(parameter: "bool") as! Bool, true)
         XCTAssertEqual(header.get(parameter: "arary") as! [String], ["one", "two", "three"])
-        XCTAssertEqual(header.get(parameter: "dict") as! [String : Int], ["one": 1, "two": 2, "three": 3])
+        XCTAssertEqual(header.get(parameter: "dict") as! [String: Int], ["one": 1, "two": 2, "three": 3])
 
         // backing data representation is as expected
         var expectedValue = parameterDictRSA as [String: Any]
@@ -395,7 +395,6 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.get(parameter: "string") as! String, "string")
         XCTAssertTrue(String(data: header.data(), encoding: .utf8)!.contains("string"))
         XCTAssertTrue(String(data: header.data(), encoding: .utf8)!.contains("kid"))
-
 
     }
 
