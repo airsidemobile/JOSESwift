@@ -114,13 +114,13 @@ struct AESCBCEncryption {
 
     func getAuthenticationTag(for hmac: Data) throws -> Data {
         switch contentEncryptionAlgorithm {
-            case .A256CBCHS512:
-                return hmac.subdata(in: 0..<32)
-            case .A128CBCHS256:
-                return hmac.subdata(in: 0..<16)
-            case .A256GCM, .A128GCM:
-                throw JWEError.contentEncryptionAlgorithmMismatch
-            }
+        case .A256CBCHS512:
+            return hmac.subdata(in: 0..<32)
+        case .A128CBCHS256:
+            return hmac.subdata(in: 0..<16)
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
     }
 }
 
