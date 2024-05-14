@@ -120,25 +120,11 @@ class AESGCMEncryptionTests: XCTestCase {
     }
 
     func testContentEncryptionAlgorithmFeatures() {
-        // verify that no split keys are retrievable for AES GCM
-        XCTAssertThrowsError(
-            try ContentEncryptionAlgorithm.A256GCM.retrieveKeys(from: contentEncryptionKey)
-        ) { error in
-            XCTAssertEqual(error as? JWEError, JWEError.contentEncryptionAlgorithmMismatch, "Expected JWEError.contentEncryptionAlgorithmMismatch but received \(error)")
-        }
-        // verify that no hmac algorithm is set
-        XCTAssertNil(ContentEncryptionAlgorithm.A256GCM.hmacAlgorithm)
         // verify key length
         XCTAssertEqual(32, ContentEncryptionAlgorithm.A256GCM.keyLength)
         XCTAssertEqual(16, ContentEncryptionAlgorithm.A128GCM.keyLength)
         // verify iv length
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A256GCM.initializationVectorLength)
-        // verify that no authentication tag is retrievable from hmac for AES GCM
-        XCTAssertThrowsError(
-            try ContentEncryptionAlgorithm.A256GCM.authenticationTag(for: Data())
-        ) { error in
-            XCTAssertEqual(error as? JWEError, JWEError.contentEncryptionAlgorithmMismatch, "Expected JWEError.contentEncryptionAlgorithmMismatch but received \(error)")
-        }
     }
 }
 // swiftlint:enable force_unwrapping

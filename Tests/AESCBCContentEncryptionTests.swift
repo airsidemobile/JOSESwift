@@ -33,13 +33,12 @@ class AESCBCContentEncryptionTests: XCTestCase {
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let algorithm = ContentEncryptionAlgorithm.A128CBCHS256
         let cek = try! SecureRandom.generate(count: algorithm.keyLength)
-        let encrypter = AESCBCEncryption(contentEncryptionAlgorithm: algorithm, contentEncryptionKey: cek)
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm, contentEncryptionKey: cek)
         let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let keys = try! algorithm.retrieveKeys(from: cek)
-        let hmacKey = keys.hmacKey
-        let encryptionKey = keys.encryptionKey
+        let hmacKey = cek.subdata(in: 0..<16)
+        let encryptionKey = cek.subdata(in: 16..<32)
 
         var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
@@ -107,13 +106,12 @@ class AESCBCContentEncryptionTests: XCTestCase {
         """.hexadecimalToData()!
 
         let cek = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
-        let encrypter = AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, contentEncryptionKey: cek)
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, contentEncryptionKey: cek)
         let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let keys = try! ContentEncryptionAlgorithm.A256CBCHS512.retrieveKeys(from: cek)
-        let hmacKey = keys.hmacKey
-        let encryptionKey = keys.encryptionKey
+        let hmacKey = cek.subdata(in: 0..<32)
+        let encryptionKey = cek.subdata(in: 32..<64)
 
         var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
@@ -179,9 +177,8 @@ class AESCBCContentEncryptionTests: XCTestCase {
             .encrypt(header: header, payload: Payload(plaintext))
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let keys = try! ContentEncryptionAlgorithm.A128CBCHS256.retrieveKeys(from: cek)
-        let hmacKey = keys.hmacKey
-        let encryptionKey = keys.encryptionKey
+        let hmacKey = cek.subdata(in: 0..<16)
+        let encryptionKey = cek.subdata(in: 16..<32)
 
         let additionalAuthenticatedData = header.data().base64URLEncodedData()
 
