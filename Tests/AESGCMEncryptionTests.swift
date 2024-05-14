@@ -125,6 +125,15 @@ class AESGCMEncryptionTests: XCTestCase {
         XCTAssertEqual(16, ContentEncryptionAlgorithm.A128GCM.keyLength)
         // verify iv length
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A256GCM.initializationVectorLength)
+        // verify non supported content encryption algorithm throws error upon initialization
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, contentEncryptionKey: contentEncryptionKey)) { error in
+            XCTAssertEqual(error as! JWEError, JWEError.contentEncryptionAlgorithmMismatch)
+        }
+        // verify key length is checked in initializer
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, contentEncryptionKey: Data())) { error in
+            XCTAssertEqual(error as! JWEError, JWEError.keyLengthNotSatisfied)
+        }
+
     }
 }
 // swiftlint:enable force_unwrapping
