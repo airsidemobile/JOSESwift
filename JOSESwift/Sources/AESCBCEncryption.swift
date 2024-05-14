@@ -36,24 +36,24 @@ struct AESCBCEncryption {
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
         // the key comes in as a combined key, split it according to the algorithm
         switch contentEncryptionAlgorithm {
-            case .A256CBCHS512:
-                self.hmacKey = contentEncryptionKey.subdata(in: 0..<32)
-                self.contentEncryptionKey = contentEncryptionKey.subdata(in: 32..<64)
-            case .A128CBCHS256:
-                self.hmacKey = contentEncryptionKey.subdata(in: 0..<16)
-                self.contentEncryptionKey = contentEncryptionKey.subdata(in: 16..<32)
-            case .A256GCM, .A128GCM:
-                throw JWEError.contentEncryptionAlgorithmMismatch
-            }
+        case .A256CBCHS512:
+            self.hmacKey = contentEncryptionKey.subdata(in: 0..<32)
+            self.contentEncryptionKey = contentEncryptionKey.subdata(in: 32..<64)
+        case .A128CBCHS256:
+            self.hmacKey = contentEncryptionKey.subdata(in: 0..<16)
+            self.contentEncryptionKey = contentEncryptionKey.subdata(in: 16..<32)
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
         // now select the appropriate hashing algorithm
         switch contentEncryptionAlgorithm {
-            case .A256CBCHS512:
-                hmacAlgorithm = .SHA512
-            case .A128CBCHS256:
-                hmacAlgorithm = .SHA256
-            case .A256GCM, .A128GCM:
-                throw JWEError.contentEncryptionAlgorithmMismatch
-            }
+        case .A256CBCHS512:
+            hmacAlgorithm = .SHA512
+        case .A128CBCHS256:
+            hmacAlgorithm = .SHA256
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
     }
 
     func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
