@@ -48,6 +48,7 @@ extension ContentEncryptionAlgorithm {
     func makeContentEncrypter(contentEncryptionKey: Data) -> ContentEncrypter {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
+            //TODO externalize checks
             return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
         case .A128GCM, .A256GCM:
             return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)

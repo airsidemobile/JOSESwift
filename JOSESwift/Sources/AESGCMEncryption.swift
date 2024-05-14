@@ -21,7 +21,6 @@
 //  ---------------------------------------------------------------------------
 //
 
-import CryptoKit
 import Foundation
 
 struct AESGCMEncryption {
@@ -39,22 +38,12 @@ struct AESGCMEncryption {
     }
 
     func encrypt(_ plaintext: Data, initializationVector: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
-        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
-        let nonce = try CryptoKit.AES.GCM.Nonce(data: initializationVector)
-        let encrypted = try CryptoKit.AES.GCM.seal(plaintext, using: key, nonce: nonce, authenticating: additionalAuthenticatedData)
-        return ContentEncryptionContext(
-            ciphertext: encrypted.ciphertext,
-            authenticationTag: encrypted.tag,
-            initializationVector: encrypted.nonce.withUnsafeBytes({ Data(Array($0)) })
-        )
+        return try AESGCM.encrypt(plaintext: plaintext, encryptionKey: contentEncryptionKey, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData)
     }
 
     func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data {
-        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
-        let nonce = try CryptoKit.AES.GCM.Nonce(data: initializationVector)
-        let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: authenticationTag)
-        let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
-        return decrypted
+        return try AESGCM.decrypt(cipherText: ciphertext, decryptionKey: contentEncryptionKey, initializationVector: initializationVector,
+         authenticationTag: authenticationTag, additionalAuthenticatedData: additionalAuthenticatedData)
     }
 }
 
