@@ -19,7 +19,6 @@ import CommonCrypto
 ///   - apv: agreementPartyVInfo.
 /// - Returns: Result of key agreement operation as a Data
 /// - Throws: `ECError.deriveKeyFail` if any error occurs while derivation.
-// swiftlint:disable:next function_parameter_count
 func keyAgreementCompute(with algorithm: KeyManagementAlgorithm, encryption: ContentEncryptionAlgorithm, privateKey: ECPrivateKey, publicKey: ECPublicKey, apu: Data, apv: Data) throws -> Data {
 
     let z = try ecdhDeriveBits(for: privateKey, publicKey: publicKey)
@@ -103,7 +102,6 @@ func intToData<T>(value: T) -> Data where T: FixedWidthInteger {
 ///   - suppPrivInfo: SuppPrivInfo @See Section 5.8.1.2 of [NIST.800-56A]
 /// - Returns: Derived Keying Material as a Data
 /// - Throws: `ECDHError` if any error occurs while derivation.
-// swiftlint:disable:next function_parameter_count
 func concatKDF(hash: Hash, z: Data, keyDataLen: Int, algorithmID: Data, partyUInfo: Data, partyVInfo: Data, suppPubInfo: Data = Data(), suppPrivInfo: Data = Data()) throws -> Data {
     if keyDataLen == 0 {
         return Data()
