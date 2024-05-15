@@ -33,6 +33,7 @@ private func ~= <T: Equatable>(array: [T], value: T) -> Bool {
 class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
     let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
     let aesKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
+    let ecdhKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW]
 
     @available(*, deprecated)
     func testEncrypterDeprecated1Initialization() {
@@ -87,6 +88,27 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: Data()
                     )
                 )
+            case ecdhKeyManagementModeAlgorithms:
+                let pubJwk = """
+                  {
+                    "crv": "P-256",
+                    "kty": "EC",
+                    "x": "CQJxA68WhgU3hztigbedfLtJitDhScq3XSnXgO0FV5o",
+                    "y": "WFg6s36izURa733WqeoJ8zXMd7ho5OSwdWnMsEPgTEI"
+                  }
+                """.data(using: .utf8)
+
+                guard let publicJWK = pubJwk, let publicKey = try? ECPublicKey(data: publicJWK) else {
+                    return XCTAssertThrowsError("publicKey is nil")
+                }
+
+                XCTAssertNotNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A256CBCHS512,
+                        encryptionKey: publicKey
+                    )
+                )
             default:
                 XCTFail()
             }
@@ -118,6 +140,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         keyManagementAlgorithm: algorithm,
                         contentEncryptionAlgorithm: .A128CBCHS256,
                         encryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case ecdhKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A256CBCHS512,
+                        encryptionKey: Data()
                     )
                 )
             default:
@@ -179,6 +209,28 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: Data()
                     )
                 )
+            case ecdhKeyManagementModeAlgorithms:
+                let privJwk = """
+                  {
+                    "crv": "P-256",
+                    "d": "920OCD0fW97YXbQNN-JaOtaDgbuNyVxXgKwjfXPPqv4",
+                    "kty": "EC",
+                    "x": "CQJxA68WhgU3hztigbedfLtJitDhScq3XSnXgO0FV5o",
+                    "y": "WFg6s36izURa733WqeoJ8zXMd7ho5OSwdWnMsEPgTEI"
+                  }
+                """.data(using: .utf8)
+
+                guard let privateJWK = privJwk, let privateKey = try? ECPrivateKey(data: privateJWK) else {
+                    return XCTAssertThrowsError("privateKey is nil")
+                }
+
+                XCTAssertNotNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A256CBCHS512,
+                        decryptionKey: privateKey
+                    )
+                )
             default:
                 XCTFail()
             }
@@ -210,6 +262,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         keyManagementAlgorithm: algorithm,
                         contentEncryptionAlgorithm: .A128CBCHS256,
                         decryptionKey: publicKeyAlice2048!
+                    )
+                )
+            case ecdhKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: Data()
                     )
                 )
             default:

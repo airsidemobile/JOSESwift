@@ -57,10 +57,10 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr><td><code>RS384</code></td><td>:white_check_mark:</td> <td><code>A192KW</code></td><td>:white_check_mark:</td>       <td><code>A192GCM</code></td><td></td>
 	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td>:white_check_mark:</td>       <td><code>A256GCM</code></td><td></td>
 	<tr><td><code>ES256</code></td><td>:white_check_mark:</td> <td><code>dir</code></td><td>:white_check_mark:</td>          <th rowspan="11"></th><th rowspan="11"></th></tr>
-	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td></td></tr>
-	<tr><td><code>ES512</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A128KW</code></td><td></td></tr>
-	<tr><td><code>PS256</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A192KW</code></td><td></td></tr>
-	<tr><td><code>PS384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A256KW</code></td><td></td></tr>
+	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>ES512</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A128KW</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>PS256</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A192KW</code></td><td>:white_check_mark:</td></tr>
+	<tr><td><code>PS384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES+A256KW</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>PS512</code></td><td>:white_check_mark:</td> <td><code>A128GCMKW</code></td><td></td></tr>
 	<tr><th rowspan="5"></th><th rowspan="5"></th>             <td><code>A192GCMKW</code></td><td></td></tr>
 	<tr>                                                       <td><code>A256GCMKW</code></td><td></td></tr>
