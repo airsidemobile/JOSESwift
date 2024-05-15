@@ -229,7 +229,6 @@ enum AES {
 }
 
 extension AES {
-    // swiftlint:disable:next function_parameter_count
     private static func ccAESCBCCrypt(
         operation: CCOperation,
         data: Data,
