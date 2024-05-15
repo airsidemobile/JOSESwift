@@ -45,17 +45,21 @@ protocol ContentDecrypter {
 }
 
 extension ContentEncryptionAlgorithm {
-    func makeContentEncrypter(contentEncryptionKey: Data) -> ContentEncrypter {
+    func makeContentEncrypter(contentEncryptionKey: Data) throws -> ContentEncrypter {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
-            return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+            return try AESCBCEncryption(contentEncryptionAlgorithm: self, secretKey: contentEncryptionKey)
+        case .A128GCM, .A256GCM:
+            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
         }
     }
 
-    func makeContentDecrypter(contentEncryptionKey: Data) -> ContentDecrypter {
+    func makeContentDecrypter(contentEncryptionKey: Data) throws -> ContentDecrypter {
         switch self {
         case .A128CBCHS256, .A256CBCHS512:
-            return AESCBCEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+            return try AESCBCEncryption(contentEncryptionAlgorithm: self, secretKey: contentEncryptionKey)
+        case .A128GCM, .A256GCM:
+            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
         }
     }
 }

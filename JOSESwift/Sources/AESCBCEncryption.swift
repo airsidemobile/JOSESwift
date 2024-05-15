@@ -25,20 +25,26 @@ import Foundation
 
 struct AESCBCEncryption {
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    private let contentEncryptionKey: Data
+    private let encryptionKey: Data
+    private let hmacKey: Data
+    private let hmacAlgorithm: HMACAlgorithm
 
-    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, contentEncryptionKey: Data) {
+    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, secretKey: Data) throws {
+        guard contentEncryptionAlgorithm.checkKeyLength(for: secretKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
+        let hmacAlgorithm = try AESCBCEncryption.getHMACAlgorithm(for: contentEncryptionAlgorithm)
+        let keys = try AESCBCEncryption.retrieveKeys(for: contentEncryptionAlgorithm, from: secretKey)
+
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-        self.contentEncryptionKey = contentEncryptionKey
+        self.hmacAlgorithm = hmacAlgorithm
+        self.hmacKey = keys.hmacKey
+        self.encryptionKey = keys.encryptionKey
     }
 
     func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
         let iv = try SecureRandom.generate(count: contentEncryptionAlgorithm.initializationVectorLength)
-
-        let keys = try contentEncryptionAlgorithm.retrieveKeys(from: contentEncryptionKey)
-        let hmacKey = keys.hmacKey
-        let encryptionKey = keys.encryptionKey
-
         let ciphertext = try AES.encrypt(plaintext, with: encryptionKey, using: contentEncryptionAlgorithm, and: iv)
 
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
@@ -47,8 +53,8 @@ struct AESCBCEncryption {
         concatData.append(ciphertext)
         concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
-        let hmac = try HMAC.calculate(from: concatData, with: hmacKey, using: contentEncryptionAlgorithm.hmacAlgorithm)
-        let authenticationTag = contentEncryptionAlgorithm.authenticationTag(for: hmac)
+        let hmac = try HMAC.calculate(from: concatData, with: hmacKey, using: hmacAlgorithm)
+        let authenticationTag = try getAuthenticationTag(for: hmac)
 
         return ContentEncryptionContext(
             ciphertext: ciphertext,
@@ -63,45 +69,68 @@ struct AESCBCEncryption {
         additionalAuthenticatedData: Data,
         authenticationTag: Data
     ) throws -> Data {
-        // Check if the key length contains both HMAC key and the actual symmetric key.
-        guard contentEncryptionAlgorithm.checkKeyLength(for: contentEncryptionKey) else {
-            throw JWEError.keyLengthNotSatisfied
-        }
-
-        // Get the two keys for the HMAC and the symmetric encryption.
-        let keys = try contentEncryptionAlgorithm.retrieveKeys(from: contentEncryptionKey)
-        let hmacKey = keys.hmacKey
-        let decryptionKey = keys.encryptionKey
-
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(initializationVector)
         concatData.append(ciphertext)
         concatData.append(additionalAuthenticatedData.getByteLengthAsOctetHexData())
 
-        // Calculate the HMAC for the concatenated input data and compare it with the reference authentication tag.
         let hmacOutput = try HMAC.calculate(
             from: concatData,
             with: hmacKey,
-            using: contentEncryptionAlgorithm.hmacAlgorithm
+            using: hmacAlgorithm
         )
 
         guard
-            authenticationTag.timingSafeCompare(with: contentEncryptionAlgorithm.authenticationTag(for: hmacOutput))
+            authenticationTag.timingSafeCompare(with: try getAuthenticationTag(for: hmacOutput))
         else {
             throw JWEError.hmacNotAuthenticated
         }
 
         // Decrypt the cipher text with a symmetric decryption key, a symmetric algorithm and the initialization vector,
-        // return the plaintext if no error occured.
+        // return the plaintext if no error occurred.
         let plaintext = try AES.decrypt(
             cipherText: ciphertext,
-            with: decryptionKey,
+            with: encryptionKey,
             using: contentEncryptionAlgorithm,
             and: initializationVector
         )
 
         return plaintext
+    }
+
+    static func getHMACAlgorithm(for contentEncryptionAlgorithm: ContentEncryptionAlgorithm) throws -> HMACAlgorithm {
+            switch contentEncryptionAlgorithm {
+            case .A256CBCHS512:
+                return .SHA512
+            case .A128CBCHS256:
+                return .SHA256
+            case .A256GCM, .A128GCM:
+                throw JWEError.contentEncryptionAlgorithmMismatch
+            }
+    }
+
+    static func retrieveKeys(for contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
+                             from inputKey: Data) throws -> (hmacKey: Data, encryptionKey: Data) {
+        switch contentEncryptionAlgorithm {
+        case .A256CBCHS512:
+            return (inputKey.subdata(in: 0..<32), inputKey.subdata(in: 32..<64))
+        case .A128CBCHS256:
+            return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
+    }
+
+    func getAuthenticationTag(for hmac: Data) throws -> Data {
+        switch contentEncryptionAlgorithm {
+        case .A256CBCHS512:
+            return hmac.subdata(in: 0..<32)
+        case .A128CBCHS256:
+            return hmac.subdata(in: 0..<16)
+        case .A256GCM, .A128GCM:
+            throw JWEError.contentEncryptionAlgorithmMismatch
+        }
     }
 }
 
