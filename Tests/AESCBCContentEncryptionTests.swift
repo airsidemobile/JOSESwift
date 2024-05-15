@@ -32,13 +32,13 @@ class AESCBCContentEncryptionTests: XCTestCase {
         let plaintext = "41 20 63 69 70 68 65 72 20 73 79 73 74 65 6d 20 6d 75 73 74 20 6e 6f 74 20 62 65 20 72 65 71 75 69 72 65 64 20 74 6f 20 62 65 20 73 65 63 72 65 74 2c 20 61 6e 64 20 69 74 20 6d 75 73 74 20 62 65 20 61 62 6c 65 20 74 6f 20 66 61 6c 6c 20 69 6e 74 6f 20 74 68 65 20 68 61 6e 64 73 20 6f 66 20 74 68 65 20 65 6e 65 6d 79 20 77 69 74 68 6f 75 74 20 69 6e 63 6f 6e 76 65 6e 69 65 6e 63 65".hexadecimalToData()!
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let algorithm = ContentEncryptionAlgorithm.A128CBCHS256
-        let cek = try! SecureRandom.generate(count: algorithm.keyLength)
-        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm, contentEncryptionKey: cek)
+        let secretKey = try! SecureRandom.generate(count: algorithm.keyLength)
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm, secretKey: secretKey)
         let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let hmacKey = cek.subdata(in: 0..<16)
-        let encryptionKey = cek.subdata(in: 16..<32)
+        let hmacKey = secretKey.subdata(in: 0..<16)
+        let encryptionKey = secretKey.subdata(in: 16..<32)
 
         var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
@@ -105,13 +105,13 @@ class AESCBCContentEncryptionTests: XCTestCase {
         20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73
         """.hexadecimalToData()!
 
-        let cek = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
-        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, contentEncryptionKey: cek)
+        let secretKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, secretKey: secretKey)
         let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let hmacKey = cek.subdata(in: 0..<32)
-        let encryptionKey = cek.subdata(in: 32..<64)
+        let hmacKey = secretKey.subdata(in: 0..<32)
+        let encryptionKey = secretKey.subdata(in: 32..<64)
 
         var concatData = String(data: additionalAuthenticatedData, encoding: .utf8)!.data(using: .utf8)!.base64URLEncodedData()
         concatData.append(symmetricEncryptionContext.initializationVector)
@@ -167,18 +167,18 @@ class AESCBCContentEncryptionTests: XCTestCase {
         let plaintext = "Live long and prosper.".data(using: .ascii)!
         let header = JWEHeader(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A128CBCHS256)
 
-        let cek = Data([UInt8]([
+        let secretKey = Data([UInt8]([
             4, 211, 31, 197, 84, 157, 252, 254, 11, 100, 157, 250, 63, 170, 106,
             206, 107, 124, 212, 45, 111, 107, 9, 219, 200, 177, 0, 240, 143, 156,
             44, 207
         ]))
 
-        let symmetricEncryptionContext = try AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, contentEncryptionKey: cek)
+        let symmetricEncryptionContext = try AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, secretKey: secretKey)
             .encrypt(header: header, payload: Payload(plaintext))
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
-        let hmacKey = cek.subdata(in: 0..<16)
-        let encryptionKey = cek.subdata(in: 16..<32)
+        let hmacKey = secretKey.subdata(in: 0..<16)
+        let encryptionKey = secretKey.subdata(in: 16..<32)
 
         let additionalAuthenticatedData = header.data().base64URLEncodedData()
 

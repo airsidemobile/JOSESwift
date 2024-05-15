@@ -126,11 +126,11 @@ class AESGCMEncryptionTests: XCTestCase {
         // verify iv length
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A256GCM.initializationVectorLength)
         // verify non supported content encryption algorithm throws error upon initialization
-        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, contentEncryptionKey: contentEncryptionKey)) { error in
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, secretKey: contentEncryptionKey)) { error in
             XCTAssertEqual(error as! JWEError, JWEError.contentEncryptionAlgorithmMismatch)
         }
         // verify key length is checked in initializer
-        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, contentEncryptionKey: Data())) { error in
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, secretKey: Data())) { error in
             XCTAssertEqual(error as! JWEError, JWEError.keyLengthNotSatisfied)
         }
 

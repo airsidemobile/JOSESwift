@@ -30,7 +30,7 @@ enum AESGCM {
         return ContentEncryptionContext(
             ciphertext: encrypted.ciphertext,
             authenticationTag: encrypted.tag,
-            initializationVector: encrypted.nonce.withUnsafeBytes({ Data(Array($0)) })
+            initializationVector: initializationVector
         )
     }
 
