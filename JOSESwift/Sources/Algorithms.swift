@@ -119,7 +119,9 @@ public enum ContentEncryptionAlgorithm: String {
 
     var keyBitSize: Int {
         switch self {
-        case .A128CBCHS256:
+        case .A128GCM:
+            return 128
+        case .A128CBCHS256, .A256GCM:
             return 256
         case .A256CBCHS512:
             return 512
@@ -128,7 +130,7 @@ public enum ContentEncryptionAlgorithm: String {
 
     var tagLength: Int {
         switch self {
-        case .A128CBCHS256:
+        case .A128CBCHS256, .A128GCM, .A256GCM:
             return 16
         case .A256CBCHS512:
             return 32
