@@ -29,7 +29,7 @@ enum HMACError: Error {
     case inputMustBeGreaterThanZero
 }
 
-fileprivate extension HMACAlgorithm {
+extension HMACAlgorithm {
     var ccAlgorithm: CCAlgorithm {
         switch self {
         case .SHA512:
@@ -38,6 +38,17 @@ fileprivate extension HMACAlgorithm {
             return CCAlgorithm(kCCHmacAlgSHA384)
         case .SHA256:
             return CCAlgorithm(kCCHmacAlgSHA256)
+        }
+    }
+
+    var ccPseudoRandomAlgorithm: CCPseudoRandomAlgorithm {
+        switch self {
+        case .SHA512:
+            return CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA512)
+        case .SHA384:
+            return CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA384)
+        case .SHA256:
+            return CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA256)
         }
     }
 }
