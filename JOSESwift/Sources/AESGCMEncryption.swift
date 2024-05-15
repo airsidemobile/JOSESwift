@@ -38,12 +38,18 @@ struct AESGCMEncryption {
     }
 
     func encrypt(_ plaintext: Data, initializationVector: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
-        return try AESGCM.encrypt(plaintext: plaintext, encryptionKey: contentEncryptionKey, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData)
+        return try AESGCM.encrypt(plaintext: plaintext,
+                                  encryptionKey: contentEncryptionKey,
+                                  initializationVector: initializationVector,
+                                  additionalAuthenticatedData: additionalAuthenticatedData)
     }
 
     func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data {
-        return try AESGCM.decrypt(cipherText: ciphertext, decryptionKey: contentEncryptionKey, initializationVector: initializationVector,
-         authenticationTag: authenticationTag, additionalAuthenticatedData: additionalAuthenticatedData)
+        return try AESGCM.decrypt(cipherText: ciphertext,
+                                  decryptionKey: contentEncryptionKey,
+                                  initializationVector: initializationVector,
+                                  authenticationTag: authenticationTag,
+                                  additionalAuthenticatedData: additionalAuthenticatedData)
     }
 }
 
