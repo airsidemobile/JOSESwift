@@ -22,7 +22,8 @@ import CommonCrypto
 func keyAgreementCompute(with algorithm: KeyManagementAlgorithm, encryption: ContentEncryptionAlgorithm, privateKey: ECPrivateKey, publicKey: ECPublicKey, apu: Data, apv: Data) throws -> Data {
 
     let z = try ecdhDeriveBits(for: privateKey, publicKey: publicKey)
-    var algId: Data, keyDataLen: Int
+    var algId: Data
+    var keyDataLen: Int
     if algorithm == .ECDH_ES {
         guard let ident = encryption.rawValue.data(using: .utf8) else {
             throw ECError.deriveKeyFail(reason: "AlgorithmID Problem - @See Section 5.8.1.2 of [NIST.800-56A]")

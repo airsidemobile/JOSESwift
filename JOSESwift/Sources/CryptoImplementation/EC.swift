@@ -307,14 +307,15 @@ internal struct EC {
                                           apu: Data(base64URLEncoded: header.apu ?? "") ?? Data(),
                                           apv: Data(base64URLEncoded: header.apv ?? "") ?? Data())
 
-        var contentKey: Data, encryptedKey: Data
+        var contentKey: Data
+        var encryptedKey: Data
         if let keyWrapAlgorithm = algorithm.keyWrapAlgorithm {
             if let injectedKey = options["key"] as? Data {
                 contentKey = injectedKey
             } else {
                 contentKey = randomBytes(size: encryption.keyBitSize / 8)
             }
-            encryptedKey = try! AES.wrap(rawKey: contentKey, keyEncryptionKey: kek, algorithm: keyWrapAlgorithm)
+            encryptedKey = try AES.wrap(rawKey: contentKey, keyEncryptionKey: kek, algorithm: keyWrapAlgorithm)
         } else {
             contentKey = kek
             encryptedKey = Data()
