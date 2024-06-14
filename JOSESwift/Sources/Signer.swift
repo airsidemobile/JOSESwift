@@ -77,21 +77,9 @@ public struct Signer<KeyType> {
             throw JWSError.algorithmMismatch
         }
 
-        guard let signingInput = [header, payload].asJOSESigningInput() else {
-            throw JWSError.cannotComputeSigningInput
-        }
+        let signingInput = try JWSSigningInput(header: header, payload: payload).signingInput()
 
         return try signer.sign(signingInput)
-    }
-}
-
-extension Array where Element == DataConvertible {
-    func asJOSESigningInput() -> Data? {
-        let encoded = self.map { component in
-            return component.data().base64URLEncodedString()
-        }
-
-        return encoded.joined(separator: ".").data(using: .ascii)
     }
 }
 

@@ -26,6 +26,7 @@ import Foundation
 internal enum JWSError: Error {
     case algorithmMismatch
     case cannotComputeSigningInput
+    case unencodedPayloadOptionMustNotBeUsedWithJWT
 }
 
 /// A JWS object consisting of a header, payload and signature. The three components of a JWS object
@@ -108,6 +109,52 @@ public struct JWS {
         }
 
         self = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerializationString)
+    }
+
+    /// Constructs a JWS object from a given compact serialization string and a [detached payload](https://www.rfc-editor.org/rfc/rfc7515.html#appendix-F).
+    ///
+    /// If `compactSerialization` contains non-empty payload, `detachedPayload` is omitted.
+    ///
+    /// - Parameters:
+    ///   - compactSerialization: A compact serialized JWS object in string format as received e.g. from the server.
+    ///   - detachedPayload: A detached payload delivered outside the JWS context.
+    /// - Throws:
+    ///   - `JOSESwiftError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     If the component count of the compact serialization is wrong.
+    ///   - `JOSESwiftError.componentNotValidBase64URL(component: String)`:
+    ///     If the component is not a valid base64URL string.
+    ///   - `JOSESwiftError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     If a component cannot be initialized from its data object.
+    public init(compactSerialization: String, detachedPayload: Payload) throws {
+        let jws = try JOSEDeserializer().deserialize(JWS.self, fromCompactSerialization: compactSerialization)
+        if jws.payload.data().isEmpty {
+            self.init(header: jws.header, payload: detachedPayload, signature: jws.signature)
+        } else {
+            self = jws
+        }
+    }
+
+    /// Constructs a JWS object from a given compact serialization data and a [detached payload](https://www.rfc-editor.org/rfc/rfc7515.html#appendix-F).
+    ///
+    /// If `compactSerialization` contains non-empty payload, `detachedPayload` is omitted.
+    ///
+    /// - Parameters:
+    ///   - compactSerialization: A compact serialized JWS object as data object as received e.g. from the server.
+    ///   - detachedPayload: A detached payload delivered outside the JWS context.
+    /// - Throws:
+    ///   - `JOSESwiftError.wrongDataEncoding(data: Data)`:
+    ///     If the compact serialization data object is not convertible to string.
+    ///   - `JOSESwiftError.invalidCompactSerializationComponentCount(count: Int)`:
+    ///     If the component count of the compact serialization is wrong.
+    ///   - `JOSESwiftError.componentNotValidBase64URL(component: String)`:
+    ///     If the component is not a valid base64URL string.
+    ///   - `JOSESwiftError.componentCouldNotBeInitializedFromData(data: Data)`:
+    ///     If a component cannot be initialized from its data object.
+    public init(compactSerialization: Data, detachedPayload: Payload) throws {
+        guard let compactSerializationString = String(data: compactSerialization, encoding: .utf8) else {
+            throw JOSESwiftError.wrongDataEncoding(data: compactSerialization)
+        }
+        try self.init(compactSerialization: compactSerializationString, detachedPayload: detachedPayload)
     }
 
     fileprivate init(header: JWSHeader, payload: Payload, signature: Data) {
@@ -207,7 +254,13 @@ public struct JWS {
 extension JWS: CompactSerializable {
     public func serialize(to serializer: inout CompactSerializer) {
         serializer.serialize(header)
-        serializer.serialize(payload)
+
+        if header.crit?.contains("b64") == true, header.b64 == false {
+            serializer.serialize(Data()) // Detached payload.
+        } else {
+            serializer.serialize(payload)
+        }
+
         serializer.serialize(signature)
     }
 }

@@ -390,6 +390,7 @@ You can find detailed information about the relevant JOSE standards in the respe
 - [RFC-7516:](https://tools.ietf.org/html/rfc7516) JSON Web Encryption (JWE)
 - [RFC-7517:](https://tools.ietf.org/html/rfc7517) JSON Web Key (JWK)
 - [RFC-7518:](https://tools.ietf.org/html/rfc7518) JSON Web Algorithms (JWA)
+- [RFC-7797:](https://datatracker.ietf.org/doc/html/rfc7797) JSON Web Signature (JWS) Unencoded Payload Option
 
 Don’t forget to check our [our wiki](https://github.com/mohemian/jose-ios/wiki) for more detailed documentation.
 

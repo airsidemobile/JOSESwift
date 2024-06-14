@@ -228,6 +228,23 @@ extension JWSHeader: CommonHeaderParameterSpace {
         }
     }
 
+    /// The unencoded payload option.
+    ///
+    /// Reference: [](https://datatracker.ietf.org/doc/html/rfc7797#section-3).
+    ///
+    /// When set to `false` and `crit` contains `b64`, payload data is not encoded when computing the JWS signature.
+    ///
+    /// **NOTE**: Due to [Unencoded Payload Content Restrictions](https://datatracker.ietf.org/doc/html/rfc7797#section-5),
+    /// [detached payload](https://www.rfc-editor.org/rfc/rfc7515.html#appendix-F) is always used when serializing `JWS`.
+    public var b64: Bool? {
+        get {
+            return parameters["b64"] as? Bool
+        }
+        set {
+            parameters["b64"] = newValue
+        }
+    }
+
     /// The critical header parameter indicates the header parameter extensions.
     public var crit: [String]? {
         get {
