@@ -165,5 +165,20 @@ class AESKeyWrapTests: XCTestCase {
             XCTAssertEqual(error as! AESError, AESError.decryptingFailed(description: ""))
         }
     }
+
+    func testAESGCMisNotUsableInCommonCrypto() {
+        for algorithm in [ContentEncryptionAlgorithm.A256GCM, ContentEncryptionAlgorithm.A128GCM] {
+            XCTAssertThrowsError(
+                try AES.encrypt(Data(), with: Data(), using: algorithm, and: Data())
+            ) { error in
+                XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
+            }
+            XCTAssertThrowsError(
+                try AES.decrypt(cipherText: Data(), with: Data(), using: algorithm, and: Data())
+            ) { error in
+                XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
+            }
+        }
+    }
 }
 // swiftlint:enable force_unwrapping

@@ -32,12 +32,40 @@ enum HeaderParsingError: Error {
 /// Moreover, a `JOSEHeader` is a `JOSEObjectComponent`. Therefore it can be initialized from and converted to `Data`.
 protocol JOSEHeader: DataConvertible, CommonHeaderParameterSpace {
     var headerData: Data { get }
-    var parameters: [String: Any] { get }
+    var parameters: [String: Any] { get set }
+
+    var requiredParameters: [String] { get }
 
     init(parameters: [String: Any], headerData: Data) throws
 
     init?(_ data: Data)
     func data() -> Data
+}
+
+extension JOSEHeader {
+    public mutating func set(_ value: Any, forParameter parameterName: String) throws {
+        guard !requiredParameters.contains(parameterName) else {
+            throw JOSESwiftError.invalidHeaderParameterValue
+        }
+
+        guard JSONSerialization.isValidJSONObject([parameterName: value]) else {
+            throw JOSESwiftError.invalidHeaderParameterValue
+        }
+
+        parameters[parameterName] = value
+    }
+
+    public func get(parameter parameterName: String) -> Any? {
+        return parameters[parameterName]
+    }
+
+    @discardableResult public mutating func remove(parameter parameterName: String) -> Any? {
+        guard !requiredParameters.contains(parameterName) else {
+            return nil
+        }
+
+        return parameters.removeValue(forKey: parameterName)
+    }
 }
 
 // `DataConvertible` implementation.
