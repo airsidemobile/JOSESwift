@@ -27,14 +27,6 @@ import XCTest
 
 class RSAVerifierTests: RSACryptoTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testVerifying() {
         guard publicKeyAlice2048 != nil else {
             XCTFail()

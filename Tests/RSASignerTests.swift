@@ -34,14 +34,6 @@ class RSASignerTests: RSACryptoTestCase {
     U6lHuTBgiXvyENzJoKJymVsUbMmy-2LNejmVpPt1Pm3zrA
     """
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testSigning() {
         XCTAssertNotNil(privateKeyAlice2048)
 

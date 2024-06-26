@@ -13,14 +13,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - gem-cache-v2-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v2
+            - gem-cache-v3-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v3
       - run:
           name: Bundler
           command: |
-            bundle install --path vendor/bundle --jobs 4 --retry 3
+            bundle config --local path 'vendor/bundle'
+            bundle install --jobs 4 --retry 3
       - save_cache:
-          key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
+          key: gem-cache-v3-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
       - persist_to_workspace:

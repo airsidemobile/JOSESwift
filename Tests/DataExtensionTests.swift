@@ -42,14 +42,6 @@ class DataExtensionTests: XCTestCase {
         "==": (unencoded: "testing the test".data(using: .utf8)!, base64URLEncoded: "dGVzdGluZyB0aGUgdGVzdA".data(using: .utf8)!)
     ]
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testBase64URLStringInit() {
         let data = Data(base64URLEncoded: validBase64URLTestString)
 

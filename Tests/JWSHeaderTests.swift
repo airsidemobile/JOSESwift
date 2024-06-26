@@ -29,14 +29,6 @@ class JWSHeaderTests: XCTestCase {
     let parameterDict = ["alg": "\(SignatureAlgorithm.RS512.rawValue)"]
     let parameterData = try! JSONSerialization.data(withJSONObject: ["alg": "\(SignatureAlgorithm.RS512.rawValue)"], options: [.sortedKeys])
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testInitWithParameters() {
         let header = try! JWSHeader(parameters: parameterDict, headerData: parameterData)
 

@@ -38,14 +38,6 @@ class JWEHeaderTests: XCTestCase {
     let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
     let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [.sortedKeys])
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testInitRSA1WithParameters() {
         let header = try! JWEHeader(parameters: parameterDictRSA)
 

@@ -27,14 +27,6 @@ import XCTest
 
 class ECSignerTests: ECCryptoTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     private func _testSigning(algorithm: SignatureAlgorithm, keyData: ECTestKeyData) {
         let messageData = message.data(using: .utf8)!
         let signer = ECSigner(algorithm: algorithm, privateKey: keyData.privateKey)

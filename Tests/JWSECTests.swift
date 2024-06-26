@@ -26,13 +26,6 @@ import XCTest
 @testable import JOSESwift
 
 class JWSECTests: ECCryptoTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
 
     @available(*, deprecated)
     func testSignAndSerialize() {
