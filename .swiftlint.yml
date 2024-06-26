@@ -19,6 +19,7 @@ disabled_rules:
   - no_space_in_method_call
 
 large_tuple: 5
+function_parameter_count: 6
 
 opt_in_rules:
   - force_unwrapping
