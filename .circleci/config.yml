@@ -18,7 +18,8 @@ jobs:
       - run:
           name: Bundler
           command: |
-            bundle install --path vendor/bundle --jobs 4 --retry 3
+            bundle config --local path 'vendor/bundle'
+            bundle install --jobs 4 --retry 3
       - save_cache:
           key: gem-cache-v2-{{ checksum "Gemfile.lock" }}
           paths:
