@@ -326,7 +326,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods
-  danger
+  danger (>= 9.5.0)
   danger-swiftlint
   fastlane
   xcpretty
