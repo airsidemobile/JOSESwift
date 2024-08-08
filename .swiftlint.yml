@@ -17,6 +17,7 @@ disabled_rules:
   - identifier_name
   - todo
   - no_space_in_method_call
+  - non_optional_string_data_conversion
 
 large_tuple: 5
 
