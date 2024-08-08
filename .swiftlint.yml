@@ -24,9 +24,6 @@ large_tuple: 5
 opt_in_rules:
   - force_unwrapping
 
-line_length:
-  ignores_comments: true
-
 included:
   - JOSESwift/Sources
   - Tests
