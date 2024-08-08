@@ -26,14 +26,6 @@ import XCTest
 
 class ECVerifierTests: ECCryptoTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     private func _testVerifying(algorithm: SignatureAlgorithm, keyData: ECTestKeyData, validSignature: Bool = true) -> Bool {
         let validJWS = keyData.compactSerializedJWSConst
         let serializedJWS = validSignature ? validJWS : invalidateCompactSerializedJWS(validJWS)

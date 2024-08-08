@@ -32,10 +32,6 @@ class CryptoTestCase: XCTestCase {
         setupKeys()
     }
 
-    override func tearDown() {
-        super.tearDown()
-    }
-
     public func setupKeys() {
         XCTFail("Setup keys function is missing")
     }
