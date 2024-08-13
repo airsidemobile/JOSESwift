@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol VerifierProtocol {
+public protocol VerifierProtocol {
     var algorithm: SignatureAlgorithm { get }
 
     /// Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
@@ -38,7 +38,7 @@ protocol VerifierProtocol {
 }
 
 public struct Verifier {
-    let verifier: VerifierProtocol
+    public let verifier: VerifierProtocol
 
     /// Constructs a verifyer used to verify a JWS.
     ///
