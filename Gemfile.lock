@@ -269,6 +269,7 @@ GEM
     plist (3.7.1)
     public_suffix (4.0.7)
     rake (13.2.1)
+    rb-readline (0.5.5)
     rchardet (1.8.0)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -331,6 +332,7 @@ DEPENDENCIES
   danger
   danger-swiftlint
   fastlane
+  rb-readline
   xcpretty
 
 BUNDLED WITH
