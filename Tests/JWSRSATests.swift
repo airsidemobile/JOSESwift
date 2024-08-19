@@ -27,13 +27,6 @@ import XCTest
 @testable import JOSESwift
 
 class JWSRSATests: RSACryptoTestCase {
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
 
     @available(*, deprecated)
     func testSignAndSerializeRS256() {

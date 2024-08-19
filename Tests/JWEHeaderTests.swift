@@ -37,7 +37,6 @@ class JWEHeaderTests: XCTestCase {
 
     let parameterDictDirect = ["alg": "dir", "enc": "A256CBC-HS512"]
     let parameterDataDirect = try! JSONSerialization.data(withJSONObject: ["alg": "dir", "enc": "A256CBC-HS512"], options: [.sortedKeys])
-
         let parameterDictECDHES = ["alg": "ECDH-ES", "enc": "A256CBC-HS512", "apu": "QWxpY2U", "apv": "Qm9i", "epk":
                                  ["kty": "EC", "crv": "P-256", "x": "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0", "y": "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps"]] as [String: Any]
     let parameterDataECDHES = try! JSONSerialization.data(withJSONObject: ["alg": "ECDH-ES", "enc": "A256CBC-HS512", "apu": "QWxpY2U", "apv": "Qm9i", "epk":
@@ -46,14 +45,6 @@ class JWEHeaderTests: XCTestCase {
     let ecPublicKey = ECPublicKey(crv: .P256,
                                   x: "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0",
                                   y: "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps")
-
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
 
     func testInitECDHWithParameters() {
 

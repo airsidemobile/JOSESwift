@@ -145,8 +145,7 @@ class RSACryptoTestCase: CryptoTestCase {
                 let keyDict = NSDictionary(contentsOfFile: path),
                 let keyDataAlice2048 = Data(base64Encoded: keyDict[privateKeyAlice2048Tag] as! String),
                 let keyDataBob2048 = Data(base64Encoded: keyDict[privateKeyBob2048Tag] as! String),
-                let keyData4096 = Data(base64Encoded: keyDict[privateKey4096Tag] as! String)
-        {
+                let keyData4096 = Data(base64Encoded: keyDict[privateKey4096Tag] as! String) {
 
             // 2048 - Alice
 
