@@ -224,3 +224,4 @@ class ECDHTests: XCTestCase {
         }
     }
 }
+// swiftlint:enable force_unwrapping
