@@ -3,7 +3,7 @@ version: 2.1
 executors:
   mac-executor:
     macos:
-      xcode: "14.2.0"
+      xcode: "15.4.0"
     working_directory: ~/joseswift
 
 jobs:
