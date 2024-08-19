@@ -20,6 +20,7 @@ disabled_rules:
   - non_optional_string_data_conversion
 
 large_tuple: 5
+function_parameter_count: 6
 
 opt_in_rules:
   - force_unwrapping

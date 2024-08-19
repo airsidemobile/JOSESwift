@@ -25,16 +25,30 @@ import Foundation
 
 protocol EncryptionKeyManagementMode {
     func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data)
+    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data
+}
+
+extension EncryptionKeyManagementMode {
+    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) { return (Data(), Data()) }
+    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data { return Data() }
 }
 
 protocol DecryptionKeyManagementMode {
     func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data
+    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data
+}
+
+extension DecryptionKeyManagementMode {
+    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data { return Data() }
+    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data { return Data() }
 }
 
 extension KeyManagementAlgorithm {
     func makeEncryptionKeyManagementMode<KeyType>(
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
-        encryptionKey: KeyType
+        encryptionKey: KeyType,
+        agreementPartyUInfo: Data? = nil,
+        agreementPartyVInfo: Data? = nil
     ) -> EncryptionKeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
@@ -62,6 +76,16 @@ extension KeyManagementAlgorithm {
             }
 
             return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+        case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
+            guard let recipientPublicKey = cast(encryptionKey, to: ECKeyEncryption.PublicKey.self) else {
+                return nil
+            }
+
+            return ECKeyEncryption.EncryptionMode(keyManagementAlgorithm: self,
+                                                  contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                                                  recipientPublicKey: recipientPublicKey,
+                                                  agreementPartyUInfo: agreementPartyUInfo ?? Data(),
+                                                  agreementPartyVInfo: agreementPartyVInfo ?? Data())
         }
     }
 
@@ -96,6 +120,15 @@ extension KeyManagementAlgorithm {
             }
 
             return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+        case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
+            guard let recipientPrivateKey = cast(decryptionKey, to: ECKeyEncryption.PrivateKey.self) else {
+                return nil
+            }
+
+            return ECKeyEncryption.DecryptionMode(keyManagementAlgorithm: self,
+                                                  contentEncryptionAlgorithm: contentEncryptionAlgorithm,
+                                                  recipientPrivateKey: recipientPrivateKey
+            )
         }
     }
 }

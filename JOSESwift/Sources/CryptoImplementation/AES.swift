@@ -54,7 +54,7 @@ fileprivate extension ContentEncryptionAlgorithm {
     }
 }
 
-fileprivate extension KeyManagementAlgorithm {
+extension KeyManagementAlgorithm {
     func checkAESKeyLength(for key: Data) -> Bool? {
         switch self {
         case .A128KW:
@@ -63,6 +63,19 @@ fileprivate extension KeyManagementAlgorithm {
             return key.count == kCCKeySizeAES192
         case .A256KW:
             return key.count == kCCKeySizeAES256
+        default:
+            return nil
+        }
+    }
+
+    var keyBitSize: Int? {
+        switch self {
+        case .A128KW:
+            return 128
+        case .A192KW:
+            return 192
+        case .A256KW:
+            return 256
         default:
             return nil
         }
@@ -180,11 +193,7 @@ enum AES {
             throw AESError.keyLengthNotSatisfied
         }
 
-        // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
-        // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
-        let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
-
-        let wrapped = ccAESKeyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
+        let wrapped = ccAESKeyWrap(rawKey: rawKey, keyEncryptionKey: keyEncryptionKey)
 
         guard let wrappedKey = wrapped.data, wrapped.status == kCCSuccess else {
             throw AESError.encryptingFailed(description: "Key wrap failed with status: \(wrapped.status).")
@@ -209,11 +218,7 @@ enum AES {
             throw AESError.keyLengthNotSatisfied
         }
 
-        // See https://tools.ietf.org/html/rfc3394#section-2.2.3.1
-        // The default iv is defined to be the hexadecimal constant A6A6A6A6A6A6A6A6
-        let iv = Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
-
-        let unwrapped = ccAESKeyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey, iv: iv)
+        let unwrapped = ccAESKeyUnwrap(wrappedKey: wrappedKey, keyEncryptionKey: keyEncryptionKey)
 
         guard let unwrappedKey = unwrapped.data, unwrapped.status == kCCSuccess else {
             throw AESError.decryptingFailed(description: "Key unwrap failed with status: \(unwrapped.status).")
@@ -224,7 +229,6 @@ enum AES {
 }
 
 extension AES {
-    // swiftlint:disable:next function_parameter_count
     private static func ccAESCBCCrypt(
         operation: CCOperation,
         data: Data,
@@ -281,34 +285,30 @@ extension AES {
 extension AES {
     private static func ccAESKeyWrap(
         rawKey: Data,
-        keyEncryptionKey: Data,
-        iv: Data
-    ) -> (data: Data?, status: Int32) {
-        let alg = CCWrappingAlgorithm(kCCWRAPAES)
+        keyEncryptionKey: Data) -> (data: Data?, status: Int32) {
 
+        let alg = CCWrappingAlgorithm(kCCWRAPAES)
         var wrappedKeyLength: size_t = CCSymmetricWrappedSize(alg, rawKey.count)
         var wrappedKey = Data(count: wrappedKeyLength)
 
         let status = wrappedKey.withUnsafeMutableBytes { wrappedKeyBytes in
             rawKey.withUnsafeBytes { rawKeyBytes in
-                iv.withUnsafeBytes { ivBytes in
-                    keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
-                        guard
-                            let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
-                        else {
-                            return Int32(kCCMemoryFailure)
-                        }
-                        return CCSymmetricKeyWrap(
-                            alg,
-                            ivBytes, iv.count,
-                            keyEncryptionKeyBytes, keyEncryptionKey.count,
-                            rawKeyBytes, rawKey.count,
-                            wrappedKeyBytes, &wrappedKeyLength
-                        )
+                keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
+                    guard
+                        let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
+                    else {
+                        return Int32(kCCMemoryFailure)
                     }
+                    return CCSymmetricKeyWrap(
+                        alg,
+                        CCrfc3394_iv,
+                        CCrfc3394_ivLen,
+                        keyEncryptionKeyBytes,
+                        keyEncryptionKey.count,
+                        rawKeyBytes, rawKey.count,
+                        wrappedKeyBytes, &wrappedKeyLength)
                 }
             }
         }
@@ -323,9 +323,8 @@ extension AES {
 
     private static func ccAESKeyUnwrap(
         wrappedKey: Data,
-        keyEncryptionKey: Data,
-        iv: Data
-    ) -> (data: Data?, status: Int32) {
+        keyEncryptionKey: Data) -> (data: Data?, status: Int32) {
+
         let alg = CCWrappingAlgorithm(kCCWRAPAES)
 
         var rawKeyLength: size_t = CCSymmetricUnwrappedSize(alg, wrappedKey.count)
@@ -333,30 +332,31 @@ extension AES {
 
         let status = rawKey.withUnsafeMutableBytes { rawKeyBytes in
             wrappedKey.withUnsafeBytes { wrappedKeyBytes in
-                iv.withUnsafeBytes { ivBytes in
-                    keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
-                        guard
-                            let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let ivBytes = ivBytes.bindMemory(to: UInt8.self).baseAddress,
-                            let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
-                        else {
-                            return Int32(kCCMemoryFailure)
-                        }
-                        return CCSymmetricKeyUnwrap(
-                            alg,
-                            ivBytes, iv.count,
-                            keyEncryptionKeyBytes, keyEncryptionKey.count,
-                            wrappedKeyBytes, wrappedKey.count,
-                            rawKeyBytes, &rawKeyLength
-                        )
+                keyEncryptionKey.withUnsafeBytes { keyEncryptionKeyBytes -> Int32 in
+                    guard
+                        let rawKeyBytes = rawKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let wrappedKeyBytes = wrappedKeyBytes.bindMemory(to: UInt8.self).baseAddress,
+                        let keyEncryptionKeyBytes = keyEncryptionKeyBytes.bindMemory(to: UInt8.self).baseAddress
+                    else {
+                        return Int32(kCCMemoryFailure)
                     }
+                    return CCSymmetricKeyUnwrap(
+                            alg,
+                            CCrfc3394_iv,
+                            CCrfc3394_ivLen,
+                            keyEncryptionKeyBytes,
+                            keyEncryptionKey.count,
+                            wrappedKeyBytes,
+                            wrappedKey.count,
+                            rawKeyBytes,
+                            &rawKeyLength
+                    )
                 }
             }
         }
 
         guard status == kCCSuccess else {
-            return (nil, status)
+            return (nil, status) // kCCDecodeError
         }
 
         rawKey.removeSubrange(rawKeyLength..<rawKey.count)
