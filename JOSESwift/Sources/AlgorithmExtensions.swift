@@ -22,7 +22,6 @@
 //
 
 import Foundation
-import CommonCrypto
 
 extension ContentEncryptionAlgorithm {
 
@@ -84,11 +83,11 @@ extension KeyManagementAlgorithm {
     var keyLength: Int {
         switch self {
         case .PBES2_HS256_A128KW:
-            return kCCKeySizeAES128
+            return 16
         case .PBES2_HS384_A192KW:
-            return kCCKeySizeAES192
+            return 24
         case .PBES2_HS512_A256KW:
-            return kCCKeySizeAES256
+            return 32
         default:
             return 0
         }
