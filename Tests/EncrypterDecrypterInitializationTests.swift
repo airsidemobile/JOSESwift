@@ -34,6 +34,7 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
     let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
     let aesKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.A128KW, .A192KW, .A256KW]
     let ecdhKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW]
+    let pbes2KeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.PBES2_HS256_A128KW, .PBES2_HS384_A192KW, .PBES2_HS512_A256KW]
 
     @available(*, deprecated)
     func testEncrypterDeprecated1Initialization() {
@@ -109,6 +110,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         encryptionKey: publicKey
                     )
                 )
+            case pbes2KeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A256CBCHS512,
+                        encryptionKey: ""
+                    )
+                )
             default:
                 XCTFail()
             }
@@ -147,6 +156,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                     Encrypter(
                         keyManagementAlgorithm: algorithm,
                         contentEncryptionAlgorithm: .A256CBCHS512,
+                        encryptionKey: Data()
+                    )
+                )
+            case pbes2KeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Encrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
                         encryptionKey: Data()
                     )
                 )
@@ -231,6 +248,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                         decryptionKey: privateKey
                     )
                 )
+            case pbes2KeyManagementModeAlgorithms:
+                XCTAssertNotNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A256CBCHS512,
+                        decryptionKey: ""
+                    )
+                )
             default:
                 XCTFail()
             }
@@ -265,6 +290,14 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
                     )
                 )
             case ecdhKeyManagementModeAlgorithms:
+                XCTAssertNil(
+                    Decrypter(
+                        keyManagementAlgorithm: algorithm,
+                        contentEncryptionAlgorithm: .A128CBCHS256,
+                        decryptionKey: ""
+                    )
+                )
+            case pbes2KeyManagementModeAlgorithms:
                 XCTAssertNil(
                     Decrypter(
                         keyManagementAlgorithm: algorithm,
