@@ -32,37 +32,43 @@ internal struct PBES2 {
     static let defaultIterationCount = 1_000_000
 
     static func deriveWrappingKey(password: String, algorithm: KeyManagementAlgorithm, salt: Data, iterations: Int) throws -> Data {
-		guard algorithm == .PBES2_HS256_A128KW || algorithm == .PBES2_HS384_A192KW || algorithm == .PBES2_HS512_A256KW else {
-			throw PBES2Error.unknownOrUnsupportedAlgorithm
-		}
+        guard algorithm == .PBES2_HS256_A128KW || algorithm == .PBES2_HS384_A192KW || algorithm == .PBES2_HS512_A256KW,
+              let passwordData = password.data(using: .utf8),
+              let algorithmData = algorithm.rawValue.data(using: .utf8) else {
+            throw PBES2Error.unknownOrUnsupportedAlgorithm
+        }
+
         guard let hmacAlgorithm = algorithm.hmacAlgorithm else {
             throw HMACError.algorithmNotSupported
         }
 
-        let passwordData = password.data(using: .utf8)!
-        let algorithmData = algorithm.rawValue.data(using: .utf8)!
         let saltData = algorithmData + Data([0x00]) + salt
 
         var derivedKey = Data(count: algorithm.keyLength)
-        let result = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
+        let result: Int = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
             saltData.withUnsafeBytes { saltBytes in
                 passwordData.withUnsafeBytes { passwordBytes in
-                    CCKeyDerivationPBKDF(
+                    guard let derivedKeyBaseAddress = derivedKeyBytes.baseAddress,
+                          let saltBaseAddress = saltBytes.baseAddress,
+                          let passwordBaseAddress = passwordBytes.baseAddress else {
+                        return Int(kCCParamError)
+                    }
+                    return Int(CCKeyDerivationPBKDF(
                         CCPBKDFAlgorithm(kCCPBKDF2),
-                        passwordBytes.baseAddress!,
+                        passwordBaseAddress,
                         passwordData.count,
-                        saltBytes.baseAddress!,
+                        saltBaseAddress,
                         saltData.count,
                         hmacAlgorithm.ccPseudoRandomAlgorithm,
                         UInt32(iterations),
-                        derivedKeyBytes.baseAddress!,
+                        derivedKeyBaseAddress,
                         derivedKeyBytes.count
-                    )
+                    ))
                 }
             }
         }
 
-        if (result == kCCSuccess) {
+        if result == kCCSuccess {
             return derivedKey
         } else {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(result), userInfo: nil)

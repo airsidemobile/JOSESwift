@@ -1,3 +1,4 @@
+// swiftlint:disable force_unwrapping
 //
 //  JWEPBES2Tests.swift
 //  JOSESwift
@@ -41,3 +42,4 @@ class JWEPBES2Tests: XCTestCase {
 		XCTAssertEqual(payload.data(), decrypted.data())
     }
 }
+// swiftlint:enable force_unwrapping

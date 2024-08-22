@@ -48,9 +48,12 @@ extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
         updatedHeader.p2s = salt
         let iterations = header.p2c ?? PBES2.defaultIterationCount
         updatedHeader.p2c = iterations
+        guard let keyWrapAlgorithm = keyManagementAlgorithm.keyWrapAlgorithm else {
+            throw PBES2Error.unknownOrUnsupportedAlgorithm
+        }
         let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, salt: salt, iterations: iterations)
         let contentKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
-        let encryptedKey = try AES.wrap(rawKey: contentKey, keyEncryptionKey: derivedKey, algorithm: keyManagementAlgorithm.keyWrapAlgorithm!)
+        let encryptedKey = try AES.wrap(rawKey: contentKey, keyEncryptionKey: derivedKey, algorithm: keyWrapAlgorithm)
         let context = Encrypter.PBES2EncryptionContext(headerData: updatedHeader.headerData, encryptedKey: encryptedKey, contentKey: contentKey)
         let result = try JSONEncoder().encode(context)
         return result
@@ -65,7 +68,10 @@ extension PBES2KeyEncryptionMode: DecryptionKeyManagementMode {
         guard let iterations = header.p2c else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "p2c")
         }
+        guard let keyWrapAlgorithm = keyManagementAlgorithm.keyWrapAlgorithm else {
+            throw PBES2Error.unknownOrUnsupportedAlgorithm
+        }
         let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, salt: salt, iterations: iterations)
-        return try AES.unwrap(wrappedKey: encryptedKey, keyEncryptionKey: derivedKey, algorithm: keyManagementAlgorithm.keyWrapAlgorithm!)
+        return try AES.unwrap(wrappedKey: encryptedKey, keyEncryptionKey: derivedKey, algorithm: keyWrapAlgorithm)
     }
 }
