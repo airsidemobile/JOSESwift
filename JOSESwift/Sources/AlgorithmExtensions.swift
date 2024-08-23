@@ -80,7 +80,7 @@ extension KeyManagementAlgorithm {
         }
     }
 
-    var keyLength: Int {
+    var derivedKeyLength: Int? {
         switch self {
         case .PBES2_HS256_A128KW:
             return 16
@@ -89,7 +89,7 @@ extension KeyManagementAlgorithm {
         case .PBES2_HS512_A256KW:
             return 32
         default:
-            return 0
+            return nil
         }
     }
 }

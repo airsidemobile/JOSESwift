@@ -32,9 +32,18 @@ internal struct PBES2 {
     static let defaultIterationCount = 1_000_000
 
     static func deriveWrappingKey(password: String, algorithm: KeyManagementAlgorithm, salt: Data, iterations: Int) throws -> Data {
-        guard algorithm == .PBES2_HS256_A128KW || algorithm == .PBES2_HS384_A192KW || algorithm == .PBES2_HS512_A256KW,
-              let passwordData = password.data(using: .utf8),
-              let algorithmData = algorithm.rawValue.data(using: .utf8) else {
+        let supportedKeyManagementAlgorithms: [KeyManagementAlgorithm] = [
+            .PBES2_HS256_A128KW,
+            .PBES2_HS384_A192KW,
+            .PBES2_HS512_A256KW
+        ]
+
+        guard
+            supportedKeyManagementAlgorithms.contains(algorithm),
+            let passwordData = password.data(using: .utf8),
+            let algorithmData = algorithm.rawValue.data(using: .utf8),
+            let derivedKeyLength = algorithm.derivedKeyLength
+        else {
             throw PBES2Error.unknownOrUnsupportedAlgorithm
         }
 
@@ -44,7 +53,7 @@ internal struct PBES2 {
 
         let saltData = algorithmData + Data([0x00]) + salt
 
-        var derivedKey = Data(count: algorithm.keyLength)
+        var derivedKey = Data(count: derivedKeyLength)
         let result: Int = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
             saltData.withUnsafeBytes { saltBytes in
                 passwordData.withUnsafeBytes { passwordBytes in
