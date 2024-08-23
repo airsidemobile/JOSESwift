@@ -41,7 +41,7 @@ fileprivate extension ContentEncryptionAlgorithm {
             return CCAlgorithm(kCCAlgorithmAES)
         case .A128CBCHS256:
             return CCAlgorithm(kCCAlgorithmAES)
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             return nil
         }
     }
@@ -50,7 +50,7 @@ fileprivate extension ContentEncryptionAlgorithm {
         switch self {
         case .A256CBCHS512, .A256GCM:
             return key.count == kCCKeySizeAES256
-        case .A192CBCHS384:
+        case .A192CBCHS384, .A192GCM:
             return key.count == kCCKeySizeAES192
         case .A128CBCHS256, .A128GCM:
             return key.count == kCCKeySizeAES128
@@ -129,7 +129,7 @@ enum AES {
             }
 
             return ciphertext
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             /// This is not being used by `AESGCMEncryption` because of `KeyType` type mismatch.
             throw AESError.invalidAlgorithm
         }
@@ -175,7 +175,7 @@ enum AES {
             }
 
             return plaintext
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             /// This is not being used by `AESGCMEncryption` because of `KeyType` type mismatch.
             throw AESError.invalidAlgorithm
         }

@@ -54,7 +54,7 @@ If you are missing a specific feature, algorithm, or serialization, feel free to
 	<tr><td><code>HS384</code></td><td>:white_check_mark:</td>                   <td><code>RSA-OAEP</code></td><td>:white_check_mark:</td>     <td><code>A192CBC-HS384</code></td><td>:white_check_mark:</td>                   <td><code>EC</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>HS512</code></td><td>:white_check_mark:</td>                   <td><code>RSA-OAEP-256</code></td><td>:white_check_mark:</td> <td><code>A256CBC-HS512</code></td><td>:white_check_mark:</td> <td><code>oct</code></td><td>:white_check_mark:</td></tr>
 	<tr><td><code>RS256</code></td><td>:white_check_mark:</td> <td><code>A128KW</code></td><td>:white_check_mark:</td>       <td><code>A128GCM</code></td><td>:white_check_mark:</td>                         <th rowspan="14"></th><th rowspan="14"></th></tr>
-	<tr><td><code>RS384</code></td><td>:white_check_mark:</td> <td><code>A192KW</code></td><td>:white_check_mark:</td>       <td><code>A192GCM</code></td><td></td>
+	<tr><td><code>RS384</code></td><td>:white_check_mark:</td> <td><code>A192KW</code></td><td>:white_check_mark:</td>       <td><code>A192GCM</code></td><td>:white_check_mark:</td>
 	<tr><td><code>RS512</code></td><td>:white_check_mark:</td> <td><code>A256KW</code></td><td>:white_check_mark:</td>       <td><code>A256GCM</code></td><td>:white_check_mark:</td>
 	<tr><td><code>ES256</code></td><td>:white_check_mark:</td> <td><code>dir</code></td><td>:white_check_mark:</td>          <th rowspan="11"></th><th rowspan="11"></th></tr>
 	<tr><td><code>ES384</code></td><td>:white_check_mark:</td> <td><code>ECDH-ES</code></td><td>:white_check_mark:</td></tr>

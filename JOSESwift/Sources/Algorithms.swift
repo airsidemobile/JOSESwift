@@ -131,6 +131,8 @@ public enum ContentEncryptionAlgorithm: String {
     case A128CBCHS256 = "A128CBC-HS256"
     /// Content encryption using AES GCM with 256-bit key
     case A256GCM = "A256GCM"
+    /// Content encryption using AES GCM with 192-bit key
+    case A192GCM = "A192GCM"
     /// Content encryption using AES GCM with 128-bit key
     case A128GCM = "A128GCM"
 
@@ -138,6 +140,8 @@ public enum ContentEncryptionAlgorithm: String {
         switch self {
         case .A128GCM:
             return 128
+        case .A192GCM:
+            return 192
         case .A128CBCHS256, .A256GCM:
             return 256
         case .A192CBCHS384:
@@ -149,7 +153,7 @@ public enum ContentEncryptionAlgorithm: String {
 
     var tagLength: Int {
         switch self {
-        case .A128CBCHS256, .A128GCM, .A256GCM:
+        case .A128CBCHS256, .A128GCM, .A192GCM, .A256GCM:
             return 16
         case .A192CBCHS384:
             return 24

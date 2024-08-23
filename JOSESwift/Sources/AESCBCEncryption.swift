@@ -107,7 +107,7 @@ struct AESCBCEncryption {
                 return .SHA384
             case .A128CBCHS256:
                 return .SHA256
-            case .A256GCM, .A128GCM:
+            case .A256GCM, .A192GCM, .A128GCM:
                 throw JWEError.contentEncryptionAlgorithmMismatch
             }
     }
@@ -121,7 +121,7 @@ struct AESCBCEncryption {
             return (inputKey.subdata(in: 0..<24), inputKey.subdata(in: 24..<48))
         case .A128CBCHS256:
             return (inputKey.subdata(in: 0..<16), inputKey.subdata(in: 16..<32))
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
     }
@@ -134,7 +134,7 @@ struct AESCBCEncryption {
             return hmac.subdata(in: 0..<24)
         case .A128CBCHS256:
             return hmac.subdata(in: 0..<16)
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
     }
