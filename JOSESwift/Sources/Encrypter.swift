@@ -44,7 +44,8 @@ public struct Encrypter {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType,
         agreementPartyUInfo: Data? = nil,
-        agreementPartyVInfo: Data? = nil
+        agreementPartyVInfo: Data? = nil,
+        pbes2SaltInputLength: Int? = nil
     ) {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
@@ -53,7 +54,8 @@ public struct Encrypter {
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             encryptionKey: encryptionKey,
             agreementPartyUInfo: agreementPartyUInfo,
-            agreementPartyVInfo: agreementPartyVInfo
+            agreementPartyVInfo: agreementPartyVInfo,
+            pbes2SaltInputLength: pbes2SaltInputLength
         )
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode
@@ -72,6 +74,28 @@ public struct Encrypter {
             let encryptedKey = try keyManagementMode.determineContentEncryptionKey(for: header)
 
             guard let context = try? JSONDecoder().decode(Encrypter.ECEncryptionContext.self, from: encryptedKey) else {
+                throw JWEError.hmacNotAuthenticated
+            }
+
+            if let contextHeader = JWEHeader(context.headerData) {
+                header = contextHeader
+            }
+
+            let contentEncryptionContext = try contentEncryptionAlgorithm
+                .makeContentEncrypter(contentEncryptionKey: context.contentKey)
+                .encrypt(headerData: context.headerData,
+                         payload: payload)
+
+            return EncryptionContext(
+                encryptedKey: context.encryptedKey,
+                ciphertext: contentEncryptionContext.ciphertext,
+                authenticationTag: contentEncryptionContext.authenticationTag,
+                initializationVector: contentEncryptionContext.initializationVector
+            )
+        } else if keyManagementAlgorithm.shouldContainPasswordBasedEncryptionScheme {
+            let encryptedKey = try keyManagementMode.determineContentEncryptionKey(for: header)
+
+            guard let context = try? JSONDecoder().decode(Encrypter.PBES2EncryptionContext.self, from: encryptedKey) else {
                 throw JWEError.hmacNotAuthenticated
             }
 
@@ -117,6 +141,12 @@ extension Encrypter {
     }
 
     struct ECEncryptionContext: Codable {
+        let headerData: Data
+        let encryptedKey: Data
+        let contentKey: Data
+    }
+
+    struct PBES2EncryptionContext: Codable {
         let headerData: Data
         let encryptedKey: Data
         let contentKey: Data

@@ -80,14 +80,20 @@ public enum KeyManagementAlgorithm: String, CaseIterable {
     case ECDH_ES_A192KW = "ECDH-ES+A192KW"
     ///  ECDH-ES using Concat KDF and CEK wrapped with "A256KW"
     case ECDH_ES_A256KW = "ECDH-ES+A256KW"
+    /// PBES2 with HMAC SHA-256 and "A128KW" wrapping
+    case PBES2_HS256_A128KW = "PBES2-HS256+A128KW"
+    /// PBES2 with HMAC SHA-384 and "A192KW" wrapping
+    case PBES2_HS384_A192KW = "PBES2-HS384+A192KW"
+    /// PBES2 with HMAC SHA-512 and "A256KW" wrapping
+    case PBES2_HS512_A256KW = "PBES2-HS512+A256KW"
 
     public var keyWrapAlgorithm: KeyManagementAlgorithm? {
         switch self {
-        case .ECDH_ES_A128KW:
+        case .ECDH_ES_A128KW, .PBES2_HS256_A128KW:
             return .A128KW
-        case .ECDH_ES_A192KW:
+        case .ECDH_ES_A192KW, .PBES2_HS384_A192KW:
             return .A192KW
-        case .ECDH_ES_A256KW:
+        case .ECDH_ES_A256KW, .PBES2_HS512_A256KW:
             return .A256KW
         default:
             return nil
@@ -97,6 +103,15 @@ public enum KeyManagementAlgorithm: String, CaseIterable {
     var shouldContainEphemeralPublicKey: Bool {
         switch self {
         case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var shouldContainPasswordBasedEncryptionScheme: Bool {
+        switch self {
+        case .PBES2_HS256_A128KW, .PBES2_HS384_A192KW, .PBES2_HS512_A256KW:
             return true
         default:
             return false

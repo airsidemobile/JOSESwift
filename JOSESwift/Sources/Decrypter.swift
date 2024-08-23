@@ -67,7 +67,7 @@ public struct Decrypter {
 
         var contentEncryptionKey = Data()
 
-        if alg.shouldContainEphemeralPublicKey {
+        if alg.shouldContainEphemeralPublicKey || alg.shouldContainPasswordBasedEncryptionScheme {
             contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey,
                                                                                        header: context.protectedHeader)
         } else {

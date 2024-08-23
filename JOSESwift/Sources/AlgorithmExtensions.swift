@@ -65,3 +65,31 @@ extension SignatureAlgorithm {
         }
     }
 }
+
+extension KeyManagementAlgorithm {
+    var hmacAlgorithm: HMACAlgorithm? {
+        switch self {
+        case .PBES2_HS256_A128KW:
+            return .SHA256
+        case .PBES2_HS384_A192KW:
+            return .SHA384
+        case .PBES2_HS512_A256KW:
+            return .SHA512
+        default:
+            return nil
+        }
+    }
+
+    var derivedKeyLength: Int? {
+        switch self {
+        case .PBES2_HS256_A128KW:
+            return 16
+        case .PBES2_HS384_A192KW:
+            return 24
+        case .PBES2_HS512_A256KW:
+            return 32
+        default:
+            return nil
+        }
+    }
+}
