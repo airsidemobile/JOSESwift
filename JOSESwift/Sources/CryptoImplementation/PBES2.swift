@@ -31,7 +31,12 @@ internal enum PBES2Error: Error {
 internal struct PBES2 {
     static let defaultIterationCount = 1_000_000
 
-    static func deriveWrappingKey(password: String, algorithm: KeyManagementAlgorithm, salt: Data, iterations: Int) throws -> Data {
+    static func deriveWrappingKey(
+        password: String,
+        algorithm: KeyManagementAlgorithm,
+        saltInput: Data,
+        iterationCount: Int
+    ) throws -> Data {
         let supportedKeyManagementAlgorithms: [KeyManagementAlgorithm] = [
             .PBES2_HS256_A128KW,
             .PBES2_HS384_A192KW,
@@ -51,7 +56,7 @@ internal struct PBES2 {
             throw HMACError.algorithmNotSupported
         }
 
-        let saltData = algorithmData + Data([0x00]) + salt
+        let saltData = algorithmData + Data([0x00]) + saltInput
 
         var derivedKey = Data(count: derivedKeyLength)
         let result: Int = derivedKey.withUnsafeMutableBytes { derivedKeyBytes in
@@ -69,7 +74,7 @@ internal struct PBES2 {
                         saltBaseAddress,
                         saltData.count,
                         hmacAlgorithm.ccPseudoRandomAlgorithm,
-                        UInt32(iterations),
+                        UInt32(iterationCount),
                         derivedKeyBaseAddress,
                         derivedKeyBytes.count
                     ))

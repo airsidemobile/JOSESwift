@@ -44,14 +44,14 @@ struct PBES2KeyEncryptionMode {
 extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
     func determineContentEncryptionKey(for header: JWEHeader) throws -> Data {
         var updatedHeader = header
-        let salt = try SecureRandom.generate(count: 16)
-        updatedHeader.p2s = salt
-        let iterations = header.p2c ?? PBES2.defaultIterationCount
-        updatedHeader.p2c = iterations
+        let saltInput = try SecureRandom.generate(count: 16)
+        updatedHeader.p2s = saltInput
+        let iterationCount = header.p2c ?? PBES2.defaultIterationCount
+        updatedHeader.p2c = iterationCount
         guard let keyWrapAlgorithm = keyManagementAlgorithm.keyWrapAlgorithm else {
             throw PBES2Error.unknownOrUnsupportedAlgorithm
         }
-        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, salt: salt, iterations: iterations)
+        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, saltInput: saltInput, iterationCount: iterationCount)
         let contentKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         let encryptedKey = try AES.wrap(rawKey: contentKey, keyEncryptionKey: derivedKey, algorithm: keyWrapAlgorithm)
         let context = Encrypter.PBES2EncryptionContext(headerData: updatedHeader.headerData, encryptedKey: encryptedKey, contentKey: contentKey)
@@ -62,16 +62,16 @@ extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
 
 extension PBES2KeyEncryptionMode: DecryptionKeyManagementMode {
     func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data {
-        guard let salt = header.p2s else {
+        guard let saltInput = header.p2s else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "p2s")
         }
-        guard let iterations = header.p2c else {
+        guard let iterationCount = header.p2c else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "p2c")
         }
         guard let keyWrapAlgorithm = keyManagementAlgorithm.keyWrapAlgorithm else {
             throw PBES2Error.unknownOrUnsupportedAlgorithm
         }
-        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, salt: salt, iterations: iterations)
+        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: keyManagementAlgorithm, saltInput: saltInput, iterationCount: iterationCount)
         return try AES.unwrap(wrappedKey: encryptedKey, keyEncryptionKey: derivedKey, algorithm: keyWrapAlgorithm)
     }
 }

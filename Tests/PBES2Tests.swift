@@ -28,9 +28,9 @@ class PBES2Tests: XCTestCase {
     /// Tests the PBES2 key derivation with the test data provided in the [RFC-7517](https://www.rfc-editor.org/rfc/rfc7517#appendix-C.4).
     func testDeriveWrappingKey() throws {
         let password = "Thus from my lips, by yours, my sin is purged."
-        let salt = Data([217, 96, 147, 112, 150, 117, 70, 247, 127, 8, 155, 137, 174, 42, 80, 215])
-        let iterations = 4096
-        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: .PBES2_HS256_A128KW, salt: salt, iterations: iterations)
+        let saltInput = Data([217, 96, 147, 112, 150, 117, 70, 247, 127, 8, 155, 137, 174, 42, 80, 215])
+        let iterationCount = 4096
+        let derivedKey = try PBES2.deriveWrappingKey(password: password, algorithm: .PBES2_HS256_A128KW, saltInput: saltInput, iterationCount: iterationCount)
         let expectedKey = Data([110, 171, 169, 92, 129, 92, 109, 117, 233, 242, 116, 233, 170, 14, 24, 75])
         XCTAssertEqual(derivedKey, expectedKey)
     }
