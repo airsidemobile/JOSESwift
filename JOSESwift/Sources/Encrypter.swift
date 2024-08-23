@@ -44,7 +44,8 @@ public struct Encrypter {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType,
         agreementPartyUInfo: Data? = nil,
-        agreementPartyVInfo: Data? = nil
+        agreementPartyVInfo: Data? = nil,
+        pbes2SaltInputLength: Int? = nil
     ) {
         self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
@@ -53,7 +54,8 @@ public struct Encrypter {
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             encryptionKey: encryptionKey,
             agreementPartyUInfo: agreementPartyUInfo,
-            agreementPartyVInfo: agreementPartyVInfo
+            agreementPartyVInfo: agreementPartyVInfo,
+            pbes2SaltInputLength: pbes2SaltInputLength
         )
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode

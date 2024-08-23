@@ -48,7 +48,8 @@ extension KeyManagementAlgorithm {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         encryptionKey: KeyType,
         agreementPartyUInfo: Data? = nil,
-        agreementPartyVInfo: Data? = nil
+        agreementPartyVInfo: Data? = nil,
+        pbes2SaltInputLength: Int? = nil
     ) -> EncryptionKeyManagementMode? {
         switch self {
         case .RSA1_5, .RSAOAEP, .RSAOAEP256:
@@ -94,7 +95,8 @@ extension KeyManagementAlgorithm {
             return PBES2KeyEncryptionMode(
                 keyManagementAlgorithm: self,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
-                password: password
+                password: password,
+                pbes2SaltInputLength: pbes2SaltInputLength
             )
         }
     }

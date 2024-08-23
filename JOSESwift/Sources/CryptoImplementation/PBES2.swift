@@ -29,8 +29,6 @@ internal enum PBES2Error: Error {
 }
 
 internal struct PBES2 {
-    static let defaultIterationCount = 1_000_000
-
     static func deriveWrappingKey(
         password: String,
         algorithm: KeyManagementAlgorithm,
