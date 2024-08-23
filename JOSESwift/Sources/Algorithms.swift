@@ -125,6 +125,8 @@ public enum KeyManagementAlgorithm: String, CaseIterable {
 public enum ContentEncryptionAlgorithm: String {
     /// Content encryption using AES_256_CBC_HMAC_SHA_512
     case A256CBCHS512 = "A256CBC-HS512"
+    /// Content encryption using AES_192_CBC_HMAC_SHA_384
+    case A192CBCHS384 = "A192CBC-HS384"
     /// Content encryption using AES_128_CBC_HMAC_SHA_256
     case A128CBCHS256 = "A128CBC-HS256"
     /// Content encryption using AES GCM with 256-bit key
@@ -138,6 +140,8 @@ public enum ContentEncryptionAlgorithm: String {
             return 128
         case .A128CBCHS256, .A256GCM:
             return 256
+        case .A192CBCHS384:
+            return 384
         case .A256CBCHS512:
             return 512
         }
@@ -147,6 +151,8 @@ public enum ContentEncryptionAlgorithm: String {
         switch self {
         case .A128CBCHS256, .A128GCM, .A256GCM:
             return 16
+        case .A192CBCHS384:
+            return 24
         case .A256CBCHS512:
             return 32
         }
