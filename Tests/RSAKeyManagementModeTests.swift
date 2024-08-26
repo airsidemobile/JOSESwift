@@ -128,6 +128,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDecryptsContentEncryptionKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -141,7 +146,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 and: algorithm
             )
 
-            let decryptedKey = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+            let decryptedKey = try keyDecryption.determineContentEncryptionKey(from: encryptedKey, with: header)
 
             XCTAssertEqual(contentEncryptionKey, decryptedKey)
         }
@@ -152,6 +157,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDoesNotThrowForDecryptionError() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -165,7 +175,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 and: algorithm
             )
 
-            XCTAssertNoThrow(try keyDecryption.determineContentEncryptionKey(from: encryptedKey))
+            XCTAssertNoThrow(try keyDecryption.determineContentEncryptionKey(from: encryptedKey, with: header))
         }
     }
 
@@ -174,6 +184,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testGeneratesRandomContentEncryptionKeyForMalformedEncryptedKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -182,8 +197,13 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
             let encryptedKey = Data(count: algorithm.maxMessageLength(for: publicKeyAlice2048!)! - 10)
 
-            let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
-            let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+            let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(
+                from: encryptedKey, with: header
+            )
+            let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(
+                from: encryptedKey,
+                with: header
+            )
 
             XCTAssertNotEqual(randomContentEncryptionKey1, randomContentEncryptionKey2)
         }

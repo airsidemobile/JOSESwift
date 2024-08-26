@@ -187,17 +187,16 @@ public struct JWE {
             authenticationTag: authenticationTag
         )
 
-        guard
-            decrypter.keyManagementAlgorithm == header.keyManagementAlgorithm,
-            decrypter.contentEncryptionAlgorithm == header.contentEncryptionAlgorithm
-        else {
-            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
-        }
-
         do {
             let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             let decryptedData = try decrypter.decrypt(context)
             return Payload(try compressor.decompress(data: decryptedData))
+        } catch JWEError.keyManagementAlgorithmMismatch {
+            // todo: better error type?
+            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
+        }  catch JWEError.contentEncryptionAlgorithmMismatch {
+            // todo: better error type?
+            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         } catch JOSESwiftError.decompressionFailed {
             throw JOSESwiftError.decompressionFailed
         } catch JOSESwiftError.compressionAlgorithmNotSupported {

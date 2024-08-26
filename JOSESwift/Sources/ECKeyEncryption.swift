@@ -59,7 +59,7 @@ extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
     var algorithm: KeyManagementAlgorithm {
         keyManagementAlgorithm
     }
-    
+
     func determineContentEncryptionKey(with jweHeader: JWEHeader) throws -> KeyManagementContext {
         let ecEncryption = try EC.encryptionContextFor(recipientPublicKey,
                                            algorithm: keyManagementAlgorithm,
@@ -81,7 +81,11 @@ extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
 }
 
 extension ECKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
 
         let randomContentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
 
@@ -92,6 +96,7 @@ extension ECKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
                                            header: header)
 
         guard decryptedKey.count == contentEncryptionAlgorithm.keyLength else { return randomContentEncryptionKey }
+
         return decryptedKey
     }
 }

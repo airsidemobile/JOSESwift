@@ -48,7 +48,7 @@ extension DirectEncryptionMode: EncryptionKeyManagementMode {
 }
 
 extension DirectEncryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+    func determineContentEncryptionKey(from encryptedKey: Data, with _: JWEHeader) throws -> Data {
         guard encryptedKey == Data() else {
             throw JOSESwiftError.decryptingFailed(description: "Direct encryption does not expect an encrypted key.")
         }

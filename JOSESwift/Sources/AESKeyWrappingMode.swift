@@ -66,7 +66,7 @@ extension AESKeyWrappingMode: EncryptionKeyManagementMode {
 }
 
 extension AESKeyWrappingMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+    func determineContentEncryptionKey(from encryptedKey: Data, with _: JWEHeader) throws -> Data {
         let contentEncryptionKey = try AES.unwrap(
             wrappedKey: encryptedKey,
             keyEncryptionKey: sharedSymmetricKey,

@@ -23,11 +23,16 @@
 
 import Foundation
 
+public protocol DecrypterProtocol {
+    var keyManagementAlgorithm: KeyManagementAlgorithm { get }
+    var contentEncryptionAlgorithm: ContentEncryptionAlgorithm { get }
+
+    var keyManagementMode: DecryptionKeyManagementMode { get }
+}
+
 public struct Decrypter {
     private let keyManagementMode: DecryptionKeyManagementMode
-
-    let keyManagementAlgorithm: KeyManagementAlgorithm
-    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
 
     /// Constructs a decrypter that can be used to decrypt a JWE.
     ///
@@ -44,7 +49,6 @@ public struct Decrypter {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         decryptionKey: KeyType
     ) {
-        self.keyManagementAlgorithm = keyManagementAlgorithm
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
 
         let mode = keyManagementAlgorithm.makeDecryptionKeyManagementMode(
@@ -57,7 +61,9 @@ public struct Decrypter {
     }
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
-        guard let alg = context.protectedHeader.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
+        guard
+            let headerAlg = context.protectedHeader.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
+        else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
@@ -65,14 +71,10 @@ public struct Decrypter {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        var contentEncryptionKey = Data()
-
-        if alg.shouldContainEphemeralPublicKey || alg.shouldContainPasswordBasedEncryptionScheme {
-            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey,
-                                                                                       header: context.protectedHeader)
-        } else {
-            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey)
-        }
+        let contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(
+            from: context.encryptedKey,
+            with: context.protectedHeader
+        )
 
         let contentDecryptionContext = ContentDecryptionContext(
             ciphertext: context.ciphertext,

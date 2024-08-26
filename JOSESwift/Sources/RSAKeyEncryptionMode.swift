@@ -79,7 +79,11 @@ extension RSAKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
 }
 
 extension RSAKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
         // Generate a random CEK to substitue in case we fail to decrypt the CEK.
         // This is to prevent the MMA (Million Message Attack) against RSA.
         // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),

@@ -67,7 +67,7 @@ public struct Encrypter {
     }
 
     internal func encrypt(header: inout JWEHeader, payload: Payload) throws -> EncryptionContext {
-        guard let alg = header.keyManagementAlgorithm, alg == keyManagementMode.algorithm else {
+        guard let headerAlg = header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 

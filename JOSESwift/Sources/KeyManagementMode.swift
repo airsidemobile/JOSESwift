@@ -25,24 +25,21 @@ import Foundation
 
 public protocol EncryptionKeyManagementMode {
     var algorithm: KeyManagementAlgorithm { get }
-    
+
     func determineContentEncryptionKey(with header: JWEHeader) throws -> KeyManagementContext
 }
 
-protocol DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data
-}
-
-extension DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data { return Data() }
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data { return Data() }
-}
-
+// todo: rename to EncryptionKeyManagementContext
 public struct KeyManagementContext {
     let contentEncryptionKey: Data
     let encryptedKey: Data
     let jweHeader: JWEHeader?
+}
+
+public protocol DecryptionKeyManagementMode {
+    var algorithm: KeyManagementAlgorithm { get }
+
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data
 }
 
 extension KeyManagementAlgorithm {

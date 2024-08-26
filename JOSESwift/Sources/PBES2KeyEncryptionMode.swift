@@ -89,7 +89,7 @@ extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
 }
 
 extension PBES2KeyEncryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data {
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
         guard let saltInput = header.p2s else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "p2s")
         }
