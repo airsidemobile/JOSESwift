@@ -23,16 +23,9 @@
 
 import Foundation
 
-public protocol DecrypterProtocol {
-    var keyManagementAlgorithm: KeyManagementAlgorithm { get }
-    var contentEncryptionAlgorithm: ContentEncryptionAlgorithm { get }
-
-    var keyManagementMode: DecryptionKeyManagementMode { get }
-}
-
 public struct Decrypter {
     private let keyManagementMode: DecryptionKeyManagementMode
-    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentDecrypter: ContentDecrypter
 
     /// Constructs a decrypter that can be used to decrypt a JWE.
     ///
@@ -49,8 +42,6 @@ public struct Decrypter {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         decryptionKey: KeyType
     ) {
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-
         let mode = keyManagementAlgorithm.makeDecryptionKeyManagementMode(
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             decryptionKey: decryptionKey
@@ -58,6 +49,18 @@ public struct Decrypter {
 
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode
+
+        let decrypter = try? contentEncryptionAlgorithm.makeContentDecrypter()
+        guard let contentDecrypter = decrypter else { return nil }
+        self.contentDecrypter = contentDecrypter
+    }
+
+    public init(
+        customKeyManagementMode keyManagementMode: DecryptionKeyManagementMode,
+        customContentDecrypter contentDecrypter: ContentDecrypter
+    ) {
+        self.keyManagementMode = keyManagementMode
+        self.contentDecrypter = contentDecrypter
     }
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
@@ -67,7 +70,9 @@ public struct Decrypter {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = context.protectedHeader.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard
+            let headerEnc = context.protectedHeader.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
+        else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -80,12 +85,11 @@ public struct Decrypter {
             ciphertext: context.ciphertext,
             initializationVector: context.initializationVector,
             additionalAuthenticatedData: context.protectedHeader.data().base64URLEncodedData(),
-            authenticationTag: context.authenticationTag
+            authenticationTag: context.authenticationTag,
+            contentEncryptionKey: contentEncryptionKey
         )
 
-        return try contentEncryptionAlgorithm
-            .makeContentDecrypter(contentEncryptionKey: contentEncryptionKey)
-            .decrypt(decryptionContext: contentDecryptionContext)
+        return try contentDecrypter.decrypt(decryptionContext: contentDecryptionContext)
     }
 }
 

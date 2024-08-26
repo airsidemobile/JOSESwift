@@ -23,16 +23,9 @@
 
 import Foundation
 
-public protocol EncrypterProtocol {
-    var keyManagementAlgorithm: KeyManagementAlgorithm { get }
-    var contentEncryptionAlgorithm: ContentEncryptionAlgorithm { get }
-
-    var keyManagementMode: EncryptionKeyManagementMode { get }
-}
-
 public struct Encrypter {
     private let keyManagementMode: EncryptionKeyManagementMode
-    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentEncryper: ContentEncrypter
 
     /// Constructs an encrypter that can be used to encrypt a JWE.
     ///
@@ -53,8 +46,6 @@ public struct Encrypter {
         agreementPartyVInfo: Data? = nil,
         pbes2SaltInputLength: Int? = nil
     ) {
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-
         let mode = keyManagementAlgorithm.makeEncryptionKeyManagementMode(
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             encryptionKey: encryptionKey,
@@ -64,6 +55,18 @@ public struct Encrypter {
         )
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode
+
+        let encrypter = try? contentEncryptionAlgorithm.makeContentEncrypter()
+        guard let contentEncrypter = encrypter else { return nil }
+        self.contentEncryper = contentEncrypter
+    }
+
+    public init(
+        customKeyManagementMode keyManagementMode: EncryptionKeyManagementMode,
+        customContentEncrypter contentEncrypter: ContentEncrypter
+    ) {
+        self.keyManagementMode = keyManagementMode
+        self.contentEncryper = contentEncrypter
     }
 
     internal func encrypt(header: inout JWEHeader, payload: Payload) throws -> EncryptionContext {
@@ -71,7 +74,7 @@ public struct Encrypter {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = header.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentEncryper.algorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -81,9 +84,11 @@ public struct Encrypter {
             header = updatedHeader
         }
 
-        let contentEncryptionContext = try contentEncryptionAlgorithm
-            .makeContentEncrypter(contentEncryptionKey: keyManagementContext.contentEncryptionKey)
-            .encrypt(headerData: header.data(), payload: payload)
+        let contentEncryptionContext = try contentEncryper.encrypt(
+            headerData: header.data(),
+            payload: payload,
+            contentEncryptionKey: keyManagementContext.contentEncryptionKey
+        )
 
         return EncryptionContext(
             encryptedKey: keyManagementContext.encryptedKey,

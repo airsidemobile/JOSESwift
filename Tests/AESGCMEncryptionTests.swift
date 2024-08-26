@@ -28,9 +28,8 @@ import CryptoKit
 @testable import JOSESwift
 
 class AESGCMEncryptionTests: XCTestCase {
-
     // Common test data as per [RFC-7516](https://www.rfc-editor.org/rfc/rfc7516#appendix-A.1).
-    let contentEncryptionKey = Data([
+    let contentEncryptionKey256 = Data([
         177, 161, 244, 128, 84, 143, 225, 115, 63, 180, 3, 255, 107, 154,
         212, 246, 138, 7, 110, 91, 112, 46, 34, 105, 47, 130, 203, 46, 122,
         234, 64, 252
@@ -77,74 +76,43 @@ class AESGCMEncryptionTests: XCTestCase {
 
     /// Tests the `AES` encryption implementation for A256GCM with the test data provided in the [RFC-7516](https://www.rfc-editor.org/rfc/rfc7516#appendix-A.1).
     func testEncryptingA256GCM() throws {
-        let encrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM, contentEncryptionKey: contentEncryptionKey)
-        let symmetricEncryptionContext = try encrypter.encrypt(expectedPlaintext, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData)
+        let encrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM)
+        let symmetricEncryptionContext = try encrypter.encrypt(expectedPlaintext, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData, contentEncryptionKey: contentEncryptionKey256)
         XCTAssertEqual(expectedCiphertext, symmetricEncryptionContext.ciphertext)
         XCTAssertEqual(authenticationTag, symmetricEncryptionContext.authenticationTag)
     }
 
     /// Tests the `AES` decryption implementation for A256GCM with the test data provided in the [RFC-7516](https://www.rfc-editor.org/rfc/rfc7516#appendix-A.1).
     func testDecryptingA256GCM() throws {
-        let decrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM, contentEncryptionKey: contentEncryptionKey)
-        let plaintext = try decrypter.decrypt(ciphertext, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag)
+        let decrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM)
+        let plaintext = try decrypter.decrypt(ciphertext, initializationVector: initializationVector, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag, contentEncryptionKey: contentEncryptionKey256)
         XCTAssertEqual(expectedPlaintext, plaintext)
     }
 
     /// Tests the `AES` decryption implementation for A256GCM with the test data provided in the [RFC-7516](https://www.rfc-editor.org/rfc/rfc7516#appendix-A.1).
-    func testDecryptingA256GCMusingDecryptionContext() throws {
+    func testDecryptingA256GCMUsingDecryptionContext() throws {
         let context = ContentDecryptionContext(
             ciphertext: ciphertext,
             initializationVector: initializationVector,
             additionalAuthenticatedData: additionalAuthenticatedData,
-            authenticationTag: authenticationTag
+            authenticationTag: authenticationTag,
+            contentEncryptionKey: contentEncryptionKey256
         )
-        let decrypter: ContentDecrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM, contentEncryptionKey: contentEncryptionKey)
+        let decrypter: ContentDecrypter = AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM)
         let plaintext = try! decrypter.decrypt(decryptionContext: context)
         XCTAssertEqual(expectedPlaintext, plaintext)
-    }
-
-    /// Tests the `AES` decryption implementation using the header payload interface
-    func testEncrypterHeaderPayloadInterfaceEncryptsDataA128GCM() throws {
-        let plaintext = "Live long and prosper.".data(using: .ascii)!
-        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A128GCM)
-        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A128GCM, contentEncryptionKey: contentEncryptionKey)
-            .encrypt(headerData: header.data(), payload: Payload(plaintext))
-
-        // Check if the symmetric encryption was successful by using the CryptoKit framework and not the implemented decrypt method.
-        let additionalAuthenticatedData = header.data().base64URLEncodedData()
-        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
-        let nonce = try CryptoKit.AES.GCM.Nonce(data: symmetricEncryptionContext.initializationVector)
-        let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: symmetricEncryptionContext.ciphertext, tag: symmetricEncryptionContext.authenticationTag)
-        let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
-        XCTAssertEqual(decrypted, plaintext)
-    }
-
-    /// Tests the `AES` decryption implementation using the header payload interface
-    func testEncrypterHeaderPayloadInterfaceEncryptsDataA192GCM() throws {
-        let plaintext = "Live long and prosper.".data(using: .ascii)!
-        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A192GCM)
-        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A192GCM, contentEncryptionKey: contentEncryptionKey)
-            .encrypt(headerData: header.data(), payload: Payload(plaintext))
-
-        // Check if the symmetric encryption was successful by using the CryptoKit framework and not the implemented decrypt method.
-        let additionalAuthenticatedData = header.data().base64URLEncodedData()
-        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
-        let nonce = try CryptoKit.AES.GCM.Nonce(data: symmetricEncryptionContext.initializationVector)
-        let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: symmetricEncryptionContext.ciphertext, tag: symmetricEncryptionContext.authenticationTag)
-        let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
-        XCTAssertEqual(decrypted, plaintext)
     }
 
     /// Tests the `AES` decryption implementation using the header payload interface
     func testEncrypterHeaderPayloadInterfaceEncryptsDataA256GCM() throws {
         let plaintext = "Live long and prosper.".data(using: .ascii)!
         let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A256GCM)
-        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM, contentEncryptionKey: contentEncryptionKey)
-            .encrypt(headerData: header.data(), payload: Payload(plaintext))
+        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM)
+            .encrypt(headerData: header.data(), payload: Payload(plaintext), contentEncryptionKey: contentEncryptionKey256)
 
         // Check if the symmetric encryption was successful by using the CryptoKit framework and not the implemented decrypt method.
         let additionalAuthenticatedData = header.data().base64URLEncodedData()
-        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
+        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey256)
         let nonce = try CryptoKit.AES.GCM.Nonce(data: symmetricEncryptionContext.initializationVector)
         let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: symmetricEncryptionContext.ciphertext, tag: symmetricEncryptionContext.authenticationTag)
         let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
@@ -161,14 +129,16 @@ class AESGCMEncryptionTests: XCTestCase {
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A192GCM.initializationVectorLength)
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A256GCM.initializationVectorLength)
         // verify non supported content encryption algorithm throws error upon initialization
-        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, secretKey: contentEncryptionKey)) { error in
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM)) { error in
             XCTAssertEqual(error as! JWEError, JWEError.contentEncryptionAlgorithmMismatch)
         }
         // verify key length is checked in initializer
-        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, secretKey: Data())) { error in
+        XCTAssertThrowsError(
+            try AESGCMEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM)
+                .encrypt(headerData: Data(), payload: Payload(Data()), contentEncryptionKey: Data())
+        ) { error in
             XCTAssertEqual(error as! JWEError, JWEError.keyLengthNotSatisfied)
         }
-
     }
 }
 // swiftlint:enable force_unwrapping
