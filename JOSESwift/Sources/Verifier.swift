@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol VerifierProtocol {
+public protocol VerifierProtocol {
     var algorithm: SignatureAlgorithm { get }
 
     /// Verifies a signature against a given signing input with a specific algorithm and the corresponding key.
@@ -71,6 +71,10 @@ public struct Verifier {
             }
             self.verifier = ECVerifier(algorithm: verifyingAlgorithm, publicKey: key as! ECVerifier.KeyType)
         }
+    }
+
+    public init(customVerifier verifier: VerifierProtocol) {
+        self.verifier = verifier
     }
 
     internal func verify(header: JWSHeader, and payload: Payload, against signature: Data) throws -> Bool {
