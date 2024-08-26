@@ -60,7 +60,7 @@ extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
         keyManagementAlgorithm
     }
 
-    func determineContentEncryptionKey(with jweHeader: JWEHeader) throws -> KeyManagementContext {
+    func determineContentEncryptionKey(with jweHeader: JWEHeader) throws -> EncryptionKeyManagementModeContext {
         let ecEncryption = try EC.encryptionContextFor(recipientPublicKey,
                                            algorithm: keyManagementAlgorithm,
                                            encryption: contentEncryptionAlgorithm,
@@ -72,7 +72,7 @@ extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
 
         }
 
-        return KeyManagementContext(
+        return .init(
             contentEncryptionKey: ecEncryption.contentEncryptionKey,
             encryptedKey: ecEncryption.encryptedKey,
             jweHeader: updatedJweHeader

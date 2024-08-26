@@ -41,9 +41,9 @@ extension DirectEncryptionMode: EncryptionKeyManagementMode {
     var algorithm: KeyManagementAlgorithm {
         keyManagementAlgorithm
     }
-    
-    func determineContentEncryptionKey(with _: JWEHeader) throws -> KeyManagementContext {
-        return KeyManagementContext(contentEncryptionKey: sharedSymmetricKey, encryptedKey: KeyType(), jweHeader: nil)
+
+    func determineContentEncryptionKey(with _: JWEHeader) throws -> EncryptionKeyManagementModeContext {
+        return .init(contentEncryptionKey: sharedSymmetricKey, encryptedKey: KeyType(), jweHeader: nil)
     }
 }
 

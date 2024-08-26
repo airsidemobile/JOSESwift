@@ -65,12 +65,12 @@ extension RSAKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
     var algorithm: KeyManagementAlgorithm {
         keyManagementAlgorithm
     }
-    
-    func determineContentEncryptionKey(with _: JWEHeader) throws -> KeyManagementContext {
+
+    func determineContentEncryptionKey(with _: JWEHeader) throws -> EncryptionKeyManagementModeContext {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
 
-        return KeyManagementContext(
+        return .init(
             contentEncryptionKey: contentEncryptionKey,
             encryptedKey: encryptedKey,
             jweHeader: nil

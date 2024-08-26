@@ -194,7 +194,7 @@ public struct JWE {
         } catch JWEError.keyManagementAlgorithmMismatch {
             // todo: better error type?
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
-        }  catch JWEError.contentEncryptionAlgorithmMismatch {
+        } catch JWEError.contentEncryptionAlgorithmMismatch {
             // todo: better error type?
             throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
         } catch JOSESwiftError.decompressionFailed {

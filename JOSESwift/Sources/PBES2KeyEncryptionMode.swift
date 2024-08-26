@@ -59,8 +59,8 @@ extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
     var algorithm: KeyManagementAlgorithm {
         keyManagementAlgorithm
     }
-    
-    func determineContentEncryptionKey(with header: JWEHeader) throws -> KeyManagementContext {
+
+    func determineContentEncryptionKey(with header: JWEHeader) throws -> EncryptionKeyManagementModeContext {
         var updatedHeader = header
 
         let saltInput = try SecureRandom.generate(count: pbes2SaltInputLength)
@@ -80,7 +80,7 @@ extension PBES2KeyEncryptionMode: EncryptionKeyManagementMode {
         let contentKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         let encryptedKey = try AES.wrap(rawKey: contentKey, keyEncryptionKey: derivedKey, algorithm: keyWrapAlgorithm)
 
-        return KeyManagementContext(
+        return .init(
             contentEncryptionKey: contentKey,
             encryptedKey: encryptedKey,
             jweHeader: updatedHeader
