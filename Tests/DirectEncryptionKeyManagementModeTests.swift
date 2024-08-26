@@ -29,22 +29,34 @@ class DirectEncryptionKeyManagementModeTests: XCTestCase {
     let sharedSymmetricKey = "secret".data(using: .utf8)!
 
     func testReturnsSharedSymmeyricKeyAsContentEncryptionKey() throws {
-        let keyEncryption = DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+        let header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A128CBCHS256)
+        let keyEncryption = DirectEncryptionMode(
+            keyManagementAlgorithm: .direct,
+            sharedSymmetricKey: sharedSymmetricKey
+        )
 
-        let (cek1, _) = try keyEncryption.determineContentEncryptionKey()
-        let (cek2, _) = try keyEncryption.determineContentEncryptionKey()
+        let context1 = try keyEncryption.determineContentEncryptionKey(with: header)
+        let context2 = try keyEncryption.determineContentEncryptionKey(with: header)
 
-        XCTAssertEqual(cek1, sharedSymmetricKey)
-        XCTAssertEqual(cek1, cek2)
+        XCTAssertEqual(context1.contentEncryptionKey, sharedSymmetricKey)
+        XCTAssertEqual(context1.contentEncryptionKey, context2.contentEncryptionKey)
+        XCTAssertEqual(context1.encryptedKey, context2.encryptedKey)
+        XCTAssertNil(context1.jweHeader)
+        XCTAssertNil(context2.jweHeader)
 
     }
 
     func testEncryptedKeyIsEmpty() throws {
-        let keyEncryption = DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+        let header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512)
 
-        let (_, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
+        let keyEncryption = DirectEncryptionMode(
+            keyManagementAlgorithm: .direct,
+            sharedSymmetricKey: sharedSymmetricKey
+        )
 
-        XCTAssertEqual(encryptedKey, Data())
+        let context = try keyEncryption.determineContentEncryptionKey(with: header)
+
+        XCTAssertEqual(context.encryptedKey, Data())
     }
 }
 // swiftlint:enable force_unwrapping

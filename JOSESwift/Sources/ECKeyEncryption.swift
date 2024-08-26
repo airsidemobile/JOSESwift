@@ -56,13 +56,27 @@ enum ECKeyEncryption {
 }
 
 extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
-    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data {
-
-        return try EC.encryptionContextFor(recipientPublicKey,
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+    
+    func determineContentEncryptionKey(with jweHeader: JWEHeader) throws -> KeyManagementContext {
+        let ecEncryption = try EC.encryptionContextFor(recipientPublicKey,
                                            algorithm: keyManagementAlgorithm,
                                            encryption: contentEncryptionAlgorithm,
-                                           header: header,
+                                           header: jweHeader,
                                            options: options)
+
+        guard let updatedJweHeader = JWEHeader(ecEncryption.jweHeaderData) else {
+            throw ECError.wrapKeyFail // todo: better error type?
+
+        }
+
+        return KeyManagementContext(
+            contentEncryptionKey: ecEncryption.contentEncryptionKey,
+            encryptedKey: ecEncryption.encryptedKey,
+            jweHeader: updatedJweHeader
+        )
     }
 }
 

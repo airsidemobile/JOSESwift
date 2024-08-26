@@ -44,7 +44,11 @@ struct AESKeyWrappingMode {
 }
 
 extension AESKeyWrappingMode: EncryptionKeyManagementMode {
-    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+    
+    func determineContentEncryptionKey(with _: JWEHeader) throws -> KeyManagementContext {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
 
         let encryptedKey = try AES.wrap(
@@ -53,7 +57,11 @@ extension AESKeyWrappingMode: EncryptionKeyManagementMode {
             algorithm: keyManagementAlgorithm
         )
 
-        return (contentEncryptionKey, encryptedKey)
+        return KeyManagementContext(
+            contentEncryptionKey: contentEncryptionKey,
+            encryptedKey: encryptedKey,
+            jweHeader: nil
+        )
     }
 }
 
