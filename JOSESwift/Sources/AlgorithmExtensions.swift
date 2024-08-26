@@ -29,8 +29,12 @@ extension ContentEncryptionAlgorithm {
         switch self {
         case .A256CBCHS512:
             return 64
+        case .A192CBCHS384:
+            return 48
         case .A128CBCHS256, .A256GCM:
             return 32
+        case .A192GCM:
+            return 24
         case .A128GCM:
             return 16
         }
@@ -38,9 +42,9 @@ extension ContentEncryptionAlgorithm {
 
     var initializationVectorLength: Int {
         switch self {
-        case .A128CBCHS256, .A256CBCHS512:
+        case .A128CBCHS256, .A192CBCHS384, .A256CBCHS512:
             return 16
-        case .A256GCM, .A128GCM:
+        case .A256GCM, .A192GCM, .A128GCM:
             return 12
         }
     }

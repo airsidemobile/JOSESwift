@@ -104,7 +104,39 @@ class AESGCMEncryptionTests: XCTestCase {
     }
 
     /// Tests the `AES` decryption implementation using the header payload interface
-    func testEncrypterHeaderPayloadInterfaceEncryptsData() throws {
+    func testEncrypterHeaderPayloadInterfaceEncryptsDataA128GCM() throws {
+        let plaintext = "Live long and prosper.".data(using: .ascii)!
+        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A128GCM)
+        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A128GCM, contentEncryptionKey: contentEncryptionKey)
+            .encrypt(headerData: header.data(), payload: Payload(plaintext))
+
+        // Check if the symmetric encryption was successful by using the CryptoKit framework and not the implemented decrypt method.
+        let additionalAuthenticatedData = header.data().base64URLEncodedData()
+        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
+        let nonce = try CryptoKit.AES.GCM.Nonce(data: symmetricEncryptionContext.initializationVector)
+        let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: symmetricEncryptionContext.ciphertext, tag: symmetricEncryptionContext.authenticationTag)
+        let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
+        XCTAssertEqual(decrypted, plaintext)
+    }
+
+    /// Tests the `AES` decryption implementation using the header payload interface
+    func testEncrypterHeaderPayloadInterfaceEncryptsDataA192GCM() throws {
+        let plaintext = "Live long and prosper.".data(using: .ascii)!
+        let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A192GCM)
+        let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A192GCM, contentEncryptionKey: contentEncryptionKey)
+            .encrypt(headerData: header.data(), payload: Payload(plaintext))
+
+        // Check if the symmetric encryption was successful by using the CryptoKit framework and not the implemented decrypt method.
+        let additionalAuthenticatedData = header.data().base64URLEncodedData()
+        let key = CryptoKit.SymmetricKey(data: contentEncryptionKey)
+        let nonce = try CryptoKit.AES.GCM.Nonce(data: symmetricEncryptionContext.initializationVector)
+        let encrypted = try CryptoKit.AES.GCM.SealedBox(nonce: nonce, ciphertext: symmetricEncryptionContext.ciphertext, tag: symmetricEncryptionContext.authenticationTag)
+        let decrypted = try CryptoKit.AES.GCM.open(encrypted, using: key, authenticating: additionalAuthenticatedData)
+        XCTAssertEqual(decrypted, plaintext)
+    }
+
+    /// Tests the `AES` decryption implementation using the header payload interface
+    func testEncrypterHeaderPayloadInterfaceEncryptsDataA256GCM() throws {
         let plaintext = "Live long and prosper.".data(using: .ascii)!
         let header = JWEHeader(keyManagementAlgorithm: .RSAOAEP256, contentEncryptionAlgorithm: .A256GCM)
         let symmetricEncryptionContext = try AESGCMEncryption(contentEncryptionAlgorithm: .A256GCM, contentEncryptionKey: contentEncryptionKey)
@@ -122,8 +154,11 @@ class AESGCMEncryptionTests: XCTestCase {
     func testContentEncryptionAlgorithmFeatures() {
         // verify key length
         XCTAssertEqual(32, ContentEncryptionAlgorithm.A256GCM.keyLength)
+        XCTAssertEqual(24, ContentEncryptionAlgorithm.A192GCM.keyLength)
         XCTAssertEqual(16, ContentEncryptionAlgorithm.A128GCM.keyLength)
         // verify iv length
+        XCTAssertEqual(12, ContentEncryptionAlgorithm.A128GCM.initializationVectorLength)
+        XCTAssertEqual(12, ContentEncryptionAlgorithm.A192GCM.initializationVectorLength)
         XCTAssertEqual(12, ContentEncryptionAlgorithm.A256GCM.initializationVectorLength)
         // verify non supported content encryption algorithm throws error upon initialization
         XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM, secretKey: contentEncryptionKey)) { error in
