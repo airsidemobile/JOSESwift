@@ -5,7 +5,7 @@
 //  Created by Tobias Hagemann on 12.08.22.
 //
 //  ---------------------------------------------------------------------------
-//  Copyright 2022 Airside Mobile Inc.
+//  Copyright 2024 Airside Mobile Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
