@@ -377,68 +377,7 @@
 			name = Common;
 			sourceTree = "<group>";
 		};
-		653355281F8F6B4A00A660C6 /* JWE */ = {
-			isa = PBXGroup;
-			children = (
-				6558164523F44EBF00EA5FEC /* KeyManagementMode */,
-				6558164B23F45CAC00EA5FEC /* ContentEncryption */,
-				8A4B08B12213FF0600828536 /* Compressor.swift */,
-				6533552D1F8FB61000A660C6 /* JWE.swift */,
-				653355291F8F6B6800A660C6 /* JWEHeader.swift */,
-				65617FCA1F90F8C700D8C743 /* Encrypter.swift */,
-				6572C2F11F96428800D4186D /* Decrypter.swift */,
-			);
-			name = JWE;
-			sourceTree = "<group>";
-		};
-		6558164123F4390D00EA5FEC /* KeyEncryption */ = {
-			isa = PBXGroup;
-			children = (
-				65617FCC1F90FB7600D8C743 /* RSAKeyEncryptionMode.swift */,
-				396DD6D4257FB0E8008353B9 /* ECKeyEncryption.swift */,
-				74BBAD6F2B2B072900ABEA95 /* PBES2KeyEncryptionMode.swift */,
-			);
-			name = KeyEncryption;
-			sourceTree = "<group>";
-		};
-		6558164223F44E4700EA5FEC /* DirectEncryption */ = {
-			isa = PBXGroup;
-			children = (
-				6558164323F44E8C00EA5FEC /* DirectEncryptionMode.swift */,
-			);
-			name = DirectEncryption;
-			sourceTree = "<group>";
-		};
-		6558164523F44EBF00EA5FEC /* KeyManagementMode */ = {
-			isa = PBXGroup;
-			children = (
-				6558164923F456F700EA5FEC /* KeyManagementMode.swift */,
-				6558164123F4390D00EA5FEC /* KeyEncryption */,
-				657D0F7523FAE4B5004A7975 /* KeyWrapping */,
-				6558164223F44E4700EA5FEC /* DirectEncryption */,
-			);
-			name = KeyManagementMode;
-			sourceTree = "<group>";
-		};
-		6558164B23F45CAC00EA5FEC /* ContentEncryption */ = {
-			isa = PBXGroup;
-			children = (
-				6558164C23F45CC200EA5FEC /* ContentEncryption.swift */,
-				6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */,
-				74618E4D28A64EBA0028B066 /* AESGCMEncryption.swift */,
-			);
-			name = ContentEncryption;
-			sourceTree = "<group>";
-		};
-		657D0F7523FAE4B5004A7975 /* KeyWrapping */ = {
-			isa = PBXGroup;
-			children = (
-				657D0F7623FAE857004A7975 /* AESKeyWrappingMode.swift */,
-			);
-			name = KeyWrapping;
-			sourceTree = "<group>";
-		};
-		6582C0BB1F4B09DC00B153D5 /* Common */ = {
+		653CECAD2C7DC6BF007A89E0 /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				65A77E931F7285A900A66DDE /* JOSEHeader.swift */,
@@ -449,9 +388,284 @@
 				65D1D0661F7A878D006377CD /* Deserializer.swift */,
 				C8610F082029B15600859FCC /* Algorithms.swift */,
 				658EE1AE23F4067D00B6E967 /* AlgorithmExtensions.swift */,
+				6514ADC82031DD15008A4DD3 /* ASN1DEREncoding.swift */,
+				6582614E2029F2D100B594ED /* ASN1DERParsing.swift */,
 				C86B876C203D857B00208387 /* JOSESwiftError.swift */,
 			);
-			name = Common;
+			path = Common;
+			sourceTree = "<group>";
+		};
+		653CECAE2C7DC6E0007A89E0 /* JWS */ = {
+			isa = PBXGroup;
+			children = (
+				C85B1EF1204D82640026BDCB /* JWS.swift */,
+				6571F6221F7BF786004D53C5 /* JWSHeader.swift */,
+				C85B1EF3204D82860026BDCB /* Signer.swift */,
+				65D868101F7CEBA200769BBF /* Verifier.swift */,
+				653CECB02C7DC716007A89E0 /* DefaultCrypto */,
+			);
+			path = JWS;
+			sourceTree = "<group>";
+		};
+		653CECB02C7DC716007A89E0 /* DefaultCrypto */ = {
+			isa = PBXGroup;
+			children = (
+				653CECB32C7DC75A007A89E0 /* EC */,
+				653CECB22C7DC74A007A89E0 /* RSA */,
+				653CECB12C7DC742007A89E0 /* HMAC */,
+			);
+			path = DefaultCrypto;
+			sourceTree = "<group>";
+		};
+		653CECB12C7DC742007A89E0 /* HMAC */ = {
+			isa = PBXGroup;
+			children = (
+				7402BE922626FC4A0012801E /* HMACSigner.swift */,
+				7402BE962626FC610012801E /* HMACVerifier.swift */,
+			);
+			path = HMAC;
+			sourceTree = "<group>";
+		};
+		653CECB22C7DC74A007A89E0 /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
+				C85B1EF5204D82970026BDCB /* RSASigner.swift */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		653CECB32C7DC75A007A89E0 /* EC */ = {
+			isa = PBXGroup;
+			children = (
+				5FB76AF2833DDD77D56D6D3F /* ECSigner.swift */,
+				5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */,
+			);
+			path = EC;
+			sourceTree = "<group>";
+		};
+		653CECB42C7DC789007A89E0 /* JWE */ = {
+			isa = PBXGroup;
+			children = (
+				6533552D1F8FB61000A660C6 /* JWE.swift */,
+				653355291F8F6B6800A660C6 /* JWEHeader.swift */,
+				65617FCA1F90F8C700D8C743 /* Encrypter.swift */,
+				6572C2F11F96428800D4186D /* Decrypter.swift */,
+				653CECB62C7DC7C3007A89E0 /* KeyManagement */,
+				653CECBC2C7DC883007A89E0 /* ContentEncryption */,
+				8A30B8F622118FD0001834E3 /* Compression */,
+			);
+			path = JWE;
+			sourceTree = "<group>";
+		};
+		653CECB52C7DC79C007A89E0 /* DefaultCrypto */ = {
+			isa = PBXGroup;
+			children = (
+				653CECBB2C7DC86D007A89E0 /* DirectEncryption */,
+				653CECBA2C7DC82E007A89E0 /* AESKW */,
+				653CECB92C7DC81E007A89E0 /* PBES2 */,
+				653CECB82C7DC80F007A89E0 /* EC */,
+				653CECB72C7DC7D8007A89E0 /* RSA */,
+			);
+			path = DefaultCrypto;
+			sourceTree = "<group>";
+		};
+		653CECB62C7DC7C3007A89E0 /* KeyManagement */ = {
+			isa = PBXGroup;
+			children = (
+				6558164923F456F700EA5FEC /* KeyManagementMode.swift */,
+				653CECB52C7DC79C007A89E0 /* DefaultCrypto */,
+			);
+			path = KeyManagement;
+			sourceTree = "<group>";
+		};
+		653CECB72C7DC7D8007A89E0 /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				65617FCC1F90FB7600D8C743 /* RSAKeyEncryptionMode.swift */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		653CECB82C7DC80F007A89E0 /* EC */ = {
+			isa = PBXGroup;
+			children = (
+				396DD6D4257FB0E8008353B9 /* ECKeyEncryption.swift */,
+			);
+			path = EC;
+			sourceTree = "<group>";
+		};
+		653CECB92C7DC81E007A89E0 /* PBES2 */ = {
+			isa = PBXGroup;
+			children = (
+				74BBAD6F2B2B072900ABEA95 /* PBES2KeyEncryptionMode.swift */,
+			);
+			path = PBES2;
+			sourceTree = "<group>";
+		};
+		653CECBA2C7DC82E007A89E0 /* AESKW */ = {
+			isa = PBXGroup;
+			children = (
+				657D0F7623FAE857004A7975 /* AESKeyWrappingMode.swift */,
+			);
+			path = AESKW;
+			sourceTree = "<group>";
+		};
+		653CECBB2C7DC86D007A89E0 /* DirectEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				6558164323F44E8C00EA5FEC /* DirectEncryptionMode.swift */,
+			);
+			path = DirectEncryption;
+			sourceTree = "<group>";
+		};
+		653CECBC2C7DC883007A89E0 /* ContentEncryption */ = {
+			isa = PBXGroup;
+			children = (
+				6558164C23F45CC200EA5FEC /* ContentEncryption.swift */,
+				653CECBD2C7DC89A007A89E0 /* DefaultCrypto */,
+			);
+			path = ContentEncryption;
+			sourceTree = "<group>";
+		};
+		653CECBD2C7DC89A007A89E0 /* DefaultCrypto */ = {
+			isa = PBXGroup;
+			children = (
+				653CECBF2C7DC8B1007A89E0 /* AESGCM */,
+				653CECBE2C7DC8A2007A89E0 /* AESCBC */,
+			);
+			path = DefaultCrypto;
+			sourceTree = "<group>";
+		};
+		653CECBE2C7DC8A2007A89E0 /* AESCBC */ = {
+			isa = PBXGroup;
+			children = (
+				6558164F23F463C200EA5FEC /* AESCBCEncryption.swift */,
+			);
+			path = AESCBC;
+			sourceTree = "<group>";
+		};
+		653CECBF2C7DC8B1007A89E0 /* AESGCM */ = {
+			isa = PBXGroup;
+			children = (
+				74618E4D28A64EBA0028B066 /* AESGCMEncryption.swift */,
+			);
+			path = AESGCM;
+			sourceTree = "<group>";
+		};
+		653CECC12C7DC9A9007A89E0 /* JWK */ = {
+			isa = PBXGroup;
+			children = (
+				65F44EB01FE2D941000C5EA0 /* JWK.swift */,
+				65E733D01FEBF7960009EAC6 /* JWKParameters.swift */,
+				65E733CB1FEBE8320009EAC6 /* JWKExtensions.swift */,
+				653656082035D86E00A3AC3B /* JWKSet.swift */,
+				6536560C2035DF8300A3AC3B /* JWKSetCodable.swift */,
+				653CECC52C7DC9F9007A89E0 /* Symmetric */,
+				653CECC42C7DC9F3007A89E0 /* EC */,
+				653CECC32C7DC9EC007A89E0 /* RSA */,
+			);
+			path = JWK;
+			sourceTree = "<group>";
+		};
+		653CECC32C7DC9EC007A89E0 /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
+				65826AB12028696000AFFC46 /* RSAKeyCodable.swift */,
+				6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */,
+				6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		653CECC42C7DC9F3007A89E0 /* EC */ = {
+			isa = PBXGroup;
+			children = (
+				5FB76A41AECF99F3673C1C40 /* ECKeys.swift */,
+				5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */,
+				396DD6DE257FB13C008353B9 /* ECKeyPair.swift */,
+				5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */,
+				5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */,
+				5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */,
+				5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */,
+			);
+			path = EC;
+			sourceTree = "<group>";
+		};
+		653CECC52C7DC9F9007A89E0 /* Symmetric */ = {
+			isa = PBXGroup;
+			children = (
+				65344C3D20F4CC9000FCBBA1 /* DataSymmetricKey.swift */,
+				65D8E8E720F499EF0059506A /* SymmetricKeys.swift */,
+				65D8E8E920F4AF880059506A /* SymmetricKeyCodable.swift */,
+			);
+			path = Symmetric;
+			sourceTree = "<group>";
+		};
+		653CECC62C7DCB1E007A89E0 /* HMAC */ = {
+			isa = PBXGroup;
+			children = (
+				C81DD9271FD7096100026024 /* HMAC.swift */,
+			);
+			path = HMAC;
+			sourceTree = "<group>";
+		};
+		653CECC72C7DCB2B007A89E0 /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				C8610F0A2029D21800859FCC /* RSA.swift */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		653CECC82C7DCB32007A89E0 /* AESCBC */ = {
+			isa = PBXGroup;
+			children = (
+				C81DBD571FFE66E700ECF69E /* AES.swift */,
+			);
+			path = AESCBC;
+			sourceTree = "<group>";
+		};
+		653CECC92C7DCB45007A89E0 /* AESGCM */ = {
+			isa = PBXGroup;
+			children = (
+				8A5B190B2BF260F100A250EB /* AESGCM.swift */,
+			);
+			path = AESGCM;
+			sourceTree = "<group>";
+		};
+		653CECCA2C7DCB4C007A89E0 /* EC */ = {
+			isa = PBXGroup;
+			children = (
+				5FB760DB390F90F91102DB74 /* EC.swift */,
+				396DD6D0257FB068008353B9 /* ECDHKeyAgreement.swift */,
+			);
+			path = EC;
+			sourceTree = "<group>";
+		};
+		653CECCB2C7DCB5C007A89E0 /* PBES2 */ = {
+			isa = PBXGroup;
+			children = (
+				74BBAD6D2B2B070200ABEA95 /* PBES2.swift */,
+			);
+			path = PBES2;
+			sourceTree = "<group>";
+		};
+		653CECCC2C7DCB8C007A89E0 /* Randomness */ = {
+			isa = PBXGroup;
+			children = (
+				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
+			);
+			path = Randomness;
+			sourceTree = "<group>";
+		};
+		653CECCD2C7DCBC8007A89E0 /* SHA */ = {
+			isa = PBXGroup;
+			children = (
+				612B0C93248E1C83009F1929 /* Thumbprint.swift */,
+			);
+			path = SHA;
 			sourceTree = "<group>";
 		};
 		65A9D3D81F45CDD7004E0B61 /* Tests */ = {
@@ -471,13 +685,11 @@
 		65A9D3E21F45CDF1004E0B61 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				8A30B8F622118FD0001834E3 /* CompressionImplementation */,
-				6582C0BB1F4B09DC00B153D5 /* Common */,
-				65FABAEB1F4AD8FA006D7679 /* JWS */,
-				653355281F8F6B4A00A660C6 /* JWE */,
-				65E9CE201FE2AB06005DF679 /* JWK */,
-				65FABAE81F4ABF61006D7679 /* CryptoInterface */,
-				C86B876B203D84D300208387 /* CryptoImplementation */,
+				653CECAD2C7DC6BF007A89E0 /* Common */,
+				653CECB42C7DC789007A89E0 /* JWE */,
+				653CECAE2C7DC6E0007A89E0 /* JWS */,
+				653CECC12C7DC9A9007A89E0 /* JWK */,
+				C86B876B203D84D300208387 /* CryptoPrimitives */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -522,50 +734,6 @@
 			name = JWK;
 			sourceTree = "<group>";
 		};
-		65E9CE201FE2AB06005DF679 /* JWK */ = {
-			isa = PBXGroup;
-			children = (
-				65F44EB01FE2D941000C5EA0 /* JWK.swift */,
-				65E733D01FEBF7960009EAC6 /* JWKParameters.swift */,
-				65E733CB1FEBE8320009EAC6 /* JWKExtensions.swift */,
-				653656082035D86E00A3AC3B /* JWKSet.swift */,
-				6536560C2035DF8300A3AC3B /* JWKSetCodable.swift */,
-				65F44EB21FE2E1C6000C5EA0 /* RSAKeys.swift */,
-				65D8E8E720F499EF0059506A /* SymmetricKeys.swift */,
-				65D8E8E920F4AF880059506A /* SymmetricKeyCodable.swift */,
-				65826AB12028696000AFFC46 /* RSAKeyCodable.swift */,
-				6582614E2029F2D100B594ED /* ASN1DERParsing.swift */,
-				6514ADC82031DD15008A4DD3 /* ASN1DEREncoding.swift */,
-				5FB76A41AECF99F3673C1C40 /* ECKeys.swift */,
-				5FB76EBD36093E9EC475BC2B /* ECKeyCodable.swift */,
-			);
-			name = JWK;
-			sourceTree = "<group>";
-		};
-		65FABAE81F4ABF61006D7679 /* CryptoInterface */ = {
-			isa = PBXGroup;
-			children = (
-				7402BE922626FC4A0012801E /* HMACSigner.swift */,
-				7402BE962626FC610012801E /* HMACVerifier.swift */,
-				C85B1EF5204D82970026BDCB /* RSASigner.swift */,
-				65D8680E1F7CE35000769BBF /* RSAVerifier.swift */,
-				5FB76AF2833DDD77D56D6D3F /* ECSigner.swift */,
-				5FB767ECBB50E5A47C671DC1 /* ECVerifier.swift */,
-			);
-			name = CryptoInterface;
-			sourceTree = "<group>";
-		};
-		65FABAEB1F4AD8FA006D7679 /* JWS */ = {
-			isa = PBXGroup;
-			children = (
-				C85B1EF1204D82640026BDCB /* JWS.swift */,
-				6571F6221F7BF786004D53C5 /* JWSHeader.swift */,
-				C85B1EF3204D82860026BDCB /* Signer.swift */,
-				65D868101F7CEBA200769BBF /* Verifier.swift */,
-			);
-			name = JWS;
-			sourceTree = "<group>";
-		};
 		65FBFDD81F45CC7C005C7D68 = {
 			isa = PBXGroup;
 			children = (
@@ -594,12 +762,13 @@
 			path = JOSESwift;
 			sourceTree = "<group>";
 		};
-		8A30B8F622118FD0001834E3 /* CompressionImplementation */ = {
+		8A30B8F622118FD0001834E3 /* Compression */ = {
 			isa = PBXGroup;
 			children = (
+				8A4B08B12213FF0600828536 /* Compressor.swift */,
 				8A30B8F722118FD0001834E3 /* DeflateWrapper.swift */,
 			);
-			path = CompressionImplementation;
+			path = Compression;
 			sourceTree = "<group>";
 		};
 		C8610F54202DD93600859FCC /* Frameworks */ = {
@@ -609,28 +778,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C86B876B203D84D300208387 /* CryptoImplementation */ = {
+		C86B876B203D84D300208387 /* CryptoPrimitives */ = {
 			isa = PBXGroup;
 			children = (
-				6582614C2029E98A00B594ED /* DataRSAPublicKey.swift */,
-				65344C3D20F4CC9000FCBBA1 /* DataSymmetricKey.swift */,
-				6546FB0E2029DD10002E421F /* SecKeyRSAPublicKey.swift */,
-				C85012E21FE04E0C00EC49FA /* SecureRandom.swift */,
-				C81DD9271FD7096100026024 /* HMAC.swift */,
-				C81DBD571FFE66E700ECF69E /* AES.swift */,
-				8A5B190B2BF260F100A250EB /* AESGCM.swift */,
-				C8610F0A2029D21800859FCC /* RSA.swift */,
-				5FB760DB390F90F91102DB74 /* EC.swift */,
-				74BBAD6D2B2B070200ABEA95 /* PBES2.swift */,
-				5FB76CEA2BD69C2AF38D2AFC /* SecKeyECPublicKey.swift */,
-				5FB763EED5A790CCC29F8771 /* DataECPublicKey.swift */,
-				5FB7604267B94DC5091D7105 /* DataECPrivateKey.swift */,
-				5FB76E4A3A52AAC72B1F33F0 /* SecKeyECPrivateKey.swift */,
-				612B0C93248E1C83009F1929 /* Thumbprint.swift */,
-				396DD6D0257FB068008353B9 /* ECDHKeyAgreement.swift */,
-				396DD6DE257FB13C008353B9 /* ECKeyPair.swift */,
+				653CECCC2C7DCB8C007A89E0 /* Randomness */,
+				653CECCB2C7DCB5C007A89E0 /* PBES2 */,
+				653CECCA2C7DCB4C007A89E0 /* EC */,
+				653CECC92C7DCB45007A89E0 /* AESGCM */,
+				653CECC82C7DCB32007A89E0 /* AESCBC */,
+				653CECC72C7DCB2B007A89E0 /* RSA */,
+				653CECC62C7DCB1E007A89E0 /* HMAC */,
+				653CECCD2C7DCBC8007A89E0 /* SHA */,
 			);
-			path = CryptoImplementation;
+			path = CryptoPrimitives;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
