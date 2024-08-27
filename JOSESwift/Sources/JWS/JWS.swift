@@ -116,54 +116,6 @@ public struct JWS {
         self.signature = signature
     }
 
-    /// Checks whether the JWS's signature is valid using a given public key.
-    ///
-    /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
-    /// - Returns: `true` if the JWS's signature is valid for the given key and the JWS's header and payload.
-    ///            `false` if the signature is not valid or if the singature could not be verified.
-    @available(*, deprecated, message: "Use `isValid(for verifier:)` instead")
-    public func isValid<KeyType>(for publicKey: KeyType) -> Bool {
-        guard let alg = header.algorithm else {
-            return false
-        }
-
-        guard let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey) else {
-            return false
-        }
-
-        do {
-            return try verifier.verify(header: header, and: payload, against: signature)
-        } catch {
-            return false
-        }
-    }
-
-    /// Checks whether the JWS's signature is valid using a given public key.
-    ///
-    /// - Parameter publicKey: The public key whose corresponding private key signed the JWS.
-    /// - Returns: The JWS on which this function was called if the signature is valid.
-    /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occured during signature validation.
-    @available(*, deprecated, message: "Use `validate(using verifier:)` instead")
-    public func validate<KeyType>(with publicKey: KeyType) throws -> JWS {
-        guard let alg = header.algorithm else {
-            throw JOSESwiftError.signingAlgorithmMismatch
-        }
-
-        guard let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey) else {
-            throw JOSESwiftError.verifyingFailed(description: "Wrong key type.")
-        }
-
-        do {
-            guard try verifier.verify(header: header, and: payload, against: signature) else {
-                throw JOSESwiftError.signatureInvalid
-            }
-        } catch {
-            throw JOSESwiftError.verifyingFailed(description: error.localizedDescription)
-        }
-
-        return self
-    }
-
     /// Checks whether the JWS's signature is valid using a given verifier.
     ///
     /// - Parameter verifier: The verifier containing the public key whose corresponding private key signed the JWS.

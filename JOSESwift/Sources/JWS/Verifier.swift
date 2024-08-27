@@ -96,12 +96,3 @@ public struct Verifier {
         return try verifier.verify(signingInput, against: signature)
     }
 }
-
-// MARK: - Deprecated API
-
-extension Verifier {
-    @available(*, deprecated, message: "Use `init?(verifyingAlgorithm: SignatureAlgorithm, key: KeyType)` instead")
-    public init?<KeyType>(verifyingAlgorithm: SignatureAlgorithm, publicKey: KeyType) {
-        self.init(verifyingAlgorithm: verifyingAlgorithm, key: publicKey)
-    }
-}

@@ -119,32 +119,3 @@ extension Encrypter {
         let initializationVector: Data
     }
 }
-
-// MARK: - Deprecated API
-
-extension Encrypter {
-    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
-    public init?<KeyType>(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, encryptionKey key: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyManagementAlgorithm: keyEncryptionAlgorithm, contentEncryptionAlgorithm: contentEncyptionAlgorithm, encryptionKey: key)
-    }
-
-    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:encryptionKey:)` instead")
-    public init?<KeyType>(keyEncryptionAlgorithm: AsymmetricKeyAlgorithm, keyEncryptionKey kek: KeyType, contentEncyptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyEncryptionAlgorithm: keyEncryptionAlgorithm, encryptionKey: kek, contentEncyptionAlgorithm: contentEncyptionAlgorithm)
-    }
-}
-
-@available(*, deprecated, message: "This type will be removed with the next major release.")
-public struct EncryptionContext {
-    let encryptedKey: Data
-    let ciphertext: Data
-    let authenticationTag: Data
-    let initializationVector: Data
-}
-
-@available(*, deprecated, message: "This type will be removed with the next major release.")
-public struct SymmetricEncryptionContext {
-    let ciphertext: Data
-    let authenticationTag: Data
-    let initializationVector: Data
-}

@@ -27,7 +27,6 @@ import XCTest
 
 class JWSECTests: ECCryptoTestCase {
 
-    @available(*, deprecated)
     func testSignAndSerialize() {
         allTestData.forEach { testData in
             self.performTestECSign(testData: testData)
@@ -42,12 +41,12 @@ class JWSECTests: ECCryptoTestCase {
 
     // MARK: - EC Tests
 
-    @available(*, deprecated)
     private func performTestECSign(testData: ECTestKeyData) {
         let algorithm = SignatureAlgorithm(rawValue: testData.signatureAlgorithm)!
         let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(plainTextPayload.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: testData.privateKey)!
+        let signer = Signer(signingAlgorithm: algorithm, key: testData.privateKey)!
+        let verifier = Verifier(verifyingAlgorithm: algorithm, key: testData.publicKey)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compact = jws.compactSerializedString
         let splitCompact = compact.split(separator: ".")
@@ -59,7 +58,7 @@ class JWSECTests: ECCryptoTestCase {
 
         let secondJWS = try! JWS(compactSerialization: compact)
 
-        XCTAssertTrue(secondJWS.isValid(for: testData.publicKey))
+        XCTAssertTrue(secondJWS.isValid(for: verifier))
     }
 
     private func performTestECDeserialization(testData: ECTestKeyData) {
