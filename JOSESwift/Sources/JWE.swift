@@ -37,7 +37,7 @@ internal enum JWEError: Error {
 /// As discussed, it is the responsibility of the framework user to cache e.g. the plaintext. Of course this will have to be communicated clearly.
 public struct JWE {
     /// The JWE's JOSE Header.
-    public var header: JWEHeader
+    public let header: JWEHeader
 
     /// The encrypted content encryption key (CEK).
     public let encryptedKey: Data
@@ -71,11 +71,9 @@ public struct JWE {
     ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
     public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
-        self.header = header
-
         var encryptionContext: Encrypter.EncryptionContext
         do {
-            encryptionContext = try encrypter.encrypt(header: &self.header, payload: payload.compressed(using: header.compressionAlgorithm))
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload.compressed(using: header.compressionAlgorithm))
         } catch JOSESwiftError.compressionFailed {
             throw JOSESwiftError.compressionFailed
         } catch JOSESwiftError.compressionAlgorithmNotSupported {
@@ -84,6 +82,7 @@ public struct JWE {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
 
+        self.header = encryptionContext.jweHeader
         self.encryptedKey = encryptionContext.encryptedKey
         self.ciphertext = encryptionContext.ciphertext
         self.initializationVector = encryptionContext.initializationVector
@@ -187,17 +186,14 @@ public struct JWE {
             authenticationTag: authenticationTag
         )
 
-        guard
-            decrypter.keyManagementAlgorithm == header.keyManagementAlgorithm,
-            decrypter.contentEncryptionAlgorithm == header.contentEncryptionAlgorithm
-        else {
-            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
-        }
-
         do {
             let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
             let decryptedData = try decrypter.decrypt(context)
             return Payload(try compressor.decompress(data: decryptedData))
+        } catch JWEError.keyManagementAlgorithmMismatch {
+            throw JOSESwiftError.keyManagementAlrgorithmMismatch
+        } catch JWEError.contentEncryptionAlgorithmMismatch {
+            throw JOSESwiftError.contentEncryptionAlgorithmMismatch
         } catch JOSESwiftError.decompressionFailed {
             throw JOSESwiftError.decompressionFailed
         } catch JOSESwiftError.compressionAlgorithmNotSupported {

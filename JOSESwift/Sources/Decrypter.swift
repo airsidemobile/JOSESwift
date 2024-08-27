@@ -25,9 +25,7 @@ import Foundation
 
 public struct Decrypter {
     private let keyManagementMode: DecryptionKeyManagementMode
-
-    let keyManagementAlgorithm: KeyManagementAlgorithm
-    let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentDecrypter: ContentDecrypter
 
     /// Constructs a decrypter that can be used to decrypt a JWE.
     ///
@@ -44,9 +42,6 @@ public struct Decrypter {
         contentEncryptionAlgorithm: ContentEncryptionAlgorithm,
         decryptionKey: KeyType
     ) {
-        self.keyManagementAlgorithm = keyManagementAlgorithm
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-
         let mode = keyManagementAlgorithm.makeDecryptionKeyManagementMode(
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             decryptionKey: decryptionKey
@@ -54,36 +49,55 @@ public struct Decrypter {
 
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode
+
+        let decrypter = try? contentEncryptionAlgorithm.makeContentDecrypter()
+        guard let contentDecrypter = decrypter else { return nil }
+        self.contentDecrypter = contentDecrypter
+    }
+
+    /// Constructs an decrypter used to decrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyManagementMode: A custom key management implementation.
+    ///   - contentEncrypter: A custom content decryption implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Decrypter`.
+    public init(
+        customKeyManagementMode keyManagementMode: DecryptionKeyManagementMode,
+        customContentDecrypter contentDecrypter: ContentDecrypter
+    ) {
+        self.keyManagementMode = keyManagementMode
+        self.contentDecrypter = contentDecrypter
     }
 
     internal func decrypt(_ context: DecryptionContext) throws -> Data {
-        guard let alg = context.protectedHeader.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
+        guard
+            let headerAlg = context.protectedHeader.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
+        else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = context.protectedHeader.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard
+            let headerEnc = context.protectedHeader.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
+        else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        var contentEncryptionKey = Data()
-
-        if alg.shouldContainEphemeralPublicKey || alg.shouldContainPasswordBasedEncryptionScheme {
-            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey,
-                                                                                       header: context.protectedHeader)
-        } else {
-            contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(from: context.encryptedKey)
-        }
+        let contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(
+            from: context.encryptedKey,
+            with: context.protectedHeader
+        )
 
         let contentDecryptionContext = ContentDecryptionContext(
             ciphertext: context.ciphertext,
             initializationVector: context.initializationVector,
             additionalAuthenticatedData: context.protectedHeader.data().base64URLEncodedData(),
-            authenticationTag: context.authenticationTag
+            authenticationTag: context.authenticationTag,
+            contentEncryptionKey: contentEncryptionKey
         )
 
-        return try contentEncryptionAlgorithm
-            .makeContentDecrypter(contentEncryptionKey: contentEncryptionKey)
-            .decrypt(decryptionContext: contentDecryptionContext)
+        return try contentDecrypter.decrypt(decryptionContext: contentDecryptionContext)
     }
 }
 

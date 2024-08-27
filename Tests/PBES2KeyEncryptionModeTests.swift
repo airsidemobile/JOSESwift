@@ -42,16 +42,9 @@ class PBES2KeyEncryptionModeTests: XCTestCase {
 
         XCTAssertEqual(keyManagementMode.pbes2SaltInputLength, 8)
 
-        let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-        let keyManagementEncryptionContext = try! JSONDecoder().decode(
-            Encrypter.PBES2EncryptionContext.self,
-            from: keyManagementEncryptionContextData
-        )
-
-        let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
-
-        XCTAssertEqual(updatedJWEHeader.p2s!.count, 8)
+        XCTAssertEqual(context.jweHeader!.p2s!.count, 8)
     }
 
     func testOkCustomSaltInputLengthGetsAccepted() throws {
@@ -69,16 +62,9 @@ class PBES2KeyEncryptionModeTests: XCTestCase {
 
         XCTAssertEqual(keyManagementMode.pbes2SaltInputLength, 16)
 
-        let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-        let keyManagementEncryptionContext = try! JSONDecoder().decode(
-            Encrypter.PBES2EncryptionContext.self,
-            from: keyManagementEncryptionContextData
-        )
-
-        let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
-
-        XCTAssertEqual(updatedJWEHeader.p2s!.count, 16)
+        XCTAssertEqual(context.jweHeader!.p2s!.count, 16)
     }
 
     func testWrongCustomSaltInputLengthGetsIgnored() throws {
@@ -96,16 +82,9 @@ class PBES2KeyEncryptionModeTests: XCTestCase {
 
         XCTAssertEqual(keyManagementMode.pbes2SaltInputLength, 8)
 
-        let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-        let keyManagementEncryptionContext = try! JSONDecoder().decode(
-            Encrypter.PBES2EncryptionContext.self,
-            from: keyManagementEncryptionContextData
-        )
-
-        let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
-
-        XCTAssertEqual(updatedJWEHeader.p2s!.count, 8)
+        XCTAssertEqual(context.jweHeader!.p2s!.count, 8)
     }
 
     func testHeaderSaltInputGetsIgnored() throws {
@@ -125,16 +104,9 @@ class PBES2KeyEncryptionModeTests: XCTestCase {
 
         XCTAssertEqual(keyManagementMode.pbes2SaltInputLength, 8)
 
-        let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-        let keyManagementEncryptionContext = try! JSONDecoder().decode(
-            Encrypter.PBES2EncryptionContext.self,
-            from: keyManagementEncryptionContextData
-        )
-
-        let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
-
-        XCTAssertEqual(updatedJWEHeader.p2s!.count, 8)
+        XCTAssertEqual(context.jweHeader!.p2s!.count, 8)
     }
 
     func testDefaultIterationCount() throws {
@@ -149,42 +121,28 @@ class PBES2KeyEncryptionModeTests: XCTestCase {
             password: testDummyPassword
         )
 
-        let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-        let keyManagementEncryptionContext = try! JSONDecoder().decode(
-            Encrypter.PBES2EncryptionContext.self,
-            from: keyManagementEncryptionContextData
+        XCTAssertEqual(context.jweHeader!.p2c!, 1_000)
+    }
+
+    func testCustomIterationCountGetsAccepted() throws {
+        var jweHeader = JWEHeader(
+            keyManagementAlgorithm: .PBES2_HS256_A128KW,
+            contentEncryptionAlgorithm: .A128CBCHS256
         )
 
-        let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
+        jweHeader.p2c = 1_000_000
 
-        XCTAssertEqual(updatedJWEHeader.p2c!, 1_000)
+        let keyManagementMode = PBES2KeyEncryptionMode(
+            keyManagementAlgorithm: jweHeader.keyManagementAlgorithm!,
+            contentEncryptionAlgorithm: jweHeader.contentEncryptionAlgorithm!,
+            password: testDummyPassword
+        )
 
-        func testCustomIterationCountGetsAccepted() throws {
-            var jweHeader = JWEHeader(
-                keyManagementAlgorithm: .PBES2_HS256_A128KW,
-                contentEncryptionAlgorithm: .A128CBCHS256
-            )
+        let context = try! keyManagementMode.determineContentEncryptionKey(with: jweHeader)
 
-            jweHeader.p2c = 1_000_000
-
-            let keyManagementMode = PBES2KeyEncryptionMode(
-                keyManagementAlgorithm: jweHeader.keyManagementAlgorithm!,
-                contentEncryptionAlgorithm: jweHeader.contentEncryptionAlgorithm!,
-                password: testDummyPassword
-            )
-
-            let keyManagementEncryptionContextData = try! keyManagementMode.determineContentEncryptionKey(for: jweHeader)
-
-            let keyManagementEncryptionContext = try! JSONDecoder().decode(
-                Encrypter.PBES2EncryptionContext.self,
-                from: keyManagementEncryptionContextData
-            )
-
-            let updatedJWEHeader = JWEHeader(keyManagementEncryptionContext.headerData)!
-
-            XCTAssertEqual(updatedJWEHeader.p2c!, 1_000_000)
-        }
+        XCTAssertEqual(context.jweHeader!.p2c!, 1_000_000)
     }
 }
 // swiftlint:enable force_unwrapping

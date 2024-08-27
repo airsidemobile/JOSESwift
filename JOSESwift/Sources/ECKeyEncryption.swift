@@ -56,18 +56,36 @@ enum ECKeyEncryption {
 }
 
 extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
-    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
 
-        return try EC.encryptionContextFor(recipientPublicKey,
+    func determineContentEncryptionKey(with jweHeader: JWEHeader) throws -> EncryptionKeyManagementModeContext {
+        let ecEncryption = try EC.encryptionContextFor(recipientPublicKey,
                                            algorithm: keyManagementAlgorithm,
                                            encryption: contentEncryptionAlgorithm,
-                                           header: header,
+                                           header: jweHeader,
                                            options: options)
+
+        guard let updatedJweHeader = JWEHeader(ecEncryption.jweHeaderData) else {
+            throw ECError.wrapKeyFail
+
+        }
+
+        return .init(
+            contentEncryptionKey: ecEncryption.contentEncryptionKey,
+            encryptedKey: ecEncryption.encryptedKey,
+            jweHeader: updatedJweHeader
+        )
     }
 }
 
 extension ECKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
 
         let randomContentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
 
@@ -78,6 +96,7 @@ extension ECKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
                                            header: header)
 
         guard decryptedKey.count == contentEncryptionAlgorithm.keyLength else { return randomContentEncryptionKey }
+
         return decryptedKey
     }
 }

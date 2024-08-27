@@ -229,7 +229,7 @@ class JWERSATests: RSACryptoTestCase {
         )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header") { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.keyManagementAlrgorithmMismatch)
         }
     }
 
@@ -249,7 +249,7 @@ class JWERSATests: RSACryptoTestCase {
         )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong alg in header with RSA-OAEP-256 algorithm") { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.keyManagementAlrgorithmMismatch)
         }
     }
 
@@ -269,7 +269,7 @@ class JWERSATests: RSACryptoTestCase {
         )!
 
         XCTAssertThrowsError(try jwe.decrypt(using: decrypter), "decrypting with wrong enc in header") { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms."))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.contentEncryptionAlgorithmMismatch)
         }
     }
 

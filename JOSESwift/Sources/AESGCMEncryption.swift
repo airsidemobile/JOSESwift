@@ -25,26 +25,24 @@ import Foundation
 
 struct AESGCMEncryption {
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    private let contentEncryptionKey: Data
 
-    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, contentEncryptionKey: Data) {
+    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm) {
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-        self.contentEncryptionKey = contentEncryptionKey
     }
 
-    func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
+    func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data, contentEncryptionKey: Data) throws -> ContentEncryptionContext {
         let iv = try SecureRandom.generate(count: contentEncryptionAlgorithm.initializationVectorLength)
-        return try encrypt(plaintext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData)
+        return try encrypt(plaintext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, contentEncryptionKey: contentEncryptionKey)
     }
 
-    func encrypt(_ plaintext: Data, initializationVector: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
+    func encrypt(_ plaintext: Data, initializationVector: Data, additionalAuthenticatedData: Data, contentEncryptionKey: Data) throws -> ContentEncryptionContext {
         return try AESGCM.encrypt(plaintext: plaintext,
                                   encryptionKey: contentEncryptionKey,
                                   initializationVector: initializationVector,
                                   additionalAuthenticatedData: additionalAuthenticatedData)
     }
 
-    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data) throws -> Data {
+    func decrypt(_ ciphertext: Data, initializationVector: Data, additionalAuthenticatedData: Data, authenticationTag: Data, contentEncryptionKey: Data) throws -> Data {
         return try AESGCM.decrypt(cipherText: ciphertext,
                                   decryptionKey: contentEncryptionKey,
                                   initializationVector: initializationVector,
@@ -53,21 +51,33 @@ struct AESGCMEncryption {
     }
 }
 
-extension AESGCMEncryption: ContentEncrypter {
-    func encrypt(headerData: Data, payload: Payload) throws -> ContentEncryptionContext {
+extension AESGCMEncryption: ContentEncrypter, ContentDecrypter {
+    var algorithm: ContentEncryptionAlgorithm {
+        contentEncryptionAlgorithm
+    }
+
+    func encrypt(headerData: Data, payload: Payload, contentEncryptionKey: Data) throws -> ContentEncryptionContext {
+        guard contentEncryptionAlgorithm.checkKeyLength(for: contentEncryptionKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
         let plaintext = payload.data()
         let additionalAuthenticatedData = headerData.base64URLEncodedData()
-        return try encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData)
-    }
-}
 
-extension AESGCMEncryption: ContentDecrypter {
+        return try encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData, contentEncryptionKey: contentEncryptionKey)
+    }
+
     func decrypt(decryptionContext: ContentDecryptionContext) throws -> Data {
+        guard contentEncryptionAlgorithm.checkKeyLength(for: decryptionContext.contentEncryptionKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
         return try decrypt(
             decryptionContext.ciphertext,
             initializationVector: decryptionContext.initializationVector,
             additionalAuthenticatedData: decryptionContext.additionalAuthenticatedData,
-            authenticationTag: decryptionContext.authenticationTag
+            authenticationTag: decryptionContext.authenticationTag,
+            contentEncryptionKey: decryptionContext.contentEncryptionKey
         )
     }
 }

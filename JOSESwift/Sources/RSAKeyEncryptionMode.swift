@@ -62,16 +62,28 @@ enum RSAKeyEncryption {
 }
 
 extension RSAKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
-    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(with _: JWEHeader) throws -> EncryptionKeyManagementModeContext {
         let contentEncryptionKey = try SecureRandom.generate(count: contentEncryptionAlgorithm.keyLength)
         let encryptedKey = try RSA.encrypt(contentEncryptionKey, with: recipientPublicKey, and: keyManagementAlgorithm)
 
-        return (contentEncryptionKey, encryptedKey)
+        return .init(
+            contentEncryptionKey: contentEncryptionKey,
+            encryptedKey: encryptedKey,
+            jweHeader: nil
+        )
     }
 }
 
 extension RSAKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
         // Generate a random CEK to substitue in case we fail to decrypt the CEK.
         // This is to prevent the MMA (Million Message Attack) against RSA.
         // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),

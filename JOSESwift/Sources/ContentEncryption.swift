@@ -23,43 +23,48 @@
 
 import Foundation
 
-struct ContentEncryptionContext {
+public protocol ContentEncrypter {
+    var algorithm: ContentEncryptionAlgorithm { get }
+
+    func encrypt(headerData: Data, payload: Payload, contentEncryptionKey: Data) throws -> ContentEncryptionContext
+}
+
+public protocol ContentDecrypter {
+    var algorithm: ContentEncryptionAlgorithm { get }
+
+    func decrypt(decryptionContext: ContentDecryptionContext) throws -> Data
+}
+
+public struct ContentEncryptionContext {
     let ciphertext: Data
     let authenticationTag: Data
     let initializationVector: Data
 }
 
-struct ContentDecryptionContext {
+public struct ContentDecryptionContext {
     let ciphertext: Data
     let initializationVector: Data
     let additionalAuthenticatedData: Data
     let authenticationTag: Data
-}
-
-protocol ContentEncrypter {
-    func encrypt(headerData: Data, payload: Payload) throws -> ContentEncryptionContext
-}
-
-protocol ContentDecrypter {
-    func decrypt(decryptionContext: ContentDecryptionContext) throws -> Data
+    let contentEncryptionKey: Data
 }
 
 extension ContentEncryptionAlgorithm {
-    func makeContentEncrypter(contentEncryptionKey: Data) throws -> ContentEncrypter {
+    func makeContentEncrypter() throws -> ContentEncrypter {
         switch self {
         case .A128CBCHS256, .A192CBCHS384, .A256CBCHS512:
-            return try AESCBCEncryption(contentEncryptionAlgorithm: self, secretKey: contentEncryptionKey)
+            return try AESCBCEncryption(contentEncryptionAlgorithm: self)
         case .A128GCM, .A192GCM, .A256GCM:
-            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+            return AESGCMEncryption(contentEncryptionAlgorithm: self)
         }
     }
 
-    func makeContentDecrypter(contentEncryptionKey: Data) throws -> ContentDecrypter {
+    func makeContentDecrypter() throws -> ContentDecrypter {
         switch self {
         case .A128CBCHS256, .A192CBCHS384, .A256CBCHS512:
-            return try AESCBCEncryption(contentEncryptionAlgorithm: self, secretKey: contentEncryptionKey)
+            return try AESCBCEncryption(contentEncryptionAlgorithm: self)
         case .A128GCM, .A192GCM, .A256GCM:
-            return AESGCMEncryption(contentEncryptionAlgorithm: self, contentEncryptionKey: contentEncryptionKey)
+            return AESGCMEncryption(contentEncryptionAlgorithm: self)
         }
     }
 }
