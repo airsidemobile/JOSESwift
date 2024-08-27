@@ -25,25 +25,24 @@ import Foundation
 
 struct AESCBCEncryption {
     private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
-    private let encryptionKey: Data
-    private let hmacKey: Data
     private let hmacAlgorithm: HMACAlgorithm
 
-    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm, secretKey: Data) throws {
-        guard contentEncryptionAlgorithm.checkKeyLength(for: secretKey) else {
-            throw JWEError.keyLengthNotSatisfied
-        }
-
+    init(contentEncryptionAlgorithm: ContentEncryptionAlgorithm) throws {
         let hmacAlgorithm = try AESCBCEncryption.getHMACAlgorithm(for: contentEncryptionAlgorithm)
-        let keys = try AESCBCEncryption.retrieveKeys(for: contentEncryptionAlgorithm, from: secretKey)
 
         self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
         self.hmacAlgorithm = hmacAlgorithm
-        self.hmacKey = keys.hmacKey
-        self.encryptionKey = keys.encryptionKey
     }
 
-    func encrypt(_ plaintext: Data, additionalAuthenticatedData: Data) throws -> ContentEncryptionContext {
+    func encrypt(
+        _ plaintext: Data,
+        additionalAuthenticatedData: Data,
+        contentEncryptionKey: Data
+    ) throws -> ContentEncryptionContext {
+        let keys = try AESCBCEncryption.retrieveKeys(for: contentEncryptionAlgorithm, from: contentEncryptionKey)
+        let hmacKey = keys.hmacKey
+        let encryptionKey = keys.encryptionKey
+
         let iv = try SecureRandom.generate(count: contentEncryptionAlgorithm.initializationVectorLength)
         let ciphertext = try AES.encrypt(plaintext, with: encryptionKey, using: contentEncryptionAlgorithm, and: iv)
 
@@ -67,8 +66,13 @@ struct AESCBCEncryption {
         _ ciphertext: Data,
         initializationVector: Data,
         additionalAuthenticatedData: Data,
-        authenticationTag: Data
+        authenticationTag: Data,
+        contentEncryptionKey: Data
     ) throws -> Data {
+        let keys = try AESCBCEncryption.retrieveKeys(for: contentEncryptionAlgorithm, from: contentEncryptionKey)
+        let hmacKey = keys.hmacKey
+        let encryptionKey = keys.encryptionKey
+
         // Put together the input data for the HMAC. It consists of A || IV || E || AL.
         var concatData = additionalAuthenticatedData
         concatData.append(initializationVector)
@@ -140,22 +144,37 @@ struct AESCBCEncryption {
     }
 }
 
-extension AESCBCEncryption: ContentEncrypter {
-    func encrypt(headerData: Data, payload: Payload) throws -> ContentEncryptionContext {
+extension AESCBCEncryption: ContentEncrypter, ContentDecrypter {
+    var algorithm: ContentEncryptionAlgorithm {
+        contentEncryptionAlgorithm
+    }
+
+    func encrypt(headerData: Data, payload: Payload, contentEncryptionKey: Data) throws -> ContentEncryptionContext {
+        guard contentEncryptionAlgorithm.checkKeyLength(for: contentEncryptionKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
         let plaintext = payload.data()
         let additionalAuthenticatedData = headerData.base64URLEncodedData()
 
-        return try encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData)
+        return try encrypt(
+            plaintext,
+            additionalAuthenticatedData: additionalAuthenticatedData,
+            contentEncryptionKey: contentEncryptionKey
+        )
     }
-}
 
-extension AESCBCEncryption: ContentDecrypter {
     func decrypt(decryptionContext: ContentDecryptionContext) throws -> Data {
+        guard contentEncryptionAlgorithm.checkKeyLength(for: decryptionContext.contentEncryptionKey) else {
+            throw JWEError.keyLengthNotSatisfied
+        }
+
         return try decrypt(
             decryptionContext.ciphertext,
             initializationVector: decryptionContext.initializationVector,
             additionalAuthenticatedData: decryptionContext.additionalAuthenticatedData,
-            authenticationTag: decryptionContext.authenticationTag
+            authenticationTag: decryptionContext.authenticationTag,
+            contentEncryptionKey: decryptionContext.contentEncryptionKey
         )
     }
 }

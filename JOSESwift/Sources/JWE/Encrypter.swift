@@ -25,8 +25,7 @@ import Foundation
 
 public struct Encrypter {
     private let keyManagementMode: EncryptionKeyManagementMode
-    private let keyManagementAlgorithm: KeyManagementAlgorithm
-    private let contentEncryptionAlgorithm: ContentEncryptionAlgorithm
+    private let contentEncryper: ContentEncrypter
 
     /// Constructs an encrypter that can be used to encrypt a JWE.
     ///
@@ -47,9 +46,6 @@ public struct Encrypter {
         agreementPartyVInfo: Data? = nil,
         pbes2SaltInputLength: Int? = nil
     ) {
-        self.keyManagementAlgorithm = keyManagementAlgorithm
-        self.contentEncryptionAlgorithm = contentEncryptionAlgorithm
-
         let mode = keyManagementAlgorithm.makeEncryptionKeyManagementMode(
             contentEncryptionAlgorithm: contentEncryptionAlgorithm,
             encryptionKey: encryptionKey,
@@ -59,97 +55,68 @@ public struct Encrypter {
         )
         guard let keyManagementMode = mode else { return nil }
         self.keyManagementMode = keyManagementMode
+
+        let encrypter = try? contentEncryptionAlgorithm.makeContentEncrypter()
+        guard let contentEncrypter = encrypter else { return nil }
+        self.contentEncryper = contentEncrypter
     }
 
-    func encrypt(header: inout JWEHeader, payload: Payload) throws -> EncryptionContext {
-        guard let alg = header.keyManagementAlgorithm, alg == keyManagementAlgorithm else {
+    /// Constructs an encrypter used to encrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyManagementMode: A custom key management implementation.
+    ///   - contentEncrypter: A custom content encryption implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Encrypter`.
+    public init(
+        customKeyManagementMode keyManagementMode: EncryptionKeyManagementMode,
+        customContentEncrypter contentEncrypter: ContentEncrypter
+    ) {
+        self.keyManagementMode = keyManagementMode
+        self.contentEncryper = contentEncrypter
+    }
+
+    internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
+        guard let headerAlg = header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let enc = header.contentEncryptionAlgorithm, enc == contentEncryptionAlgorithm else {
+        guard let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentEncryper.algorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
-        if keyManagementAlgorithm.shouldContainEphemeralPublicKey {
-            let encryptedKey = try keyManagementMode.determineContentEncryptionKey(for: header)
+        let keyManagementContext = try keyManagementMode.determineContentEncryptionKey(with: header)
 
-            guard let context = try? JSONDecoder().decode(Encrypter.ECEncryptionContext.self, from: encryptedKey) else {
-                throw JWEError.hmacNotAuthenticated
-            }
-
-            if let contextHeader = JWEHeader(context.headerData) {
-                header = contextHeader
-            }
-
-            let contentEncryptionContext = try contentEncryptionAlgorithm
-                .makeContentEncrypter(contentEncryptionKey: context.contentKey)
-                .encrypt(headerData: context.headerData,
-                         payload: payload)
-
-            return EncryptionContext(
-                encryptedKey: context.encryptedKey,
-                ciphertext: contentEncryptionContext.ciphertext,
-                authenticationTag: contentEncryptionContext.authenticationTag,
-                initializationVector: contentEncryptionContext.initializationVector
-            )
-        } else if keyManagementAlgorithm.shouldContainPasswordBasedEncryptionScheme {
-            let encryptedKey = try keyManagementMode.determineContentEncryptionKey(for: header)
-
-            guard let context = try? JSONDecoder().decode(Encrypter.PBES2EncryptionContext.self, from: encryptedKey) else {
-                throw JWEError.hmacNotAuthenticated
-            }
-
-            if let contextHeader = JWEHeader(context.headerData) {
-                header = contextHeader
-            }
-
-            let contentEncryptionContext = try contentEncryptionAlgorithm
-                .makeContentEncrypter(contentEncryptionKey: context.contentKey)
-                .encrypt(headerData: context.headerData,
-                         payload: payload)
-
-            return EncryptionContext(
-                encryptedKey: context.encryptedKey,
-                ciphertext: contentEncryptionContext.ciphertext,
-                authenticationTag: contentEncryptionContext.authenticationTag,
-                initializationVector: contentEncryptionContext.initializationVector
-            )
+        let updatedHeader = if let updatedHeader = keyManagementContext.jweHeader {
+            updatedHeader
         } else {
-            let (contentEncryptionKey, encryptedKey) = try keyManagementMode.determineContentEncryptionKey()
-
-            let contentEncryptionContext = try contentEncryptionAlgorithm
-                .makeContentEncrypter(contentEncryptionKey: contentEncryptionKey)
-                .encrypt(headerData: header.data(),
-                         payload: payload)
-
-            return EncryptionContext(
-                encryptedKey: encryptedKey,
-                ciphertext: contentEncryptionContext.ciphertext,
-                authenticationTag: contentEncryptionContext.authenticationTag,
-                initializationVector: contentEncryptionContext.initializationVector
-            )
+            header
         }
+
+        let contentEncryptionContext = try contentEncryper.encrypt(
+            headerData: updatedHeader.data(),
+            payload: payload,
+            contentEncryptionKey: keyManagementContext.contentEncryptionKey
+        )
+
+        return EncryptionContext(
+            jweHeader: updatedHeader,
+            encryptedKey: keyManagementContext.encryptedKey,
+            ciphertext: contentEncryptionContext.ciphertext,
+            authenticationTag: contentEncryptionContext.authenticationTag,
+            initializationVector: contentEncryptionContext.initializationVector
+        )
     }
 }
 
 extension Encrypter {
     struct EncryptionContext {
+        let jweHeader: JWEHeader
         let encryptedKey: Data
         let ciphertext: Data
         let authenticationTag: Data
         let initializationVector: Data
-    }
-
-    struct ECEncryptionContext: Codable {
-        let headerData: Data
-        let encryptedKey: Data
-        let contentKey: Data
-    }
-
-    struct PBES2EncryptionContext: Codable {
-        let headerData: Data
-        let encryptedKey: Data
-        let contentKey: Data
     }
 }
 

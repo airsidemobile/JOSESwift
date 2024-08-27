@@ -28,21 +28,27 @@ import Foundation
 struct DirectEncryptionMode {
     typealias KeyType = Data
 
+    private let keyManagementAlgorithm: KeyManagementAlgorithm
     private let sharedSymmetricKey: KeyType
 
-    init(sharedSymmetricKey: KeyType) {
+    init(keyManagementAlgorithm: KeyManagementAlgorithm, sharedSymmetricKey: KeyType) {
+        self.keyManagementAlgorithm = keyManagementAlgorithm
         self.sharedSymmetricKey = sharedSymmetricKey
     }
 }
 
 extension DirectEncryptionMode: EncryptionKeyManagementMode {
-    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) {
-        return (sharedSymmetricKey, KeyType())
+    var algorithm: KeyManagementAlgorithm {
+        keyManagementAlgorithm
+    }
+
+    func determineContentEncryptionKey(with _: JWEHeader) throws -> EncryptionKeyManagementModeContext {
+        return .init(contentEncryptionKey: sharedSymmetricKey, encryptedKey: KeyType(), jweHeader: nil)
     }
 }
 
 extension DirectEncryptionMode: DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data {
+    func determineContentEncryptionKey(from encryptedKey: Data, with _: JWEHeader) throws -> Data {
         guard encryptedKey == Data() else {
             throw JOSESwiftError.decryptingFailed(description: "Direct encryption does not expect an encrypted key.")
         }

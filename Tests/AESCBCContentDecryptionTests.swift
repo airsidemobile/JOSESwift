@@ -36,8 +36,8 @@ class AESCBCContentDecryptionTests: XCTestCase {
         let authenticationTag = "65 2c 3f a3 6b 0a 7c 5b 32 19 fa b3 a3 0b c1 c4".hexadecimalToData()!
         let testPlaintext = "41 20 63 69 70 68 65 72 20 73 79 73 74 65 6d 20 6d 75 73 74 20 6e 6f 74 20 62 65 20 72 65 71 75 69 72 65 64 20 74 6f 20 62 65 20 73 65 63 72 65 74 2c 20 61 6e 64 20 69 74 20 6d 75 73 74 20 62 65 20 61 62 6c 65 20 74 6f 20 66 61 6c 6c 20 69 6e 74 6f 20 74 68 65 20 68 61 6e 64 73 20 6f 66 20 74 68 65 20 65 6e 65 6d 79 20 77 69 74 68 6f 75 74 20 69 6e 63 6f 6e 76 65 6e 69 65 6e 63 65".hexadecimalToData()!
 
-        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, secretKey: secretKey)
-        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag)
+        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256)
+        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag, contentEncryptionKey: secretKey)
 
         XCTAssertEqual(plaintext, testPlaintext)
     }
@@ -51,8 +51,8 @@ class AESCBCContentDecryptionTests: XCTestCase {
         let authenticationTag = "84 90 ac 0e 58 94 9b fe 51 87 5d 73 3f 93 ac 20 75 16 80 39 cc c7 33 d7".hexadecimalToData()!
         let testPlaintext = "41 20 63 69 70 68 65 72 20 73 79 73 74 65 6d 20 6d 75 73 74 20 6e 6f 74 20 62 65 20 72 65 71 75 69 72 65 64 20 74 6f 20 62 65 20 73 65 63 72 65 74 2c 20 61 6e 64 20 69 74 20 6d 75 73 74 20 62 65 20 61 62 6c 65 20 74 6f 20 66 61 6c 6c 20 69 6e 74 6f 20 74 68 65 20 68 61 6e 64 73 20 6f 66 20 74 68 65 20 65 6e 65 6d 79 20 77 69 74 68 6f 75 74 20 69 6e 63 6f 6e 76 65 6e 69 65 6e 63 65".hexadecimalToData()!
 
-        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A192CBCHS384, secretKey: secretKey)
-        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag)
+        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A192CBCHS384)
+        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag, contentEncryptionKey: secretKey)
 
         XCTAssertEqual(plaintext, testPlaintext)
     }
@@ -70,10 +70,11 @@ class AESCBCContentDecryptionTests: XCTestCase {
             ciphertext: ciphertext,
             initializationVector: iv,
             additionalAuthenticatedData: additionalAuthenticatedData,
-            authenticationTag: authenticationTag
+            authenticationTag: authenticationTag,
+            contentEncryptionKey: secretKey
         )
 
-        let decrypter: ContentDecrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, secretKey: secretKey)
+        let decrypter: ContentDecrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256)
         let plaintext = try! decrypter.decrypt(decryptionContext: context)
 
         XCTAssertEqual(plaintext, testPlaintext)
@@ -113,8 +114,8 @@ class AESCBCContentDecryptionTests: XCTestCase {
         69 6e 63 6f 6e 76 65 6e 69 65 6e 63 65
         """.hexadecimalToData()!
 
-        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, secretKey: secretKey)
-        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag)
+        let decrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512)
+        let plaintext = try! decrypter.decrypt(ciphertext, initializationVector: iv, additionalAuthenticatedData: additionalAuthenticatedData, authenticationTag: authenticationTag, contentEncryptionKey: secretKey)
 
         XCTAssertEqual(plaintext, testPlaintext)
     }
@@ -157,10 +158,11 @@ class AESCBCContentDecryptionTests: XCTestCase {
             ciphertext: ciphertext,
             initializationVector: iv,
             additionalAuthenticatedData: additionalAuthenticatedData,
-            authenticationTag: authenticationTag
+            authenticationTag: authenticationTag,
+            contentEncryptionKey: secretKey
         )
 
-        let decrypter: ContentDecrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, secretKey: secretKey)
+        let decrypter: ContentDecrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512)
         let plaintext = try! decrypter.decrypt(decryptionContext: context)
 
         XCTAssertEqual(plaintext, testPlaintext)

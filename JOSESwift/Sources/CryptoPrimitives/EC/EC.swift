@@ -292,7 +292,7 @@ internal struct EC {
                                      encryption: ContentEncryptionAlgorithm,
                                      header: JWEHeader,
                                      options: [String: Any] = [:]
-    ) throws -> Data {
+    ) throws -> (contentEncryptionKey: Data, encryptedKey: Data, jweHeaderData: Data) {
         var ephemeralKeyPair: ECKeyPair
         if let eKeyPair = options["ephemeralKeyPair"] as? ECKeyPair {
             ephemeralKeyPair = eKeyPair
@@ -328,11 +328,7 @@ internal struct EC {
             updatedHeader.epk = ephemeralKeyPair.getPublic()
         }
 
-        let context = Encrypter.ECEncryptionContext(headerData: updatedHeader.headerData,
-                                                    encryptedKey: encryptedKey,
-                                                    contentKey: contentKey)
-        let result = try JSONEncoder().encode(context)
-        return result
+        return (contentEncryptionKey: contentKey, encryptedKey: encryptedKey, jweHeaderData: updatedHeader.headerData)
     }
 
     /// Decrypts a cipher text using a given `EC` algorithm and the corresponding private key.

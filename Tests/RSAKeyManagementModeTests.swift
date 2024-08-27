@@ -31,63 +31,72 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
     func testGeneratesRandomContentEncryptionKeyOnEachCall() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
+
             let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
             )
 
-            let (cek1, _) = try keyEncryption.determineContentEncryptionKey()
-            let (cek2, _) = try keyEncryption.determineContentEncryptionKey()
+            let context1 = try keyEncryption.determineContentEncryptionKey(with: header)
+            let context2 = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek1, cek2)
+            XCTAssertNotEqual(context1.contentEncryptionKey, context2.contentEncryptionKey)
+            XCTAssertNotEqual(context1.encryptedKey, context2.encryptedKey)
+            XCTAssertNil(context1.jweHeader)
+            XCTAssertNil(context2.jweHeader)
         }
     }
 
     func testEncryptsContentEncryptionKey() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
+
             let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
             )
 
-            let (cek, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
+            let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek, encryptedKey)
+            XCTAssertNotEqual(context.contentEncryptionKey, context.encryptedKey)
 
             var decryptionError: Unmanaged<CFError>?
             let decryptedKey = SecKeyCreateDecryptedData(
                 privateKeyAlice2048!,
                 algorithm.secKeyAlgorithm!,
-                encryptedKey as CFData,
+                context.encryptedKey as CFData,
                 &decryptionError
             )
 
             XCTAssertNil(decryptionError)
             XCTAssertNotNil(decryptedKey)
 
-            XCTAssertEqual(cek, decryptedKey! as Data)
+            XCTAssertEqual(context.contentEncryptionKey, decryptedKey! as Data)
         }
     }
 
     func testEncryptsContentEncryptionKeyOnlyForProvidedKey() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
+
             let keyEncryption = RSAKeyEncryption.EncryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A256CBCHS512,
                 recipientPublicKey: publicKeyAlice2048!
             )
 
-            let (cek, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
+            let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek, encryptedKey)
+            XCTAssertNotEqual(context.contentEncryptionKey, context.encryptedKey)
 
             var decryptionError: Unmanaged<CFError>?
             let decryptedKey = SecKeyCreateDecryptedData(
                 privateKeyBob2048!,
                 algorithm.secKeyAlgorithm!,
-                encryptedKey as CFData,
+                context.encryptedKey as CFData,
                 &decryptionError
             )
 
@@ -101,15 +110,17 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
         for alg in keyManagementModeAlgorithms {
             for enc in contentEncryptionAlgorithms {
+                let header = JWEHeader(keyManagementAlgorithm: alg, contentEncryptionAlgorithm: enc)
+
                 let keyEncryption = RSAKeyEncryption.EncryptionMode(
                     keyManagementAlgorithm: alg,
                     contentEncryptionAlgorithm: enc,
                     recipientPublicKey: publicKeyAlice2048!
                 )
 
-                let (cek, _) = try keyEncryption.determineContentEncryptionKey()
+                let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-                XCTAssertEqual(cek.count, enc.keyLength)
+                XCTAssertEqual(context.contentEncryptionKey.count, enc.keyLength)
             }
         }
     }
@@ -117,6 +128,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDecryptsContentEncryptionKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -130,7 +146,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 and: algorithm
             )
 
-            let decryptedKey = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+            let decryptedKey = try keyDecryption.determineContentEncryptionKey(from: encryptedKey, with: header)
 
             XCTAssertEqual(contentEncryptionKey, decryptedKey)
         }
@@ -141,6 +157,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testDoesNotThrowForDecryptionError() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -154,7 +175,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 and: algorithm
             )
 
-            XCTAssertNoThrow(try keyDecryption.determineContentEncryptionKey(from: encryptedKey))
+            XCTAssertNoThrow(try keyDecryption.determineContentEncryptionKey(from: encryptedKey, with: header))
         }
     }
 
@@ -163,6 +184,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
     func testGeneratesRandomContentEncryptionKeyForMalformedEncryptedKey() throws {
         let contentEncryptionAlgorithm = ContentEncryptionAlgorithm.A128CBCHS256
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(
+                keyManagementAlgorithm: algorithm,
+                contentEncryptionAlgorithm: contentEncryptionAlgorithm
+            )
+
             let keyDecryption = RSAKeyEncryption.DecryptionMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: contentEncryptionAlgorithm,
@@ -171,8 +197,13 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
             let encryptedKey = Data(count: algorithm.maxMessageLength(for: publicKeyAlice2048!)! - 10)
 
-            let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
-            let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(from: encryptedKey)
+            let randomContentEncryptionKey1 = try keyDecryption.determineContentEncryptionKey(
+                from: encryptedKey, with: header
+            )
+            let randomContentEncryptionKey2 = try keyDecryption.determineContentEncryptionKey(
+                from: encryptedKey,
+                with: header
+            )
 
             XCTAssertNotEqual(randomContentEncryptionKey1, randomContentEncryptionKey2)
         }

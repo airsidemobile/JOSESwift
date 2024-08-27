@@ -23,24 +23,22 @@
 
 import Foundation
 
-protocol EncryptionKeyManagementMode {
-    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data)
-    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data
+public protocol EncryptionKeyManagementMode {
+    var algorithm: KeyManagementAlgorithm { get }
+
+    func determineContentEncryptionKey(with header: JWEHeader) throws -> EncryptionKeyManagementModeContext
 }
 
-extension EncryptionKeyManagementMode {
-    func determineContentEncryptionKey() throws -> (contentEncryptionKey: Data, encryptedKey: Data) { return (Data(), Data()) }
-    func determineContentEncryptionKey(for header: JWEHeader) throws -> Data { return Data() }
+public struct EncryptionKeyManagementModeContext {
+    let contentEncryptionKey: Data
+    let encryptedKey: Data
+    let jweHeader: JWEHeader?
 }
 
-protocol DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data
-}
+public protocol DecryptionKeyManagementMode {
+    var algorithm: KeyManagementAlgorithm { get }
 
-extension DecryptionKeyManagementMode {
-    func determineContentEncryptionKey(from encryptedKey: Data) throws -> Data { return Data() }
-    func determineContentEncryptionKey(from encryptedKey: Data, header: JWEHeader) throws -> Data { return Data() }
+    func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data
 }
 
 extension KeyManagementAlgorithm {
@@ -76,7 +74,7 @@ extension KeyManagementAlgorithm {
                 return nil
             }
 
-            return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+            return DirectEncryptionMode(keyManagementAlgorithm: self, sharedSymmetricKey: sharedSymmetricKey)
         case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
             guard let recipientPublicKey = cast(encryptionKey, to: ECKeyEncryption.PublicKey.self) else {
                 return nil
@@ -131,7 +129,7 @@ extension KeyManagementAlgorithm {
                 return nil
             }
 
-            return DirectEncryptionMode(sharedSymmetricKey: sharedSymmetricKey)
+            return DirectEncryptionMode(keyManagementAlgorithm: self, sharedSymmetricKey: sharedSymmetricKey)
         case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
             guard let recipientPrivateKey = cast(decryptionKey, to: ECKeyEncryption.PrivateKey.self) else {
                 return nil

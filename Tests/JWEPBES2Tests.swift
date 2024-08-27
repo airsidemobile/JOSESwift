@@ -32,14 +32,17 @@ class JWEPBES2Tests: XCTestCase {
         let payload = Payload("Live long and prosper.".data(using: .utf8)!)
         let password = "123456"
 
-        let encrypter = Encrypter(keyManagementAlgorithm: .PBES2_HS256_A128KW, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: password)
+        let encrypter = Encrypter(keyManagementAlgorithm: .PBES2_HS256_A128KW, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: password, pbes2SaltInputLength: 32)
         let jwe = try JWE(header: header, payload: payload, encrypter: encrypter!)
         let serialization = jwe.compactSerializedString
 
         let deserialization = try JWE(compactSerialization: serialization)
         let decrypter = Decrypter(keyManagementAlgorithm: .PBES2_HS256_A128KW, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: password)
         let decrypted = try! deserialization.decrypt(using: decrypter!)
-		XCTAssertEqual(payload.data(), decrypted.data())
+
+        XCTAssertEqual(payload.data(), decrypted.data())
+        XCTAssertEqual(jwe.header.p2c, 1000)
+        XCTAssertEqual(jwe.header.p2s?.count, 32)
     }
 }
 // swiftlint:enable force_unwrapping

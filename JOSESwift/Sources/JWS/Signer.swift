@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol SignerProtocol {
+public protocol SignerProtocol {
     var algorithm: SignatureAlgorithm { get }
 
     /// Signs input data.
@@ -35,7 +35,7 @@ protocol SignerProtocol {
     func sign(_ signingInput: Data) throws -> Data
 }
 
-public struct Signer<KeyType> {
+public struct Signer {
     let signer: SignerProtocol
 
     /// Constructs a signer used to sign a JWS.
@@ -49,7 +49,7 @@ public struct Signer<KeyType> {
     ///     - For _MAC algorithms_ it is the secret symmetric key (`Data`)
     ///       shared between the sender and the recipient.
     /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
-    public init?(signingAlgorithm: SignatureAlgorithm, key: KeyType) {
+    public init?<KeyType>(signingAlgorithm: SignatureAlgorithm, key: KeyType) {
         switch signingAlgorithm {
         case .HS256, .HS384, .HS512:
             guard type(of: key) is HMACSigner.KeyType.Type else {
@@ -70,6 +70,17 @@ public struct Signer<KeyType> {
             // swiftlint:disable:next force_cast
             self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: key as! ECSigner.KeyType)
         }
+    }
+
+    /// Constructs a signer used to sign a JWS.
+    ///
+    /// - Parameters:
+    ///   - customSigner: A custom signing implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Signer`.
+    public init(customSigner signer: SignerProtocol) {
+        self.signer = signer
     }
 
     internal func sign(header: JWSHeader, payload: Payload) throws -> Data {
@@ -99,7 +110,7 @@ extension Array where Element == DataConvertible {
 
 extension Signer {
     @available(*, deprecated, message: "Use `init?(signingAlgorithm: SignatureAlgorithm, key: KeyType)` instead")
-    public init?(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
+    public init?<KeyType>(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
         self.init(signingAlgorithm: signingAlgorithm, key: privateKey)
     }
 }

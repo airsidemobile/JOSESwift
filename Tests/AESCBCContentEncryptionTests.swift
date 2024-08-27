@@ -33,8 +33,8 @@ class AESCBCContentEncryptionTests: XCTestCase {
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let algorithm = ContentEncryptionAlgorithm.A128CBCHS256
         let secretKey = try! SecureRandom.generate(count: algorithm.keyLength)
-        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm, secretKey: secretKey)
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData(), contentEncryptionKey: secretKey)
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let hmacKey = secretKey.subdata(in: 0..<16)
@@ -96,8 +96,8 @@ class AESCBCContentEncryptionTests: XCTestCase {
         let additionalAuthenticatedData = "54 68 65 20 73 65 63 6f 6e 64 20 70 72 69 6e 63 69 70 6c 65 20 6f 66 20 41 75 67 75 73 74 65 20 4b 65 72 63 6b 68 6f 66 66 73".hexadecimalToData()!
         let algorithm = ContentEncryptionAlgorithm.A192CBCHS384
         let secretKey = try! SecureRandom.generate(count: algorithm.keyLength)
-        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm, secretKey: secretKey)
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: algorithm)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData(), contentEncryptionKey: secretKey)
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let hmacKey = secretKey.subdata(in: 0..<24)
@@ -169,8 +169,8 @@ class AESCBCContentEncryptionTests: XCTestCase {
         """.hexadecimalToData()!
 
         let secretKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
-        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512, secretKey: secretKey)
-        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData())
+        let encrypter = try! AESCBCEncryption(contentEncryptionAlgorithm: .A256CBCHS512)
+        let symmetricEncryptionContext = try! encrypter.encrypt(plaintext, additionalAuthenticatedData: additionalAuthenticatedData.base64URLEncodedData(), contentEncryptionKey: secretKey)
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let hmacKey = secretKey.subdata(in: 0..<32)
@@ -236,8 +236,8 @@ class AESCBCContentEncryptionTests: XCTestCase {
             44, 207
         ]))
 
-        let symmetricEncryptionContext = try AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256, secretKey: secretKey)
-            .encrypt(headerData: header.headerData, payload: Payload(plaintext))
+        let symmetricEncryptionContext = try AESCBCEncryption(contentEncryptionAlgorithm: .A128CBCHS256)
+            .encrypt(headerData: header.headerData, payload: Payload(plaintext), contentEncryptionKey: secretKey)
 
         // Check if the symmetric encryption was successful by using the CommonCrypto framework and not the implemented decrypt method.
         let hmacKey = secretKey.subdata(in: 0..<16)
@@ -293,6 +293,28 @@ class AESCBCContentEncryptionTests: XCTestCase {
         }
 
         XCTAssertEqual(cryptData, plaintext)
+    }
+
+    func testContentEncryptionAlgorithmFeatures() {
+        // verify key length
+        XCTAssertEqual(32, ContentEncryptionAlgorithm.A128CBCHS256.keyLength)
+        XCTAssertEqual(48, ContentEncryptionAlgorithm.A192CBCHS384.keyLength)
+        XCTAssertEqual(64, ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
+        // verify iv length
+        XCTAssertEqual(16, ContentEncryptionAlgorithm.A128CBCHS256.initializationVectorLength)
+        XCTAssertEqual(16, ContentEncryptionAlgorithm.A192CBCHS384.initializationVectorLength)
+        XCTAssertEqual(16, ContentEncryptionAlgorithm.A256CBCHS512.initializationVectorLength)
+        // verify non supported content encryption algorithm throws error upon initialization
+        XCTAssertThrowsError(try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A256GCM)) { error in
+            XCTAssertEqual(error as! JWEError, JWEError.contentEncryptionAlgorithmMismatch)
+        }
+        // verify key length is checked in initializer
+        XCTAssertThrowsError(
+            try AESCBCEncryption(contentEncryptionAlgorithm: ContentEncryptionAlgorithm.A128CBCHS256)
+                .encrypt(headerData: Data(), payload: Payload(Data()), contentEncryptionKey: Data())
+        ) { error in
+            XCTAssertEqual(error as! JWEError, JWEError.keyLengthNotSatisfied)
+        }
     }
 }
 // swiftlint:enable force_unwrapping

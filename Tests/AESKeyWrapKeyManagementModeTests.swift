@@ -55,41 +55,53 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
     func testGeneratesRandomContentEncryptionKeyOnEachCall() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
                 sharedSymmetricKey: symmetricKeys[algorithm]!
             )
 
-            let (cek1, _) = try keyEncryption.determineContentEncryptionKey()
-            let (cek2, _) = try keyEncryption.determineContentEncryptionKey()
+            let context1 = try keyEncryption.determineContentEncryptionKey(with: header)
+            let context2 = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek1, cek2)
+            XCTAssertNotEqual(context1.contentEncryptionKey, context2.contentEncryptionKey)
+            XCTAssertNotEqual(context1.encryptedKey, context2.encryptedKey)
+            XCTAssertNil(context1.jweHeader)
+            XCTAssertNil(context2.jweHeader)
         }
     }
 
     func testFailsForWrongKeySize() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
                 sharedSymmetricKey: Data(count: 10)
             )
 
-            XCTAssertThrowsError(try keyEncryption.determineContentEncryptionKey())
+            XCTAssertThrowsError(try keyEncryption.determineContentEncryptionKey(with: header))
         }
     }
 
     func testEncryptingFailsForWrongAlgorithm() throws {
         let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
         for algorithm in rsaKeyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
                 sharedSymmetricKey: symmetricKeys[.A128KW]!
             )
 
-            XCTAssertThrowsError(try keyEncryption.determineContentEncryptionKey(), "Invalid algorithm") { error in
+            XCTAssertThrowsError(
+                try keyEncryption.determineContentEncryptionKey(with: header),
+                "Invalid algorithm"
+            ) { error in
                 XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
             }
         }
@@ -97,47 +109,51 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
     func testEncryptsContentEncryptionKey() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
                 sharedSymmetricKey: symmetricKeys[algorithm]!
             )
 
-            let (cek, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
+            let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek, encryptedKey)
+            XCTAssertNotEqual(context.contentEncryptionKey, context.encryptedKey)
 
             let decryptedKey = ccAESKeyUnwrap(
-                wrappedKey: encryptedKey,
+                wrappedKey: context.encryptedKey,
                 keyEncryptionKey: symmetricKeys[algorithm]!,
                 iv: Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
             )
 
-            XCTAssertEqual(decryptedKey.data, cek)
+            XCTAssertEqual(context.contentEncryptionKey, decryptedKey.data)
         }
     }
 
     func testEncryptsContentEncryptionKeyOnlyForProvidedKey() throws {
         for algorithm in keyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
                 sharedSymmetricKey: symmetricKeys[algorithm]!
             )
 
-            let (cek, encryptedKey) = try keyEncryption.determineContentEncryptionKey()
+            let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-            XCTAssertNotEqual(cek, encryptedKey)
+            XCTAssertNotEqual(context.contentEncryptionKey, context.encryptedKey)
 
             let wrongKey = Data(repeating: 1, count: symmetricKeys[algorithm]!.count)
 
             let decryptedKey = ccAESKeyUnwrap(
-                wrappedKey: encryptedKey,
+                wrappedKey: context.encryptedKey,
                 keyEncryptionKey: wrongKey,
                 iv: Data(bytes: CCrfc3394_iv, count: CCrfc3394_ivLen)
             )
 
-            XCTAssertNotEqual(decryptedKey.data, cek)
+            XCTAssertNotEqual(context.contentEncryptionKey, decryptedKey.data)
         }
     }
 
@@ -146,15 +162,17 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
         for alg in keyManagementModeAlgorithms {
             for enc in contentEncryptionAlgorithms {
+                let header = JWEHeader(keyManagementAlgorithm: alg, contentEncryptionAlgorithm: enc)
+
                 let keyEncryption = AESKeyWrappingMode(
                     keyManagementAlgorithm: alg,
                     contentEncryptionAlgorithm: enc,
                     sharedSymmetricKey: symmetricKeys[alg]!
                 )
 
-                let (cek, _) = try keyEncryption.determineContentEncryptionKey()
+                let context = try keyEncryption.determineContentEncryptionKey(with: header)
 
-                XCTAssertEqual(cek.count, enc.keyLength)
+                XCTAssertEqual(context.contentEncryptionKey.count, enc.keyLength)
             }
         }
     }
@@ -162,6 +180,8 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
     func testDecryptingFailsForWrongAlgorithm() throws {
         let rsaKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.RSA1_5, .RSAOAEP, .RSAOAEP256]
         for algorithm in rsaKeyManagementModeAlgorithms {
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A128CBCHS256)
+
             let keyEncryption = AESKeyWrappingMode(
                 keyManagementAlgorithm: algorithm,
                 contentEncryptionAlgorithm: .A128CBCHS256,
@@ -169,7 +189,7 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
             )
 
             XCTAssertThrowsError(
-                try keyEncryption.determineContentEncryptionKey(from: Data()), "Invalid algorithm"
+                try keyEncryption.determineContentEncryptionKey(from: Data(), with: header), "Invalid algorithm"
             ) { error in
                 XCTAssertEqual(error as! AESError, AESError.invalidAlgorithm)
             }
@@ -178,6 +198,8 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
     // Test data taken from RFC-3394, 4 (https://tools.ietf.org/html/rfc3394#section-4).
     func testDecryptsContentEncryptionKeyAndChecksLengthForContentEncryption() throws {
+        let header = JWEHeader(keyManagementAlgorithm: .A128KW, contentEncryptionAlgorithm: .A128CBCHS256)
+
         let keyEncryption = AESKeyWrappingMode(
             keyManagementAlgorithm: .A128KW,
             contentEncryptionAlgorithm: .A128CBCHS256,
@@ -186,7 +208,8 @@ class AESKeyWrapKeyManagementModeTests: XCTestCase {
 
         XCTAssertThrowsError(
             try keyEncryption.determineContentEncryptionKey(
-                from: "1FA68B0A8112B447AEF34BD8FB5A7B829D3E862371D2CFE5".hexadecimalToData()!
+                from: "1FA68B0A8112B447AEF34BD8FB5A7B829D3E862371D2CFE5".hexadecimalToData()!,
+                with: header
             )
         ) { error in
             XCTAssertEqual(error as! AESError, AESError.keyLengthNotSatisfied)
