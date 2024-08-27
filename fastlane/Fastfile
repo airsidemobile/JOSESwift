@@ -213,7 +213,7 @@ desc "Updates the copyright year of license headers in source files if needed"
 lane :copyright do |options|
   ensure_git_status_clean
 
-  sh("../scripts/update-license-year.sh")
+  sh("cd .. && scripts/update-license-year.sh")
   sh("git diff-index --quiet HEAD || git commit -am 'Update license header year - happy new year'")
   
   ensure_git_status_clean
