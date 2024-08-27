@@ -29,7 +29,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testValidatesWithExplicitVerifier() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)!
 
         XCTAssertNoThrow(try jws.validate(using: verifier))
     }
@@ -37,7 +37,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testValidatesWithExplicitVerifierReturnsJWS() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)!
 
         let returnedJWS = try! jws.validate(using: verifier)
 
@@ -47,7 +47,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testValidatesWithExplicitVerifierCatchesWrongVerifierAlgorithm() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS256, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS256, key: publicKeyAlice2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong verifier algorithm") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.signingAlgorithmMismatch)
@@ -60,7 +60,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong header algorithm") { error in
             XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.signingAlgorithmMismatch)
@@ -86,7 +86,7 @@ class JWSValidationTests: RSACryptoTestCase {
             return
         }
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: SecKeyCopyPublicKey(key)!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: SecKeyCopyPublicKey(key)!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier))
     }
@@ -97,7 +97,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier))
     }
@@ -105,7 +105,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testIsValidWithExplicitVerifier() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)
 
         XCTAssertTrue(jws.isValid(for: verifier!))
     }
@@ -116,7 +116,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)
 
         XCTAssertFalse(jws.isValid(for: verifier!))
     }
@@ -127,7 +127,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)
 
         XCTAssertFalse(jws.isValid(for: verifier!))
     }
@@ -135,7 +135,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testIsValidWithExplicitVerifierIsFalseForWrongKey() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKey4096!)
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKey4096!)
 
         XCTAssertFalse(jws.isValid(for: verifier!))
     }
@@ -143,7 +143,7 @@ class JWSValidationTests: RSACryptoTestCase {
     func testIsValidWithExplicitVerifierCatchesWrongVerifierAlgorithm() {
         let jws = try! JWS(compactSerialization: compactSerializedJWSRS512Const)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS256, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS256, key: publicKeyAlice2048!)!
 
         XCTAssertFalse(jws.isValid(for: verifier))
     }
@@ -154,7 +154,7 @@ class JWSValidationTests: RSACryptoTestCase {
 
         let jws = try! JWS(compactSerialization: malformedSerialization)
 
-        let verifier = Verifier(verifyingAlgorithm: .RS512, key: publicKeyAlice2048!)!
+        let verifier = Verifier(signatureAlgorithm: .RS512, key: publicKeyAlice2048!)!
 
         XCTAssertFalse(jws.isValid(for: verifier))
     }

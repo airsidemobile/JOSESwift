@@ -31,7 +31,7 @@ class JWSHMACTests: HMACCryptoTestCase {
         XCTAssertEqual("{\"alg\":\"\(algorithm.rawValue)\"}", String(data: jws.header.data(), encoding: .utf8))
         XCTAssertEqual(message, String(data: jws.payload.data(), encoding: .utf8))
 
-        let signer = Signer(signingAlgorithm: algorithm, key: signingKey)!
+        let signer = Signer(signatureAlgorithm: algorithm, key: signingKey)!
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }
@@ -39,12 +39,12 @@ class JWSHMACTests: HMACCryptoTestCase {
     private func _testHMACSerializationValidationAndDeserialization(algorithm: SignatureAlgorithm) {
         let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, key: signingKey)!
+        let signer = Signer(signatureAlgorithm: algorithm, key: signingKey)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
-        let verifier = Verifier(verifyingAlgorithm: algorithm, key: signingKey)
+        let verifier = Verifier(signatureAlgorithm: algorithm, key: signingKey)
 
         XCTAssertTrue(secondJWS.isValid(for: verifier!))
         XCTAssertEqual(message, String(data: secondJWS.payload.data(), encoding: .utf8))
