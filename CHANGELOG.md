@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 Include references to issue- or pull-request numbers.
 
+## [3.0.0] - 2024-08-27
+
+- Update signer and verifier init param name and fix typos (#346)
+- Remove depracated apis (#345)
+- Update directory structure (#344)
+- Allow for plugging in user-provided crypto implementations via customization API (#343)
+- Add support for A192CBC-HS384 and A192GCM (#341)
+- Add support for PBES2 (#304)
+- chore(deps): lock file maintenance + xcode update (#339)
+- Updates search path for Mac silicon SwiftLint functionality in Xcode (#311)
+- chore(deps): lock file maintenance (#328)
+- [JWE] Added support for `A256GCM` and `A128GCM` (#278)
+- chore(deps): lock file maintenance (#313)
+- Add support for public and private header parameters (#312)
+- Update target platforms and fix tests (#310)
+- chore: Configure Renovate and lock file maintenance (#308)
+- Expose JWSHeader parameters (#277)
+- Expose JWEHeader parameters (#277)
+
 ## [2.4.0] - 2021-04-20
 
 - Use timing safe byte comparison for AES CBC MAC checks (#259)
