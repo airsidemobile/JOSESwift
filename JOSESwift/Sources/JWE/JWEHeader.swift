@@ -224,7 +224,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
     }
 
-    /// The X.509 URL that referes to a resource for the X.509 public key certificate
+    /// The X.509 URL that refers to a resource for the X.509 public key certificate
     /// or certificate chain corresponding to the key used to encrypt the JWE.
     public var x5u: URL? {
         get {
@@ -339,7 +339,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
     }
 
-    /// Header Parameters used for PBES2 Key Deriviation - PBES2 Salt Input
+    /// Header Parameters used for PBES2 Key Derivation - PBES2 Salt Input
     public var p2s: Data? {
         get {
             guard let parameter = parameters["p2s"] as? String else {
@@ -352,7 +352,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
     }
 
-    /// Header Parameters used for PBES2 Key Deriviation - PBES2 Count
+    /// Header Parameters used for PBES2 Key Derivation - PBES2 Count
     public var p2c: Int? {
         get {
             return parameters["p2c"] as? Int

@@ -40,7 +40,7 @@ public protocol VerifierProtocol {
 public struct Verifier {
     let verifier: VerifierProtocol
 
-    /// Constructs a verifyer used to verify a JWS.
+    /// Constructs a verifier used to verify a JWS.
     ///
     /// - Parameters:
     ///   - signatureAlgorithm: The desired `SignatureAlgorithm`.

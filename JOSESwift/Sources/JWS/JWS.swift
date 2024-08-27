@@ -120,7 +120,7 @@ public struct JWS {
     ///
     /// - Parameter verifier: The verifier containing the public key whose corresponding private key signed the JWS.
     /// - Returns: The JWS on which this function was called if the signature is valid.
-    /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occured during signature validation.
+    /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occurred during signature validation.
     public func validate(using verifier: Verifier) throws -> JWS {
         do {
             guard try verifier.verify(header: header, and: payload, against: signature) else {
@@ -139,7 +139,7 @@ public struct JWS {
     ///
     /// - Parameter verifier: The verifier containing the public key whose corresponding private key signed the JWS.
     /// - Returns: `true` if the JWS's signature is valid for the given verifier and the JWS's header and payload.
-    ///            `false` if the signature is not valid or if the singature could not be verified.
+    ///            `false` if the signature is not valid or if the signature could not be verified.
     public func isValid(for verifier: Verifier) -> Bool {
         guard verifier.verifier.algorithm == header.algorithm else {
             return false

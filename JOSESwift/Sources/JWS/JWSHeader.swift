@@ -161,7 +161,7 @@ extension JWSHeader: CommonHeaderParameterSpace {
         }
     }
 
-    /// The X.509 URL that referes to a resource for the X.509 public key certificate
+    /// The X.509 URL that refers to a resource for the X.509 public key certificate
     /// or certificate chain corresponding to the key used to sign the JWS.
     public var x5u: URL? {
         get {

@@ -48,7 +48,7 @@ public struct JWE {
     /// The ciphertext resulting from authenticated encryption of the plaintext.
     public let ciphertext: Data
 
-    /// The output of an authenticated encryption with associated data that ensures the integrity of the ciphertext and the additional associeated data.
+    /// The output of an authenticated encryption with associated data that ensures the integrity of the ciphertext and the additional associated data.
     public let authenticationTag: Data
 
     /// The compact serialization of this JWE object as string.
@@ -154,7 +154,7 @@ public struct JWE {
             let decryptedData = try decrypter.decrypt(context)
             return Payload(try compressor.decompress(data: decryptedData))
         } catch JWEError.keyManagementAlgorithmMismatch {
-            throw JOSESwiftError.keyManagementAlrgorithmMismatch
+            throw JOSESwiftError.keyManagementAlgorithmMismatch
         } catch JWEError.contentEncryptionAlgorithmMismatch {
             throw JOSESwiftError.contentEncryptionAlgorithmMismatch
         } catch JOSESwiftError.decompressionFailed {

@@ -1,5 +1,5 @@
 //
-//  KeyManaggementMode.swift
+//  KeyManagementMode.swift
 //  JOSESwift
 //
 //  Created by Daniel Egger on 12.02.20.
@@ -158,7 +158,7 @@ private func cast<GivenType, ExpectedType>(
     to _: ExpectedType.Type
 ) -> ExpectedType? {
     // A conditional downcast to the CoreFoundation type SecKey will always succeed.
-    // Therfore we perform runtime type checking to guarantee that the given encryption key's type
+    // Therefore we perform runtime type checking to guarantee that the given encryption key's type
     // matches the type that the respective key management mode expects.
     return (type(of: something) is ExpectedType.Type) ? (something as! ExpectedType) : nil
 }

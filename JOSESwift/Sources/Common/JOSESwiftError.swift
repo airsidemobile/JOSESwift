@@ -54,20 +54,20 @@ public enum JOSESwiftError: Error {
     case invalidCurvePointOctetLength
     case localAuthenticationFailed(errorCode: Int)
 
-    // Compression erros
+    // Compression errors
     case compressionFailed
     case decompressionFailed
     case compressionAlgorithmNotSupported
     case rawDataMustBeGreaterThanZero
     case compressedDataMustBeGreaterThanZero
 
-    // Thumprint computation
+    // Thumbprint computation
     case thumbprintSerialization
 
     // Header errors
     case invalidHeaderParameterValue
 
-    case keyManagementAlrgorithmMismatch
+    case keyManagementAlgorithmMismatch
     case contentEncryptionAlgorithmMismatch
     case signingAlgorithmMismatch
 }
