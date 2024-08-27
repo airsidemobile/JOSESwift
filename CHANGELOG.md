@@ -6,22 +6,29 @@ Include references to issue- or pull-request numbers.
 
 ## [3.0.0] - 2024-08-27
 
-- Update signer and verifier init param name and fix typos (#346)
-- Remove depracated apis (#345)
-- Update directory structure (#344)
-- Allow for plugging in user-provided crypto implementations via customization API (#343)
-- Add support for A192CBC-HS384 and A192GCM (#341)
-- Add support for PBES2 (#304)
-- chore(deps): lock file maintenance + xcode update (#339)
-- Updates search path for Mac silicon SwiftLint functionality in Xcode (#311)
-- chore(deps): lock file maintenance (#328)
-- [JWE] Added support for `A256GCM` and `A128GCM` (#278)
-- chore(deps): lock file maintenance (#313)
-- Add support for public and private header parameters (#312)
-- Update target platforms and fix tests (#310)
-- chore: Configure Renovate and lock file maintenance (#308)
-- Expose JWSHeader parameters (#277)
-- Expose JWEHeader parameters (#277)
+### What's Changed
+
+* added watchos build-ability to SPM package by @mcecunda in https://github.com/airsidemobile/JOSESwift/pull/264
+* Fix linter warnings by @antonyalkmim in https://github.com/airsidemobile/JOSESwift/pull/293
+* Update target platforms and fix tests by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/310
+* Add support for public and private header parameters by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/312
+* [JWE] Added support for `A256GCM` and `A128GCM` by @tobihagemann in https://github.com/airsidemobile/JOSESwift/pull/278
+* Updates search path for Mac silicon SwiftLint functionality in Xcode by @haeser in https://github.com/airsidemobile/JOSESwift/pull/311
+* Add ECDH support for JWE Key Management continuation of #268 by @anthony-dedieu-ariadnext in https://github.com/airsidemobile/JOSESwift/pull/314
+* Add support for PBES2 by @tobihagemann in https://github.com/airsidemobile/JOSESwift/pull/304
+* Add support for A192CBC-HS384 and A192GCM by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/341
+* Allow for plugging in user-provided crypto implementations via customization API by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/343
+* Reorganize source files into directories by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/344
+* Remove deprecated APIs by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/345
+* Update signer and verifier init param name and fix typos by @daniel-moh in https://github.com/airsidemobile/JOSESwift/pull/346
+
+### New Contributors
+* @mcecunda made their first contribution in https://github.com/airsidemobile/JOSESwift/pull/264
+* @antonyalkmim made their first contribution in https://github.com/airsidemobile/JOSESwift/pull/293
+* @anthony-dedieu-ariadnext made their first contribution in https://github.com/airsidemobile/JOSESwift/pull/314
+* @daniel-moh made their first contribution in https://github.com/airsidemobile/JOSESwift/pull/310
+
+**Full Changelog**: https://github.com/airsidemobile/JOSESwift/compare/2.4.0...3.3.0
 
 ## [2.4.0] - 2021-04-20
 
