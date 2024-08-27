@@ -84,7 +84,7 @@ extension RSAKeyEncryption.DecryptionMode: DecryptionKeyManagementMode {
     }
 
     func determineContentEncryptionKey(from encryptedKey: Data, with header: JWEHeader) throws -> Data {
-        // Generate a random CEK to substitue in case we fail to decrypt the CEK.
+        // Generate a random CEK to substitute in case we fail to decrypt the CEK.
         // This is to prevent the MMA (Million Message Attack) against RSA.
         // For detailed information, please refer to RFC-3218 (https://tools.ietf.org/html/rfc3218#section-2.3.2),
         // RFC-5246 (https://tools.ietf.org/html/rfc5246#appendix-F.1.1.2),

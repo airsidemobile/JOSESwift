@@ -25,7 +25,7 @@ import Foundation
 
 public struct Encrypter {
     private let keyManagementMode: EncryptionKeyManagementMode
-    private let contentEncryper: ContentEncrypter
+    private let contentEncrypter: ContentEncrypter
 
     /// Constructs an encrypter that can be used to encrypt a JWE.
     ///
@@ -58,7 +58,7 @@ public struct Encrypter {
 
         let encrypter = try? contentEncryptionAlgorithm.makeContentEncrypter()
         guard let contentEncrypter = encrypter else { return nil }
-        self.contentEncryper = contentEncrypter
+        self.contentEncrypter = contentEncrypter
     }
 
     /// Constructs an encrypter used to encrypt a JWE.
@@ -74,7 +74,7 @@ public struct Encrypter {
         customContentEncrypter contentEncrypter: ContentEncrypter
     ) {
         self.keyManagementMode = keyManagementMode
-        self.contentEncryper = contentEncrypter
+        self.contentEncrypter = contentEncrypter
     }
 
     internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
@@ -82,7 +82,7 @@ public struct Encrypter {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
-        guard let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentEncryper.algorithm else {
+        guard let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentEncrypter.algorithm else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
@@ -94,7 +94,7 @@ public struct Encrypter {
             header
         }
 
-        let contentEncryptionContext = try contentEncryper.encrypt(
+        let contentEncryptionContext = try contentEncrypter.encrypt(
             headerData: updatedHeader.data(),
             payload: payload,
             contentEncryptionKey: keyManagementContext.contentEncryptionKey

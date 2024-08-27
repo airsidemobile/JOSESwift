@@ -57,8 +57,8 @@ class JWSCustomSignerVerifierTests: XCTestCase {
 
         let header = JWSHeader(algorithm: .HS256)
         let payload = Payload("Summer, Sun, Cactus".data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: .HS256, key: testDummySigningKey)!
-        let joseVerifier = Verifier(verifyingAlgorithm: .HS256, key: testDummySigningKey)!
+        let signer = Signer(signatureAlgorithm: .HS256, key: testDummySigningKey)!
+        let joseVerifier = Verifier(signatureAlgorithm: .HS256, key: testDummySigningKey)!
         let customVerifier = Verifier(customVerifier: NoOpVerifyer())
 
         let jws = try JWS(header: header, payload: payload, signer: signer)

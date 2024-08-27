@@ -88,7 +88,7 @@ public protocol ExpressibleAsRSAPrivateKeyComponents {
 
 // MARK: Public Key
 
-/// A JWK holding an RSA pubkic key.
+/// A JWK holding an RSA public key.
 public struct RSAPublicKey: JWK {
     /// The JWK key type.
     public let keyType: JWKKeyType

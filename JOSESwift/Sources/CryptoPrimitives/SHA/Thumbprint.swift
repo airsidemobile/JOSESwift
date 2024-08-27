@@ -29,7 +29,7 @@ enum ThumbprintError: Error {
 }
 
 fileprivate extension JWKThumbprintAlgorithm {
-    var outputLenght: Int {
+    var outputLength: Int {
         switch self {
         case .SHA256:
             return Int(CC_SHA256_DIGEST_LENGTH)
@@ -56,13 +56,13 @@ internal struct Thumbprint {
             throw ThumbprintError.inputMustBeGreaterThanZero
         }
 
-        let hashBytes = UnsafeMutablePointer<UInt8>.allocate(capacity: algorithm.outputLenght)
+        let hashBytes = UnsafeMutablePointer<UInt8>.allocate(capacity: algorithm.outputLength)
         defer { hashBytes.deallocate() }
 
         input.withUnsafeBytes { buffer in
             algorithm.calculate(input: buffer, output: hashBytes)
         }
 
-        return Data(bytes: hashBytes, count: algorithm.outputLenght).base64URLEncodedString()
+        return Data(bytes: hashBytes, count: algorithm.outputLength).base64URLEncodedString()
     }
 }

@@ -175,7 +175,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(count: 300)
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
             }
         }
     }
@@ -189,7 +189,7 @@ class RSADecryptionTests: RSACryptoTestCase {
         for algorithm in keyManagementModeAlgorithms {
             let ciphertext = Data(count: 0)
             XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
             }
         }
     }
@@ -207,7 +207,7 @@ class RSADecryptionTests: RSACryptoTestCase {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
                 // Should throw "decryption failed", but
                 // should _not_ throw cipherTextLenghtNotSatisfied
-                XCTAssertNotEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+                XCTAssertNotEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
             }
         }
     }
@@ -223,7 +223,7 @@ class RSADecryptionTests: RSACryptoTestCase {
 
         for algorithm in keyManagementModeAlgorithms {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
             }
         }
     }
@@ -239,7 +239,7 @@ class RSADecryptionTests: RSACryptoTestCase {
 
         for algorithm in keyManagementModeAlgorithms {
             XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLenghtNotSatisfied)
+                XCTAssertEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
             }
         }
     }

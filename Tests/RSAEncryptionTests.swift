@@ -28,7 +28,7 @@ import XCTest
 extension RSAError: Equatable {
     public static func == (lhs: RSAError, rhs: RSAError) -> Bool {
         switch (lhs, rhs) {
-        case (.cipherTextLenghtNotSatisfied, .cipherTextLenghtNotSatisfied):
+        case (.cipherTextLengthNotSatisfied, .cipherTextLengthNotSatisfied):
             return true
         case (.plainTextLengthNotSatisfied, .plainTextLengthNotSatisfied):
             return true

@@ -45,8 +45,8 @@ class JWSECTests: ECCryptoTestCase {
         let algorithm = SignatureAlgorithm(rawValue: testData.signatureAlgorithm)!
         let header = JWSHeader(algorithm: algorithm)
         let payload = Payload(plainTextPayload.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, key: testData.privateKey)!
-        let verifier = Verifier(verifyingAlgorithm: algorithm, key: testData.publicKey)!
+        let signer = Signer(signatureAlgorithm: algorithm, key: testData.privateKey)!
+        let verifier = Verifier(signatureAlgorithm: algorithm, key: testData.publicKey)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compact = jws.compactSerializedString
         let splitCompact = compact.split(separator: ".")

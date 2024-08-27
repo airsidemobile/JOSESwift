@@ -29,7 +29,7 @@ internal enum RSAError: Error {
     case signingFailed(description: String)
     case verifyingFailed(description: String)
     case plainTextLengthNotSatisfied
-    case cipherTextLenghtNotSatisfied
+    case cipherTextLengthNotSatisfied
     case encryptingFailed(description: String)
     case decryptingFailed(description: String)
 }
@@ -137,7 +137,7 @@ fileprivate extension KeyManagementAlgorithm {
     /// This length checking is just for usability reasons.
     /// Proper length checking is done in the implementation of iOS'
     /// `SecKeyCreateEncryptedData` and `SecKeyCreateDecryptedData`.
-    func isCipherTextLenghtSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool? {
+    func isCipherTextLengthSatisfied(_ cipherText: Data, for privateKey: SecKey) -> Bool? {
         switch self {
         case .RSA1_5:
             // For detailed information about the allowed cipher length for RSAES-PKCS1-v1_5,
@@ -278,9 +278,9 @@ internal struct RSA {
 
         // Check if the cipher text length does not exceed the maximum.
         // e.g. for RSA1_5 the cipher text has the same length as the private key's modulus.
-        guard algorithm.isCipherTextLenghtSatisfied(ciphertext, for: privateKey) == true
+        guard algorithm.isCipherTextLengthSatisfied(ciphertext, for: privateKey) == true
         else {
-            throw RSAError.cipherTextLenghtNotSatisfied
+            throw RSAError.cipherTextLengthNotSatisfied
         }
 
         // Decrypt the cipher text with a given `SecKeyAlgorithm` and a private key.

@@ -92,7 +92,7 @@ public struct SymmetricKey: JWK {
     /// Creates a `SymmetricKey` JWK with the specified symmetric key and optional additional JWK parameters.
     ///
     /// - Parameters:
-    ///   - key: The symmetirc key that the resulting JWK should represent.
+    ///   - key: The symmetric key that the resulting JWK should represent.
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public init(key: ExpressibleAsSymmetricKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {

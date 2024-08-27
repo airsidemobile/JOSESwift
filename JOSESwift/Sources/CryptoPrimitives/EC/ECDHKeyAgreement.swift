@@ -4,6 +4,22 @@
 //
 //  Created by Mikael Rucinsky on 07.12.20.
 //
+//  ---------------------------------------------------------------------------
+//  Copyright 2024 Airside Mobile Inc.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//  ---------------------------------------------------------------------------
+//
 
 import Foundation
 import CommonCrypto
@@ -37,9 +53,9 @@ func keyAgreementCompute(with algorithm: KeyManagementAlgorithm, encryption: Con
         algId = ident
         keyDataLen = algorithm.keyWrapAlgorithm?.keyBitSize ?? 0
     }
-    let algorithmID = prefixedBigEndenLen(from: algId)
-    let partyUInfo = prefixedBigEndenLen(from: apu)
-    let partyVInfo = prefixedBigEndenLen(from: apv)
+    let algorithmID = prefixedBigEndianLen(from: algId)
+    let partyUInfo = prefixedBigEndianLen(from: apu)
+    let partyVInfo = prefixedBigEndianLen(from: apv)
     let suppPubInfo = intToData(value: UInt32(keyDataLen).bigEndian)
     return try concatKDF(hash: Hash.SHA256, z: z, keyDataLen: keyDataLen, algorithmID: algorithmID, partyUInfo: partyUInfo, partyVInfo: partyVInfo, suppPubInfo: suppPubInfo)
 }
@@ -80,7 +96,7 @@ func truncateBitLen(from: Data, bitLen: Int) -> Data {
     return result
 }
 
-func prefixedBigEndenLen(from: Data) -> Data {
+func prefixedBigEndianLen(from: Data) -> Data {
     let prefix = intToData(value: UInt32(from.count).bigEndian)
     return prefix + from
 }
@@ -110,21 +126,21 @@ func concatKDF(hash: Hash, z: Data, keyDataLen: Int, algorithmID: Data, partyUIn
     let modLen = keyDataLen % hash.bitLength
     let reps = (keyDataLen / hash.bitLength) + (modLen > 0 ? 1 : 0)
 
-    let concatedData = z + algorithmID + partyUInfo + partyVInfo + suppPubInfo + suppPrivInfo
-    let hashInputLen = 4 + concatedData.count
+    let concatenatedData = z + algorithmID + partyUInfo + partyVInfo + suppPubInfo + suppPrivInfo
+    let hashInputLen = 4 + concatenatedData.count
     guard hashInputLen <= 0xFFFF else {
-        throw ECError.deriveKeyFail(reason: "Derivation parameter (couter + Z + otherInfor) is more than max HASH input length")
+        throw ECError.deriveKeyFail(reason: "Derivation parameter is more than max HASH input length")
     }
 
     var derivedKeyingMaterial = Data()
     for i in 1 ..< reps {
-        derivedKeyingMaterial += hash.digest(intToData(value: UInt32(i).bigEndian) + concatedData)
+        derivedKeyingMaterial += hash.digest(intToData(value: UInt32(i).bigEndian) + concatenatedData)
     }
 
     if modLen == 0 {
-        derivedKeyingMaterial += hash.digest(intToData(value: UInt32(reps).bigEndian) + concatedData)
+        derivedKeyingMaterial += hash.digest(intToData(value: UInt32(reps).bigEndian) + concatenatedData)
     } else {
-        let digest = hash.digest(intToData(value: UInt32(reps).bigEndian) + concatedData)
+        let digest = hash.digest(intToData(value: UInt32(reps).bigEndian) + concatenatedData)
         derivedKeyingMaterial += truncateBitLen(from: digest, bitLen: modLen)
     }
     return derivedKeyingMaterial

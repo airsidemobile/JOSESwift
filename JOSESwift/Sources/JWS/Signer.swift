@@ -41,7 +41,7 @@ public struct Signer {
     /// Constructs a signer used to sign a JWS.
     ///
     /// - Parameters:
-    ///   - signingAlgorithm: The desired `SignatureAlgorithm`.
+    ///   - signatureAlgorithm: The desired `SignatureAlgorithm`.
     ///   - key: The key used to compute the JWS's signature or message authentication code (MAC).
     ///     Currently supported key types are: `SecKey` and `Data`.
     ///     - For _digital signature algorithms_ it is the sender's private key (`SecKey`)
@@ -49,26 +49,26 @@ public struct Signer {
     ///     - For _MAC algorithms_ it is the secret symmetric key (`Data`)
     ///       shared between the sender and the recipient.
     /// - Returns: A fully initialized `Signer` or `nil` if provided key is of the wrong type.
-    public init?<KeyType>(signingAlgorithm: SignatureAlgorithm, key: KeyType) {
-        switch signingAlgorithm {
+    public init?<KeyType>(signatureAlgorithm: SignatureAlgorithm, key: KeyType) {
+        switch signatureAlgorithm {
         case .HS256, .HS384, .HS512:
             guard type(of: key) is HMACSigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = HMACSigner(algorithm: signingAlgorithm, key: key as! HMACSigner.KeyType)
+            self.signer = HMACSigner(algorithm: signatureAlgorithm, key: key as! HMACSigner.KeyType)
         case .RS256, .RS384, .RS512, .PS256, .PS384, .PS512:
             guard type(of: key) is RSASigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = RSASigner(algorithm: signingAlgorithm, privateKey: key as! RSASigner.KeyType)
+            self.signer = RSASigner(algorithm: signatureAlgorithm, privateKey: key as! RSASigner.KeyType)
         case .ES256, .ES384, .ES512:
             guard type(of: key) is ECSigner.KeyType.Type else {
                 return nil
             }
             // swiftlint:disable:next force_cast
-            self.signer = ECSigner(algorithm: signingAlgorithm, privateKey: key as! ECSigner.KeyType)
+            self.signer = ECSigner(algorithm: signatureAlgorithm, privateKey: key as! ECSigner.KeyType)
         }
     }
 
