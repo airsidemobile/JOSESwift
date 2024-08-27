@@ -193,7 +193,6 @@ public struct JWE {
         } catch JWEError.keyManagementAlgorithmMismatch {
             throw JOSESwiftError.keyManagementAlrgorithmMismatch
         } catch JWEError.contentEncryptionAlgorithmMismatch {
-            // todo: better error type?
             throw JOSESwiftError.contentEncryptionAlgorithmMismatch
         } catch JOSESwiftError.decompressionFailed {
             throw JOSESwiftError.decompressionFailed
