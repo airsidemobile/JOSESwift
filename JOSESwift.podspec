@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = "JOSESwift"
-  s.version           = "2.4.0"
+  s.version           = "3.0.0"
   s.license           = "Apache License, Version 2.0"
 
   s.summary           = "JOSE framework for Swift"
