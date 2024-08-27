@@ -37,7 +37,7 @@ internal enum JWEError: Error {
 /// As discussed, it is the responsibility of the framework user to cache e.g. the plaintext. Of course this will have to be communicated clearly.
 public struct JWE {
     /// The JWE's JOSE Header.
-    public var header: JWEHeader
+    public let header: JWEHeader
 
     /// The encrypted content encryption key (CEK).
     public let encryptedKey: Data
@@ -71,11 +71,9 @@ public struct JWE {
     ///   - encrypter: The `Encrypter` used to encrypt the JWE from the header and payload.
     /// - Throws: `JOSESwiftError` if any error occurs while encrypting.
     public init(header: JWEHeader, payload: Payload, encrypter: Encrypter) throws {
-        self.header = header
-
         var encryptionContext: Encrypter.EncryptionContext
         do {
-            encryptionContext = try encrypter.encrypt(header: &self.header, payload: payload.compressed(using: header.compressionAlgorithm))
+            encryptionContext = try encrypter.encrypt(header: header, payload: payload.compressed(using: header.compressionAlgorithm))
         } catch JOSESwiftError.compressionFailed {
             throw JOSESwiftError.compressionFailed
         } catch JOSESwiftError.compressionAlgorithmNotSupported {
@@ -84,6 +82,7 @@ public struct JWE {
             throw JOSESwiftError.encryptingFailed(description: error.localizedDescription)
         }
 
+        self.header = encryptionContext.jweHeader
         self.encryptedKey = encryptionContext.encryptedKey
         self.ciphertext = encryptionContext.ciphertext
         self.initializationVector = encryptionContext.initializationVector

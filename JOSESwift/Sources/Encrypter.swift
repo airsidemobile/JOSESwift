@@ -69,7 +69,7 @@ public struct Encrypter {
         self.contentEncryper = contentEncrypter
     }
 
-    internal func encrypt(header: inout JWEHeader, payload: Payload) throws -> EncryptionContext {
+    internal func encrypt(header: JWEHeader, payload: Payload) throws -> EncryptionContext {
         guard let headerAlg = header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
@@ -80,17 +80,20 @@ public struct Encrypter {
 
         let keyManagementContext = try keyManagementMode.determineContentEncryptionKey(with: header)
 
-        if let updatedHeader = keyManagementContext.jweHeader {
-            header = updatedHeader
+        let updatedHeader = if let updatedHeader = keyManagementContext.jweHeader {
+            updatedHeader
+        } else {
+            header
         }
 
         let contentEncryptionContext = try contentEncryper.encrypt(
-            headerData: header.data(),
+            headerData: updatedHeader.data(),
             payload: payload,
             contentEncryptionKey: keyManagementContext.contentEncryptionKey
         )
 
         return EncryptionContext(
+            jweHeader: updatedHeader,
             encryptedKey: keyManagementContext.encryptedKey,
             ciphertext: contentEncryptionContext.ciphertext,
             authenticationTag: contentEncryptionContext.authenticationTag,
@@ -101,6 +104,7 @@ public struct Encrypter {
 
 extension Encrypter {
     struct EncryptionContext {
+        let jweHeader: JWEHeader
         let encryptedKey: Data
         let ciphertext: Data
         let authenticationTag: Data
