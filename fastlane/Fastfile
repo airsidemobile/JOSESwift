@@ -60,28 +60,6 @@ lane :bump do |options|
   new_version_xcode
 end
 
-desc "Get all pull requests since the last release"
-lane :pr_commits do
-  # Only include squashed pull requests which end with something like "(#123)".
-  changelog_from_git_commits(pretty:"- %s")
-    .split("\n")
-    .grep(/\(#[0-9]*\)$/)
-    .join("\n")
-end
-
-lane :update_changelog do
-  ensure_git_status_clean
-
-  changelog_path = "../CHANGELOG.md"
-  changelog_additions = "## [#{get_version_number}] - #{Time.now.strftime("%Y-%m-%d")}\n\n#{pr_commits}"
-  changelog = File.read(changelog_path)
-  changelog = changelog.sub(/##/, "#{changelog_additions}\n\n\\0")
-  File.write(changelog_path, changelog)
-
-  sh("git commit -am 'Update changelog'")
-  ensure_git_status_clean
-end
-
 desc "Prepares a release by bumping version, formatting code, running tests, setting up a release preparation branch"
 lane :prepare do |options|
   unless options[:force]
@@ -109,8 +87,6 @@ lane :prepare do |options|
   copyright
 
   test
-
-  update_changelog
 
   # Prompt for confimation
   promt_text = "Version #{version} has been prepared for release. "\
@@ -176,15 +152,7 @@ desc "Publishes the release on GitHub"
 lane :publish_release do
   version = get_version_number(target: "JOSESwift")
 
-  changelog = File.read("../CHANGELOG.md")
-  changes = changelog[/(- .+\(#.+\)\n)+/] # Filter latest change set (e.g. "- Add some feature (#123)\n...").
-  tmp_changelog = Tempfile.new("jose-changelog")
-  tmp_changelog.write(changes)
-  tmp_changelog.close
-
-  system("gh release create #{version} --title v#{version} --notes-file #{tmp_changelog.path}")
-
-  tmp_changelog.unlink
+  system("gh release create #{version} --title v#{version} --notes-from-tag")
 end
 
 desc "Run Sonarqube analysis after running the test lane"
