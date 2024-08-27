@@ -73,6 +73,13 @@ public struct Verifier {
         }
     }
 
+    /// Constructs a verifier used to verify a JWS signature.
+    ///
+    /// - Parameters:
+    ///   - customVerifier: A custom signature verification implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Verifier`.
     public init(customVerifier verifier: VerifierProtocol) {
         self.verifier = verifier
     }

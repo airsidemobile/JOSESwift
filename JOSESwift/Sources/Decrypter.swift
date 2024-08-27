@@ -55,6 +55,14 @@ public struct Decrypter {
         self.contentDecrypter = contentDecrypter
     }
 
+    /// Constructs an decrypter used to decrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyManagementMode: A custom key management implementation.
+    ///   - contentEncrypter: A custom content decryption implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Decrypter`.
     public init(
         customKeyManagementMode keyManagementMode: DecryptionKeyManagementMode,
         customContentDecrypter contentDecrypter: ContentDecrypter

@@ -61,6 +61,14 @@ public struct Encrypter {
         self.contentEncryper = contentEncrypter
     }
 
+    /// Constructs an encrypter used to encrypt a JWE.
+    ///
+    /// - Parameters:
+    ///   - keyManagementMode: A custom key management implementation.
+    ///   - contentEncrypter: A custom content encryption implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Encrypter`.
     public init(
         customKeyManagementMode keyManagementMode: EncryptionKeyManagementMode,
         customContentEncrypter contentEncrypter: ContentEncrypter

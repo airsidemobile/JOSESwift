@@ -72,6 +72,13 @@ public struct Signer {
         }
     }
 
+    /// Constructs a signer used to sign a JWS.
+    ///
+    /// - Parameters:
+    ///   - customSigner: A custom signing implementation.
+    ///
+    ///   It is the implementors responsibility to ensure compliance with the necessary specifications.
+    /// - Returns: A fully initialized `Signer`.
     public init(customSigner signer: SignerProtocol) {
         self.signer = signer
     }
