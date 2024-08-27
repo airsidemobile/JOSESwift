@@ -105,12 +105,3 @@ extension Array where Element == DataConvertible {
         return encoded.joined(separator: ".").data(using: .ascii)
     }
 }
-
-// MARK: - Deprecated API
-
-extension Signer {
-    @available(*, deprecated, message: "Use `init?(signingAlgorithm: SignatureAlgorithm, key: KeyType)` instead")
-    public init?<KeyType>(signingAlgorithm: SignatureAlgorithm, privateKey: KeyType) {
-        self.init(signingAlgorithm: signingAlgorithm, key: privateKey)
-    }
-}

@@ -36,32 +36,6 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
     let ecdhKeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW]
     let pbes2KeyManagementModeAlgorithms: [KeyManagementAlgorithm] = [.PBES2_HS256_A128KW, .PBES2_HS384_A192KW, .PBES2_HS512_A256KW]
 
-    @available(*, deprecated)
-    func testEncrypterDeprecated1Initialization() {
-        for algorithm in rsaKeyManagementModeAlgorithms {
-            XCTAssertNotNil(
-                Encrypter(
-                    keyEncryptionAlgorithm: algorithm,
-                    keyEncryptionKey: publicKeyAlice2048!,
-                    contentEncyptionAlgorithm: .A256CBCHS512
-                )
-            )
-        }
-    }
-
-    @available(*, deprecated)
-    func testEncrypterDeprecated2Initialization() {
-        for algorithm in rsaKeyManagementModeAlgorithms {
-            XCTAssertNotNil(
-                Encrypter(
-                    keyEncryptionAlgorithm: algorithm,
-                    encryptionKey: publicKeyAlice2048!,
-                    contentEncyptionAlgorithm: .A256CBCHS512
-                )
-            )
-        }
-    }
-
     func testSuccessfulEncrypterInitialization() {
         for algorithm in KeyManagementAlgorithm.allCases {
             switch algorithm {
@@ -170,32 +144,6 @@ class EncrypterDecrypterInitializationTests: RSACryptoTestCase {
             default:
                 XCTFail()
             }
-        }
-    }
-
-    @available(*, deprecated)
-    func testDecrypterDeprecated1Initialization() {
-        for algorithm in rsaKeyManagementModeAlgorithms {
-            XCTAssertNotNil(
-                Decrypter(
-                    keyDecryptionAlgorithm: algorithm,
-                    keyDecryptionKey: privateKeyAlice2048!,
-                    contentDecryptionAlgorithm: .A256CBCHS512
-                )
-            )
-        }
-    }
-
-    @available(*, deprecated)
-    func testDecrypterDeprecated2Initialization() {
-        for algorithm in rsaKeyManagementModeAlgorithms {
-            XCTAssertNotNil(
-                Decrypter(
-                    keyDecryptionAlgorithm: algorithm,
-                    decryptionKey: privateKeyAlice2048!,
-                    contentDecryptionAlgorithm: .A256CBCHS512
-                )
-            )
         }
     }
 

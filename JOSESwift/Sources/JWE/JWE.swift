@@ -137,43 +137,6 @@ public struct JWE {
     /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
     /// It is the responsibility of the user to cache this plaintext.
     ///
-    /// - Parameter kdk: The private key to decrypt the JWE with.
-    /// - Returns: The decrypted payload of the JWE.
-    /// - Throws: A `JOSESwiftError` indicating any errors.
-    @available(*, deprecated, message: "Use `decrypt(using decrypter:)` instead")
-    public func decrypt<KeyType>(with key: KeyType) throws -> Payload {
-        let context = Decrypter.DecryptionContext(
-            protectedHeader: header,
-            encryptedKey: encryptedKey,
-            initializationVector: initializationVector,
-            ciphertext: ciphertext,
-            authenticationTag: authenticationTag
-        )
-
-        guard let alg = header.algorithm, let enc = header.encryptionAlgorithm else {
-            throw JOSESwiftError.decryptingFailed(description: "Invalid header parameter.")
-        }
-
-        guard let decrypter = Decrypter(keyDecryptionAlgorithm: alg, decryptionKey: key, contentDecryptionAlgorithm: enc) else {
-            throw JOSESwiftError.decryptingFailed(description: "Wrong key type.")
-        }
-
-        do {
-            let decryptedData = try decrypter.decrypt(context)
-            let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-            return Payload(try compressor.decompress(data: decryptedData))
-        } catch JOSESwiftError.decompressionFailed {
-            throw JOSESwiftError.decompressionFailed
-        } catch JOSESwiftError.compressionAlgorithmNotSupported {
-            throw JOSESwiftError.compressionAlgorithmNotSupported
-        } catch {
-            throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
-        }
-    }
-
-    /// Decrypt the JWE's ciphertext and return the corresponding plaintext.
-    /// It is the responsibility of the user to cache this plaintext.
-    ///
     /// - Parameter decrypter: The decrypter to decrypt the JWE with.
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.

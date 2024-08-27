@@ -45,95 +45,64 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         130, 17, 68, 228, 129, 138, 7, 130
     ])
 
-    @available(*, deprecated)
-
     func testRoundtripA128CBCHS256() {
         let algorithm = ContentEncryptionAlgorithm.A128CBCHS256
         let symmetricKey = try! SecureRandom.generate(count: algorithm.keyLength)
 
-        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: algorithm)
+        let header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: algorithm)
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: algorithm)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: algorithm, encryptionKey: symmetricKey)!
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: algorithm, decryptionKey: symmetricKey)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
-        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
 
-    @available(*, deprecated)
     func testRoundtripA256CBCHS512() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
-        let header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
+        let header = JWEHeader(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512)
         let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
+        let encrypter = Encrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: symmetricKey)!
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
 
         let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
         let serialization = jwe.compactSerializedString
 
-        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
+        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(using: decrypter).data(), data)
     }
 
-    @available(*, deprecated)
     func testDecryptFromNimbus() {
         let symmetricKey = keyFromNimbus
 
         let jwe = try! JWE(compactSerialization: serializationFromNimbus)
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
 
-        try! XCTAssertEqual(jwe.decrypt(with: symmetricKey).data(), data)
+        try! XCTAssertEqual(jwe.decrypt(using: decrypter).data(), data)
     }
 
-    @available(*, deprecated)
     func testDecryptWithWrongSymmetricKey() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 
         let jwe = try! JWE(compactSerialization: serializationFromNimbus)
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
 
-        XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
+        XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
     }
 
-    @available(*, deprecated)
-    func testDecryptWithCorrectAlgWrongKeyType() {
+    func testDecryptWithAlgKeyMismatch1() {
         let privateKey = privateKeyAlice2048!
-
-        let jwe = try! JWE(compactSerialization: serializationFromNimbus)
-
-        XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
+        XCTAssertNil(Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKey))
     }
 
-    @available(*, deprecated)
-    func testDecryptWithWrongAlgCorrectKeyType() {
-        // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
-        let serialization = serializationFromNimbus.replacingOccurrences(
-            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0",
-            with: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBMV81In0"
-        )
-
+    func testDecryptWithAlgKeyMismatch2() {
         let symmetricKey = keyFromNimbus
-
-        let jwe = try! JWE(compactSerialization: serialization)
-
-        XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
+        XCTAssertNil(Decrypter(keyManagementAlgorithm: .RSA1_5, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey))
     }
 
-    @available(*, deprecated)
-    func testDecryptWithWrongAlgWrongKeyType() {
-        // replacing `{"enc":"A256CBC-HS512","alg":"dir"}` with `{"enc":"A256CBC-HS512","alg":"RSA1_5"}`
-        let serialization = serializationFromNimbus.replacingOccurrences(
-            of: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiZGlyIn0",
-            with: "eyJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBMV81In0"
-        )
-
-        let privateKey = privateKeyAlice2048!
-
-        let jwe = try! JWE(compactSerialization: serialization)
-
-        XCTAssertThrowsError(try jwe.decrypt(with: privateKey))
-    }
-
-    @available(*, deprecated)
-    func testDecryptWithEncryptedKeyPresent() {
+    func testDecryptDirectEncryptionWithUnexpectedEncryptedKeyPresent() {
         let encryptedKey = """
             c3HOjtBLx3xt3RYMx2WexgbYpcszeqiWXZmeBaLIUb8BXsETRxHDFUyyAt6Q8dIYX22kQs9Kte7AL1CcVxS0C2sx_yu7xDZ4s67cHW1AMbf\
             qqqhyaUSS5BkyTIhLgEbo34ohxP0bYq-enlu8hlOYWhwh-yLSj1mRCSYufv8ik6QhoJ14P981M_O8Fl0XMGe7Ki3jdui_MKj8NKN-96McS4\
@@ -151,8 +120,9 @@ class JWEDirectEncryptionTests: RSACryptoTestCase {
         let symmetricKey = keyFromNimbus
 
         let jwe = try! JWE(compactSerialization: serialization)
+        let decrypter = Decrypter(keyManagementAlgorithm: .direct, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: symmetricKey)!
 
-        XCTAssertThrowsError(try jwe.decrypt(with: symmetricKey))
+        XCTAssertThrowsError(try jwe.decrypt(using: decrypter))
     }
 
 }

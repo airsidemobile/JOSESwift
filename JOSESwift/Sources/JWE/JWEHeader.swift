@@ -362,31 +362,3 @@ extension JWEHeader: CommonHeaderParameterSpace {
         }
     }
 }
-
-// MARK: - Deprecated API
-
-public extension JWEHeader {
-    /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
-    @available(*, deprecated, message: "Use `JWEHeader.keyManagementAlgorithm` instead")
-    var algorithm: AsymmetricKeyAlgorithm? {
-        // Forced cast is ok here since we checked both that "alg" exists
-        // and holds a `String` value in `init(parameters:)`.
-        // swiftlint:disable:next force_cast
-        return AsymmetricKeyAlgorithm(rawValue: parameters["alg"] as! String)
-    }
-
-    /// The encryption algorithm used to perform authenticated encryption of the plaintext
-    /// to produce the ciphertext and the Authentication Tag.
-    @available(*, deprecated, message: "Use `JWEHeader.contentEncryptionAlgorithm` instead")
-    var encryptionAlgorithm: SymmetricKeyAlgorithm? {
-        // Forced cast is ok here since we checked both that "enc" exists
-        // and holds a `String` value in `init(parameters:)`.
-        // swiftlint:disable:next force_cast
-        return SymmetricKeyAlgorithm(rawValue: parameters["enc"] as! String)
-    }
-
-    @available(*, deprecated, message: "Use `init(keyManagementAlgorithm:contentEncryptionAlgorithm` instead")
-    init(algorithm: AsymmetricKeyAlgorithm, encryptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: encryptionAlgorithm)
-    }
-}

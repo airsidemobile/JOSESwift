@@ -37,22 +37,6 @@ class JWECompressionTests: RSACryptoTestCase {
         XpUD3tNskLzdl17s4vsCCSUwe5bRFpJg1kUs
         """
 
-    @available(*, deprecated)
-    func testRoundtripWithLegacyDecrypter() {
-        let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
-
-        var header = JWEHeader(algorithm: .direct, encryptionAlgorithm: .A256CBCHS512)
-        header.zip = "DEF"
-
-        let payload = Payload(data)
-        let encrypter = Encrypter(keyEncryptionAlgorithm: .direct, encryptionKey: symmetricKey, contentEncyptionAlgorithm: .A256CBCHS512)!
-
-        let jwe = try! JWE(header: header, payload: payload, encrypter: encrypter)
-        let serialization = jwe.compactSerializedString
-
-        try! XCTAssertEqual(JWE(compactSerialization: serialization).decrypt(with: symmetricKey).data(), data)
-    }
-
     func testRoundtripDirectEncryption() {
         let symmetricKey = try! SecureRandom.generate(count: ContentEncryptionAlgorithm.A256CBCHS512.keyLength)
 

@@ -331,15 +331,6 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.compressionAlgorithm, nil)
     }
 
-    @available(*, deprecated)
-    func testDeprecatedAPI() {
-        let header1 = JWEHeader(algorithm: .A128KW, encryptionAlgorithm: .A128CBCHS256)
-        let header2 = JWEHeader(keyManagementAlgorithm: .A128KW, contentEncryptionAlgorithm: .A128CBCHS256)
-
-        XCTAssertEqual(header1.algorithm, header1.keyManagementAlgorithm)
-        XCTAssertEqual(header2.encryptionAlgorithm, header1.contentEncryptionAlgorithm)
-    }
-
     func testJwkTypedHeaderParamRSA() throws {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,

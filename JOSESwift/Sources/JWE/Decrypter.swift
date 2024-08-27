@@ -110,34 +110,3 @@ extension Decrypter {
         let authenticationTag: Data
     }
 }
-
-// MARK: - Deprecated API
-
-extension Decrypter {
-    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:decryptionKey:)` instead")
-    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, decryptionKey key: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyManagementAlgorithm: keyDecryptionAlgorithm, contentEncryptionAlgorithm: contentDecryptionAlgorithm, decryptionKey: key)
-    }
-
-    @available(*, deprecated, message: "Use `init?(keyManagementAlgorithm:contentEncryptionAlgorithm:decryptionKey:)` instead")
-    public init?<KeyType>(keyDecryptionAlgorithm: AsymmetricKeyAlgorithm, keyDecryptionKey kdk: KeyType, contentDecryptionAlgorithm: SymmetricKeyAlgorithm) {
-        self.init(keyDecryptionAlgorithm: keyDecryptionAlgorithm, decryptionKey: kdk, contentDecryptionAlgorithm: contentDecryptionAlgorithm)
-    }
-}
-
-@available(*, deprecated, message: "This type will be removed with the next major release.")
-public struct DecryptionContext {
-    let header: JWEHeader
-    let encryptedKey: Data
-    let initializationVector: Data
-    let ciphertext: Data
-    let authenticationTag: Data
-}
-
-@available(*, deprecated, message: "This type will be removed with the next major release.")
-public struct SymmetricDecryptionContext {
-    let ciphertext: Data
-    let initializationVector: Data
-    let additionalAuthenticatedData: Data
-    let authenticationTag: Data
-}

@@ -28,12 +28,10 @@ import XCTest
 
 class JWSRSATests: RSACryptoTestCase {
 
-    @available(*, deprecated)
     func testSignAndSerializeRS256() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS256)
     }
 
-    @available(*, deprecated)
     func testSignAndVerifyRS256WithNonRequiredHeaderParameter() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS256, withKid: true)
     }
@@ -42,12 +40,10 @@ class JWSRSATests: RSACryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS256, compactSerializedJWS: compactSerializedJWSRS256Const)
     }
 
-    @available(*, deprecated)
     func testSignAndSerializeRS384() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS384)
     }
 
-    @available(*, deprecated)
     func testSignAndVerifyRS384WithNonRequiredHeaderParameter() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS384, withKid: true)
     }
@@ -56,12 +52,10 @@ class JWSRSATests: RSACryptoTestCase {
         self.performTestRSADeserialization(algorithm: .RS384, compactSerializedJWS: compactSerializedJWSRS384Const)
     }
 
-    @available(*, deprecated)
     func testSignAndSerializeRS512() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS512)
     }
 
-    @available(*, deprecated)
     func testSignAndVerifyRS512WithNonRequiredHeaderParameter() {
         self.performTestRSASerializationValidationAndDeserialization(algorithm: .RS512, withKid: true)
     }
@@ -97,7 +91,7 @@ class JWSRSATests: RSACryptoTestCase {
         XCTAssertEqual(String(data: jws.header.data(), encoding: .utf8), "{\"alg\":\"\(algorithm.rawValue)\"}")
         XCTAssertEqual(String(data: jws.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")
 
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
+        let signer = Signer(signingAlgorithm: algorithm, key: privateKeyAlice2048!)!
         let signature = try! signer.sign(header: JWSHeader(algorithm: algorithm), payload: Payload(message.data(using: .utf8)!))
         XCTAssertEqual(jws.signature.data(), signature)
     }
@@ -113,12 +107,12 @@ class JWSRSATests: RSACryptoTestCase {
             header.kid = "kid"
         }
         let payload = Payload(message.data(using: .utf8)!)
-        let signer = Signer(signingAlgorithm: algorithm, privateKey: privateKeyAlice2048!)!
+        let signer = Signer(signingAlgorithm: algorithm, key: privateKeyAlice2048!)!
         let jws = try! JWS(header: header, payload: payload, signer: signer)
         let compactSerializedJWS = jws.compactSerializedString
 
         let secondJWS = try! JWS(compactSerialization: compactSerializedJWS)
-        let verifier = Verifier(verifyingAlgorithm: algorithm, publicKey: publicKeyAlice2048!)
+        let verifier = Verifier(verifyingAlgorithm: algorithm, key: publicKeyAlice2048!)
 
         XCTAssertTrue(secondJWS.isValid(for: verifier!))
         XCTAssertEqual(String(data: secondJWS.payload.data(), encoding: .utf8), "The true sign of intelligence is not knowledge but imagination.")

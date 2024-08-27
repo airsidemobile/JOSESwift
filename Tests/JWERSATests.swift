@@ -87,7 +87,6 @@ class JWERSATests: RSACryptoTestCase {
         The true sign of intelligence is not knowledge but imagination.
         """.data(using: .utf8)!
 
-    @available(*, deprecated)
     func testJWERoundtrip() {
         guard let publicKeyAlice2048 = publicKeyAlice2048  else {
             XCTFail("publicKeyAlice2048 was nil.")
@@ -95,12 +94,13 @@ class JWERSATests: RSACryptoTestCase {
         }
 
         for algorithm in keyManagementModeAlgorithms {
-            let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048)!
+            let decrypter = Decrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)!
             let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-            let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
+            let decryptedPayload = try! jweDec.decrypt(using: decrypter)
 
             XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
         }
@@ -132,38 +132,23 @@ class JWERSATests: RSACryptoTestCase {
         XCTAssertThrowsError(try JWE(header: header, payload: payload, encrypter: encrypter))
     }
 
-    @available(*, deprecated)
     func testJWERoundtripWithNonRequiredJWEHeaderParameter() {
         for algorithm in keyManagementModeAlgorithms {
-            var header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            var header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
             header.kid = "kid"
 
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
-            let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
+            let decrypter = Decrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: privateKeyAlice2048!)!
 
+            let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
-            let decryptedPayload = try! jweDec.decrypt(with: privateKeyAlice2048!)
+            let decryptedPayload = try! jweDec.decrypt(using: decrypter)
 
             XCTAssertEqual(message.data(using: .utf8)!, decryptedPayload.data())
         }
     }
 
-    @available(*, deprecated)
-    func testDecryptWithInferredDecrypter() {
-        guard let privateKeyAlice2048 = privateKeyAlice2048  else {
-            XCTFail("privateKeyAlice2048 was nil.")
-            return
-        }
-        for algorithm in keyManagementModeAlgorithms {
-            let jwe = try! JWE(compactSerialization: compactSerializedData[algorithm.rawValue]!)
-            let payload = try! jwe.decrypt(with: privateKeyAlice2048).data()
-
-            XCTAssertEqual(payload, plaintext)
-        }
-    }
-
-    @available(*, deprecated)
     func testDecryptFails() {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,
@@ -176,7 +161,7 @@ class JWERSATests: RSACryptoTestCase {
         ]
 
         for algorithm in keyManagementModeAlgorithms {
-            let header = JWEHeader(algorithm: algorithm, encryptionAlgorithm: .A256CBCHS512)
+            let header = JWEHeader(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512)
             let payload = Payload(message.data(using: .utf8)!)
             let encrypter = Encrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, encryptionKey: publicKeyAlice2048!)!
             let jweEnc = try! JWE(header: header, payload: payload, encrypter: encrypter)
@@ -189,8 +174,9 @@ class JWERSATests: RSACryptoTestCase {
             }
 
             let jweDec = try! JWE(compactSerialization: jweEnc.compactSerializedData)
+            let decrypter = Decrypter(keyManagementAlgorithm: algorithm, contentEncryptionAlgorithm: .A256CBCHS512, decryptionKey: key)!
 
-            XCTAssertThrowsError(try jweDec.decrypt(with: key))
+            XCTAssertThrowsError(try jweDec.decrypt(using: decrypter))
         }
     }
 
