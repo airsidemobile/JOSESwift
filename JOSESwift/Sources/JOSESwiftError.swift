@@ -66,4 +66,8 @@ public enum JOSESwiftError: Error {
 
     // Header errors
     case invalidHeaderParameterValue
+
+    case keyManagementAlrgorithmMismatch
+    case contentEncryptionAlgorithmMismatch
+    case signingAlgorithmMismatch
 }

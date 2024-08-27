@@ -68,7 +68,7 @@ extension ECKeyEncryption.EncryptionMode: EncryptionKeyManagementMode {
                                            options: options)
 
         guard let updatedJweHeader = JWEHeader(ecEncryption.jweHeaderData) else {
-            throw ECError.wrapKeyFail // todo: better error type?
+            throw ECError.wrapKeyFail
 
         }
 

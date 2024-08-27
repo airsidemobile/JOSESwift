@@ -191,11 +191,10 @@ public struct JWE {
             let decryptedData = try decrypter.decrypt(context)
             return Payload(try compressor.decompress(data: decryptedData))
         } catch JWEError.keyManagementAlgorithmMismatch {
-            // todo: better error type?
-            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
+            throw JOSESwiftError.keyManagementAlrgorithmMismatch
         } catch JWEError.contentEncryptionAlgorithmMismatch {
             // todo: better error type?
-            throw JOSESwiftError.decryptingFailed(description: "JWE header algorithms do not match encrypter algorithms.")
+            throw JOSESwiftError.contentEncryptionAlgorithmMismatch
         } catch JOSESwiftError.decompressionFailed {
             throw JOSESwiftError.decompressionFailed
         } catch JOSESwiftError.compressionAlgorithmNotSupported {

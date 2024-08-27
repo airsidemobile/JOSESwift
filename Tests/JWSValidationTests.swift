@@ -128,7 +128,7 @@ class JWSValidationTests: RSACryptoTestCase {
         let verifier = Verifier(verifyingAlgorithm: .RS256, publicKey: publicKeyAlice2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong verifier algorithm") { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.signingAlgorithmMismatch)
         }
     }
 
@@ -141,7 +141,7 @@ class JWSValidationTests: RSACryptoTestCase {
         let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKeyAlice2048!)!
 
         XCTAssertThrowsError(try jws.validate(using: verifier), "verifying with wrong header algorithm") { error in
-            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm."))
+            XCTAssertEqual(error as! JOSESwiftError, JOSESwiftError.signingAlgorithmMismatch)
         }
     }
 

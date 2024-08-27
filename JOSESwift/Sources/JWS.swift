@@ -146,7 +146,7 @@ public struct JWS {
     @available(*, deprecated, message: "Use `validate(using verifier:)` instead")
     public func validate<KeyType>(with publicKey: KeyType) throws -> JWS {
         guard let alg = header.algorithm else {
-            throw JOSESwiftError.verifyingFailed(description: "Invalid header parameter.")
+            throw JOSESwiftError.signingAlgorithmMismatch
         }
 
         guard let verifier = Verifier(verifyingAlgorithm: alg, publicKey: publicKey) else {
@@ -170,14 +170,12 @@ public struct JWS {
     /// - Returns: The JWS on which this function was called if the signature is valid.
     /// - Throws: A `JOSESwiftError` if the signature is invalid or if errors occured during signature validation.
     public func validate(using verifier: Verifier) throws -> JWS {
-        guard verifier.verifier.algorithm == header.algorithm else {
-            throw JOSESwiftError.verifyingFailed(description: "JWS header algorithm does not match verifier algorithm.")
-        }
-
         do {
             guard try verifier.verify(header: header, and: payload, against: signature) else {
                 throw JOSESwiftError.signatureInvalid
             }
+        } catch JWSError.algorithmMismatch {
+            throw JOSESwiftError.signingAlgorithmMismatch
         } catch {
             throw JOSESwiftError.verifyingFailed(description: error.localizedDescription)
         }
