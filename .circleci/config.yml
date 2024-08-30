@@ -1,29 +1,52 @@
 version: 2.1
 
+orbs:
+  macos: circleci/macos@2.3.6
+
 executors:
   mac-executor:
     macos:
       xcode: "15.4.0"
-    working_directory: ~/joseswift
+    resource_class: macos.m1.medium.gen1
+    working_directory: ~/JOSESwift
 
-jobs:
-  install_dependencies:
-    executor: mac-executor
+commands:
+  restore_cache_cmd:
     steps:
-      - checkout
       - restore_cache:
           keys:
             - gem-cache-v3-{{ checksum "Gemfile.lock" }}
             - gem-cache-v3
+  set_ruby_version_cmd:
+    steps:
+      - macos/switch-ruby:
+          version: "$(cat .ruby-version || echo system)"
       - run:
-          name: Bundler
           command: |
+            echo "ruby version: $(ruby -v)"
+  install_gems_cmd:
+    steps:
+      - run:
+         command: |
             bundle config --local path 'vendor/bundle'
             bundle install --jobs 4 --retry 3
+  save_cache_cmd:
+    steps:
       - save_cache:
           key: gem-cache-v3-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+
+
+jobs:
+  prepare-build:
+    executor: mac-executor
+    steps:
+      - checkout
+      - restore_cache_cmd
+      - set_ruby_version_cmd
+      - install_gems_cmd
+      - save_cache_cmd
       - persist_to_workspace:
           root: .
           paths:
@@ -34,7 +57,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: ~/JOSESwift
       - run:
           name: Test
           command: |
@@ -52,7 +75,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: ~/JOSESwift
       - run:
           name: Lint
           command: |
@@ -68,7 +91,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: ~/JOSESwift
       - run:
           name: Sonarcloud
           command: |
@@ -83,13 +106,13 @@ jobs:
 workflows:
   test_and_lint:
     jobs:
-      - install_dependencies
+      - prepare-build
       - lint:
           requires:
-            - install_dependencies
+            - prepare-build
       - test:
           requires:
-            - install_dependencies
+            - prepare-build
       - sonarcloud:
           requires:
             - test
