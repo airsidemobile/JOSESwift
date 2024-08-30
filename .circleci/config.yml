@@ -8,45 +8,26 @@ executors:
     macos:
       xcode: "15.4.0"
     resource_class: macos.m1.medium.gen1
-    working_directory: ~/JOSESwift
-
-commands:
-  restore_cache_cmd:
-    steps:
-      - restore_cache:
-          keys:
-            - gem-cache-v3-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v3
-  set_ruby_version_cmd:
-    steps:
-      - macos/switch-ruby:
-          version: "$(cat .ruby-version || echo system)"
-      - run:
-          command: |
-            echo "ruby version: $(ruby -v)"
-  install_gems_cmd:
-    steps:
-      - run:
-         command: |
-            bundle config --local path 'vendor/bundle'
-            bundle install --jobs 4 --retry 3
-  save_cache_cmd:
-    steps:
-      - save_cache:
-          key: gem-cache-v3-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
 
 jobs:
   prepare-build:
     executor: mac-executor
     steps:
       - checkout
-      - restore_cache_cmd
-      - set_ruby_version_cmd
-      - install_gems_cmd
-      - save_cache_cmd
+      - restore_cache:
+          keys:
+            - gem-cache-v3-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v3
+      - macos/switch-ruby:
+          version: "$(cat .ruby-version || echo system)"
+      - run:
+          command: |
+            bundle config --local path 'vendor/bundle'
+            bundle install --jobs 4 --retry 3
+      - save_cache:
+          key: gem-cache-v3-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
       - persist_to_workspace:
           root: .
           paths:
@@ -57,7 +38,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/JOSESwift
+          at: .
       - run:
           name: Test
           command: |
@@ -75,23 +56,23 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/JOSESwift
+          at: .
       - run:
           name: Lint
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint --display-times || true
+            ([ -f .swiftlint.yml ] && (which swiftlint > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint)) || true
+            ([ -f .swiftformat ] && (which swiftformat > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftformat)) || true
             bundle config --local path vendor/bundle
             bundle exec fastlane lint strict:true
       - store_test_results:
           path: fastlane/test_output
-
 
   sonarcloud:
     executor: mac-executor
     steps:
       - checkout
       - attach_workspace:
-          at: ~/JOSESwift
+          at: .
       - run:
           name: Sonarcloud
           command: |
@@ -99,12 +80,12 @@ jobs:
               echo "No Sonarcloud token is set. Failing."
               exit 1;
             fi
-            brew install sonar-scanner --display-times || true
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install sonar-scanner --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
 workflows:
-  test_and_lint:
+  pr_workflow:
     jobs:
       - prepare-build
       - lint:
