@@ -1,13 +1,16 @@
 version: 2.1
 
+orbs:
+  macos: circleci/macos@2.3.6
+
 executors:
   mac-executor:
     macos:
       xcode: "15.4.0"
-    working_directory: ~/joseswift
+    resource_class: macos.m1.medium.gen1
 
 jobs:
-  install_dependencies:
+  prepare-build:
     executor: mac-executor
     steps:
       - checkout
@@ -15,8 +18,9 @@ jobs:
           keys:
             - gem-cache-v3-{{ checksum "Gemfile.lock" }}
             - gem-cache-v3
+      - macos/switch-ruby:
+          version: "$(cat .ruby-version || echo system)"
       - run:
-          name: Bundler
           command: |
             bundle config --local path 'vendor/bundle'
             bundle install --jobs 4 --retry 3
@@ -34,7 +38,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: .
       - run:
           name: Test
           command: |
@@ -52,23 +56,23 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: .
       - run:
           name: Lint
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint --display-times || true
+            ([ -f .swiftlint.yml ] && (which swiftlint > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint)) || true
+            ([ -f .swiftformat ] && (which swiftformat > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftformat)) || true
             bundle config --local path vendor/bundle
             bundle exec fastlane lint strict:true
       - store_test_results:
           path: fastlane/test_output
-
 
   sonarcloud:
     executor: mac-executor
     steps:
       - checkout
       - attach_workspace:
-          at: ~/joseswift
+          at: .
       - run:
           name: Sonarcloud
           command: |
@@ -76,20 +80,20 @@ jobs:
               echo "No Sonarcloud token is set. Failing."
               exit 1;
             fi
-            brew install sonar-scanner --display-times || true
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install sonar-scanner --display-times || true
             bundle config --local path vendor/bundle
             bundle exec fastlane sonarqube
 
 workflows:
-  test_and_lint:
+  pr_workflow:
     jobs:
-      - install_dependencies
+      - prepare-build
       - lint:
           requires:
-            - install_dependencies
+            - prepare-build
       - test:
           requires:
-            - install_dependencies
+            - prepare-build
       - sonarcloud:
           requires:
             - test
