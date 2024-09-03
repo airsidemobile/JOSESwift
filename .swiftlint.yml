@@ -30,3 +30,4 @@ included:
   - Tests
 excluded:
   - vendor
+  - BuildTools/.build

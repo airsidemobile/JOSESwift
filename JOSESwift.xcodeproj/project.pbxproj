@@ -835,11 +835,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 65FBFDEA1F45CC7C005C7D68 /* Build configuration list for PBXNativeTarget "JOSESwift" */;
 			buildPhases = (
+				658E40142C8728FE0033D3A7 /* Lint using SwiftFormat */,
+				658E40152C872AC50033D3A7 /* Lint using SwiftLint */,
 				65FBFDDD1F45CC7C005C7D68 /* Sources */,
 				65FBFDDE1F45CC7C005C7D68 /* Frameworks */,
 				65FBFDDF1F45CC7C005C7D68 /* Headers */,
 				65FBFDE01F45CC7C005C7D68 /* Resources */,
-				4E06574B223CC78D00D7A199 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -912,7 +913,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4E06574B223CC78D00D7A199 /* SwiftLint */ = {
+		658E40142C8728FE0033D3A7 /* Lint using SwiftFormat */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -922,14 +923,35 @@
 			);
 			inputPaths = (
 			);
-			name = SwiftLint;
+			name = "Lint using SwiftFormat";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run -c release swiftformat --lint --lenient --config \"$SRCROOT/.swiftformat\" \"$SRCROOT\"\n";
+			showEnvVarsInLog = 0;
+		};
+		658E40152C872AC50033D3A7 /* Lint using SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint using SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift package plugin swiftlint lint --lenient --config \"$SRCROOT/.swiftlint.yml\" \"$SRCROOT\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
