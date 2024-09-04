@@ -17,11 +17,75 @@ lane :test do
   scan(scheme: "JOSESwift", derived_data_path: DERIVED_DATA_PATH, clean: true, output_directory: "#{TEST_OUTPUT}/xctest/")
 end
 
-desc "Lint Swift files"
-lane :lint do |options|
-  strict = options.fetch(:strict, false)
+desc 'Lint code. This might hurt your feelings multiple times.'
+lane :lint do
+  lint_swiftformat
+  lint_swiftlint
+end
+
+desc 'Lint code using SwiftFormat. This might hurt your feelings.'
+lane :lint_swiftformat do
+  unless File.exist?('../.swiftformat')
+    next
+  end
+
+  sh "mkdir -p ../#{TEST_OUTPUT}/swiftformat/"
+  sh "rm -f ../#{TEST_OUTPUT}/swiftformat/report.json"
+  sh "rm -f ../#{TEST_OUTPUT}/swiftformat/report.sonarqube"
+  swiftformat_command = "cd ../BuildTools && swift run -c release swiftformat --lint --lenient --config ../.swiftformat --reporter json --report ../#{TEST_OUTPUT}/swiftformat/report.json"
+
+  sh "#{swiftformat_command} ../"
+
+  project_root = sh "cd .. && pwd | tr -d '\n'"
+  swiftformat_json_report = JSON.parse(File.read("../#{TEST_OUTPUT}/swiftformat/report.json"))
+
+  swiftformat_sonarqube_report = {
+    "issues" => swiftformat_json_report.map do |issue|
+      {
+        "engineId" => "SwiftFormat",
+        "ruleId" => issue["rule_id"],
+        "primaryLocation" => {
+          "message" => issue["reason"],
+          "filePath" => issue["file"].sub("#{project_root}/", ''),
+          "textRange" => {
+            "startLine" => issue["line"]
+          }
+        },
+        "type" => "CODE_SMELL",
+        "severity" => "MINOR"
+      }
+    end
+  }
+
+  File.open("../#{TEST_OUTPUT}/swiftformat/report.sonarqube", 'w') do |file|
+    file.write(JSON.pretty_generate(swiftformat_sonarqube_report))
+  end
+end
+
+desc 'Lint code using SwiftLint. This might hurt your feelings.'
+lane :lint_swiftlint do
+  unless File.exist?('../.swiftlint.yml')
+    next
+  end
+
   sh "mkdir -p ../#{TEST_OUTPUT}/swiftlint/"
-  swiftlint(strict: strict, reporter: "junit", output_file: "#{TEST_OUTPUT}/swiftlint/results.junit")
+  sh "rm -f ../#{TEST_OUTPUT}/swiftlint/report.sonarqube"
+  swiftlint_command = "cd ../BuildTools && swift package plugin swiftlint lint --quiet --config ../.swiftlint.yml --reporter sonarqube"
+
+  sh "#{swiftlint_command} ../ > ../#{TEST_OUTPUT}/swiftlint/report.sonarqube"
+
+  project_root = sh "cd .. && pwd | tr -d '\n'"
+  swiftlint_sonarqube_report = JSON.parse(File.read("../#{TEST_OUTPUT}/swiftlint/report.sonarqube"))
+
+  swiftlint_sonarqube_report["issues"].each do |issue|
+    original_path = issue["primaryLocation"]["filePath"]
+    cleaned_path = original_path.gsub(/\\/, '').sub("#{project_root}/", '')
+    issue["primaryLocation"]["filePath"] = cleaned_path
+  end
+
+  File.open("../#{TEST_OUTPUT}/swiftlint/report.sonarqube", 'w') do |file|
+    file.write(JSON.pretty_generate(swiftlint_sonarqube_report))
+  end
 end
 
 desc "Format Swift files"
