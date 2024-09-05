@@ -27,7 +27,7 @@ extension ContentEncryptionAlgorithm {
 
     var keyLength: Int {
         switch self {
-        case .A256CBCHS512:
+         case .A256CBCHS512:
             return 64
         case .A192CBCHS384:
             return 48
