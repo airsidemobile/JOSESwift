@@ -1,32 +1,11 @@
-custom_rules:
-  doc_blocks:
-    name: "Documentation Comment Format"
-    regex: '(\/\*\*)'
-    message: "Use `///` instead of `/** ... */` for documentation comments."
-    severity: warning
-
-disabled_rules:
-  - force_try
-  - force_cast
-  - xctfail_message
-  - line_length
-  - function_body_length
-  - type_body_length
-  - file_length
-  - type_name
-  - identifier_name
-  - todo
-  - no_space_in_method_call
-  - non_optional_string_data_conversion
-
-large_tuple: 5
-function_parameter_count: 6
-
-opt_in_rules:
-  - force_unwrapping
-
-included:
-  - JOSESwift/Sources
-  - Tests
 excluded:
   - vendor
+  - BuildTools/.build
+
+only_rules:
+  - custom_rules
+
+custom_rules:
+  noop:
+    regex: "noop^"
+    match_kinds: comment

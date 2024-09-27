@@ -60,12 +60,16 @@ jobs:
       - run:
           name: Lint
           command: |
-            ([ -f .swiftlint.yml ] && (which swiftlint > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftlint)) || true
-            ([ -f .swiftformat ] && (which swiftformat > /dev/null || HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install swiftformat)) || true
+            cd BuildTools && swift package resolve && cd ..
             bundle config --local path vendor/bundle
-            bundle exec fastlane lint strict:true
-      - store_test_results:
+            bundle exec fastlane lint
+      - store_artifacts:
           path: fastlane/test_output
+      - persist_to_workspace:
+          root: .
+          paths:
+            - fastlane/test_output/swiftformat
+            - fastlane/test_output/swiftlint
 
   sonarcloud:
     executor: mac-executor
@@ -96,6 +100,7 @@ workflows:
             - prepare-build
       - sonarcloud:
           requires:
+            - lint
             - test
           filters:
             branches:
