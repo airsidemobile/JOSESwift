@@ -406,12 +406,6 @@ JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 [@daniel-moh](https://github.com/daniel-moh),
 [@haeser](https://github.com/haeser)
 
-### Creators
-
-[@carol-mohemian](https://github.com/carol-mohemian),
-[@daniel-moh](https://github.com/daniel-moh),
-[@gigi-mohemian](https://github.com/gigi-mohemian)
-
 ### Logo
 
 The logo was designed by Ivan Leuzzi.
