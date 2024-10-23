@@ -18,8 +18,13 @@ jobs:
           keys:
             - gem-cache-v3-{{ checksum "Gemfile.lock" }}
             - gem-cache-v3
+      - run:
+          name: Find Ruby Version
+          command: |
+            export RUBY_VERSION=$(cat .ruby-version || echo system)
+            echo "ORB_VAL_RUBY_VERSION=$RUBY_VERSION" >> $BASH_ENV
       - macos/switch-ruby:
-          version: "$(cat .ruby-version || echo system)"
+          version: $ORB_VAL_RUBY_VERSION
       - run:
           command: |
             bundle config --local path 'vendor/bundle'
