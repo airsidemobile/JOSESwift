@@ -401,15 +401,16 @@ Feel free to contact the project maintainers at <joseswift@airsidemobile.com>.
 
 JOSESwift is maintained by [Airside Mobile](https://www.airsidemobile.com).
 
-### Project Authors and Maintainers
+### Project Maintainers
+
+[@daniel-moh](https://github.com/daniel-moh),
+[@haeser](https://github.com/haeser)
+
+### Creators
 
 [@carol-mohemian](https://github.com/carol-mohemian),
-[@daniel-mohemian](https://github.com/daniel-mohemian),
+[@daniel-moh](https://github.com/daniel-moh),
 [@gigi-mohemian](https://github.com/gigi-mohemian)
-
-### Reviewers
-
-[@haeser](https://github.com/haeser), [@michael-mohemian](https://github.com/michael-mohemian)
 
 ### Logo
 
