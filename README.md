@@ -90,12 +90,12 @@ JOSESwift integrates nicely into your iOS and macOS projects. We support the fol
 To integrate JOSESwift into your Xcode project, include it in your `Podfile`:
 
 ``` ruby
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 platform :ios, '13.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'JOSESwift', '~> 2.3'
+    pod 'JOSESwift', '~> 3.0'
 end
 ```
 
@@ -106,7 +106,7 @@ Then install it by running `pod install`. More documentation on using CocoaPods 
 To integrate JOSESwift in your Xcode project, include it in your `Cartfile`:
 
 ```
-github "airsidemobile/JOSESwift" ~> 2.3
+github "airsidemobile/JOSESwift" ~> 3.0
 ```
 
 Then build it by running `carthage update` and drag the built framework into your Xcode project. More documentation on using Carthage can be found [here](https://github.com/Carthage/Carthage).
@@ -118,7 +118,7 @@ To integrate JOSESwift in your Xcode project as a Swift package, follow Apple's 
 Alternatively, when using Swift Package Manager manually include the following dependency in your `Package.swift` file. See [Apple's documentation](https://developer.apple.com/documentation/swift_packages/package/dependency) for more details on specifying dependency version requirements.
 
 ``` swift
-.package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "2.3.0")
+.package(url: "https://github.com/airsidemobile/JOSESwift.git", from: "3.0.0")
 ```
 
 ## Usage
