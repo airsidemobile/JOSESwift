@@ -5,13 +5,20 @@
   ],
   "packageRules": [
     {
-      "updateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true
     },
     {
-      "matchUpdateTypes": ["lockFileMaintenance"],
+      "matchUpdateTypes": [
+        "lockFileMaintenance"
+      ],
       "automerge": true
     }
   ],
-  "lockFileMaintenance": { "enabled": true }
+  "lockFileMaintenance": {
+    "enabled": true
+  }
 }
