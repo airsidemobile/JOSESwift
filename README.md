@@ -186,7 +186,7 @@ The signer algorithm must match the header algorithm.
 ``` swift
 let privateKey: SecKey = /* ... */
 
-let signer = Signer(signingAlgorithm: .RS512, privateKey: privateKey)!
+let signer = Signer(signatureAlgorithm: .RS512, key: privateKey)!
 ```
 
 ##### Serializing
