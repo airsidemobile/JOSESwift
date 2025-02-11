@@ -950,7 +950,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift package plugin swiftlint lint --lenient --config \"$SRCROOT/.swiftlint.yml\" \"$SRCROOT\"\n";
+			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift package plugin --allow-writing-to-package-directory swiftlint lint --lenient --config \"$SRCROOT/.swiftlint.yml\" \"$SRCROOT\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

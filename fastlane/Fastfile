@@ -70,7 +70,7 @@ lane :lint_swiftlint do
 
   sh "mkdir -p ../#{TEST_OUTPUT}/swiftlint/"
   sh "rm -f ../#{TEST_OUTPUT}/swiftlint/report.sonarqube"
-  swiftlint_command = "cd ../BuildTools && swift package plugin swiftlint lint --quiet --config ../.swiftlint.yml --reporter sonarqube"
+  swiftlint_command = "cd ../BuildTools && swift package plugin --allow-writing-to-package-directory swiftlint lint --quiet --config ../.swiftlint.yml --reporter sonarqube"
 
   sh "#{swiftlint_command} ../ > ../#{TEST_OUTPUT}/swiftlint/report.sonarqube"
 
