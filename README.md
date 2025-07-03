@@ -212,7 +212,7 @@ let serialization = "ey (..) n0.HK (..) pQ.yS (..) PA.AK (..) Jx.hB (..) 7w"
 ``` swift
 do {
     let jws = try JWS(compactSerialization: serialization)
-    let verifier = Verifier(verifyingAlgorithm: .RS512, publicKey: publicKey)!
+    let verifier = Verifier(signatureAlgorithm: .RS512, publicKey: publicKey)!
     let payload = try jws.validate(using: verifier).payload
     let message = String(data: payload.data(), encoding: .utf8)!
 
