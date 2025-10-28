@@ -6,7 +6,7 @@ let package = Package(
     platforms: [.macOS(.v14)],
     dependencies: [
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.58.5"),
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.62.1")
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.62.2")
     ],
     targets: [.target(name: "BuildTools", path: "")]
 )
