@@ -32,7 +32,7 @@ class ECPrivateKeyToDataTests: ECCryptoTestCase {
                     crv: testData.expectedCurveType,
                     x: testData.expectedXCoordinateBase64Url,
                     y: testData.expectedYCoordinateBase64Url,
-                    privateKey: testData.expectedPrivateBase64Url
+                    d: testData.expectedPrivateBase64Url
             )
             let data = try! jwk.converted(to: Data.self)
 

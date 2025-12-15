@@ -131,7 +131,7 @@ extension KeyManagementAlgorithm {
 
             return DirectEncryptionMode(keyManagementAlgorithm: self, sharedSymmetricKey: sharedSymmetricKey)
         case .ECDH_ES, .ECDH_ES_A128KW, .ECDH_ES_A192KW, .ECDH_ES_A256KW:
-            guard let recipientPrivateKey = cast(decryptionKey, to: ECKeyEncryption.PrivateKey.self) else {
+            guard let recipientPrivateKey = decryptionKey as? ECKeyEncryption.PrivateKey else {
                 return nil
             }
 
