@@ -242,7 +242,7 @@ GEM
     nap (1.1.0)
     naturally (2.3.0)
     netrc (0.11.0)
-    optparse (0.8.0)
+    optparse (0.8.1)
     os (1.1.4)
     plist (3.7.2)
     public_suffix (4.0.7)
