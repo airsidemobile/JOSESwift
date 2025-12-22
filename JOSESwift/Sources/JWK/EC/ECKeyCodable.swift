@@ -102,7 +102,7 @@ extension ECPrivateKey: Encodable {
         try ecParameters.encode(crv, forKey: .curve)
         try ecParameters.encode(x, forKey: .x)
         try ecParameters.encode(y, forKey: .y)
-        try ecParameters.encode(privateKey, forKey: .privateKey)
+        try ecParameters.encode(d, forKey: .d)
     }
 }
 
@@ -132,13 +132,14 @@ extension ECPrivateKey: Decodable {
         let crv = try ecParameters.decode(ECCurveType.self, forKey: .curve)
         let x = try ecParameters.decode(String.self, forKey: .x)
         let y = try ecParameters.decode(String.self, forKey: .y)
-        let privateKey = try ecParameters.decode(String.self, forKey: .privateKey)
+        let d = try ecParameters.decode(String.self, forKey: .d)
 
         try self.init(
                 crv: crv.rawValue,
                 x: x,
                 y: y,
-                privateKey: privateKey,
+                d: d,
+                privateKeyHandle: nil,
                 additionalParameters: parameters
         )
     }

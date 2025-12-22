@@ -67,7 +67,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url,
+                    d: keyData.expectedPrivateBase64Url,
                     additionalParameters: ["alg": keyData.signatureAlgorithm, "kid": Consts.kid]
             )
 
@@ -85,7 +85,7 @@ class JWKECEncodingTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url,
+                    d: keyData.expectedPrivateBase64Url,
                     additionalParameters: ["alg": keyData.signatureAlgorithm, "kid": Consts.kid, "breeze": "through"]
             )
 

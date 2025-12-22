@@ -33,7 +33,7 @@ class ECPrivateKeyToSecKeyTests: ECCryptoTestCase {
                     crv: testData.expectedCurveType,
                     x: testData.expectedXCoordinateBase64Url,
                     y: testData.expectedYCoordinateBase64Url,
-                    privateKey: testData.expectedPrivateBase64Url
+                    d: testData.expectedPrivateBase64Url
             )
             let key = try! jwk.converted(to: SecKey.self)
 
@@ -46,20 +46,20 @@ class ECPrivateKeyToSecKeyTests: ECCryptoTestCase {
             let crv = testData.expectedCurveType
             let x = testData.expectedXCoordinateBase64Url
             let y = testData.expectedYCoordinateBase64Url
-            let privateKey = testData.expectedPrivateBase64Url
+            let d = testData.expectedPrivateBase64Url
             let invalid = "\u{96}"
-            checkInvalidArgumentListForException(crv: "P-INVALID", x: x, y: y, privateKey: privateKey)
-            checkInvalidArgumentListForException(crv: crv, x: invalid, y: y, privateKey: privateKey)
-            checkInvalidArgumentListForException(crv: crv, x: x, y: invalid, privateKey: privateKey)
-            checkInvalidArgumentListForException(crv: crv, x: x, y: y, privateKey: invalid)
+            checkInvalidArgumentListForException(crv: "P-INVALID", x: x, y: y, d: d)
+            checkInvalidArgumentListForException(crv: crv, x: invalid, y: y, d: d)
+            checkInvalidArgumentListForException(crv: crv, x: x, y: invalid, d: d)
+            checkInvalidArgumentListForException(crv: crv, x: x, y: y, d: invalid)
         }
     }
 
     // MARK: Helper functions
 
-    func checkInvalidArgumentListForException(crv: String, x: String, y: String, privateKey: String) {
+    func checkInvalidArgumentListForException(crv: String, x: String, y: String, d: String) {
         let closure = {
-            let jwk = try ECPrivateKey(crv: crv, x: x, y: y, privateKey: privateKey)
+            let jwk = try ECPrivateKey(crv: crv, x: x, y: y, d: d)
             _ = try jwk.converted(to: SecKey.self)
         }
         XCTAssertThrowsError(try closure())

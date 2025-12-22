@@ -44,7 +44,7 @@ public extension ECKeyPair {
 public extension ECPrivateKey {
 
     func getPublic() -> ECPublicKey {
-        let parametersForPublic = parameters.filter { $0.key != ECParameter.privateKey.rawValue }
+        let parametersForPublic = parameters.filter { $0.key != ECParameter.d.rawValue }
         return ECPublicKey(crv: crv, x: x, y: y, additionalParameters: parametersForPublic)
     }
 

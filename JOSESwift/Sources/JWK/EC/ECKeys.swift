@@ -47,7 +47,8 @@ public typealias ECPrivateKeyComponents = (
         crv: String,
         x: Data,
         y: Data,
-        d: Data
+        d: Data?,
+        privateKeyHandle: SecKey?
 )
 
 /// A type that represents an EC public key.
@@ -236,9 +237,12 @@ public struct ECPrivateKey: JWK {
     /// The y coordinate value for the EC public key.
     public let y: String
 
-    /// The private exponent value for the EC private key.
-    public let privateKey: String
+    /// Private 'd' coordinate (may be nil for Secure Enclave keys).
+    public let d: String?
 
+    /// Optional handle for Secure Enclave private key (non-exportable)
+    public let privateKeyHandle: SecKey?
+    
     /// Initializes a JWK containing an EC private key.
     ///
     /// - Note: Ensure that the x/y coordinates and private key are `base64urlUInt` encoded as described in
@@ -254,7 +258,7 @@ public struct ECPrivateKey: JWK {
     ///   - privateKey: The private key component for the EC public key in `base64urlUInt` encoding
     ///                 as specified in [RFC-7518, Section 2](https://tools.ietf.org/html/rfc7518#section-2).
     ///   - parameters: Additional JWK parameters.
-    public init(crv: String, x: String, y: String, privateKey: String, additionalParameters parameters: [String: String] = [:]) throws {
+    public init(crv: String, x: String, y: String, d: String?, privateKeyHandle: SecKey? = nil, additionalParameters parameters: [String: String] = [:]) throws {
         self.keyType = .EC
 
         guard let curve = ECCurveType(rawValue: crv) else {
@@ -264,18 +268,24 @@ public struct ECPrivateKey: JWK {
         self.crv = curve
         self.x = x
         self.y = y
-        self.privateKey = privateKey
-
-        self.parameters = parameters.merging(
-                [
-                    JWKParameter.keyType.rawValue: self.keyType.rawValue,
-                    ECParameter.curve.rawValue: self.crv.rawValue,
-                    ECParameter.x.rawValue: self.x,
-                    ECParameter.y.rawValue: self.y,
-                    ECParameter.privateKey.rawValue: self.privateKey
-                ],
-                uniquingKeysWith: { (_, new) in new }
+        self.d = d
+        self.privateKeyHandle = privateKeyHandle
+        
+        var params = parameters
+        params.merge(
+            [
+                JWKParameter.keyType.rawValue: self.keyType.rawValue,
+                ECParameter.curve.rawValue: self.crv.rawValue,
+                ECParameter.x.rawValue: self.x,
+                ECParameter.y.rawValue: self.y
+            ],
+            uniquingKeysWith: { _, new in new }
         )
+        
+        if let d {
+            params[ECParameter.d.rawValue] = d
+        }
+        self.parameters = params
     }
 
     /// Creates an `ECPrivateKey` JWK with the specified private key and optional additional JWK parameters.
@@ -285,7 +295,7 @@ public struct ECPrivateKey: JWK {
     ///   - parameters: Any additional parameters to be contained in the JWK.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public init(privateKey: ExpressibleAsECPrivateKeyComponents, additionalParameters parameters: [String: String] = [:]) throws {
-        guard let (crv, x, y, privateKey) = try? privateKey.ecPrivateKeyComponents() else {
+        guard let (crv, x, y, d, privateKeyHandle) = try? privateKey.ecPrivateKeyComponents() else {
             throw JOSESwiftError.couldNotConstructJWK
         }
 
@@ -296,7 +306,8 @@ public struct ECPrivateKey: JWK {
                 crv: crv,
                 x: x.base64URLEncodedString(),
                 y: y.base64URLEncodedString(),
-                privateKey: privateKey.base64URLEncodedString(),
+                d: d?.base64URLEncodedString(),
+                privateKeyHandle: privateKeyHandle,
                 additionalParameters: parameters
         )
     }
@@ -315,6 +326,10 @@ public struct ECPrivateKey: JWK {
     /// - Returns: The type initialized with the key data.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public func converted<T>(to type: T.Type) throws -> T where T: ExpressibleAsECPrivateKeyComponents {
+        if let handle = privateKeyHandle as? T {
+            return handle
+        }
+        
         guard let x = Data(base64URLEncoded: self.x) else {
             throw JOSESwiftError.xNotBase64URLUIntEncoded
         }
@@ -323,17 +338,17 @@ public struct ECPrivateKey: JWK {
             throw JOSESwiftError.yNotBase64URLUIntEncoded
         }
 
-        guard let privateKey = Data(base64URLEncoded: self.privateKey) else {
+        guard let encodedD = d, let d = Data(base64URLEncoded: encodedD) else {
             throw JOSESwiftError.privateKeyNotBase64URLUIntEncoded
         }
 
-        return try T.representing(ecPrivateKeyComponents: (self.crv.rawValue, x, y, privateKey))
+        return try T.representing(ecPrivateKeyComponents: (self.crv.rawValue, x, y, d, nil))
     }
 
     @available(iOS 11.0, *)
     public func withThumbprintAsKeyId(algorithm: JWKThumbprintAlgorithm = .SHA256) throws -> Self {
         let keyId = try thumbprint(algorithm: algorithm)
-        return try .init(crv: crv.rawValue, x: x, y: y, privateKey: privateKey, additionalParameters: parameters.merging([
+        return try .init(crv: crv.rawValue, x: x, y: y, d: d, privateKeyHandle: privateKeyHandle, additionalParameters: parameters.merging([
             JWKParameter.keyIdentifier.rawValue: keyId
         ], uniquingKeysWith: { (_, new) in new }))
     }

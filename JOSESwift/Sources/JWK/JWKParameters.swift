@@ -63,5 +63,5 @@ public enum ECParameter: String, CodingKey {
     case curve = "crv"
     case x = "x"
     case y = "y"
-    case privateKey = "d"
+    case d = "d"
 }

@@ -55,10 +55,6 @@ public struct JWEHeader: JOSEHeader {
             throw HeaderParsingError.headerIsNotValidJSONObject
         }
 
-        guard parameters["alg"] is String else {
-            throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "alg")
-        }
-
         guard parameters["enc"] is String else {
             throw HeaderParsingError.requiredHeaderParameterMissing(parameter: "enc")
         }
@@ -360,5 +356,26 @@ extension JWEHeader: CommonHeaderParameterSpace {
         set {
             parameters["p2c"] = newValue
         }
+    }
+}
+
+extension JWEHeader {
+    /// Join a JWEHeader with an Unprotected header.
+    public func join(_ unprotected: UnprotectedHeader) throws -> JWEHeader {
+        // Validate disjointness
+        let protectedKeys = Set(parameters.keys)
+        let unprotectedKeys = Set(unprotected.parameters.keys)
+        let intersection = protectedKeys.intersection(unprotectedKeys)
+        if !intersection.isEmpty {
+            throw JWEError.nonDisjointHeaders // TODO: dwawa
+        }
+
+        // Merge parameters
+        var mergedParameters = parameters
+        for (key, value) in unprotected.parameters {
+            mergedParameters[key] = value
+        }
+
+        return try Self(parameters: mergedParameters)
     }
 }

@@ -28,6 +28,7 @@ internal enum JWEError: Error {
     case contentEncryptionAlgorithmMismatch
     case keyLengthNotSatisfied
     case hmacNotAuthenticated
+    case nonDisjointHeaders
 }
 
 /// A JWE consisting of five parameters as specified in [RFC-7516](https://tools.ietf.org/html/rfc7516).
@@ -125,8 +126,8 @@ public struct JWE {
         self = try JOSEDeserializer().deserialize(JWE.self, fromCompactSerialization: compactSerializationString)
     }
 
-    /// Initializes a JWE by providing all of it's five parts. Only used during deserialization.
-    fileprivate init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
+    /// Initializes a JWE by providing all of it's five parts
+    public init(header: JWEHeader, encryptedKey: Data, initializationVector: Data, ciphertext: Data, authenticationTag: Data) {
         self.header = header
         self.encryptedKey = encryptedKey
         self.initializationVector = initializationVector
@@ -141,12 +142,13 @@ public struct JWE {
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public func decrypt(using decrypter: Decrypter) throws -> Payload {
-        let context = Decrypter.DecryptionContext(
-            protectedHeader: header,
-            encryptedKey: encryptedKey,
-            initializationVector: initializationVector,
-            ciphertext: ciphertext,
-            authenticationTag: authenticationTag
+        let context = DecryptionContext(
+            header: header,
+            encryptedKey: Base64URL(encryptedKey),
+            initializationVector: Base64URL(initializationVector),
+            ciphertext: Base64URL(ciphertext),
+            authenticationTag: Base64URL(authenticationTag),
+            aad: computeAAD()
         )
 
         do {
@@ -164,6 +166,10 @@ public struct JWE {
         } catch {
             throw JOSESwiftError.decryptingFailed(description: error.localizedDescription)
         }
+    }
+    
+    private func computeAAD() -> Data {
+        header.data().base64URLEncodedData()
     }
 }
 
