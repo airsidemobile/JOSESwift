@@ -42,7 +42,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url,
+                    d: keyData.expectedPrivateBase64Url,
                     additionalParameters: [ "kty": "wrongKty" ]
             )
 
@@ -82,7 +82,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url
+                    d: keyData.expectedPrivateBase64Url
             )
 
             XCTAssertEqual(key.keyType, .EC)
@@ -97,7 +97,7 @@ class JWKECKeysTests: ECCryptoTestCase {
             XCTAssertEqual(key.y, keyData.expectedYCoordinateBase64Url)
             XCTAssertEqual(key["y"] ?? "", keyData.expectedYCoordinateBase64Url)
 
-            XCTAssertEqual(key.privateKey, keyData.expectedPrivateBase64Url)
+            XCTAssertEqual(key.d, keyData.expectedPrivateBase64Url)
             XCTAssertEqual(key["d"] ?? "", keyData.expectedPrivateBase64Url)
 
             // kty, crv, x, y, d
@@ -121,7 +121,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url
+                    d: keyData.expectedPrivateBase64Url
             )
 
             XCTAssertEqual(jwk.keyType, .EC)
@@ -155,7 +155,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url,
+                    d: keyData.expectedPrivateBase64Url,
                     additionalParameters: params
             )
 
@@ -165,7 +165,7 @@ class JWKECKeysTests: ECCryptoTestCase {
 
     func testInvalidPrivateCurveType() {
         do {
-            _ = try ECPrivateKey(crv: "P-255", x: "", y: "", privateKey: "")
+            _ = try ECPrivateKey(crv: "P-255", x: "", y: "", d: "")
         } catch JOSESwiftError.invalidCurvePointOctetLength {
             return
         } catch {
@@ -195,7 +195,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url
+                    d: keyData.expectedPrivateBase64Url
             )
 
             XCTAssertEqual(try? key.thumbprint(), keyData.expectedThumbprint)
@@ -238,7 +238,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url
+                    d: keyData.expectedPrivateBase64Url
             ).withThumbprintAsKeyId()
 
             XCTAssertEqual(key.parameters[JWKParameter.keyIdentifier.rawValue], keyData.expectedThumbprint)
@@ -253,7 +253,7 @@ class JWKECKeysTests: ECCryptoTestCase {
                     crv: keyData.expectedCurveType,
                     x: keyData.expectedXCoordinateBase64Url,
                     y: keyData.expectedYCoordinateBase64Url,
-                    privateKey: keyData.expectedPrivateBase64Url,
+                    d: keyData.expectedPrivateBase64Url,
                     additionalParameters: [JWKParameter.keyUse.rawValue: useKey]
             ).withThumbprintAsKeyId()
 
