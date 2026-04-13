@@ -930,7 +930,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run -c release swiftformat --lint --lenient --config \"$SRCROOT/.swiftformat\" \"$SRCROOT\"\n";
+			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run -c release swiftformat --lint --lenient --config \"$SRCROOT/.swiftformat\" \"$SRCROOT\" || echo \"warning: swiftformat build-phase returned non-zero; see 'lint' CI job for authoritative check\"\n";
 			showEnvVarsInLog = 0;
 		};
 		658E40152C872AC50033D3A7 /* Lint using SwiftLint */ = {
