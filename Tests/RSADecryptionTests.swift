@@ -83,10 +83,6 @@ class RSADecryptionTests: RSACryptoTestCase {
         8GmvJ5UwA==
         """
 
-    let rsaDecryptionError = RSAError.decryptingFailed(description: """
-        The operation couldn’t be completed. (OSStatus error -50 - RSAdecrypt wrong input (err -27))
-        """)
-
     /// Dictionary of ciphertexts for each available Asymmetric key algorithm generate via openssl with Alice's public key
     lazy var aliceCipherTextDict: [String: String] = {
         [
@@ -142,12 +138,17 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
+        let plaintext = message.data(using: .utf8)!
+
         for algorithm in keyManagementModeAlgorithms {
-            // Decrypting with the wrong key should throw an error
+            // Decrypting with the wrong key must not recover the plaintext. Apple's
+            // `SecKeyCreateDecryptedData` may either throw (e.g. RSA-OAEP) or return
+            // pseudo-random data via implicit rejection (RSA1_5) to mitigate
+            // Bleichenbacher attacks. Either outcome is acceptable; recovering the
+            // original message is not.
             let ciphertext = Data(base64URLEncoded: aliceCipherTextDict[algorithm.rawValue]!)!
-            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, rsaDecryptionError)
-            }
+            let decrypted = try? RSA.decrypt(ciphertext, with: privateKeyBob2048!, and: algorithm)
+            XCTAssertNotEqual(decrypted, plaintext)
         }
     }
 
@@ -157,12 +158,17 @@ class RSADecryptionTests: RSACryptoTestCase {
             return
         }
 
+        let plaintext = message.data(using: .utf8)!
+
         for algorithm in keyManagementModeAlgorithms {
-            // Decrypting with the wrong key should throw an error
+            // Decrypting with the wrong key must not recover the plaintext. Apple's
+            // `SecKeyCreateDecryptedData` may either throw (e.g. RSA-OAEP) or return
+            // pseudo-random data via implicit rejection (RSA1_5) to mitigate
+            // Bleichenbacher attacks. Either outcome is acceptable; recovering the
+            // original message is not.
             let ciphertext = Data(base64URLEncoded: bobCipherTextDict[algorithm.rawValue]!)!
-            XCTAssertThrowsError(try RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                XCTAssertEqual(error as? RSAError, rsaDecryptionError)
-            }
+            let decrypted = try? RSA.decrypt(ciphertext, with: privateKeyAlice2048, and: algorithm)
+            XCTAssertNotEqual(decrypted, plaintext)
         }
     }
 
@@ -204,10 +210,15 @@ class RSADecryptionTests: RSACryptoTestCase {
         let testMessage = Data(count: secKeyBlockSize)
 
         for algorithm in keyManagementModeAlgorithms {
-            XCTAssertThrowsError(try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)) { (error: Error) in
-                // Should throw "decryption failed", but
-                // should _not_ throw cipherTextLenghtNotSatisfied
-                XCTAssertNotEqual(error as? RSAError, RSAError.cipherTextLengthNotSatisfied)
+            // An exactly-block-sized ciphertext must not trip the length pre-check.
+            // Decryption itself may either throw a different error (e.g. RSA-OAEP) or
+            // succeed with pseudo-random data via implicit rejection (RSA1_5).
+            do {
+                _ = try RSA.decrypt(testMessage, with: privateKeyAlice2048, and: algorithm)
+            } catch let error as RSAError {
+                XCTAssertNotEqual(error, RSAError.cipherTextLengthNotSatisfied)
+            } catch {
+                XCTFail("Unexpected error type: \(error)")
             }
         }
     }

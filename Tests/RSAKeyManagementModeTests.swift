@@ -92,6 +92,11 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
 
             XCTAssertNotEqual(context.contentEncryptionKey, context.encryptedKey)
 
+            // Decrypting with the wrong key must not recover the original CEK. Apple's
+            // `SecKeyCreateDecryptedData` may either fail with an error (e.g. RSA-OAEP)
+            // or return pseudo-random data via implicit rejection (RSA1_5) to mitigate
+            // Bleichenbacher attacks. Either outcome is acceptable; recovering the
+            // original key is not.
             var decryptionError: Unmanaged<CFError>?
             let decryptedKey = SecKeyCreateDecryptedData(
                 privateKeyBob2048!,
@@ -100,8 +105,7 @@ class RSAKeyManagementModeTests: RSACryptoTestCase {
                 &decryptionError
             )
 
-            XCTAssertNotNil(decryptionError)
-            XCTAssertNil(decryptedKey)
+            XCTAssertNotEqual(decryptedKey as Data?, context.contentEncryptionKey)
         }
     }
 

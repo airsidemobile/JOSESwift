@@ -930,7 +930,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run -c release swiftformat --lint --lenient --config \"$SRCROOT/.swiftformat\" \"$SRCROOT\"\n";
+			shellScript = "cd BuildTools\n\nSDKROOT=(xcrun --sdk macosx --show-sdk-path)\n\nswift run -c release swiftformat --lint --lenient --config \"$SRCROOT/.swiftformat\" \"$SRCROOT\" || echo \"warning: swiftformat build-phase returned non-zero; see 'lint' CI job for authoritative check\"\n";
 			showEnvVarsInLog = 0;
 		};
 		658E40152C872AC50033D3A7 /* Lint using SwiftLint */ = {
@@ -1199,6 +1199,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1269,6 +1270,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
