@@ -117,10 +117,10 @@ public struct JWEHeader: JOSEHeader {
 public extension JWEHeader {
     /// The algorithm used to encrypt or determine the value of the Content Encryption Key.
     var keyManagementAlgorithm: KeyManagementAlgorithm? {
-        // Forced cast is ok here since we checked both that "alg" exists
-        // and holds a `String` value in `init(parameters:)`.
-        // swiftlint:disable:next force_cast
-        return KeyManagementAlgorithm(rawValue: parameters["alg"] as! String)
+        // `alg` is optional for the JSON serialization's protected header, where it
+        // may be carried in a per-recipient header instead, so access it safely.
+        guard let algorithm = parameters["alg"] as? String else { return nil }
+        return KeyManagementAlgorithm(rawValue: algorithm)
     }
 
     /// The encryption algorithm used to perform authenticated encryption of the plaintext
@@ -360,22 +360,16 @@ extension JWEHeader: CommonHeaderParameterSpace {
 }
 
 extension JWEHeader {
-    /// Join a JWEHeader with an Unprotected header.
+    /// Returns the union of this header and the given unprotected header.
+    ///
+    /// The two must be disjoint; otherwise this throws `JWEError.nonDisjointHeaders`.
     public func join(_ unprotected: UnprotectedHeader) throws -> JWEHeader {
-        // Validate disjointness
-        let protectedKeys = Set(parameters.keys)
-        let unprotectedKeys = Set(unprotected.parameters.keys)
-        let intersection = protectedKeys.intersection(unprotectedKeys)
-        if !intersection.isEmpty {
-            throw JWEError.nonDisjointHeaders // TODO: dwawa
+        let sharedKeys = Set(parameters.keys).intersection(unprotected.parameters.keys)
+        guard sharedKeys.isEmpty else {
+            throw JWEError.nonDisjointHeaders
         }
 
-        // Merge parameters
-        var mergedParameters = parameters
-        for (key, value) in unprotected.parameters {
-            mergedParameters[key] = value
-        }
-
-        return try Self(parameters: mergedParameters)
+        let mergedParameters = parameters.merging(unprotected.parameters) { current, _ in current }
+        return try JWEHeader(parameters: mergedParameters)
     }
 }

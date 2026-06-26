@@ -71,29 +71,36 @@ public struct Decrypter: JWEDecrypter {
         self.contentDecrypter = contentDecrypter
     }
 
-    public func decrypt(_ context: DecryptionContext) throws -> Data {
+    public func decrypt(
+        header: JWEHeader,
+        encryptedKey: Base64URL,
+        initializationVector: Base64URL,
+        ciphertext: Base64URL,
+        authenticationTag: Base64URL,
+        additionalAuthenticatedData: Data
+    ) throws -> Data {
         guard
-            let headerAlg = context.header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
+            let headerAlg = header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
         else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
         guard
-            let headerEnc = context.header.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
+            let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
         else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
         let contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(
-            from: context.encryptedKey.decode(),
-            with: context.header
+            from: try encryptedKey.decode(),
+            with: header
         )
 
         let contentDecryptionContext = ContentDecryptionContext(
-            ciphertext: try context.ciphertext.decode(),
-            initializationVector: try context.initializationVector.decode(),
-            additionalAuthenticatedData: context.aad,
-            authenticationTag: try context.authenticationTag.decode(),
+            ciphertext: try ciphertext.decode(),
+            initializationVector: try initializationVector.decode(),
+            additionalAuthenticatedData: additionalAuthenticatedData,
+            authenticationTag: try authenticationTag.decode(),
             contentEncryptionKey: contentEncryptionKey
         )
 
