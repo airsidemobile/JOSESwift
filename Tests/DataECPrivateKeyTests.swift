@@ -44,11 +44,12 @@ class DataECPrivateKeyTests: ECCryptoTestCase {
 
     func testDataFromPrivateKeyComponents() {
         allTestData.forEach { testData in
-            let components = (
+            let components = ECPrivateKeyComponents(
                     testData.expectedCurveType,
                     testData.expectedXCoordinate,
                     testData.expectedYCoordinate,
-                    testData.expectedPrivateOctetString
+                    testData.expectedPrivateOctetString,
+                    nil
             )
             let data = try! Data.representing(ecPrivateKeyComponents: components)
             XCTAssertEqual(data, testData.privateKeyData)
@@ -98,11 +99,12 @@ class DataECPrivateKeyTests: ECCryptoTestCase {
             default: XCTFail("Unexpected error: \(error)")
             }
         }
-        let components = (
+        let components = ECPrivateKeyComponents(
                 p256.expectedCurveType,
                 p256.expectedXCoordinate,
                 p256.expectedYCoordinate,
-                p256.expectedPrivateOctetString.dropLast()
+                p256.expectedPrivateOctetString.dropLast(),
+                nil
         )
         XCTAssertThrowsError(
                 try Data.representing(ecPrivateKeyComponents: components),

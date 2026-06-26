@@ -52,17 +52,18 @@ class SecKeyECPrivateKeyTests: ECCryptoTestCase {
             XCTAssertEqual(jwk?.crv.rawValue, testData.expectedCurveType)
             XCTAssertEqual(jwk?.x, testData.expectedXCoordinateBase64Url)
             XCTAssertEqual(jwk?.y, testData.expectedYCoordinateBase64Url)
-            XCTAssertEqual(jwk?.privateKey, testData.expectedPrivateBase64Url)
+            XCTAssertEqual(jwk?.d, testData.expectedPrivateBase64Url)
         }
     }
 
     func testPrivateKeyFromPrivateComponents() throws {
         try allTestData.forEach { testData in
-            let components = (
+            let components = ECPrivateKeyComponents(
                     testData.expectedCurveType,
                     testData.expectedXCoordinate,
                     testData.expectedYCoordinate,
-                    testData.expectedPrivateOctetString
+                    testData.expectedPrivateOctetString,
+                    nil
             )
             let secKey = try SecKey.representing(ecPrivateKeyComponents: components)
 
@@ -74,7 +75,7 @@ class SecKeyECPrivateKeyTests: ECCryptoTestCase {
     }
 
     func testPrivateKeyFromInvalidCurveType() {
-        let components = ("P-Invalid", p256.expectedXCoordinate, p256.expectedYCoordinate, p256.expectedPrivateOctetString)
+        let components = ECPrivateKeyComponents("P-Invalid", p256.expectedXCoordinate, p256.expectedYCoordinate, p256.expectedPrivateOctetString, nil)
         XCTAssertThrowsError(try SecKey.representing(ecPrivateKeyComponents: components)) { error in
             XCTAssertEqual(error as? JWKError, JWKError.invalidECCurveType)
         }

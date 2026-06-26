@@ -69,13 +69,26 @@ extension SecKey: ExpressibleAsECPrivateKeyComponents {
                 else {
             throw JWKError.notAPrivateKey
         }
-
-        var error: Unmanaged<CFError>?
-        guard let keyData = SecKeyCopyExternalRepresentation(self, &error) else {
-            // swiftlint:disable:next force_unwrapping
-            throw error!.takeRetainedValue() as Error
+        
+        if isSecureEnclaveBacked {
+            var error: Unmanaged<CFError>?
+            guard let publicKey = SecKeyCopyPublicKey(self),
+                  let pubData = SecKeyCopyExternalRepresentation(publicKey, &error) as Data? else {
+                throw error!.takeRetainedValue() as Error
+            }
+            let pub = try pubData.ecPublicKeyComponents()
+            return ECPrivateKeyComponents(crv: pub.crv, x: pub.x, y: pub.y, d: nil, privateKeyHandle: self)
+        } else {
+            var error: Unmanaged<CFError>?
+            guard let keyData = SecKeyCopyExternalRepresentation(self, &error) else {
+                throw error!.takeRetainedValue() as Error
+            }
+            return try (keyData as Data).ecPrivateKeyComponents()
         }
-
-        return try (keyData as Data).ecPrivateKeyComponents()
+    }
+    
+    var isSecureEnclaveBacked: Bool {
+        guard let attrs = SecKeyCopyAttributes(self) as? [CFString: Any] else { return false }
+        return (attrs[kSecAttrTokenID] as? String) == (kSecAttrTokenIDSecureEnclave as String)
     }
 }

@@ -28,6 +28,7 @@ internal enum JWEError: Error {
     case contentEncryptionAlgorithmMismatch
     case keyLengthNotSatisfied
     case hmacNotAuthenticated
+    case nonDisjointHeaders
 }
 
 /// A JWE consisting of five parameters as specified in [RFC-7516](https://tools.ietf.org/html/rfc7516).
@@ -141,17 +142,16 @@ public struct JWE {
     /// - Returns: The decrypted payload of the JWE.
     /// - Throws: A `JOSESwiftError` indicating any errors.
     public func decrypt(using decrypter: Decrypter) throws -> Payload {
-        let context = Decrypter.DecryptionContext(
-            protectedHeader: header,
-            encryptedKey: encryptedKey,
-            initializationVector: initializationVector,
-            ciphertext: ciphertext,
-            authenticationTag: authenticationTag
-        )
-
         do {
             let compressor = try CompressorFactory.makeCompressor(algorithm: header.compressionAlgorithm)
-            let decryptedData = try decrypter.decrypt(context)
+            let decryptedData = try decrypter.decrypt(
+                header: header,
+                encryptedKey: Base64URL(encryptedKey),
+                initializationVector: Base64URL(initializationVector),
+                ciphertext: Base64URL(ciphertext),
+                authenticationTag: Base64URL(authenticationTag),
+                additionalAuthenticatedData: header.data().base64URLEncodedData()
+            )
             return Payload(try compressor.decompress(data: decryptedData))
         } catch JWEError.keyManagementAlgorithmMismatch {
             throw JOSESwiftError.keyManagementAlgorithmMismatch

@@ -136,7 +136,7 @@ class JWKECDecodingTests: ECCryptoTestCase {
 
         XCTAssertNotNil(jwk)
         checkSharedKeyComponents(jwk: jwk!)
-        XCTAssertEqual(jwk?.privateKey, Consts.keyD)
+        XCTAssertEqual(jwk?.d, Consts.keyD)
     }
 
     func testDecodingPrivateKey() {
@@ -144,7 +144,7 @@ class JWKECDecodingTests: ECCryptoTestCase {
 
         XCTAssertNotNil(jwk)
         checkSharedKeyComponents(jwk: jwk!)
-        XCTAssertEqual(jwk?.privateKey, Consts.keyD)
+        XCTAssertEqual(jwk?.d, Consts.keyD)
     }
 
     func testDecodingPrivateKeyMissingKeyType() {
@@ -195,7 +195,7 @@ class JWKECDecodingTests: ECCryptoTestCase {
             Consts.innerKeyJSONX,
             Consts.innerKeyJSONY
         ])
-        checkMissingKeyPrivate(json: privateKeyJSONMissingPrivateKey, key: ECParameter.privateKey.rawValue)
+        checkMissingKeyPrivate(json: privateKeyJSONMissingPrivateKey, key: ECParameter.d.rawValue)
     }
 
     func testDecodingPrivateKeyWrongDataFormat() {

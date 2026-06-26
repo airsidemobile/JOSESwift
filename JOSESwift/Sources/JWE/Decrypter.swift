@@ -23,7 +23,7 @@
 
 import Foundation
 
-public struct Decrypter {
+public struct Decrypter: JWEDecrypter {
     private let keyManagementMode: DecryptionKeyManagementMode
     private let contentDecrypter: ContentDecrypter
 
@@ -71,42 +71,39 @@ public struct Decrypter {
         self.contentDecrypter = contentDecrypter
     }
 
-    internal func decrypt(_ context: DecryptionContext) throws -> Data {
+    public func decrypt(
+        header: JWEHeader,
+        encryptedKey: Base64URL,
+        initializationVector: Base64URL,
+        ciphertext: Base64URL,
+        authenticationTag: Base64URL,
+        additionalAuthenticatedData: Data
+    ) throws -> Data {
         guard
-            let headerAlg = context.protectedHeader.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
+            let headerAlg = header.keyManagementAlgorithm, headerAlg == keyManagementMode.algorithm
         else {
             throw JWEError.keyManagementAlgorithmMismatch
         }
 
         guard
-            let headerEnc = context.protectedHeader.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
+            let headerEnc = header.contentEncryptionAlgorithm, headerEnc == contentDecrypter.algorithm
         else {
             throw JWEError.contentEncryptionAlgorithmMismatch
         }
 
         let contentEncryptionKey = try keyManagementMode.determineContentEncryptionKey(
-            from: context.encryptedKey,
-            with: context.protectedHeader
+            from: try encryptedKey.decode(),
+            with: header
         )
 
         let contentDecryptionContext = ContentDecryptionContext(
-            ciphertext: context.ciphertext,
-            initializationVector: context.initializationVector,
-            additionalAuthenticatedData: context.protectedHeader.data().base64URLEncodedData(),
-            authenticationTag: context.authenticationTag,
+            ciphertext: try ciphertext.decode(),
+            initializationVector: try initializationVector.decode(),
+            additionalAuthenticatedData: additionalAuthenticatedData,
+            authenticationTag: try authenticationTag.decode(),
             contentEncryptionKey: contentEncryptionKey
         )
 
         return try contentDecrypter.decrypt(decryptionContext: contentDecryptionContext)
-    }
-}
-
-extension Decrypter {
-    struct DecryptionContext {
-        let protectedHeader: JWEHeader
-        let encryptedKey: Data
-        let initializationVector: Data
-        let ciphertext: Data
-        let authenticationTag: Data
     }
 }

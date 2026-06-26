@@ -1,8 +1,8 @@
 //
-//  ECPrivateKeyToDataTests.swift
-//  Tests
+//  JWEDecrypter.swift
+//  JOSESwift
 //
-//  Created by Jarrod Moldrich on 10.01.2019.
+//  Created by Prem Eide on 05/12/2025.
 //
 //  ---------------------------------------------------------------------------
 //  Copyright 2024 Airside Mobile Inc.
@@ -21,23 +21,21 @@
 //  ---------------------------------------------------------------------------
 //
 
-import XCTest
-@testable import JOSESwift
+import Foundation
 
-class ECPrivateKeyToDataTests: ECCryptoTestCase {
-
-    func testPrivateKeyToData() {
-        allTestData.forEach { testData in
-            let jwk = try! ECPrivateKey(
-                    crv: testData.expectedCurveType,
-                    x: testData.expectedXCoordinateBase64Url,
-                    y: testData.expectedYCoordinateBase64Url,
-                    d: testData.expectedPrivateBase64Url
-            )
-            let data = try! jwk.converted(to: Data.self)
-
-            XCTAssertEqual(data, testData.privateKeyData)
-        }
-    }
-
+/// A type that can decrypt the parts of a JWE.
+public protocol JWEDecrypter {
+    /// Decrypts the given JWE parts and returns the plaintext.
+    ///
+    /// For a JSON serialization with multiple recipients, `encryptedKey` holds the
+    /// base64url-encoded `{"recipients": [...]}` object that a `MultiDecryptor` uses to
+    /// select the matching recipient.
+    func decrypt(
+        header: JWEHeader,
+        encryptedKey: Base64URL,
+        initializationVector: Base64URL,
+        ciphertext: Base64URL,
+        authenticationTag: Base64URL,
+        additionalAuthenticatedData: Data
+    ) throws -> Data
 }

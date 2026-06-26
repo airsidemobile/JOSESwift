@@ -27,7 +27,7 @@ extension Data: ExpressibleAsECPrivateKeyComponents {
     public static func representing(ecPrivateKeyComponents components: ECPrivateKeyComponents) throws -> Data {
         let xBytes = [UInt8](components.x)
         let yBytes = [UInt8](components.y)
-        let dBytes = [UInt8](components.d)
+        let dBytes = [UInt8](components.d!)
         let uncompressedIndication: [UInt8] = [ECCompression.Uncompressed.rawValue]
 
         guard
@@ -58,6 +58,6 @@ extension Data: ExpressibleAsECPrivateKeyComponents {
         let xData = Data(xBytes)
         let yData = Data(yBytes)
         let dData = Data(dBytes)
-        return (curve.rawValue, xData, yData, dData)
+        return (curve.rawValue, xData, yData, dData, nil)
     }
 }
