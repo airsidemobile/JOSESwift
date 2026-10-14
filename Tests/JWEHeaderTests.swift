@@ -58,6 +58,18 @@ class JWEHeaderTests: XCTestCase {
         XCTAssertEqual(header.data().count, try! JSONSerialization.data(withJSONObject: parameterDictECDHES, options: []).count)
     }
 
+    func testInitECDHWithNonStringEPKMembers() throws {
+        // As exported by WebCrypto's `exportKey("jwk", ...)`, see https://github.com/airsidemobile/JOSESwift/issues/426
+        let epk: [String: Any] = ["kty": "EC", "crv": "P-256", "x": "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0", "y": "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps", "key_ops": [String](), "ext": true]
+        let headerData = try JSONSerialization.data(withJSONObject: ["alg": "ECDH-ES", "enc": "A256GCM", "epk": epk])
+
+        let header = try XCTUnwrap(JWEHeader(headerData))
+
+        XCTAssertEqual(header.epk?.crv, .P256)
+        XCTAssertEqual(header.epk?.x, ecPublicKey.x)
+        XCTAssertEqual(header.epk?.y, ecPublicKey.y)
+    }
+
     func testInitECDHCustomInitWithParameters() {
 
         let header = JWEHeader(keyManagementAlgorithm: .ECDH_ES,

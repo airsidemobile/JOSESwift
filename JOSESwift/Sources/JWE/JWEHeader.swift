@@ -304,11 +304,12 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// Header Parameters Used for ECDH Key Agreement - Ephemeral Public Key
     public var epk: ECPublicKey? {
         get {
-            guard let jwkParameters = parameters["epk"] as? [String: String] else {
+            // JWK members may hold any JSON value, e.g., `key_ops` is an array (RFC 7517, Section 4).
+            guard let jwkParameters = parameters["epk"] as? [String: Any], JSONSerialization.isValidJSONObject(jwkParameters) else {
                 return nil
             }
 
-            guard let json = try? JSONEncoder().encode(jwkParameters) else {
+            guard let json = try? JSONSerialization.data(withJSONObject: jwkParameters) else {
                 return nil
             }
 
