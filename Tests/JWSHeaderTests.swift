@@ -190,6 +190,19 @@ class JWSHeaderTests: XCTestCase {
         XCTAssertEqual(jwk.y, headerJwk?.y)
     }
 
+    func testJwkTypedHeaderParamWithNonStringMembers() throws {
+        // As exported by WebCrypto's `exportKey("jwk", ...)`, see https://github.com/airsidemobile/JOSESwift/issues/426
+        let jwk: [String: Any] = ["kty": "EC", "crv": "P-256", "x": "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0", "y": "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps", "key_ops": ["verify"], "ext": true]
+        let headerData = try JSONSerialization.data(withJSONObject: ["alg": "ES256", "jwk": jwk])
+
+        let header = try XCTUnwrap(JWSHeader(headerData))
+
+        let headerJwk = try XCTUnwrap(header.jwkTyped as? ECPublicKey)
+        XCTAssertEqual(headerJwk.crv, .P256)
+        XCTAssertEqual(headerJwk.x, "gI0GAILBdu7T53akrFmMyGcsF3n5dO7MmwNBHKW5SV0")
+        XCTAssertEqual(headerJwk.y, "SLW_xSffzlPWrHEVI30DHM_4egVwt3NQqeUD7nMFpps")
+    }
+
     func testJwkTypedHeaderParamRSA() throws {
         let attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeRSA,

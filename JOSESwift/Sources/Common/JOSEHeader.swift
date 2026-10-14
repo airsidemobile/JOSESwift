@@ -68,6 +68,18 @@ extension JOSEHeader {
     }
 }
 
+extension JOSEHeader {
+    /// Returns the JWK held by a header parameter such as `jwk` or `epk`.
+    /// JWK members may hold any JSON value, e.g., `key_ops` is an array (RFC 7517, Section 4).
+    func jwkJSONObject(forParameter parameterName: String) -> [String: Any]? {
+        guard let jwkParameters = parameters[parameterName] as? [String: Any], JSONSerialization.isValidJSONObject(jwkParameters) else {
+            return nil
+        }
+
+        return jwkParameters
+    }
+}
+
 // `DataConvertible` implementation.
 extension JOSEHeader {
     public init?(_ data: Data) {

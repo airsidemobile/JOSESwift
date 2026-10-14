@@ -185,18 +185,18 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// The JSON Web key corresponding to the key used to encrypt the JWE, as a JWK.
     public var jwkTyped: JWK? {
         get {
-            guard let jwkParameters = parameters["jwk"] as? [String: String] else {
+            guard let jwkParameters = jwkJSONObject(forParameter: "jwk") else {
                 return nil
             }
 
             guard
-                let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue],
+                let keyTypeString = jwkParameters[JWKParameter.keyType.rawValue] as? String,
                 let keyType = JWKKeyType(rawValue: keyTypeString)
             else {
                 return nil
             }
 
-            guard let json = try? JSONEncoder().encode(jwkParameters) else {
+            guard let json = try? JSONSerialization.data(withJSONObject: jwkParameters) else {
                 return nil
             }
 
@@ -304,8 +304,7 @@ extension JWEHeader: CommonHeaderParameterSpace {
     /// Header Parameters Used for ECDH Key Agreement - Ephemeral Public Key
     public var epk: ECPublicKey? {
         get {
-            // JWK members may hold any JSON value, e.g., `key_ops` is an array (RFC 7517, Section 4).
-            guard let jwkParameters = parameters["epk"] as? [String: Any], JSONSerialization.isValidJSONObject(jwkParameters) else {
+            guard let jwkParameters = jwkJSONObject(forParameter: "epk") else {
                 return nil
             }
 
